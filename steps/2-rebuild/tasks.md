@@ -14,34 +14,62 @@ to discuss: task 7, the inbox watched. Task 8, the human's findings from the man
 
 ## Priorities (the human, 2026-11-15)
 
-"We need to set some priorities." As the human listed them, in that
-order, in the human's words; nothing of it discussed yet, none has a go.
+The human: "I think we have a clear list of priorities: use mycelium,
+achieve p2p swarm, improve self-containment (help, dev pipeline) to
+achieve efficient AI autonomy."
 
-1. "Implementation of mrepos as shortcuts with a 'registry' of mrepos."
-   (With it: `local-note.md`, 2026-11-15, point 4, settled there: the
-   parent's `main/<name>/` holds the shortcut only, the mrepo is placed
-   elsewhere.)
-2. "Then creating node mrepos, how to create the container version."
-   (`local-note.md`, point 3: the nodes now are the bridgehead for the
-   container nodes.)
-3. "Then we can do simple demos with a p2p swarm."
-4. "We need to do a review of the package repos for 'full install
-   tests'."
-5. "We need to make sure that rules and design decisions live in the
-   help and howto where they are implemented (XPath e.g.)."
-6. "We need proper howtos, we need a proper help protocol."
-   (`local-note.md`, points 1 and 2: `haicc help/get` without a URI, the
-   machine level's help, settled; an mrepo's own help and where a howto
-   lives, proposed there, not answered.)
-7. "I want to use claude headless ASAP using the tailored help and
-   howtos." (`vision.md`, "Agents"; tried once: `local-note.md`.)
-8. "Then we need to 'haicc' the development process."
+The list as the human gave it ("We need to set some priorities"), in
+that order, in the human's words, each with a label to follow it by
+(the human: "can you label task meaningful (as well) rather than just
+numbers? Make it easier for me to follow"). Under which of the three
+aims each falls is our reading, to confirm. Nothing of it discussed
+yet, none has a go.
 
-Not placed in this list by the human, to ask where they go: task 7 (the
-inbox watched), task 8 (the findings of the manual test, settled, waits
-for the go), task 9 (the request records reachable), XPath's phase 2,
-and the local agent's finding that a teardown leaves a node inside the
-host running (`local-note.md`, point 5).
+| | label | the human | aim (our reading) |
+|---|---|---|---|
+| P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
+| P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
+| P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
+| P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
+| P5 | `rules-in-help` | "We need to make sure that rules and design decisions live in the help and howto where they are implemented (XPath e.g.)." | self-containment |
+| P6 | `help-and-howtos` | "We need proper howtos, we need a proper help protocol." | self-containment |
+| P7 | `claude-headless` | "I want to use claude headless ASAP using the tailored help and howtos." | self-containment |
+| P8 | `dev-on-haicc` | "Then we need to 'haicc' the development process." | self-containment (dev pipeline) |
+
+What the local agent's notes of 2026-11-15 hold for them
+(`local-note.md`):
+
+- `mrepo-registry`: point 4, settled there: the parent's `main/<name>/`
+  holds the shortcut only, the mrepo is placed elsewhere.
+- `node-mrepos`: point 3: the nodes now are the bridgehead for the
+  container nodes.
+- `help-and-howtos`: points 1 and 2: `haicc help/get` without a URI,
+  the machine level's help, settled; an mrepo's own help and where a
+  howto lives, proposed there, not answered.
+- `claude-headless`: `vision.md`, "Agents"; tried once.
+
+Not placed in this list by the human, to ask where they go:
+`inbox-watcher` (task 7), `command-line-findings` (task 8, settled,
+waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
+(the union and the fan-out over shortcuts; `xpath.md`), and
+`teardown-cascade`: a teardown leaves a node inside the host running
+(`local-note.md`, point 5).
+
+## The tasks by label
+
+| | label | what | where it stands |
+|---|---|---|---|
+| 0 | `haicc-app` | the `haicc` command as a Bare app | built, part 60 |
+| 1 | `relative-uris` | relative URIs, a URI as segments | built, parts 61, 62 |
+| 2 | `crud` | the crud protocol, the shortcuts in `main` | built, part 63 |
+| 3 | `rest-removed` | the rest actions removed | built, part 64 |
+| 4 | `request-train-repairs` | a removed branch's folders, the squash into `main` | built, part 65 |
+| 5 | `logging` | flags, three levels, the request's metrics and audit | built, part 66 |
+| 6 | `xpath-first` | XPath phase 1: the engine, `crud` and `haicc` on it | built, parts 67 to 69; decisions to confirm |
+| 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | noted, to discuss |
+| 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | settled, waits for the go |
+| 9 | `request-layer-access` | the request records reachable, `layer=request` | in discussion |
+| P1 to P8 | above | the priorities | not discussed yet |
 
 How to read a task:
 
@@ -398,7 +426,7 @@ packages as well; put on the list, the implementation looked at later.
 - What coverage means for a haiccing package: its own tests against the
   code it carries and its own entry points.
 
-## 1. Relative URIs
+## 1 · relative-uris: Relative URIs
 
 Discussed 2026-11-13, while designing task 2, which builds on it.
 
@@ -624,7 +652,7 @@ Discussed 2026-11-13, while designing task 2, which builds on it.
   (114 checks), `haiccing/base-component-boot/test/boot/`, the modules'
   tests; the READMEs that show commands.
 
-## 2. The crud protocol
+## 2 · crud: The crud protocol
 
 Built (`readme.md`, part 63), with the shortcuts moved into `main` and
 the `xpath` layer removed. Left from it, each to come with what needs it:
@@ -644,7 +672,7 @@ the `xpath` layer removed. Left from it, each to come with what needs it:
 - **The two repositories exist**: `pear-full-square/mrepo-base-crud`,
   `haiccing/base-package-crud`.
 
-## 4. The request train: two repairs
+## 4 · request-train-repairs: The request train: two repairs
 
 Built (`readme.md`, part 65): a removed branch takes its empty folders
 with it; an execution's branches are squashed into their targets; the
@@ -662,7 +690,7 @@ to 212 ms within 200). Left from it, each to come with what needs it:
 - **`p2p-git`'s own two defects on refs** (the handover, "Elsewhere"),
   untouched: the adapter works around both.
 
-## 5. Logging: the levels in use, the level a request's flag
+## 5 · logging: Logging: the levels in use, the level a request's flag
 
 Built (`readme.md`, part 66): the flags (`--flags`, space separated, a
 flag alone or `key=value`, to the end of the command or `--`, held
@@ -683,7 +711,7 @@ it, each to come with what needs it:
 - **What the entries hold** is ours to change as we learn what we need
   (the human: "You decide output format, does not need to be fixed").
 
-## 6. XPath, the first implementation
+## 6 · xpath-first: XPath, the first implementation
 
 Discussed with the human, 2026-11-14 and 15: `xpath.md` holds it as it
 went, each answer in its words. This is what of it is to be built first.
@@ -774,7 +802,7 @@ went, each answer in its words. This is what of it is to be built first.
   `mrepo-base-execute/index.js` (`exec.select`, the execution's view
   over its branch).
 
-## 7. The inbox watched, not looked at
+## 7 · inbox-watcher: The inbox watched, not looked at
 
 Noted 2026-11-15, to discuss. The human, on how a file in the inbox
 folder gets into git (the runtime looks every 200 ms, lists the whole
@@ -803,7 +831,7 @@ be better with a filewatcher?"
   principal's answer collected from the outbox folder);
   `haicc-base-app/internal/request/` (the app waiting for its answer).
 
-## 8. The human's findings from the manual test: flags after the URI; a record packed on its lines; `haicc output`
+## 8 · command-line-findings: The human's findings from the manual test: flags after the URI; a record packed on its lines; `haicc output`
 
 The human tried `haicc` by hand on the laptop (`main` as of `c8200f7`)
 and settled three findings with the local agent, 2026-11-15:
@@ -849,7 +877,7 @@ words. Not built: the cloud session's to build, on the human's go.
   9b (the flags' checks); `haiccing/package-docs-mrepo/mrepo/request/`
   ("Flags").
 
-## 9. The request records reachable: the layer switched in the request
+## 9 · request-layer-access: The request records reachable: the layer switched in the request
 
 Found open in part 68: the outside reaches `main` only, so the request
 records cannot be queried from the command line. The human, 2026-11-15:
