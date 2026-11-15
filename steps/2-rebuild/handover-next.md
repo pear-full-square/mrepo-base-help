@@ -169,6 +169,14 @@ local agent's notes of 2026-11-15 (help, howtos, nodes, where a child
 mrepo is placed, the teardown that leaves a grandchild running) go with
 them: read, not acted on.
 
+**The order of work** (the human, 2026-11-15; `tasks.md`, "The order,
+as it stands"): cleanup of the open tasks; `mrepo-registry`;
+`node-mrepos`; `swarm-demos`; `context-help` (the help protocol,
+context sensitive); `package-review` (its criteria: full install tests,
+rules and decisions in the help and howto, proper howtos). That block
+is the milestone: ready for headless Claude and for the D&I process on
+`haicc`.
+
 **Task 9 is in discussion** (`tasks.md`): the request records made
 reachable by switching the layer in the request, a flag, `layer=request`
 (the human's direction, 2026-11-15); our proposal there: the command's

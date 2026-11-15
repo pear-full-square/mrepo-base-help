@@ -47,11 +47,25 @@ mrepo). What else on that list?"):
    confirm.)
 2. `mrepo-registry`: the registry's design, an mrepo as a shortcut.
 3. `node-mrepos`: swarm node creation, the container mrepo.
-4. What is left, in the list's order, not placed again by the human:
-   `swarm-demos`, `install-tests-review`, `rules-in-help`,
-   `help-and-howtos`, `claude-headless`, `dev-on-haicc`. And from
-   before the list: `xpath-phase-2`; "Deployed tests" and "Coverage"
-   (below).
+4. `swarm-demos`: simple demos with a p2p swarm.
+5. `context-help`: the help protocol, context sensitive help (the
+   human: "help howtos and install custom test are very closely
+   related, they develop together. I also think that testing the review
+   would benefit from a working help protocol. So I would put that 5,
+   context sensitive help").
+6. `package-review`: the review of the package repositories ("Then 6
+   and 7 as amongst the criteria for review"): its criteria, among
+   others: the full install tests, each package's custom test
+   (`install-tests-review`); rules and design decisions living in the
+   help and howto where they are implemented (`rules-in-help`); proper
+   howtos (`help-and-howtos`).
+
+**The milestone** this block (5 and 6) achieves (the human): "ready to
+start using headless claude (AI autonomy) and tackling the D&I process
+using haicc": `claude-headless`, then `dev-on-haicc`.
+
+From before the list, not placed: `xpath-phase-2`; "Deployed tests" and
+"Coverage" (below).
 
 What the local agent's notes of 2026-11-15 hold for them
 (`local-note.md`):
