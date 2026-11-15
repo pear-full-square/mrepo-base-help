@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-14 by the cloud session (parts 60 to 64), for the local agent (a Linux
+Updated 2026-11-15 by the cloud session (parts 60 to 66), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,12 +93,20 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 64, and `handover-next.md`. Since your last run
-(`381bbae`): every package has its own tests and a test report (parts 47
-to 59); the `haicc` command is a Bare app (60); URIs are relative (61,
-62); `crud` makes structure in `main`, the shortcuts are in `main` and
-the `xpath` layer is gone (63); the `rest` actions are removed and a
-race of `haicc boot/deploy` run again is fixed (64). Known and not
+`readme.md`, parts 30 to 66, and `handover-next.md`. Before your last
+run (`6ebec98`): every package has its own tests and a test report
+(parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
+relative (61, 62); `crud` makes structure in `main`, the shortcuts are
+in `main` and the `xpath` layer is gone (63); the `rest` actions are
+removed and a race of `haicc boot/deploy` run again is fixed (64).
+**Since your last run**: an execution's branches are squashed into their
+targets, one commit in `main` a request, and a removed branch takes its
+empty folders (65: a request's cycle no longer slows as requests are
+done); a request's log, in its record, with flags (`--flags
+log=verbose`, `log=debug`), errors caught at the request, and five new
+checks in the code test (66). The `haicc` test has 152 checks now. New
+for you: `tools/commit-bench.js` (the prompt's step 6), the commits
+measured on the human's laptop. Known and not
 built: our packages are not published, so `haicc sources download`
 fetches Bare only; a position deeper inside `main` is refused by
 `haicc`; teardown does not cascade (tear down a node before its host;

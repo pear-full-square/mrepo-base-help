@@ -81,7 +81,10 @@ Only its note is committed.
 >    `haicc boot/deploy`, `haicc . boot/deploy host base-component-haicc`,
 >    `haicc host service/initialise`, `haicc host service/start`,
 >    `haicc host help/get`, `haicc . crud/create swarms/swarm-1`,
->    `haicc . crud/read swarms`, `haicc . crud/read .`; and to undo:
+>    `haicc . crud/read swarms`, `haicc . crud/read .`,
+>    `haicc host crud/read . --flags log=verbose` (a request's log with
+>    its action's steps), `haicc --flags log=debug -- host crud/read .`
+>    (flags in front, closed by `--`: for the whole chain); and to undo:
 >    `haicc . boot/teardown host`, then `haicc boot/teardown`. A URI has
 >    no leading slash any more: `.` is the root, `host` the position
 >    `host`. A work folder left by an earlier version (`~/.haicc/work`)
@@ -90,7 +93,9 @@ Only its note is committed.
 >    after `haicc boot/deploy`; its work folder is `~/.haicc/work`. A
 >    command prints its response record whole, unpacked across lines;
 >    `haicc --raw ...` as it is stored, one line; `haicc --output ...` the
->    output alone. `haicc --help` lists the commands.
+>    output alone. Every record now holds its `log`: what the request
+>    changed and its metrics, always; more with `--flags log=verbose` or
+>    `log=debug`. `haicc --help` lists the commands.
 > 9. **Write a note back**: what ran, each result, anything that did not
 >    run as written and why (with a proposal and a patch if you have one,
 >    as before), in `steps/2-rebuild/local-note.md`: a new section at the
