@@ -107,8 +107,8 @@ limit for the commits; the train's bookkeeping slows as requests are
 done). **The next to build: `tasks.md`, task 4**, the two repairs (a
 removed branch takes its empty folders; the merge into `main` a squash):
 its "Proposed" is confirmed with the human first. XPath itself: a good
-first implementation, measured, then single or several requests decided
-from the figures (the human). The readings marked "to confirm" in
+first implementation, measured; its pipeline allows both modes, one
+request or several, by how long the processing takes (the human). The readings marked "to confirm" in
 `xpath.md` and its "To settle" lists are what to go through with the
 human, point by point.
 

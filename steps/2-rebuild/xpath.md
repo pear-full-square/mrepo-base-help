@@ -144,17 +144,30 @@ document.
 
 - "I think we should do a good first implementation and measure its
   performance to see if we should go single or multiple requests
-  (processing duration vs request and commit overhead)." Our reading, to
-  confirm: the first implementation evaluates a query inside one mrepo
-  in one request; it is measured (what the selecting and filtering
-  takes, against what a request and its commits cost: about 44 ms a
-  request's cycle and 7 to 9 ms a commit here); from the figures it is
-  decided whether a query is cut into several requests inside one
-  mrepo. Across a link a hop is a request either way.
+  (processing duration vs request and commit overhead)."
+- **Both modes** (the human, 2026-11-15, on our reading that the figures
+  would decide for one of the two): "Xpath Pipeline should allow multi
+  and single request mode depending on how long processing takes." Our
+  reading, to confirm: a query's plan is one thing (its steps: select,
+  filter, merge) and can be run two ways inside an mrepo: in one
+  request, the steps calls inside it; or as several requests, a step
+  each, on the query's request branch one after another. Short
+  processing: one request, nothing paid for a request and its commits a
+  step (here about 44 ms a request's cycle, 7 to 9 ms a commit); long
+  processing: several. The first implementation is measured to find
+  where the one becomes the other. Across a link a hop is a request in
+  both modes.
 
-**Proposed** (ours, not yet put to the human; written before the line
-above: the cut into requests inside one mrepo now waits for the
-figures). Each as a feature is
+**To settle**
+
+- Who chooses the mode, and when: the one who asks (an option on the
+  query); the plan, from an estimate before it runs (how much a step
+  selects); or a query started in one request and carried on as several
+  once it has run too long.
+
+
+**Proposed** (ours, not yet put to the human; written before the lines
+above: every step below is to work in both modes). Each as a feature is
 built now: a demo with the `haicc` tool first, then the real thing, the
 demo kept as its how-to.
 
@@ -278,11 +291,12 @@ this."
 - **The rates** (after the measurements): "Our request rate and request
   branch commit rate will be significantly higher than the request
   branch creation rate. The number of commits per request branch will be
-  low (<100)." Our reading, to confirm: a request branch carries several
-  requests (a pipeline's steps) and their commits; what is paid a
-  branch (made, merged into `main`, removed: the train's part) is paid
-  far less often than what is paid a commit, which is cheap and runs in
-  parallel.
+  low (<100)." Our reading, confirmed ("Yes, consecutively"): a request
+  branch carries several requests (a pipeline's steps) and their
+  commits, one after another; what is paid a branch (made, merged into
+  `main`, removed: the train's part) is paid far less often than what
+  is paid a commit, which is cheap. In parallel are the branches, not
+  the requests on one branch.
 - **The two repairs are a task**: "Yes, put them on the task list.
   Sounds like a good starting position" (`tasks.md`, task 4).
 - **The same measured on the human's laptop** (twelve cores), by the
