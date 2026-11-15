@@ -122,8 +122,13 @@ parallel, tried); the request train and the commit to `main` stay on one
 thread; the commits measured (`tools/commit-bench.js`: git is not the
 limit for the commits; the train's bookkeeping slows as requests are
 done). **Tasks 4 and 5 are built** (parts 65 and 66: the two repairs;
-logging). **Task 6, XPath's first implementation, is written up and
-waits for a go**: its "Proposed" (the filters' forms first) to confirm.
+logging). **Task 6, XPath's first implementation, has its go** (standard
+XPath in phases: the list in `xpath.md`; `haicc` and `crud` both its
+first users; all commands maps over an array of nodes): in two parts,
+the engine in `mycelium-xpath` first. One thing to confirm before the
+second part: whether a command's answer is always an array, also for
+one node. **Task 7, the inbox watched instead of looked at**, is noted
+to discuss.
 XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
