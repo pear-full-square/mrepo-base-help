@@ -13,6 +13,7 @@ const abs = p => (p.startsWith('/') ? p : `/${p}`)
 // path (given relative or slash-led), its writes kept in order.
 function execution (files = {}) {
   const writes = []
+  const kind = p => (p in files ? 'blob' : Object.keys(files).some(f => f.startsWith(p + '/')) ? 'tree' : null)
   const exec = {
     read: async path => { if (!(abs(path) in files)) throw new Error(`nothing at ${path}`); return files[abs(path)] },
     // the rest of an execution context, standing in: a file that may not
@@ -31,6 +32,10 @@ function execution (files = {}) {
       }
       return [...seen.values()].sort((a, b) => (a[0] < b[0] ? -1 : 1))
     },
+    // the tree itself, for a query: a node its path here
+    node: async u => (kind(abs(u)) ? { type: kind(abs(u)), p: abs(u) } : null),
+    children: async n => (n.type === 'blob' ? null : [...new Set(Object.keys(files).filter(f => f.startsWith(n.p + '/')).map(f => f.slice(n.p.length + 1).split('/')[0]))].sort().map(name => [name, { type: kind(`${n.p}/${name}`), p: `${n.p}/${name}` }])),
+    bytes: async n => files[n.p],
     put: (path, bytes) => { writes.push(['put', abs(path), JSON.parse(bytes.toString())]); files[abs(path)] = Buffer.from(bytes) },
     remove: path => { writes.push(['remove', abs(path)]); delete files[abs(path)] },
     commit: async () => {}
@@ -82,6 +87,9 @@ test('create, read, delete: a node made with its path, read, removed; each idemp
   t.alike(await act('read', exec, { uri: at('swarms') }), [{ uri: ['main', 'swarms'], value: {}, children: ['swarm-1'] }], 'read: an array of the nodes selected, the children by name')
   t.alike((await act('read', exec, { uri: at('swarms/*') })).map(n => n.uri), [['main', 'swarms/swarm-1']], 'read with *: the children')
   t.alike(await act('read', exec, { uri: at('nothing') }), [], 'read what is not there: empty, no error')
+  t.alike((await act('read', exec, { uri: at('swarms/*[size>2]') })).map(n => n.uri), [['main', 'swarms/swarm-1']], 'read with a filter: the nodes whose document it holds for')
+  t.alike(await act('read', exec, { uri: at("swarms/*[size='none']") }), [], 'none: empty')
+  t.alike(await act('read', exec, { uri: at('swarms/swarm-1/size') }), [{ uri: ['main', 'swarms/swarm-1/size'], value: 3 }], 'read inside a document: the value there')
   await t.exception(act('delete', exec, { uri: at('swarms') }), /swarms has children: not deleted \(crud\/delete swarms recurse\)/, 'delete a node with children: refused without recurse')
   t.alike((await act('delete', exec, { uri: at('swarms'), args: ['recurse'] })).map(n => [n.uri, n.outcome]), [[['main', 'swarms'], 'deleted']], 'with recurse: deleted')
   t.alike(Object.keys(files), ['/main/layer.json'], 'the node and what was below it gone')
@@ -95,6 +103,10 @@ test('what each refuses, writing nothing', async (t) => {
   await t.exception(act('create', exec, { uri: at('a'), args: ['nonsense'] }), /not a document: nonsense \(JSON\)/)
   await t.exception(act('create', exec, { uri: at('host/x') }), /host is a shortcut: a URI does not run through it/, 'below a shortcut')
   await t.exception(act('read', exec, { uri: at('host/x') }), /host is a shortcut/)
+  await t.exception(act('read', exec, { uri: at('*[size>2]') }), /host is a shortcut: a URI does not run through it \(haicc host haicc \[size>2\] \.\.\.\)/, 'a filter on a shortcut: its document is elsewhere')
+  await t.exception(act('read', exec, { uri: at('*[1]') }), /a position: not in this phase/, 'what the query does not read yet')
+  await t.exception(act('create', exec, { uri: at('a[size>2]') }), /one node, not a selection/)
+  await t.exception(act('delete', exec, { uri: at('host/x') }), /host is a shortcut/)
   await t.exception(act('delete', exec, { uri: at('.') }), /missing argument: target/)
   await t.exception(act('delete', exec, { uri: at('host'), args: ['everything'] }), /not an argument: everything \(recurse\)/)
   t.alike((await act('read', exec, { uri: at('host') }))[0].shortcuts, [{ mrepo: 'local/host' }], 'a shortcut read: a node, with where its data comes from')

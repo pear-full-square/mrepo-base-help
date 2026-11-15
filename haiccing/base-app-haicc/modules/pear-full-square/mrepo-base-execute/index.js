@@ -157,7 +157,10 @@ const runtimeView = ctx => Object.freeze({
   protocols: ctx.protocols ?? {},
   select: uri => ctx.repo.select(abs(uri)),
   read: uri => ctx.repo.read(abs(uri)),
-  find: uri => ctx.repo.find(abs(uri))
+  find: uri => ctx.repo.find(abs(uri)),
+  node: uri => ctx.repo.node(abs(uri)),
+  children: node => ctx.repo.children(node),
+  bytes: node => ctx.repo.bytes(node)
 })
 
 // actions: the mrepo's, by protocol and action: those its packages offer.
@@ -284,6 +287,12 @@ export async function execute (ctx, { actions = {} } = {}) {
       // A file that may not be there: null when nothing is at the URI;
       // anything else that goes wrong is thrown, as read throws it.
       find: uri => { counted.reads++; return repo.find(exec.path(uri)) },
+      // The tree itself, for a query: the one node at a plain URI (null when
+      // nothing is there), as the execution sees it; a node's children,
+      // [name, node] pairs, null for a file; a file's content.
+      node: uri => { counted.selects++; return repo.node(exec.path(uri)) },
+      children: node => { counted.selects++; return repo.children(node) },
+      bytes: node => { counted.reads++; return repo.bytes(node) },
       put (given, bytes) { const uri = abs(given); const b = targetOf(uri); if (!b) throw new Error(`not writable here: ${given}`); counted.puts++; (edits.get(b) ?? edits.set(b, []).get(b)).push(['put', inside(uri), bytes]) },
       remove (given) { const uri = abs(given); const b = targetOf(uri); if (!b) throw new Error(`not writable here: ${given}`); counted.removes++; (edits.get(b) ?? edits.set(b, []).get(b)).push(['remove', inside(uri)]) },
       // The local commit: the writes so far committed to the execution

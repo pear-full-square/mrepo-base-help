@@ -220,6 +220,9 @@ test('a step of an action: measured at the boundary, what it took and what it re
         seen.not = await exec.find('main/nope/.node.json')
         seen.folder = await exec.find('main/a').then(() => 'found', err => err.message)
         seen.runtime = [await exec.runtime.find('main/a/.node.json'), await exec.runtime.find('main/nope')]
+        const main = await exec.node('main')
+        const kids = await exec.children(main)
+        seen.tree = [main.type, kids.map(([n]) => n).filter(n => !n.startsWith('.') && n !== 'layer.json'), (await exec.bytes((await exec.children(kids.find(([n]) => n === 'a')[1]))[0][1])).toString(), await exec.node('main/nope'), (await exec.runtime.children(await exec.runtime.node('main/a'))).length]
         const found = await exec.step('look', r => ({ found: r.length }), async () => { await exec.read('main/a/.node.json'); return exec.select('main/*') })
         await exec.step('write', { what: 'two' }, async () => { exec.put('main/one.json', Buffer.from('1')); exec.put('main/two.json', Buffer.from('2')); await exec.commit('two') })
         await exec.step('inside', {}, async () => {}, 'debug')
@@ -236,6 +239,7 @@ test('a step of an action: measured at the boundary, what it took and what it re
       t.ok(/not a file/.test(seen.folder), 'something else there: thrown, as read throws')
       t.is(seen.runtime[0].toString(), '{}\n', 'the runtime\'s view: the same')
       t.is(seen.runtime[1], null)
+      t.alike(seen.tree, ['tree', ['a'], '{}\n', null, 1], 'the tree itself: a node, its children, a file\'s content; the runtime\'s view the same')
       const steps = done.log.filter(e => e.event.startsWith('crud.read.'))
       t.alike(steps.map(e => [e.level, e.event]), [['verbose', 'crud.read.look'], ['verbose', 'crud.read.write'], ['verbose', 'crud.read.breaks']], 'a step: an entry at verbose, under the action\'s name (the one at debug not kept)')
       const [look, write, breaks] = steps
@@ -244,7 +248,7 @@ test('a step of an action: measured at the boundary, what it took and what it re
       t.ok([look, write, breaks].every(e => Number.isInteger(e.ms)), 'each with what it took')
       t.absent('puts' in look, 'a count that did not move: not said')
       t.alike({ n: breaks.n, failed: breaks.failed }, { n: 1, failed: 'broke' }, 'a step that throws: logged, then thrown on')
-      t.alike(done.log.at(-1).reads, 4, 'find counted as a read in the request\'s metrics (three finds and a read; the runtime\'s view is not the execution\'s)')
+      t.alike(done.log.at(-1).reads, 5, 'find counted as a read in the request\'s metrics, a file\'s content too (three finds, bytes and a read; the runtime\'s view is not the execution\'s)')
     })
   } finally { rmSync(work, { recursive: true, force: true }) }
 })

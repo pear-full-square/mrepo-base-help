@@ -70,13 +70,15 @@ passes one handler into `pending/default`; the inbox itself checks nothing.
 ## Commands sent on
 
 A command at a shortcut is not executed where it arrived. `haicc <URI>
-<command>` goes to the position; where that is a shortcut, the command
-that follows is sent to the mrepo linked there, and that mrepo's response
-becomes the request's result.
+<command>` goes to the positions the URI selects and executes the command
+at each (a URI that selects: a list of what each gave); where the URI
+reaches a shortcut, the command that follows is sent to the mrepo linked
+there, and that mrepo's response becomes the request's result.
 
-- **Sent on unchanged**: the hop takes its own `haicc <URI>` off, and the
-  rest is delivered as it is to the other mrepo's inbox. Nothing is
-  rewritten. On the same node that is direct: a file dropped into its
+- **Sent on**: the hop takes its own `haicc <URI>` off, and the rest is
+  delivered as it is to the other mrepo's inbox. Where the URI runs on
+  through the shortcut, what is left of it goes in front, a `haicc`
+  there. On the same node that is direct: a file dropped into its
   inbox folder. Another node needs dispatch, which is not built.
 - **Waiting**: the request's processing ends there. Its principal, on
   its own branch, now says which child it waits for. The mrepo goes on

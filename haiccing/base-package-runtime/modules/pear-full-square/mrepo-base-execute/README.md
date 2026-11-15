@@ -61,7 +61,9 @@ mrepo's root (`runtime/service.json`) or slash-led, the same.
 
 The action's context (`exec`): `read`, `select` (overlaid: a target read
 from its execution branch), `find` (as `read`, for a file that may not be
-there: `null` then; anything else that goes wrong is thrown), `put`,
+there: `null` then; anything else that goes wrong is thrown), `node`,
+`children`, `bytes` (the tree itself, for a query: the one node at a plain
+URI as the execution sees it, a node's children, a file's content), `put`,
 `remove` (collected), `runtime` (the
 runtime's context, read only: its name, its work folder, its directory). Two
 contexts:

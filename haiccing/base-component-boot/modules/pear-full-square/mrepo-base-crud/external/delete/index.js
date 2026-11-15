@@ -19,8 +19,11 @@ export async function remove (exec, { uri, args = [] }) {
   if (other.length) throw new Error(`not an argument: ${other[0]} (recurse)`)
   const recurse = args.includes('recurse')
   const p = place(uri)
-  if (!p.star && !p.names.length) throw new Error('missing argument: target')
+  if (p.names && !p.names.length) throw new Error('missing argument: target')
   const found = await select(exec, p)
+  const value = found.find(f => f.value)
+  if (value) throw new Error(`not a node: ${p.at(value.names)} (a value inside a document; crud/delete removes nodes)`)
+  if (found.some(f => !f.names.length)) throw new Error('not deleted: the layer itself (a node below it)')
   // (all of them looked at before any is removed: one refused, none removed)
   for (const { names, node } of found) {
     if (node.children.length && !recurse) throw new Error(`${p.at(names)} has children: not deleted (crud/delete ${p.at(names)} recurse)`)
