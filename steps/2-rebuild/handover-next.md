@@ -149,8 +149,16 @@ point by point (short answers, one question at a time):
   resolves the usage restriction; descendants; positions), results as
   attachments, task 7.
 
-**The human's priorities** (2026-11-15; `tasks.md`, "Priorities", in
-the human's words, in order): mrepos as shortcuts with a registry of
+**Tasks have labels**: the human follows a task by a meaningful label,
+with its number (the human, 2026-11-15: "can you label task meaningful
+(as well) rather than just numbers? Make it easier for me to follow"):
+`tasks.md`, "The tasks by label". Use the label whenever a task is
+named: `command-line-findings` (task 8), not "task 8" alone.
+
+**The human's priorities** (2026-11-15: "use mycelium, achieve p2p
+swarm, improve self-containment (help, dev pipeline) to achieve
+efficient AI autonomy"; `tasks.md`, "Priorities", in
+the human's words, in order, each with its label): mrepos as shortcuts with a registry of
 mrepos; node mrepos and the container version; simple demos with a p2p
 swarm; a review of the package repositories for full install tests;
 rules and design decisions living in the help and howto where they are
