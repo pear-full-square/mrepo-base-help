@@ -7,6 +7,78 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-15: `c8200f7`
+
+The prompt ran as written, every step passed. The code not changed here.
+No release created.
+
+| Step | Result |
+|---|---|
+| 1. update | `main` fast-forwarded to `c8200f7` (parts 65, 66; the XPath notes) |
+| 2. `sh tools/install.sh` | exit 0: 0 fetched, 207 kept, 0 linked; Bare there |
+| 3. `tools/bare tools/release.js` | exit 0: the twelve bundles, from `c8200f7`, Bare v1.36.0; every report `current`; `git status` clean |
+| 4. `sh haiccing/base-linux-haicc/test/run.sh`, three times | each exit 0, `# checks = 152/152 pass`, `# ok`; nothing left running |
+| 5. the packages' `/test/full` | all twelve exit 0, `"ok":true`; `release.js --strict`: exit 0, every report `current`; nothing left running |
+| 6. `tools/bare tools/commit-bench.js --dir "$HOME/haicc-commit-bench"` | exit 0, 480 s, `"ok":true`; no `"error"`, every `"errors"` 0; nothing left running; the folder left empty |
+| 7. `haicc-install.sh`, sources, `haicc prereq` | `/usr/local/bin/haicc`, its folder `~/.haicc`; the clone's `sources/` linked; `prereq`: all ok, the app found, Bare 1.36.0 as pinned; no boot mrepo was running, no `~/.haicc/work` |
+
+On step 6: the machine has 14 cores here, not twelve (WSL2 sees all of
+them). Whether the laptop was on mains power was not checked from here;
+nothing else heavy ran during the measurement (the tests had finished).
+
+The processor (`lscpu`):
+
+```
+CPU(s):                               14
+Model name:                           Intel(R) Core(TM) Ultra 5 225H
+Thread(s) per core:                   1
+Core(s) per socket:                   14
+```
+
+The filesystem (`df -T "$HOME"`; WSL2's virtual disk):
+
+```
+Filesystem     Type  1K-blocks     Used Available Use% Mounted on
+/dev/sdc       ext4 1055762868 45503036 956556360   5% /
+```
+
+Every line it printed:
+
+```
+{"measure":"machine","cores":14,"platform":"linux","arch":"x64","bare":"v1.36.0","dir":"/home/herma/haicc-commit-bench/commit-bench-eh8fjb"}
+{"measure":"loop","oneThreadMs":323,"threads":14,"allAtOnceMs":722,"gain":6.3}
+{"measure":"writers","mode":"threads","writers":1,"commitsEach":300,"commitsPerSecond":[195,207,206],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"threads","writers":2,"commitsEach":300,"commitsPerSecond":[294,292,291],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"threads","writers":4,"commitsEach":300,"commitsPerSecond":[454,414,422],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"threads","writers":8,"commitsEach":300,"commitsPerSecond":[589,606,1122],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"threads","writers":12,"commitsEach":300,"commitsPerSecond":[707,727,743],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"threads","writers":14,"commitsEach":300,"commitsPerSecond":[806,809,810],"errors":0,"firstError":null,"lateStartMs":2}
+{"measure":"writers","mode":"threads","writers":16,"commitsEach":300,"commitsPerSecond":[857,836,1214],"errors":0,"firstError":null,"lateStartMs":3}
+{"measure":"writers","mode":"threads","writers":24,"commitsEach":300,"commitsPerSecond":[838,924,868],"errors":0,"firstError":null,"lateStartMs":3}
+{"measure":"writers","mode":"processes","writers":1,"commitsEach":300,"commitsPerSecond":[203,183,189],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"processes","writers":2,"commitsEach":300,"commitsPerSecond":[295,326,297],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"processes","writers":4,"commitsEach":300,"commitsPerSecond":[499,525,505],"errors":0,"firstError":null,"lateStartMs":2}
+{"measure":"writers","mode":"processes","writers":8,"commitsEach":300,"commitsPerSecond":[631,672,675],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"processes","writers":12,"commitsEach":300,"commitsPerSecond":[872,765,883],"errors":0,"firstError":null,"lateStartMs":5}
+{"measure":"writers","mode":"processes","writers":14,"commitsEach":300,"commitsPerSecond":[865,811,855],"errors":0,"firstError":null,"lateStartMs":2}
+{"measure":"writers","mode":"processes","writers":16,"commitsEach":300,"commitsPerSecond":[847,790,840],"errors":0,"firstError":null,"lateStartMs":6}
+{"measure":"writers","mode":"processes","writers":24,"commitsEach":300,"commitsPerSecond":[1005,823,1064],"errors":0,"firstError":null,"lateStartMs":6}
+{"measure":"width","children":10,"commitsPerSecond":225}
+{"measure":"width","children":100,"commitsPerSecond":206}
+{"measure":"width","children":1000,"commitsPerSecond":110}
+{"measure":"width","children":10000,"commitsPerSecond":18}
+{"measure":"width","children":100,"levelsDeeper":5,"commitsPerSecond":151}
+{"measure":"history","commits":12000,"commitsPerSecondUpTo":{"2000":256,"4000":309,"6000":231,"8000":249,"10000":310,"12000":241},"looseObjects":59805}
+{"measure":"corestore","commitsPerSecond":207}
+{"measure":"native","commitsPerSecond":61}
+{"measure":"cycle","requests":"1 to 50","msEach":{"branchMade":2.2,"aCommit":4.6,"squashIntoMain":4.6,"branchRemoved":1.7,"together":13},"listBranches":{"msACall":1,"callsARequest":6},"isAncestor":{"msACall":0.6,"callsARequest":2}}
+{"measure":"cycle","requests":"51 to 100","msEach":{"branchMade":2,"aCommit":4.6,"squashIntoMain":4.2,"branchRemoved":1.8,"together":12.6},"listBranches":{"msACall":0.9,"callsARequest":6},"isAncestor":{"msACall":0.6,"callsARequest":2}}
+{"measure":"cycle","requests":"101 to 150","msEach":{"branchMade":2,"aCommit":5.5,"squashIntoMain":5.7,"branchRemoved":1.8,"together":15},"listBranches":{"msACall":1,"callsARequest":6},"isAncestor":{"msACall":0.7,"callsARequest":2}}
+{"measure":"cycle","requests":"151 to 200","msEach":{"branchMade":2,"aCommit":4.9,"squashIntoMain":5.4,"branchRemoved":1.7,"together":14},"listBranches":{"msACall":0.9,"callsARequest":6},"isAncestor":{"msACall":0.6,"callsARequest":2}}
+{"measure":"cycle","after":200,"underRefs":{"files":1,"folders":2}}
+{"ok":true,"measure":"done","measured":["machine","loop","writers","width","history","corestore","native","cycle"],"seconds":480}
+```
+
 ## 2026-11-14: `6ebec98`
 
 The prompt ran as written, every step passed. The code not changed here.
