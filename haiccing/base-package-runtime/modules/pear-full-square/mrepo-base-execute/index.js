@@ -12,8 +12,10 @@
 //   2. its execution branches its own, by its key: execute/<key>/<target>,
 //      each made from its target's head as the request first writes there
 //      (main, runtime, help, protocols: those the mrepo has)
-//   3. each execution branch merged back into its own target, then removed
-//      (a failure: removed, nothing merged)
+//   3. each execution branch squashed into its own target (one commit
+//      there, the request's: what it did on its branch, commit by commit,
+//      stays out of the target's history), then removed (a failure:
+//      removed, nothing squashed)
 //   4. the form completed with its output (or the error that stopped it),
 //      written in its envelope through execute/<key>/request/execute, merged
 //      into request/execute (the request completed: the request protocol
@@ -75,7 +77,7 @@ async function open (w, backend, id, target) {
   return name
 }
 
-// One removed: merged or not (a failure's: discarded).
+// One removed: squashed or merged, or not (a failure's: discarded).
 async function close (backend, id, target) {
   const name = branchOf(id, target)
   const at = (await heads(backend))[name]
@@ -158,8 +160,8 @@ export async function execute (ctx, { actions = {} } = {}) {
     // last local commit undone; exec.reset(): all of it ditched, back to the
     // start), for building up its changes and handling its errors; global,
     // the runtime's, not the action's: when the action ends, its writes
-    // committed and its execution branches merged back into their targets,
-    // once, then removed; a failure discards them, nothing merged.
+    // committed and its execution branches squashed into their targets,
+    // once, then removed; a failure discards them, nothing squashed.
     // Its execution branches, made as it first writes a target: each with
     // the head it started from.
     const made = new Map()
@@ -280,11 +282,12 @@ export async function execute (ctx, { actions = {} } = {}) {
       }
       continue
     }
-    // Merged back, each execution branch that moved (main first); then
-    // removed, merged or discarded.
+    // Squashed into its target, each execution branch that moved (main
+    // first): one commit there, the request's; then removed, squashed or
+    // discarded.
     if (result.ok) {
       const now = await heads(backend)
-      for (const [t, from] of made) if (now[branchOf(name, t)] !== from) await w.merge(branchOf(name, t), t, `Merge ${message}`, { author: AUTHOR })
+      for (const [t, from] of made) if (now[branchOf(name, t)] !== from) await w.squash(branchOf(name, t), t, message, { author: AUTHOR })
     }
     for (const t of made.keys()) await close(backend, name, t)
     // The form completed, in its envelope, through its own execution branch.

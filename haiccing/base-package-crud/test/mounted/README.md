@@ -23,7 +23,7 @@ minimal execution in memory.
 ## Not here
 
 The protocol in a running mrepo: nodes created, read and deleted through
-the inbox, on the execution's branch of `main` and merged back; its
+the inbox, on the execution's branch of `main` and squashed into it; its
 config in effect on a request from outside, `update` answered with the
 actions there are. That needs a test mrepo; until this package has one,
 it is covered by the `haicc` command's end to end test.

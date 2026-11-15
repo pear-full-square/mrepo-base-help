@@ -36,19 +36,23 @@ const run = async (ctx, value) => {
   return 'output' in core.value ? { ok: true, value: core.value.output } : 'error' in core.value ? { ok: false, error: core.value.error } : null
 }
 
-test('execute: execution branches from their targets, the record completed, merged back into each target', async (t) => {
+test('execute: execution branches from their targets, the record completed, squashed into each target', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
     await bootedHost(work, { preload: false })
     await withHost(work, async ctx => {
       let r = await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       t.alike(r, { ok: true, value: { service: 'initialised', state: 'initialised' } })
-      t.is((await json(ctx.repo, '/runtime/service.json')).state, 'initialised', 'merged back into runtime')
+      t.is((await json(ctx.repo, '/runtime/service.json')).state, 'initialised', 'squashed into runtime')
       r = await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
+      const mainBefore = (Object.fromEntries(await ctx.backend.listBranches())).main
       r = await run(ctx, { protocol: 'crud', action: 'create', uri: ['main', 'a/b'], args: ['{"n":1}'] })
       t.alike(r, { ok: true, value: [{ uri: ['main', 'a'], value: {}, children: ['b'], outcome: 'created' }, { uri: ['main', 'a/b'], value: { n: 1 }, children: [], outcome: 'created' }] }, 'completed: its form filled in, merged into request/execute; what it made read back in the same execution')
       t.alike(await json(ctx.repo, '/main/a/b/.node.json'), { n: 1 }, 'in main')
-      t.alike((await ctx.backend.listBranches()).map(([b]) => b).filter(b => b.startsWith('execute/')), [], 'its execution branches, its own by its key: merged back and removed')
+      const squashed = await ctx.backend.readCommit((Object.fromEntries(await ctx.backend.listBranches())).main)
+      t.alike(squashed.parents, [mainBefore], 'one commit in main, its only parent main as it was: the request\'s own commits not in main\'s history')
+      t.ok(/: crud create main\/a\/b/.test(squashed.message), 'saying the request')
+      t.alike((await ctx.backend.listBranches()).map(([b]) => b).filter(b => b.startsWith('execute/')), [], 'its execution branches, its own by its key: squashed and removed')
       const before = (Object.fromEntries(await ctx.backend.listBranches())).main
       r = await run(ctx, { protocol: 'crud', action: 'delete', uri: ['main', 'a'] })
       t.alike(r, { ok: false, error: 'a has children: not deleted (crud/delete a recurse)' }, 'failed: its result said')
