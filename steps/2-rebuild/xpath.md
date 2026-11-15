@@ -947,7 +947,15 @@ script, not kept). Operations a second:
   layers.
 - What the request layers cost on top (the record's own branch, its
   merges, the envelope, the runtime's pass): the cycle measured through
-  a running mrepo, a request a time.
+  a running mrepo, a request a time. Known of it (read from the code,
+  2026-11-15, on the human's question how a file in the inbox folder
+  gets into git): the runtime does not watch the folder, it looks every
+  200 ms; each look lists the whole inbox folder and the whole `inbox`
+  layer to find what is new, commits the new files in one commit, then
+  takes them in. So a request waits up to 200 ms at each hop, and again
+  for its answer; and both listings grow for ever, nothing being
+  removed from the inbox: the wide folder again, here read five times
+  a second.
 
 ## To settle
 
