@@ -647,6 +647,41 @@ flag." To be discussed first, then built.
 - **The logging level is a request flag.**
 - **The levels are implemented**, and what information goes at which
   level is decided: with the human.
+- **Whose need decides** (asked what goes at which level): "You will be
+  the main consumer, so your input is most important." So what is
+  logged is decided from what we need to find a fault or read a
+  measurement from a request's record alone: "Our input", below.
+- **The flag's form**: "Let's do a --flags followed by enumeration."
+  Our reading, to confirm: one option before the URI, `--flags`, then
+  the flags a request carries, listed; a level's name is one of them:
+  `haicc --flags debug host crud/read swarms/*`,
+  `haicc --flags debug,error-on-empty ...`. It is the place for every
+  request flag, not for logging alone.
+
+**Our input** (as the main reader of these records; put to the human,
+not answered)
+
+- **Data, not prose**: an entry is `{ level, event, time, ... }` with a
+  fixed name for its event (`crud.read.select`, `train.squash`) and its
+  numbers in fixed fields (`ms`, `count`), so entries can be counted,
+  added up and compared between two runs without reading sentences.
+- **`error`**: what stopped the request, at which step, and what had
+  been done before it (and was undone).
+- **`warn`**: what was got over, with how often (a ref written once
+  more, a listing asked again, a hand-over found done).
+- **`info`** (without a flag): what the request changed, a line a
+  thing (a node created, a child deployed, a command sent on, a test
+  unit), and one closing line with its totals: the time it took, the
+  reads, the writes, the commits. Enough to say what a request did and
+  roughly what it cost, always.
+- **`debug`**: the steps inside, each with what it took and how much
+  (`ms`, nodes selected, reads, writes); what a URI resolved to (a
+  position, a shortcut); which way a decision went (sent on, executed
+  here; one request, several); and the runtime's part for the request
+  (its branches made, the squash, the record's merge), which the action
+  does not see.
+- No level below `debug` for now (every path read, every value): the
+  record would hold the data twice.
 
 **What is there** (found 2026-11-15)
 
@@ -666,20 +701,9 @@ flag." To be discussed first, then built.
 
 **Proposed** (ours, not answered: the list to discuss)
 
-- What at which level:
-  - `error`: what stopped the request (today its `error` alone);
-  - `warn`: something not as asked that was got over (a ref written
-    once more, a listing asked again, a hand-over found done);
-  - `info`: what the action did, a line a thing (a node created, a
-    child deployed, a command sent on, a test unit);
-  - `debug`: the steps inside, with what each took and how much: a
-    step's duration, the reads and writes counted, the commits, a
-    selection's size; and the runtime's part for the request (its
-    branches, the squash, the merge), which the action does not see.
-- The flag's form: a property of the request's form (`log: "debug"`),
-  as `errorOnEmpty` was proposed; at the command line an option before
-  the URI, where `--raw` and `--output` go: `haicc --log debug host
-  crud/read swarms/*`.
+- In the form: the flags a property of the request (`flags:
+  ["debug"]`); at the command line `--flags` goes where `--raw` and
+  `--output` go, before the URI.
 - A request without the flag: `info`, as now. Whether the mrepo's own
   threshold (`/runtime/log.json`) stays as that default or goes.
 - A command sent on (a `haicc` hop): the flag goes with it; the child's
