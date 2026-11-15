@@ -165,8 +165,21 @@ document.
   (`tasks.md`, "Future additions": how a package is made, what type of
   mrepo it is for; the configs well documented).
 
+- **Its measurements go into the request's record** (the human,
+  2026-11-15, asked whether timings should be written there at debug
+  level: "Logging was decided to go to the request info": `readme.md`,
+  part 12, "a request is its own record"). So: `exec.log` entries at
+  `debug`, with what each step took, in the request's `log`. What is
+  there for it: the four levels, the mrepo's threshold in
+  `/runtime/log.json` (`info` without it). What is not: no code logs at
+  `debug` (one action logs at all, `runtime/run`), nothing records a
+  duration, and nothing writes `/runtime/log.json`: the level cannot be
+  set from the command line.
+
 **To settle**
 
+- How the log's level is set for a measurement: the mrepo's
+  (`/runtime/log.json`, by a command), or asked for with a request.
 - Where the option is written: a protocol's config in its package
   (`protocol.js`), an action's, or the mrepo's own; and its default.
 
