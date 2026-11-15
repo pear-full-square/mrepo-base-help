@@ -285,6 +285,21 @@ select to the list of requests?"; put to the human, not answered)
   was is `T1` or `T2`, by its commit. The sequence is the commits
   walked from the right: `c3` added `c`, `c2` added `b`, `c1` added
   `a`. The cost shows too: each new tree lists every record again.
+- **One commit, one node set for every part of the query** (the
+  human's question: "when we read at fixed commit, it selects the
+  nodeset that goes with it for each part of the query?"; ours: yes).
+  The commit fixes the whole tree below it, every folder and every
+  document: each segment and each filter of the query reads the same
+  state. With several layers in a query, one commit a layer (a branch
+  each): the fixed state is `{ layer: commit }`.
+- **The node set is one commit's tree, not the commits walked** (the
+  human, on the diagram: "for nodeset we are walking the set of one
+  commit. It looks like linked list"). Right, and ours had run two
+  things together. The commits are the linked list, each pointing to
+  the one before. A node set never walks them: it is the tree of the
+  one commit read at, one object listing all its members, by name.
+  The chain is a second thing, an order in time, and no part of a node
+  set.
 - **Two ways to point at the list**, by what is asked:
   - the set: the layer's tree at a commit, its members in name order
     (the keys are GUIDs: that order says nothing);
