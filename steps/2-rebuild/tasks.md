@@ -793,7 +793,7 @@ written into the existing code, and the catches gone through
 ("Errors", below).
 
 **Errors** (the human's question: "errors caught at request level or
-intermediate and rethrown?"; ours, put to the human, not answered)
+intermediate and rethrown?"; ours, put to the human and agreed: "Yes")
 
 - **Today** (found): an error is thrown where it is found, with a
   message that says what and with what (about 120 `throw new Error`),
@@ -827,6 +827,31 @@ intermediate and rethrown?"; ours, put to the human, not answered)
   also means the `debug` and `verbose` entries; both are in it.) Faults
   that are swallowed today will show as errors in the first runs:
   wanted.
+
+**A code quality check** (the human, with the yes on errors: "And code
+quality check on verbose debug and request handling"). Our reading, to
+confirm: the code test checks three things of this task, each failing
+when something was forgotten:
+
+- **`verbose` and `debug` are in place**: every action a protocol
+  offers (a method under `external/`) and every internal method that is
+  handed the execution context logs at `verbose` at least once, and at
+  `debug` where it has internals to show. A method with nothing to say
+  says so, explicitly, as a package with nothing of its own to test
+  does: a decision, not a default. Code without the context (plain
+  functions: `mycelium-uri`, `mycelium-xpath`) is not asked: it is
+  reproduced from its arguments.
+- **Handling**: the two rules on catches ("Errors", above): no catch
+  that does not use its error; an error thrown in a catch carries its
+  `cause`.
+- **Request handling**: what belongs to the request is done at the
+  request, nowhere else: an action does not write to the console,
+  times and counts nothing itself, does not catch its own failure to
+  return it as a value, and writes no `info` of the standard kind (the
+  boundary's).
+
+What can be read from the code is checked there; whether an entry is
+really written when the code runs is for the tests that run it.
 
 **What is there** (found 2026-11-15)
 
