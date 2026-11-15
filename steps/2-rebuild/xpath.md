@@ -285,6 +285,29 @@ select to the list of requests?"; put to the human, not answered)
   was is `T1` or `T2`, by its commit. The sequence is the commits
   walked from the right: `c3` added `c`, `c2` added `b`, `c1` added
   `a`. The cost shows too: each new tree lists every record again.
+- **A folder inside a folder** (the human: "that folder is child on
+  another folder, how does that work?"). A tree's entry is a file or
+  another tree, held by its id. A commit names the root tree; a folder
+  anywhere is reached from it down its path, a tree a step. One node
+  added under `swarms`:
+
+  ```
+  commit c1                     commit c2   (swarm-2 added)
+     │                             │
+     ▼                             ▼
+   root R1                       root R2            new: its entry for swarms changed
+   ├ notes ──► N1                ├ notes ──► N1     the same tree: not touched, shared
+   └ swarms ─► S1                └ swarms ─► S2     new: one entry longer
+               └ swarm-1                     ├ swarm-1   the same as before, shared
+                                             └ swarm-2   new
+  ```
+
+  A change makes a new tree for each folder on its path, up to the
+  root, and for nothing else: what is beside the path keeps its id and
+  is shared between the commits. So the pointer to a node set anywhere
+  is the commit and the path, which lead to that folder's tree; and a
+  folder that did not change (`notes`) has the same id at `c1` and
+  `c2`: what was filtered from it at `c1` still holds at `c2`.
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
