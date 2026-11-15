@@ -47,6 +47,14 @@ human in conversation (their words quoted); the code not changed here.
    `HAICC_WIDTH` already sets it. Proposed (ours, not yet confirmed):
    `HAICC_WIDTH` when set, else the terminal's columns when the output is
    a terminal (`bare-tty`, already in the lockfile), else 80 (piped).
+   Then the human: "I want a haicc command to set it: haicc output 80".
+   Proposed with it (ours, not yet confirmed): the width kept in haicc's
+   own folder (`~/.haicc`, like `sources.list`), so it holds for every
+   later command; `haicc output` alone says the width in force and where
+   it comes from; `haicc output auto` back to the terminal's width. The
+   order: `HAICC_WIDTH` for one command, then the width set with `haicc
+   output`, then the terminal's, then 80. `output` becomes one of the
+   script's own words: a position named so is reached as `./output`.
 
 The human also asked whether `haicc` is now a Node app: answered no, an
 app run with Bare from its bundle (`base-app-haicc`), the sh scripts of
