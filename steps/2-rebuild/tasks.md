@@ -669,8 +669,31 @@ flag." To be discussed first, then built.
     ```
 
     (Our earlier reading, the list ended by the first word that is not
-    a known flag, is withdrawn: the end is explicit, so a word that is
-    no flag is an error said, not a URI.)
+    a known flag, is withdrawn: the end is explicit.) Said again on our
+    list of proposals: "End of command or --".
+  - **An unknown flag**: "Unknown flag ignored with warning" (our
+    proposal, refused, is withdrawn). The warning is an entry in the
+    request's log.
+  - **In a chain**: "A flag persists in chain until changed." Our
+    reading, to confirm: a flag holds from the command it is written at
+    through the commands that follow in the chain, until one of them
+    sets it differently. Written at a command that is not the last, its
+    list is closed with `--`; at the end of the line it is the last
+    command's:
+
+    ```
+    haicc --flags log=debug -- host haicc node-1 crud/read swarms
+    haicc host haicc node-1 crud/read swarms --flags log=debug
+    ```
+
+    The first: `debug` at the boot mrepo, at `host` and at `node-1`.
+    The second: at `node-1` only.
+- **The output's format is ours**: "You decide output format, does not
+  need to be fixed." What an entry holds is ours to choose and to
+  change as we learn what we need ("Our input", below, is then a start,
+  not a contract).
+- **Not done discussing**: "Still items to discuss" (on our request for
+  a go): nothing of this task is built yet.
 
 **Our input** (as the main reader of these records; put to the human,
 not answered)
@@ -718,15 +741,12 @@ not answered)
 - The logging flag: `log=<level>`, its values the four levels.
 - In the form the flags are a map: `flags: { "log": "debug",
   "error-on-empty": true }`.
-- A flag that is not known, or a value that is not one of its flag's:
-  refused, with the flags there are.
-- In a chain (`haicc host haicc node-1 crud/read swarms --flags
-  log=debug`) the flags are the whole command's: they go with what is
-  sent on, hop by hop.
+- A value that is not one of its flag's (`log=loud`): ignored with a
+  warning, as an unknown flag is.
 - A request without the flag: `info`, as now. Whether the mrepo's own
   threshold (`/runtime/log.json`) stays as that default or goes.
-- A command sent on (a `haicc` hop): the flag goes with it; the child's
-  entries come back with its response, under their jump.
+- A command sent on (a `haicc` hop): the child's entries come back
+  with its response, under their jump.
 - Timings and counts in one shape (`ms`, `count`), so a tool can add
   them up: the XPath measurements read them.
 - A debug log makes a record large: whether it is bounded.
