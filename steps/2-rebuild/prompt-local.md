@@ -31,7 +31,8 @@ Only its note is committed.
 >    sources linked, Bare put in place, the boot, the host deployed from
 >    `base-component-haicc`, its service started, a node deployed inside
 >    it, commands chained through both, nodes created, read and deleted
->    with `crud`, the teardowns. One line a check (136 of them); the last
+>    with `crud`, a request's log and its flags, the teardowns. One line a
+>    check (152 of them); the last
 >    lines say
 >    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
 >    leaves nothing running: check with `pgrep -fa "bin/bare"`.

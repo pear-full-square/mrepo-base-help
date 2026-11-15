@@ -9,8 +9,7 @@ its record is then a part in `readme.md`.
 
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
-the request train's two repairs, is built: part 65. Waiting, to discuss
-then build: task 5, logging.
+the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66.
 
 How to read a task:
 
@@ -633,264 +632,24 @@ to 212 ms within 200). Left from it, each to come with what needs it:
 
 ## 5. Logging: the levels in use, the level a request's flag
 
-The human, 2026-11-15, while the XPath measurements were discussed
-(`xpath.md`, "The steps"): "put for discussion and implementation
-(another item) implement logging levels and decide what info at what
-level. Timings counts etc. All go in request, logging level is request
-flag." To be discussed first, then built.
+Built (`readme.md`, part 66): the flags (`--flags`, space separated, a
+flag alone or `key=value`, to the end of the command or `--`, held
+through a chain until changed, one that is none ignored with a
+warning); three levels, `log=info|verbose|debug`, an error and a warning
+always; `info` made at the request, its metrics and its audit; an
+action's steps measured for it (`exec.step`); errors caught at the
+request, a catch in between using its error or saying what it expects,
+a thrown one carrying its cause; a file that may not be there (`find`);
+the retrofit through every module; the code quality check. Left from
+it, each to come with what needs it:
 
-**Settled** (the human)
-
-- **Everything goes into the request**: "Logging was decided to go to
-  the request info" (`readme.md`, part 12: a request is its own record).
-  Timings, counts and the like too.
-- **The logging level is a request flag.**
-- **The levels are implemented**, and what information goes at which
-  level is decided: with the human.
-- **Whose need decides** (asked what goes at which level): "You will be
-  the main consumer, so your input is most important." So what is
-  logged is decided from what we need to find a fault or read a
-  measurement from a request's record alone: "Our input", below.
-- **The flag's form**: "Let's do a --flags followed by enumeration."
-  One option, `--flags`, then the flags a request carries; it is the
-  place for every request flag, not for logging alone.
-  - **Space separated** (on our reading with commas).
-  - **A flag can carry a value**: "They could have key=value with no
-    space": `log=debug`; one without a value stands alone
-    (`error-on-empty`).
-  - **Where the list is, and where it ends**: "Flags are last of
-    command or ended by --." So the flags come at the end of the
-    command, everything after `--flags` a flag; or earlier, the list
-    closed with `--`:
-
-    ```
-    haicc host crud/read swarms/* --flags log=debug error-on-empty
-    haicc --flags log=debug error-on-empty -- host crud/read swarms/*
-    ```
-
-    (Our earlier reading, the list ended by the first word that is not
-    a known flag, is withdrawn: the end is explicit.) Said again on our
-    list of proposals: "End of command or --".
-  - **An unknown flag**: "Unknown flag ignored with warning" (our
-    proposal, refused, is withdrawn). The warning is an entry in the
-    request's log.
-  - **In a chain**: "A flag persists in chain until changed." Our
-    reading, to confirm: a flag holds from the command it is written at
-    through the commands that follow in the chain, until one of them
-    sets it differently. Written at a command that is not the last, its
-    list is closed with `--`; at the end of the line it is the last
-    command's:
-
-    ```
-    haicc --flags log=debug -- host haicc node-1 crud/read swarms
-    haicc host haicc node-1 crud/read swarms --flags log=debug
-    ```
-
-    The first: `debug` at the boot mrepo, at `host` and at `node-1`.
-    The second: at `node-1` only.
-- **The output's format is ours**: "You decide output format, does not
-  need to be fixed." What an entry holds is ours to choose and to
-  change as we learn what we need ("Our input", below, is then a start,
-  not a contract).
-- **Not done discussing**: "Still items to discuss" (on our request for
-  a go): nothing of this task is built yet.
-- **Three levels** (the human's proposal): "info, verbose, debug. Error
-  and warning always given. Silent not an option. Info has all standard
-  metrics and auditing, verbose more detail." So `log=info` (without
-  the flag), `log=verbose`, `log=debug`; an error and a warning are in
-  the record whatever the level. (Today: `error`, `warn`, `info`,
-  `debug`, one threshold over the four.)
-- **In the rules, and the existing code** (the human's question: "What
-  about with it in the rules and retrofitting existing code?"): our
-  answer below, to discuss.
-
-**Rules and retrofit** (ours; its first point confirmed by the human,
-asked whether `info` comes from the boundary so that existing actions
-need no change: "Yes from request")
-
-- **The standard comes from the boundary, not from each action**
-  (`CLAUDE.md`, "Execution": metrics and audit only at the boundary).
-  The execution context already is every action's only way to read,
-  write and commit, so it can count and time them itself. At `info`
-  every request's record then holds its metrics (the time it took, the
-  reads, the writes, the commits) and its audit (what it changed: the
-  paths written and removed, on which layer), without the action doing
-  anything: nothing to remember, nothing to forget. The runtime adds
-  its own part the same way (the request begun, its branches, the
-  squash, the record's merge).
-- **So the retrofit is small**: the boundary is built once
-  (`mrepo-base-execute`, the runtime) and every existing action has its
-  `info` log the same day, untouched. An action adds only what it alone
-  knows: at `info` the meaning of what it did (a child deployed, a
-  command sent on), at `verbose` its steps, at `debug` its internals.
-  (The human since: `verbose` and `debug` in all code.)
-- **The rules** (the code rules, `package-docs-template`, checked):
-  - code run under a request logs through `exec.log`, never to the
-    console (checked over the modules; three places print today, each
-    with its reason: the app's own output, the follower's, the
-    runtime's last word when no request can take it: named
-    exceptions);
-  - an event's name is given short by the action and stored under its
-    protocol and action by the context (`crud.read.select`): nothing to
-    check;
-  - the standard entries are there for every action: tested once, where
-    they are made (the execute module's tests), and seen again in each
-    package's `mounted` test, which runs every action.
-- A warning or an error is kept at every level; an entry at a level
-  that is not one of the five is refused, as today.
-- **What of it the code test holds** (the human: "Is all that in code
-  tests?"). Today none: the code test (`/test/code`, `pkgm-base-check`,
-  `internal/rules`) reads the code without running it and checks three
-  things: a module's structure, its imports, transient references.
-  Proposed:
-  - into the code test, read from the code: no console in code run
-    under a request (the named exceptions aside); a level written in a
-    call of `exec.log` is one of the five;
-  - not for the code test, because it has to run: that the standard
-    entries are in a request's record (the execute module's tests,
-    where they are made; each package's `mounted` test, which runs
-    every action; the two end to end tests, on a real record).
-
-**Our input** (as the main reader of these records; put to the human,
-not answered)
-
-- **Data, not prose**: an entry is `{ level, event, time, ... }` with a
-  fixed name for its event (`crud.read.select`, `train.squash`) and its
-  numbers in fixed fields (`ms`, `count`), so entries can be counted,
-  added up and compared between two runs without reading sentences.
-- **`error`**: what stopped the request, at which step, and what had
-  been done before it (and was undone).
-- **`warn`**: what was got over, with how often (a ref written once
-  more, a listing asked again, a hand-over found done).
-- **`info`** (without a flag): what the request changed, a line a
-  thing (a node created, a child deployed, a command sent on, a test
-  unit), and one closing line with its totals: the time it took, the
-  reads, the writes, the commits. Enough to say what a request did and
-  roughly what it cost, always. (The human since: "Info has all
-  standard metrics and auditing".)
-- **`verbose`** (the human's level, "more detail"; ours: what was under
-  `debug` here, the part a measurement reads): the steps inside, each
-  with what it took and how much (`ms`, nodes selected, reads, writes);
-  what a URI resolved to (a position, a shortcut); which way a decision
-  went (sent on, executed here; one request, several).
-- **`debug`**: the internals: the runtime's part for the request call
-  by call (its branches made, the squash, the record's merge), a retry
-  with what it met, the shapes of what was passed.
-- Nothing below `debug` for now (every path read, every value): the
-  record would hold the data twice.
-
-**Where each level is made and tested** (the human, on the split
-between the code test and the tests that run): "There is a lot of
-request testing, info and output. Debug and verbose in all code." Our
-reading, to confirm: `info` and a request's output are the request's
-matter, made at the boundary and covered by the many tests that run
-requests; `verbose` and `debug` entries are written into all the code,
-not only where it is touched next: the retrofit goes through every
-module. (Our "as an action is touched" is withdrawn.) Confirmed: "Retrofit means putting debug and verbose in place", and,
-on our reading that it then means that alone: "I meant retrofit also
-means". So the retrofit is both: the `verbose` and `debug` entries
-written into the existing code, and the catches gone through
-("Errors", below).
-
-**Errors** (the human's question: "errors caught at request level or
-intermediate and rethrown?"; ours, put to the human and agreed: "Yes")
-
-- **Today** (found): an error is thrown where it is found, with a
-  message that says what and with what (about 120 `throw new Error`),
-  and caught once, at the request's boundary (`mrepo-base-execute`):
-  the request rolled back, its `error` the message. Only the message is
-  kept: no stack, no step. Nothing is rethrown with its cause. About
-  forty places in between catch and go on with a default (a file not
-  there: `() => 'info'`, `catch {}`): meant for what is expected to be
-  missing, they take any error, silently (a file that is there and
-  does not parse reads as missing).
-- **Caught at the request level**: one place decides what an error
-  does to a request, the boundary. It writes the `error` entry (always
-  kept): the message, the step it happened in, what had been done and
-  was undone; the stack at `debug`.
-- **In between, a catch has one of two reasons**, and says which:
-  - to go on (a retry, a default for what may be missing): it names
-    what it expects (not there, taken meanwhile) and lets everything
-    else through; getting over something that was not expected is a
-    `warn`, the expected default a `debug` entry;
-  - to say more and throw again: the new error carries the one caught
-    as its `cause`, so the chain reaches the boundary whole (its
-    messages in the `error` entry, in order).
-  Never a new error in place of the one caught, and never an error
-  taken without a word.
-- **Checked, in the code test**: a catch that does not use its error
-  (`catch {}`, a rejection handler without a parameter) is a problem,
-  unless it goes through the one helper that tells "not there" from the
-  rest; an error thrown inside a catch carries a `cause`.
-- **The retrofit, this part of it**: the forty places, each looked at:
-  what it expects named, the rest let through. (The human: the retrofit
-  also means the `debug` and `verbose` entries; both are in it.) Faults
-  that are swallowed today will show as errors in the first runs:
-  wanted.
-
-**A code quality check** (the human, with the yes on errors: "And code
-quality check on verbose debug and request handling"). Our reading, to
-confirm: the code test checks three things of this task, each failing
-when something was forgotten:
-
-- **`verbose` and `debug` are in place**: every action a protocol
-  offers (a method under `external/`) and every internal method that is
-  handed the execution context logs at `verbose` at least once, and at
-  `debug` where it has internals to show. A method with nothing to say
-  says so, explicitly, as a package with nothing of its own to test
-  does: a decision, not a default. Code without the context (plain
-  functions: `mycelium-uri`, `mycelium-xpath`) is not asked: it is
-  reproduced from its arguments.
-- **Handling**: the two rules on catches ("Errors", above): no catch
-  that does not use its error; an error thrown in a catch carries its
-  `cause`.
-- **Request handling**: what belongs to the request is done at the
-  request, nowhere else: an action does not write to the console,
-  times and counts nothing itself, does not catch its own failure to
-  return it as a value, and writes no `info` of the standard kind (the
-  boundary's).
-
-What can be read from the code is checked there; whether an entry is
-really written when the code runs is for the tests that run it.
-
-**What is there** (found 2026-11-15)
-
-- `exec.log(level, event, data)` in the execution context; the levels
-  `error`, `warn`, `info`, `debug`; an entry kept at or above a
-  threshold, with its time, in the request's own record (its `log`).
-- The threshold is the mrepo's: `/runtime/log.json`'s `level`, `info`
-  without it. Nothing writes that file: the level cannot be set today.
-- One action logs: `runtime/run`, a line a test unit, `info` or
-  `error`. No code logs at `debug`; nothing records a duration or a
-  count.
-- The runtime's own work for a request (begun, its branches made, the
-  squash, the record's merge, moved to done) leaves no entries. A
-  runtime's failed pass goes to standard error.
-- The storage modules (`p2p-store`, `p2p-mrepo`, `p2p-replicate`) emit
-  events to an observer when one is handed in: not the request's log.
-
-**Proposed** (ours, not answered: the list to discuss)
-
-- The logging flag: `log=<level>`, its values the three levels.
-- In the form the flags are a map: `flags: { "log": "debug",
-  "error-on-empty": true }`.
-- A value that is not one of its flag's (`log=loud`): ignored with a
-  warning, as an unknown flag is.
-- A request without the flag: `info`, as now. Whether the mrepo's own
-  threshold (`/runtime/log.json`) stays as that default or goes.
-- A command sent on (a `haicc` hop): the child's entries come back
-  with its response, under their jump.
-- Timings and counts in one shape (`ms`, `count`), so a tool can add
-  them up: the XPath measurements read them.
-- A debug log makes a record large: whether it is bounded.
-
-**Where**
-
-- `pear-full-square/mrepo-base-request/lib/record.js` (`logger`,
-  `LEVELS`, `complete`); `mrepo-base-execute/index.js` (the threshold
-  read, `exec.log`, `entries` into the completed form);
-  `mrepo-base-request` (`formOf`: a request's form);
-  `haicc-base-app/internal/command/` (the options before a command).
+- **The runtime's part after a request is completed** (its record
+  merged, moved to done): not logged, the record is closed by then.
+- **A log's size**: not bounded.
+- **`error-on-empty`**, the second flag: "Future additions", below; the
+  place for it is there (`FLAGS`, `mrepo-base-request`).
+- **What the entries hold** is ours to change as we learn what we need
+  (the human: "You decide output format, does not need to be fixed").
 
 ## Future additions
 

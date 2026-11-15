@@ -24,7 +24,8 @@ standing for the parent's.
 - **`redeploy`**: torn down first and that committed, then the deploy,
   from the package it was deployed from when none is given.
 - **Nothing forgotten**: the last test fails when the config names an
-  action that was not run here.
+  action that was not run here, or one that wrote nothing into the
+  request's log as it ran.
 
 ## Not here
 

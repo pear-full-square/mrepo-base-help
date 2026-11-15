@@ -18,7 +18,8 @@ minimal execution in memory.
   and without `recurse`; each repeated.
 - **What each refuses**, writing nothing; a shortcut read as a node.
 - **Nothing forgotten**: the last test fails when the config names an
-  action that was not run here.
+  action that was not run here, or one that wrote nothing into the
+  request's log as it ran.
 
 ## Not here
 

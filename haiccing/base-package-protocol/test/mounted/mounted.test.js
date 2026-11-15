@@ -14,6 +14,11 @@ function execution (protocols = {}, files = {}) {
   const exec = {
     runtime: { protocols },
     read: async uri => { if (!(uri in files)) throw new Error(`nothing at ${uri}`); return files[uri] },
+    // the rest of an execution context, standing in: a file that may not
+    // be there, the log (kept: entries), a step run as it is
+    find: async function (p) { try { return await this.read(p) } catch { return null } },
+    log: function (level, event, data = {}) { (this.entries ??= []).push({ level, event, ...data }) },
+    step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
     put: (uri, bytes) => { writes.push(['put', uri, JSON.parse(bytes.toString())]); files[uri] = Buffer.from(bytes) },
     remove: uri => { writes.push(['remove', uri]); delete files[uri] }
   }
@@ -21,7 +26,14 @@ function execution (protocols = {}, files = {}) {
 }
 const HELP = { package: 'org/help', description: 'Help.', actions: { get: { uris: ['**'] } } }
 const ran = new Set()
-const act = (name, exec, form) => { ran.add(name); return mounted.actions.protocol[name](exec, form) }
+// an action that wrote into the execution's log as it ran: every one must
+const logged = new Set()
+const act = async (name, exec, form) => {
+  ran.add(name)
+  const before = exec.entries?.length ?? 0
+  // (one refused has logged too, before it threw)
+  try { return await mounted.actions.protocol[name](exec, form) } finally { if ((exec.entries?.length ?? 0) > before) logged.add(name) }
+}
 
 test('loaded as a runtime loads it: one protocol, protocol, its config and its actions', (t) => {
   t.alike(Object.keys(mounted.protocols), ['protocol'], 'the package provides the protocol protocol, and no other')
@@ -73,4 +85,5 @@ test('activate, then deactivate: the layer as it was', async (t) => {
 
 test('every action the config names was run here', (t) => {
   t.alike([...ran].sort(), Object.keys(mounted.protocols.protocol.actions).sort(), 'none left out: an action added without its test fails this')
+  t.alike([...logged].sort(), Object.keys(mounted.protocols.protocol.actions).sort(), 'and each wrote into the request\'s log as it ran: an action that logs nothing fails this')
 })

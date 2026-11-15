@@ -34,9 +34,15 @@ export function child (exec, segments) {
   if (!dir) throw new Error('no directory in the context')
   const mrepo = uriOf(exec.runtime.uri, at)
   const local = `runtime/deployed/${at}.json`
-  const json = p => exec.read(p).then(b => JSON.parse(b.toString()), () => null)
+  // a document that may not be there: null then; one that is no document: an error
+  const json = async p => {
+    const bytes = await exec.find(p)
+    if (bytes === null) return null
+    try { return JSON.parse(bytes.toString()) } catch (err) { throw new Error(`not a document: ${p}`, { cause: err }) }
+  }
   const linked = async () => (await shortcutsAt(exec, at)).find(l => l.mrepo === mrepo) ?? null
-  const exists = async () => (await exec.select(`main/${at}`).catch(() => [])).length > 0 && !(await linked())
+  const exists = async () => (await exec.select(`main/${at}`)).length > 0 && !(await linked())
+  exec.log('debug', 'child', { at, mrepo, dir: join(dir, shadowOf(at)) })
   return {
     name: at,
     at,

@@ -55,6 +55,11 @@ function context (dir, backend) {
     // (paths given relative from the root or slash-led, the same)
     select: uri => repo.select(abs(uri)),
     read: uri => repo.read(abs(uri)),
+    // the rest of an execution context, standing in: a file that may not
+    // be there, the log (kept: entries), a step run as it is
+    find: async function (p) { try { return await this.read(p) } catch { return null } },
+    log: function (level, event, data = {}) { (this.entries ??= []).push({ level, event, ...data }) },
+    step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
     put: (uri, bytes) => edits.push(['put', abs(uri), bytes]),
     remove: uri => edits.push(['remove', abs(uri)]),
     commit: () => commit()
@@ -124,12 +129,11 @@ test('deploy from a target package\'s list, inside the parent; redeploy; teardow
     const rec = json(await repo.read('/runtime/deployed/host.json'))
     exec.put('/runtime/deployed/host.json', Buffer.from(JSON.stringify({ ...rec, runtime: { pid: stubborn.pid } })))
     await commit()
-    const logged = []
-    exec.log = (level, event, data) => logged.push({ level, event, ...data })
+    exec.entries = []
     t.alike(await teardown(exec, { uri: ['main', 'host'] }), { tornDown: 'host' })
     t.absent(spawnSync('kill', ['-0', String(stubborn.pid)], { stdio: 'ignore' }).status === 0, 'a runtime that would not stop: ended (SIGKILL)')
-    t.is(logged.find(e => e.event === 'runtime stopped')?.how, 'SIGKILL', 'and how, logged')
-    delete exec.log
+    t.is(exec.entries.find(e => e.event === 'runtime')?.stopped?.how, 'SIGKILL', 'and how, logged: the step that stopped it')
+    t.alike(exec.entries.filter(e => e.level === 'info').map(e => e.event), ['torn down'], 'what it did, at info')
     await commit()
     t.absent(existsSync(host), 'removed')
     t.alike([await repo.read('/main/host/.shortcuts.json').catch(() => null), await repo.read('/main/host/.node.json').catch(() => null), await repo.read('/runtime/deployed/host.json').catch(() => null)], [null, null, null], 'its shortcut and its node out of main, what was local out of the runtime layer')

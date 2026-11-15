@@ -21,7 +21,7 @@ export async function place ({ dir, store, sources, list }) {
   const backend = p2pgitBackend(join(dir, '.git'), { fs })
   const from = sources.map(x => x.kind === 'folder' ? `folder:${x.path}` : `github:${x.org}`)
   const now = Buffer.from(JSON.stringify({ packages, sources: from, store }, null, 2) + '\n')
-  const was = await openRepo(backend).read('/packages/manifest.json').catch(() => null)
+  const was = await openRepo(backend).find('/packages/manifest.json')
   const committed = !was || !was.equals(now)
   if (committed) {
     const c = await writer(backend).change('packages')

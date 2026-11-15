@@ -9,12 +9,26 @@ const none = name => new Failure(`no command '${name}' (haicc --help)`, 2)
 // A position written as the root: `.`, or `./` and nothing after.
 const isRoot = uri => uri.replace(/^(\.\/)+/, '') === '.' || uri.replace(/^(\.\/)+/, '') === ''
 
+// A request's flags: a list after this word, to the end of the command or
+// to a closing --.
+const FLAGS = '--flags'
+const END = '--'
+
 function forMrepos (args, print) {
+  // a flag list in front, closed by --: the command's own, sent in front
+  // of it as typed (one after the command is among its parts already)
+  let lead = []
+  if (args[0] === FLAGS) {
+    const end = args.indexOf(END)
+    if (end < 0 || end === args.length - 1) throw new Failure(`haicc ${FLAGS} <flag>... ${END} <URI> <protocol>/<action> ... (flags in front are closed by ${END}, a command follows)`, 2)
+    lead = args.slice(0, end + 1)
+    args = args.slice(end + 1)
+  }
   const [uri, ...parts] = args
   if (!parts.length) throw new Failure('haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)', 2)
   // at the root the command is written plain; anywhere else the haicc
   // command goes as it is, and the root mrepo resolves the position
-  return { kind: 'request', uri, parts: isRoot(uri) ? parts : ['haicc', uri, ...parts], print }
+  return { kind: 'request', uri, parts: [...lead, ...(isRoot(uri) ? parts : ['haicc', uri, ...parts])], print }
 }
 
 export function command (argv) {
@@ -23,6 +37,7 @@ export function command (argv) {
     if (!rest.length) throw new Failure(`${first} goes before a URI`, 2)
     return forMrepos(rest, first.slice(2))
   }
+  if (first === FLAGS) return forMrepos(argv, null)
   if (first === '' || (USAGE.includes(first) && !rest.length)) return { kind: 'usage' }
   // the machine level: a protocol and its action, no URI before them
   const actions = p => Object.keys(MACHINE[p]).sort()

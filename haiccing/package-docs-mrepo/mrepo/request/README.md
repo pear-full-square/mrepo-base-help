@@ -11,6 +11,44 @@ The requests, as they move. Non-atomic. A request is one document,
 
 An error goes into the request it happened to.
 
+## Flags
+
+What is asked of the way a request is handled, beside what it asks for.
+Written with a command after the word `--flags`, space separated, to the
+end of the command or to a closing `--`; a flag stands alone, or carries
+a value, `key=value`, no space.
+
+```
+haicc host crud/read swarms --flags log=verbose
+haicc --flags log=debug -- host haicc node-1 crud/read swarms
+```
+
+- **In the form** they are a map: `"flags": { "log": "debug" }`.
+- **A flag holds through a chain until changed**: one written in front
+  of a chain goes with each command sent on; one written at the end of
+  the line is the last command's.
+- **A flag that is none**, or a value its flag does not take: ignored,
+  with a warning in the request's log.
+- The flags there are: `log`, below.
+
+## The log
+
+A request's log is in its own record, `log`: its entries, each
+`{ level, event, time, ... }`, its numbers in fields of their own (`ms`,
+counts).
+
+| level | |
+|---|---|
+| `error`, `warn` | always kept: what stopped the request (`request.failed`: the error, its causes, the step it was at, what was undone); what was got over |
+| `info` | without a flag: what the request changed, a target a line (`request.changed`: the paths added, changed, removed); where it was sent on; its metrics, the closing line (`request.metrics`: `ok`, `ms`, reads, selects, puts, removes, commits); and the meaning of what its action did |
+| `verbose` | `--flags log=verbose`: the action's steps too, each with what it took and what it read and wrote |
+| `debug` | `--flags log=debug`: its internals too, and the boundary's own steps (`train.*`) |
+
+An action's entries are stored under its protocol and action:
+`crud.read.select`. The entries of a request a command was sent on to
+come back with its response, each under its `jump`: the positions gone
+through.
+
 ## Internal requests
 
 A request comes from the inbox, or from the mrepo itself. Either way it

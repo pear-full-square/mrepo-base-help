@@ -7,6 +7,7 @@ import { Failure } from '../failure.js'
 // The list's file, in haicc's own folder: a line a source, folder:<path>
 // or github:<org>.
 export const LIST = 'sources.list'
+// catch: not there: not a folder
 const isFolder = f => { try { return statSync(f).isDirectory() } catch { return false } }
 
 export function sources (home) {

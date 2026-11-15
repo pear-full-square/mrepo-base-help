@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-15, part 65). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-15, part 66). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -9,7 +9,8 @@ pin, every package brought to the template one by one; 60 the `haicc`
 command as a Bare app; 61 relative URIs, piece A; 62 a URI inside an
 array of segments; 63 the crud protocol, the shortcuts in main; 64 the rest actions
 removed, a race fixed; 65 the request train's two repairs: the squash
-into main).
+into main; 66 logging: flags, three levels, the request's metrics and
+audit, errors caught at the request, the code quality check).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -51,7 +52,7 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
   pinned, each with a test of its own and a current, passing report
   (parts 47 to 64). `tools/bare tools/release.js --strict` passes;
   `tools/bare tools/code-check.js` and the README checks have no
-  problems; the `haicc` test 136 of 136; `base-component-boot`'s `boot`
+  problems; the `haicc` test 152 of 152; `base-component-boot`'s `boot`
   test passing.
 - The `haicc` command is a Bare app, `base-app-haicc` (part 60); the
   shell, `base-linux-haicc`, is the first step only. The command's form
@@ -82,12 +83,22 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
   folders; the ancestry check reads what two histories have apart. A
   request's cycle at the repository's level stays near 20 ms however
   many are done (`tools/bare tools/commit-bench.js --only cycle`).
+- **A request's log** (part 66): in its record; `info` unasked (what it
+  changed, its metrics), `--flags log=verbose` its action's steps,
+  `log=debug` the internals; an error and a warning always. Flags:
+  `haicc host crud/read . --flags log=verbose`, `haicc --flags
+  log=debug -- host haicc node-1 ...` (in front: for the whole chain).
+  **When code is written**: an action logs through `exec.log` and
+  `exec.step`, reads what may be missing with `exec.find`, never
+  catches without using the error or saying what it expects
+  (`// catch:`), and throws with `{ cause }`; the code test checks it
+  (`package-docs-template`, "Logging and handling").
 - **Every package and module has its own repository, up to date**
   (2026-11-14): `haiccing/base-app-haicc` and
   `pear-full-square/haicc-base-app` were the last two created.
 
 **Next: a planning round with the human.** The task list (`tasks.md`) is
-built out: tasks 0 to 4 are done (parts 60 to 65). What it still holds
+built out: tasks 0 to 5 are done (parts 60 to 66). What it still holds
 is what they left, each to come with what needs it:
 
 - of relative URIs (task 1): more than the two segments of a URI
@@ -110,10 +121,8 @@ requests can run on threads, several at once (reads of the Corestore are
 parallel, tried); the request train and the commit to `main` stay on one
 thread; the commits measured (`tools/commit-bench.js`: git is not the
 limit for the commits; the train's bookkeeping slows as requests are
-done). **Task 4, the two repairs, is built** (part 65). **Task 5,
-logging, waits**: to discuss with the human, then build (everything
-into the request, the level a request's flag, what goes at which level
-to decide). XPath itself: a good
+done). **Tasks 4 and 5 are built** (parts 65 and 66: the two repairs;
+logging). XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
 `xpath.md` and its "To settle" lists are what to go through with the

@@ -120,6 +120,35 @@ helper with nothing to document is a plain file. A method's README: the
 one-liner, the summary, then `Signature`, `Arguments` for an action, `Returns`,
 `Errors`, as they apply. The module's `index.js` exports its methods.
 
+## Logging and handling
+
+Checked by the code test, read from a module's own code (its tests
+aside). What is decided in the code is said there, in a remark on the
+line or right above it: `// log: ...`, `// catch: ...`, `// console: ...`,
+`// time: ...`.
+
+- **A request's log is its record.** An action logs through the
+  execution context: `exec.log(level, event, data)`, and
+  `exec.step(event, data, fn)` for a step, which the context measures.
+  Nothing is printed: a print that is meant says why (`// console:`).
+- **Three levels of detail**: `info`, `verbose`, `debug`; `error` and
+  `warn` are always kept. `info` is the request's standard, its metrics
+  and its audit, made at the boundary for every action; an action adds
+  at `info` only the meaning of what it did. Its steps go at `verbose`,
+  its internals at `debug`.
+- **Every function handed the execution context logs**, or says where
+  its entries are, or why it has none (`// log:`): a decision, not a
+  default.
+- **What is the request's is not done by an action**: it takes no time
+  itself (a step is measured for it), writes no entry of the boundary's
+  kind (`request.*`, `train.*`), and does not return its own failure as
+  a value: it throws, and the request records it.
+- **An error is caught at the request.** In between, a catch has one of
+  two reasons. To go on: it uses the error, or says what it expects
+  (`// catch:`); for a file that may not be there, `exec.find` gives
+  `null` and lets everything else through. To say more: the error it
+  throws carries the one caught, `{ cause }`.
+
 ## package.json
 
 ```json

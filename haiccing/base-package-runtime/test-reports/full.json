@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-package-runtime",
-  "content": "cf64023f741c568f6fd0103a37b2d8e4057a32b374f18e3f7e99c27ed67d9c38",
+  "content": "2199eaaae3e8bef8d68e2f371f11c9d9cfbf0dbc01b7e366e127b8582294af4b",
   "bare": "v1.36.0",
-  "date": "2026-11-15T01:24:40.792Z",
+  "date": "2026-11-15T08:28:37.019Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -88,12 +88,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-execute",
       "ok": true,
       "tests": {
-        "passed": 7,
-        "total": 7
+        "passed": 10,
+        "total": 10
       },
       "asserts": {
-        "passed": 48,
-        "total": 48
+        "passed": 88,
+        "total": 88
       },
       "failures": []
     },
@@ -127,12 +127,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-request",
       "ok": true,
       "tests": {
-        "passed": 14,
-        "total": 14
+        "passed": 16,
+        "total": 16
       },
       "asserts": {
-        "passed": 125,
-        "total": 125
+        "passed": 158,
+        "total": 158
       },
       "failures": []
     },
@@ -144,8 +144,8 @@
         "total": 6
       },
       "asserts": {
-        "passed": 110,
-        "total": 110
+        "passed": 122,
+        "total": 122
       },
       "failures": []
     },
@@ -192,12 +192,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-git",
       "ok": true,
       "tests": {
-        "passed": 134,
-        "total": 134
+        "passed": 139,
+        "total": 139
       },
       "asserts": {
-        "passed": 712,
-        "total": 712
+        "passed": 737,
+        "total": 737
       },
       "failures": []
     },
@@ -244,12 +244,12 @@
       "unit": "/test/modules/pear-full-square/p2p-mrepo",
       "ok": true,
       "tests": {
-        "passed": 32,
-        "total": 32
+        "passed": 33,
+        "total": 33
       },
       "asserts": {
-        "passed": 158,
-        "total": 158
+        "passed": 163,
+        "total": 163
       },
       "failures": []
     },
@@ -283,12 +283,12 @@
       "unit": "/test/modules/pear-full-square/pkgm-base-check",
       "ok": true,
       "tests": {
-        "passed": 14,
-        "total": 14
+        "passed": 17,
+        "total": 17
       },
       "asserts": {
-        "passed": 26,
-        "total": 26
+        "passed": 46,
+        "total": 46
       },
       "failures": []
     }
