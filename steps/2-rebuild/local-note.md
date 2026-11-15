@@ -7,6 +7,51 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-15: `c8200f7`, the human's manual test
+
+The human tried `haicc` by hand. Three findings, each settled with the
+human in conversation (their words quoted); the code not changed here.
+
+1. **Flags: the implementation is wrong** (part 66's reading). The
+   human: "The flags should be after host and -- is used to say: this is
+   where the next command starts." So:
+   `haicc host --flags log=debug -- crud/read .`: the flags after the
+   URI are that step's, `--` marks where the next command starts, and
+   `--` is optional ("yes, -- optional"). Today
+   (`mrepo-base-request/lib/flags.js`, `split`) a list in front of the
+   URI, closed by `--`, is the first command's, and after the URI of a
+   command passed on (`goto`) no list is looked for. A flag still
+   persists down the chain until changed (unchanged, ours).
+2. **The record printed: attributes packed on a line.** The human
+   expected compact JSON, "attributes on one line" up to the width;
+   today (`haicc-base-app/internal/unpack`) an opened object puts every
+   attribute on a line of its own. Confirmed with the human on a sample:
+   an opened container's entries fill a line up to the width, separated
+   by `, `; an entry is never split across lines; one that does not fit
+   on a line of its own is opened below, as now. E.g.:
+
+   ```
+   "value": {
+     "command": ["boot/teardown","host"], "protocol": "boot",
+     "action": "teardown", "uri": ["main","host"], "args": [],
+     "output": {"tornDown":"host"},
+     "log": [
+       {
+         "level": "info", "event": "boot.teardown.torn down",
+         "time": "2026-11-15T12:18:51.261Z", "at": "host",
+         "mrepo": "local/host", "runtime": {"pid":401981,"how":"asked"}
+       },
+   ```
+3. **The width from the terminal.** The human: "line width should be
+   configurable (or can the size of the terminal be read in code?)".
+   `HAICC_WIDTH` already sets it. Proposed (ours, not yet confirmed):
+   `HAICC_WIDTH` when set, else the terminal's columns when the output is
+   a terminal (`bare-tty`, already in the lockfile), else 80 (piped).
+
+The human also asked whether `haicc` is now a Node app: answered no, an
+app run with Bare from its bundle (`base-app-haicc`), the sh scripts of
+`base-linux-haicc` only the first step.
+
 ## 2026-11-15: `c8200f7`
 
 The prompt ran as written, every step passed. The code not changed here.
