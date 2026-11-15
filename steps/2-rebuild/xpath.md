@@ -371,7 +371,13 @@ select to the list of requests?"; put to the human, not answered)
   version 7 is that, its first 48 bits the time in milliseconds, and
   still a GUID: the smallest change (ours are version 4, all random).
   What git does not allow is another order than by name: a listing not
-  sorted is not a valid tree.
+  sorted is not a valid tree. **Always ascending** (the human: "does
+  git read it or order it always in ascending order"): stored so, and
+  read back so. But a listing is one object, read whole: once read it
+  is an array, and walking it from its end, the newest first with such
+  keys, costs nothing more. What cannot be done is to read only its
+  end: a wide folder is read whole for its last entry, one more reason
+  for subfolders by date (the latest is then in the last folder).
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
