@@ -157,7 +157,7 @@ test('local commit and rollback in an action; the global commit at its end, a fa
   } finally { rmSync(work, { recursive: true, force: true }) }
 })
 
-test('exec.log: entries into the request\'s record, at or above the threshold', async (t) => {
+test('the request\'s log: info unasked (its audit, its metrics), the action\'s entries under its name, as much as its flag asks', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
     await bootedHost(work, { preload: false })
@@ -165,23 +165,144 @@ test('exec.log: entries into the request\'s record, at or above the threshold', 
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
       const logging = { ...CRUD, crud: { ...CRUD.crud, read: async exec => {
+        await exec.read('main/a/.node.json')
         exec.log('info', 'step', { n: 1 })
+        exec.log('verbose', 'more')
         exec.log('debug', 'detail')
         exec.log('warn', 'careful')
         t.exception(() => exec.log('loud', 'x'), /not a log level/)
+        exec.put('main/logged.json', Buffer.from('{}'))
         return 'logged'
       } } }
-      const one = async () => {
+      await run(ctx, { protocol: 'crud', action: 'create', uri: ['main', 'a'] })
+      const one = async flags => {
         const name = guid()
-        await begin(ctx, name, record(null, { protocol: 'crud', action: 'read', uri: ['main', '.'] }, name))
+        await begin(ctx, name, record(null, { protocol: 'crud', action: 'read', uri: ['main', '.'], ...(flags ? { flags } : {}) }, name))
         await execute(ctx, { actions: logging })
         return (await json(ctx.repo, `/${EXECUTE}/${name}.json`)).value.value
       }
+      const events = done => done.log.map(e => [e.level, e.event])
       const done = await one()
       t.is(done.output, 'logged')
-      t.alike(done.log.map(e => [e.level, e.event]), [['info', 'step'], ['warn', 'careful']], 'kept at info and above (debug not)')
+      t.alike(events(done), [['info', 'crud.read.step'], ['warn', 'crud.read.careful'], ['info', 'request.changed'], ['info', 'request.metrics']], 'without a flag: info, and a warning; the action\'s entries under its protocol and action; then the boundary\'s own')
       t.is(done.log[0].n, 1, 'with its data')
       t.ok(done.log[0].time, 'and its time')
+      const [changed, metrics] = done.log.slice(-2)
+      t.alike({ target: changed.target, count: changed.count, added: changed.added, changed: changed.changed, removed: changed.removed }, { target: 'main', count: 1, added: ['logged.json'], changed: [], removed: [] }, 'its audit: what it changed, a target a line')
+      t.alike({ ok: metrics.ok, reads: metrics.reads, selects: metrics.selects, puts: metrics.puts, removes: metrics.removes, commits: metrics.commits }, { ok: true, reads: 1, selects: 0, puts: 1, removes: 0, commits: 1 }, 'its metrics: counted at the boundary, the action doing nothing for them')
+      t.ok(Number.isInteger(metrics.ms) && metrics.ms >= 0, 'and what it took')
+      // as much as its flag asks
+      t.alike(events(await one({ log: 'verbose' })).filter(([, e]) => e.startsWith('crud.')), [['info', 'crud.read.step'], ['verbose', 'crud.read.more'], ['warn', 'crud.read.careful']], 'log=verbose: its steps too')
+      const debug = await one({ log: 'debug' })
+      t.alike(events(debug).filter(([, e]) => e.startsWith('crud.')).map(([l]) => l), ['info', 'verbose', 'debug', 'warn'], 'log=debug: its internals too')
+      t.alike(events(debug).filter(([, e]) => e.startsWith('train.')), [['debug', 'train.branch'], ['debug', 'train.commit'], ['debug', 'train.squash'], ['debug', 'train.removed']], 'and the boundary\'s own steps')
+      t.ok(debug.log.filter(e => e.event.startsWith('train.')).every(e => Number.isInteger(e.ms)), 'each with what it took')
+      // a flag that is not one, or a value its flag does not take: ignored, with a warning
+      const odd = await one({ log: 'loud', nope: true })
+      t.is(odd.output, 'logged', 'the request done all the same')
+      t.alike(odd.log.filter(e => e.event === 'request.flag').map(e => [e.level, e.flag, e.ignored]), [['warn', 'log', 'log=loud: not one of info, verbose, debug'], ['warn', 'nope', 'no flag: nope (log)']])
+      t.absent(odd.log.some(e => e.level === 'verbose'), 'at info, the flag ignored')
+    })
+  } finally { rmSync(work, { recursive: true, force: true }) }
+})
+
+test('a step of an action: measured at the boundary, what it took and what it read and wrote; a file that may not be there', async (t) => {
+  const work = mkdtempSync(join(tmpdir(), 'execute-'))
+  try {
+    await bootedHost(work, { preload: false })
+    await withHost(work, async ctx => {
+      await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
+      await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
+      await run(ctx, { protocol: 'crud', action: 'create', uri: ['main', 'a'] })
+      const seen = {}
+      const stepping = { ...CRUD, crud: { ...CRUD.crud, read: async exec => {
+        seen.there = await exec.find('main/a/.node.json')
+        seen.not = await exec.find('main/nope/.node.json')
+        seen.folder = await exec.find('main/a').then(() => 'found', err => err.message)
+        seen.runtime = [await exec.runtime.find('main/a/.node.json'), await exec.runtime.find('main/nope')]
+        const found = await exec.step('look', r => ({ found: r.length }), async () => { await exec.read('main/a/.node.json'); return exec.select('main/*') })
+        await exec.step('write', { what: 'two' }, async () => { exec.put('main/one.json', Buffer.from('1')); exec.put('main/two.json', Buffer.from('2')); await exec.commit('two') })
+        await exec.step('inside', {}, async () => {}, 'debug')
+        await exec.step('breaks', { n: 1 }, async () => { throw new Error('broke') }).catch(() => {})
+        return found.length
+      } } }
+      const name = guid()
+      await begin(ctx, name, record(null, { protocol: 'crud', action: 'read', uri: ['main', '.'], flags: { log: 'verbose' } }, name))
+      await execute(ctx, { actions: stepping })
+      const done = (await json(ctx.repo, `/${EXECUTE}/${name}.json`)).value.value
+      t.is(done.output, 1)
+      t.is(seen.there.toString(), '{}\n', 'find: there, its content')
+      t.is(seen.not, null, 'not there: null')
+      t.ok(/not a file/.test(seen.folder), 'something else there: thrown, as read throws')
+      t.is(seen.runtime[0].toString(), '{}\n', 'the runtime\'s view: the same')
+      t.is(seen.runtime[1], null)
+      const steps = done.log.filter(e => e.event.startsWith('crud.read.'))
+      t.alike(steps.map(e => [e.level, e.event]), [['verbose', 'crud.read.look'], ['verbose', 'crud.read.write'], ['verbose', 'crud.read.breaks']], 'a step: an entry at verbose, under the action\'s name (the one at debug not kept)')
+      const [look, write, breaks] = steps
+      t.alike({ found: look.found, reads: look.reads, selects: look.selects }, { found: 1, reads: 1, selects: 1 }, 'what the step found (from its result), what it read meanwhile')
+      t.alike({ what: write.what, puts: write.puts, commits: write.commits }, { what: 'two', puts: 2, commits: 1 }, 'what it wrote')
+      t.ok([look, write, breaks].every(e => Number.isInteger(e.ms)), 'each with what it took')
+      t.absent('puts' in look, 'a count that did not move: not said')
+      t.alike({ n: breaks.n, failed: breaks.failed }, { n: 1, failed: 'broke' }, 'a step that throws: logged, then thrown on')
+      t.alike(done.log.at(-1).reads, 4, 'find counted as a read in the request\'s metrics (three finds and a read; the runtime\'s view is not the execution\'s)')
+    })
+  } finally { rmSync(work, { recursive: true, force: true }) }
+})
+
+test('an error ends a request at the boundary: what stopped it, its causes, the step it was at, what was undone', async (t) => {
+  const work = mkdtempSync(join(tmpdir(), 'execute-'))
+  try {
+    await bootedHost(work, { preload: false })
+    await withHost(work, async ctx => {
+      await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
+      await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
+      const failing = { ...CRUD, crud: { ...CRUD.crud, read: async exec => {
+        exec.put('main/half.json', Buffer.from('{}'))
+        await exec.commit('half')
+        exec.log('verbose', 'second')
+        try { JSON.parse('{') } catch (err) { throw new Error('reading the second half', { cause: new Error('not a document', { cause: err }) }) }
+      } } }
+      const one = async flags => {
+        const name = guid()
+        await begin(ctx, name, record(null, { protocol: 'crud', action: 'read', uri: ['main', '.'], ...(flags ? { flags } : {}) }, name))
+        await execute(ctx, { actions: failing })
+        return (await json(ctx.repo, `/${EXECUTE}/${name}.json`)).value.value
+      }
+      const done = await one()
+      t.is(done.error, 'reading the second half', 'the request\'s error: what stopped it')
+      const failed = done.log.find(e => e.event === 'request.failed')
+      t.is(failed.level, 'error', 'an error entry, kept whatever the level')
+      t.is(failed.error, 'reading the second half')
+      t.is(failed.causes.length, 2, 'the chain of its causes, outermost first')
+      t.is(failed.causes[0], 'not a document')
+      t.is(failed.at, 'crud.read.second', 'the step the action was at: the last event it logged')
+      t.alike(failed.undone, { commits: 1, puts: 1, removes: 0 }, 'what had been done and was undone')
+      t.absent('stack' in failed, 'no stack at info')
+      t.alike(await ctx.repo.select('/main/half.json'), [], 'undone')
+      t.alike(done.log.at(-1).event, 'request.metrics', 'its metrics all the same')
+      t.is(done.log.at(-1).ok, false)
+      t.ok(Array.isArray((await one({ log: 'debug' })).log.find(e => e.event === 'request.failed').stack), 'its stack at debug')
+    })
+  } finally { rmSync(work, { recursive: true, force: true }) }
+})
+
+test('a command run in the execution: its entries under its own name, its flags in force from there on', async (t) => {
+  const work = mkdtempSync(join(tmpdir(), 'execute-'))
+  try {
+    await bootedHost(work, { preload: false })
+    await withHost(work, async ctx => {
+      await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
+      await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
+      const nested = { ...CRUD, crud: { ...CRUD.crud,
+        read: async exec => { exec.log('verbose', 'outer'); const r = await exec.run(['crud/delete', 'x', '--flags', 'log=debug']); exec.log('debug', 'after'); return r },
+        delete: async exec => { exec.log('debug', 'inner'); return 'ran' }
+      } }
+      const name = guid()
+      await begin(ctx, name, record(null, { protocol: 'crud', action: 'read', uri: ['main', '.'] }, name))
+      await execute(ctx, { actions: nested })
+      const done = (await json(ctx.repo, `/${EXECUTE}/${name}.json`)).value.value
+      t.is(done.output, 'ran')
+      t.alike(done.log.filter(e => e.event.startsWith('crud.')).map(e => [e.level, e.event]), [['debug', 'crud.delete.inner'], ['debug', 'crud.read.after']], 'at info until the command run set log=debug; then debug, for what follows too')
     })
   } finally { rmSync(work, { recursive: true, force: true }) }
 })

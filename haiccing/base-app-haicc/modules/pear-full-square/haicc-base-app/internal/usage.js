@@ -8,6 +8,13 @@ haicc --raw <URI> <protocol>/<action> ...       the record as it is stored,
                                                 one line
 haicc --output <URI> <protocol>/<action> ...    the completed form's output
                                                 alone
+haicc <URI> <command> --flags <flag>...         flags for the request, space
+                                                separated, to the end of the
+                                                command or to a closing --:
+                                                log=info|verbose|debug, how
+                                                much its log holds (info
+                                                without it)
+haicc --flags <flag>... -- <URI> <command>      in front: for the whole chain
 haicc boot/deploy                               the machine level: the boot
                                                 mrepo put in place at the
                                                 root, its runtime started
@@ -25,6 +32,8 @@ haicc sources https | no-https                  https as the backup, or not
   haicc host service/start
   haicc host boot/deploy node-1 base-package-runtime
   haicc host haicc node-1 help/get
+  haicc host crud/read . --flags log=verbose
+  haicc --flags log=debug -- host haicc node-1 crud/read .
   haicc host boot/teardown node-1
   haicc . boot/teardown host
   haicc boot/teardown

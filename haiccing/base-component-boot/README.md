@@ -57,7 +57,8 @@ command as typed and a GUID. Each step's outcome is logged in it.
 - `--work=<folder>`: the work folder; the current one by default.
 - `--sources=folder:<path>` or `--sources=github:<org>`, repeated: where
   packages come from, in order; `github:haiccing` when none is given.
-- `--level=<level>`: its log's threshold, `info` by default.
+- `--level=<level>`: how much its log holds, `info` (the default),
+  `verbose` or `debug`; an error and a warning are always in it.
 
 ## The boot mrepo
 

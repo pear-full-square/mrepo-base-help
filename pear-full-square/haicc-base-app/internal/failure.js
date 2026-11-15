@@ -5,6 +5,7 @@
 //   3   something is missing: the boot mrepo, a package, a download
 //   4   no response in time
 //   5   a response with no completed form
+// options: an error's own ({ cause }): one thrown for another carries it.
 export class Failure extends Error {
-  constructor (message, code = 1) { super(message); this.code = code }
+  constructor (message, code = 1, options) { super(message, options); this.code = code }
 }

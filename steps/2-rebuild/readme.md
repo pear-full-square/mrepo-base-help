@@ -2994,3 +2994,112 @@ packages, no problems. The READMEs: 241 in the sources, 490 in the help
 tree, no problems. The `haicc` test four times in a row, 136 of 136
 each. `base-component-boot`'s `validate` three times, its `boot` test
 120 of 120 each. Nothing left running.
+
+## 66. Logging: three levels, the level a request's flag; the request's metrics and audit at the boundary; errors caught at the request; the code quality check (2026-11-15)
+
+Task 5 of `tasks.md`, discussed with the human point by point, then on
+the human's go ("Yes, go ahead"). What settled is quoted in the task as
+it was; this is what was built.
+
+- **Flags** (`mrepo-base-request`, `lib/flags.js`; the app's command
+  line): "--flags followed by enumeration", "space separated", a flag
+  alone or "key=value with no space", "last of command or ended by --".
+  In the form a map, `flags`, there only when one was written or came
+  with the request. The words after the URI of an action that passes
+  them on (`haicc`'s `goto`: its config says `command: true`) are left
+  as written, so a list at the end of a chain is the last command's and
+  one in front, closed by `--`, the first's. "A flag persists in chain
+  until changed": a command sent on takes the flags in force with it; a
+  command run in the same execution sets its own from there on.
+  "Unknown flag ignored with warning": so is a value its flag does not
+  take. One flag is built, `log`; `error-on-empty` stays a future one.
+- **Three levels** (the human: "info, verbose, debug. Error and warning
+  always given. Silent not an option"): `log=info|verbose|debug`, `info`
+  without the flag. The mrepo's own threshold, `/runtime/log.json`, is
+  gone: ours, the level being the request's flag.
+- **`info` comes from the request** (the human: "Yes from request"),
+  made at the boundary (`mrepo-base-execute`) for every action, the
+  action doing nothing for it: its audit, a target a line
+  (`request.changed`: the paths added, changed and removed, read from
+  the two trees, so what was undone on the way is not in it), where it
+  was sent on (`request.sent`), and its metrics, the closing line
+  (`request.metrics`: `ok`, `ms`, reads, selects, puts, removes,
+  commits). At `debug` the boundary's own steps, each with its `ms`
+  (`train.branch`, `train.commit`, `train.squash`, `train.removed`).
+- **An action's entries** go through the execution context, stored
+  under its protocol and action (`crud.read.select`): `exec.log(level,
+  event, data)`, and, new, `exec.step(event, data, fn)`: a step run and
+  measured by the context (what it took, what it read and wrote
+  meanwhile), so an action takes no time and counts nothing itself.
+  The output's format is ours ("You decide output format, does not need
+  to be fixed"): an event's name, and its numbers in fields of their
+  own.
+- **The entries of a request a command was sent on to** come back with
+  its response, each under its `jump` (the positions gone through); what
+  the sender logged before it sent stays with it while it waits.
+- **Errors caught at the request** (agreed: "Yes"). The boundary writes
+  `request.failed`, always kept: the error, the chain of its causes,
+  the step the action was at (the last event it logged), what had been
+  done and is undone; its stack at `debug`. In between a catch either
+  goes on, and then uses the error or says what it expects, or says
+  more, and then the error it throws carries the one caught (`cause`).
+- **A file that may not be there**: `find`, beside `read`, in the
+  repository (`mycelium-git`) and in the execution context: `null` when
+  nothing is at the path, everything else thrown. It replaces the
+  catches that took any error for "not there": a document that is there
+  and does not parse is now an error, said with its cause.
+- **The retrofit** (the human: both, the catches gone through and "debug
+  and verbose in place"). Every function handed the execution context
+  logs: 43 entries and steps in the actions and their methods (`crud`,
+  `boot`, `haicc`, `help`, `protocol`, `service`, `runtime/run`, the
+  position resolved), or says where its entries are, or why it has none
+  (14 remarks). Every catch looked at: those that could hide a fault
+  under a request changed to `find` or given their cause; the others
+  given what they expect, in a remark on the line (32). Catches around a
+  selection are gone: a selection gives nothing where nothing is, it
+  does not throw. Three places print, each with its reason said: the
+  command line's output, the follower's, the runtime's last word.
+- **The code quality check** (the human: "code quality check on verbose
+  debug and request handling"): five checks more in the code test
+  (`pkgm-base-check`, `internal/rules`), read from a module's own code,
+  its tests aside: `console`, `catch`, `cause`, `logging`, `request`. A
+  decision made in the code is said there, in a remark: `// log:`,
+  `// catch:`, `// console:`, `// time:`. Written into the template
+  (`package-docs-template`, "Logging and handling") and the mrepo's
+  documentation (`package-docs-mrepo`, the request page: "Flags", "The
+  log").
+- **Seen where it runs**: each protocol package's own test (`mounted`)
+  now fails when an action it runs writes nothing into the log; the
+  `haicc` test has sixteen checks more (the log unasked, `log=verbose`
+  at the end of a line and in front, `log=debug` through two hops with
+  both jumps, a flag that is none, flags in front not closed).
+
+**Not in it**: the runtime's part after a request is completed (its
+record merged, moved to done) is not logged: the record is closed by
+then. A log's size is not bounded. `error-on-empty`.
+
+**Found on the way**: tests that held a swallowed error as right (a
+reader of hooks whose selection throws: "no hooks") now say what is
+right (a reader that fails: its error). The boot component's `boot`
+test read three entries by their old names: it reads them by the new
+ones, and the audit of a redeploy with them. A target that is the same
+in the end (written and undone) gets no audit line.
+
+**Validated**: every module's tests (21 modules; `mrepo-base-request` 16
+tests, 158 asserts; `mrepo-base-execute` 10, 88; `mrepo-base-runtime` 6,
+122: a command with flags through a real runtime on both storages;
+`mycelium-git` 139, 737; `pkgm-base-check` 17, 46: each rule kept and
+broken). Every package's pre-release, each passing:
+`package-docs-template` 7 units, 45 tests, 245 asserts;
+`package-docs-mrepo` 8, 45, 245; `base-package-help` 8, 52, 289;
+`base-package-protocol` 9, 54, 289; `base-package-haicc` 10, 55, 313;
+`base-package-crud` 10, 59, 366; `base-package-service` 14, 218, 1223;
+`base-component-haicc` 8, 51, 283; `base-package-runtime` 22, 277,
+1684; `base-package-boot` 23, 288, 1792; `base-component-boot` 23, 283,
+1860; `base-app-haicc` 23, 299, 1888. `tools/bare tools/release.js
+--strict`: twelve packages, every report current. `tools/bare
+tools/code-check.js`: 20 modules, 13 packages, no problems, the five new
+checks among them. The READMEs: 241 in the sources, 490 in the help
+tree, no problems. The `haicc` test five times in a row, 152 of 152
+each. `base-component-boot`'s `validate` four times, its `boot` test
+passing each. Nothing left running.

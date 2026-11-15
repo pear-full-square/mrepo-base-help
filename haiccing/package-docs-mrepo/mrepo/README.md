@@ -28,7 +28,8 @@ Each layer, its README:
 - One writer per branch.
 - The repository is the truth; a folder on disk is a view of a commit.
 - Writes are commits only, never files edited in place.
-- No log: a request is its own record, `request/done` the history.
+- No log of its own: a request is its own record, its `log` in it,
+  `request/done` the history.
 
 ## Modes and storage
 

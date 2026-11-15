@@ -27,6 +27,7 @@ ok () { n=$((n + 1)); echo "ok $n - $1"; }
 no () { n=$((n + 1)); failed=$((failed + 1)); echo "not ok $n - $1"; [ -z "${2:-}" ] || echo "  # $2"; }
 is () { if [ "$1" = "$2" ]; then ok "$3"; else no "$3" "got: $1; expected: $2"; fi; }
 has () { case "$1" in *"$2"*) ok "$3" ;; *) no "$3" "got: $1; expected in it: $2" ;; esac; }
+hasnt () { case "$1" in *"$2"*) no "$3" "got: $1; not expected in it: $2" ;; *) ok "$3" ;; esac; }
 
 T=$(mktemp -d "${TMPDIR:-/tmp}/haicc-test.XXXXXX")
 running () { pgrep -f -- "[/]bin/bare $T/" 2>/dev/null; }
@@ -197,6 +198,29 @@ is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"chil
 is "$(haicc --output host crud/create swarms/swarm-1 2>&1)" '[{"uri":["main","swarms"],"value":{},"children":["swarm-1"],"outcome":"created"},{"uri":["main","swarms/swarm-1"],"value":{},"children":[],"outcome":"created"}]' "haicc host crud/create swarms/swarm-1: in the host, started: its own main"
 is "$(haicc --output host crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["node-1","swarms"]}]' "the host's root: its node, a shortcut, and what was created there"
 is "$(haicc --output . crud/read swarms 2>&1)" '[]' "nothing of it in the boot mrepo: each mrepo its own main"
+
+# 9b. a request's log, and its flags: info unasked; --flags log=verbose,
+# log=debug; through a chain; a flag that is none
+out=$(haicc --raw host crud/read . 2>&1)
+has "$out" '"event":"request.metrics"' "a request's log, without a flag: its metrics, at info"
+has "$out" '"event":"request.sent"' "and where it was sent on"
+hasnt "$out" '"event":"crud.read.select"' "no steps: those are verbose"
+out=$(haicc --raw host crud/read . --flags log=verbose 2>&1)
+has "$out" '"args":["crud/read",".","--flags","log=verbose"]' "haicc host crud/read . --flags log=verbose: at the end of the line, the last command's: passed on as written"
+has "$out" '"event":"crud.read.select"' "the read's steps, from the host"
+has "$out" '"jump":["host"]' "each entry of the host's under its jump"
+hasnt "$out" '"event":"haicc.goto.sent on"' "the boot mrepo's own hop still at info: the flag was the last command's"
+out=$(haicc --raw --flags log=verbose -- host crud/read . 2>&1)
+has "$out" '"event":"haicc.goto.sent on"' "haicc --flags log=verbose -- host crud/read .: in front, from the first command on"
+has "$out" '"event":"crud.read.select"' "and it held through the chain: the host's steps too"
+out=$(haicc --raw --flags log=debug -- host haicc node-1 help/get . packages 2>&1)
+has "$out" '"event":"help.get.index"' "log=debug through two hops: the node's internals"
+has "$out" '"jump":["host","node-1"]' "under both jumps, in order"
+out=$(haicc --raw . crud/read . --flags nope log=loud 2>&1); is "$?" "0" "a flag that is none, a value its flag does not take: the request done all the same"
+has "$out" '"event":"request.flag"' "each ignored, with a warning in its log"
+hasnt "$out" '"level":"verbose"' "and the log at info"
+out=$(haicc --flags log=debug host crud/read . 2>&1 >/dev/null); is "$?" "2" "flags in front without their closing --: refused, exit 2"
+has "$out" "flags in front are closed by --" "said"
 
 # 10. torn down: the node; the service stopped and shut down; the host
 is "$(haicc --output host boot/teardown node-1 2>&1)" '{"tornDown":"node-1"}' "haicc host boot/teardown node-1"

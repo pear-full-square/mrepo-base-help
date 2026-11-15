@@ -17,7 +17,8 @@ minimal execution in memory.
   what `deactivate` removes, what each returns, each refusal, and that a
   refusal writes nothing.
 - **Nothing forgotten**: the last test fails when the config names an
-  action that was not run here.
+  action that was not run here, or one that wrote nothing into the
+  request's log as it ran.
 
 ## Not here
 

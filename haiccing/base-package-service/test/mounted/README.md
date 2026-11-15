@@ -26,7 +26,8 @@ hooks.
   it; hooks a defining package drops in run on their own transition, in
   name order; a hook that fails leaves the state where it was.
 - **Nothing forgotten**: the last test fails when the config names an
-  action that was not run here.
+  action that was not run here, or one that wrote nothing into the
+  request's log as it ran.
 
 ## Not here
 

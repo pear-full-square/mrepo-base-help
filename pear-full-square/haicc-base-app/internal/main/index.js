@@ -13,6 +13,7 @@ import { CONFIG } from '../config.js'
 import { Failure } from '../failure.js'
 import { USAGE } from '../usage.js'
 
+// console: the command line's own output: what the user asked for, and what went wrong
 const CONSOLE = { out: line => console.log(line), err: line => console.error(line), stdio: 'inherit' }
 
 export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE } = {}) {

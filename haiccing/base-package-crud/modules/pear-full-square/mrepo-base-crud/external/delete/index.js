@@ -4,6 +4,7 @@
 import { place, select, folderOf } from '../../internal/node/index.js'
 
 // Every file in a folder: its own only, or with everything below it.
+// log: in remove, below: each file, at debug
 async function files (exec, folder, deep) {
   const out = []
   for (const [path, n] of await exec.select(`${folder}/*`)) {
@@ -24,6 +25,11 @@ export async function remove (exec, { uri, args = [] }) {
   for (const { names, node } of found) {
     if (node.children.length && !recurse) throw new Error(`${p.at(names)} has children: not deleted (crud/delete ${p.at(names)} recurse)`)
   }
-  for (const { names } of found) for (const f of await files(exec, folderOf(p, names), recurse)) exec.remove(f)
+  let removed = 0
+  await exec.step('remove', () => ({ nodes: found.length, files: removed, recurse }), async () => {
+    for (const { names } of found) {
+      for (const f of await files(exec, folderOf(p, names), recurse)) { exec.log('debug', 'file', { path: f }); exec.remove(f); removed++ }
+    }
+  })
   return found.map(({ node }) => ({ ...node, outcome: 'deleted' }))
 }

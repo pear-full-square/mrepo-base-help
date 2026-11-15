@@ -25,7 +25,8 @@
 //     --work      the work folder: the current one by default
 //     --sources   where packages come from, in order (github:haiccing when
 //                 none is given)
-//     --level     its log's threshold: error, warn, info (default), debug
+//     --level     how much its log holds: info (default), verbose, debug;
+//                 an error and a warning always
 //     --follow    the records followed after the runtime starts (the default
 //                 on a terminal; --no-follow: not), until Ctrl-C
 //     --until-done[=<seconds>]  followed until every request is done, then
@@ -61,8 +62,9 @@ const sources = (value('sources').length ? value('sources') : ['github:haiccing'
 // The request: the invocation, as typed (the entry's name, its arguments).
 const entry = basename(script ? process.argv[1] : process.argv[0])
 const core = record(null, { protocol: 'boot', action: 'deploy', uri: [NAME], command: [entry, ...args].join(' ') }, guid())
-// Its log: each step's outcome, an entry in the request's own record, at or
-// above the threshold (--level=<error|warn|info|debug>, info by default).
+// Its log: each step's outcome, an entry in the request's own record, as
+// much as asked for (--level=<info|verbose|debug>, info by default; an
+// error and a warning always).
 const { log, entries } = logger(value('level')[0] ?? 'info')
 const done = result => complete(core, result, entries)
 

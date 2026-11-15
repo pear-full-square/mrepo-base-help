@@ -47,6 +47,7 @@ export function structureOf ({ store, pkg }) {
 export function put (from, to) {
   mkdirSync(dirname(to), { recursive: true })
   rmSync(to, { force: true })
+  // catch: no hard link to be had there (another device, a filesystem without them): copied instead, and the copy says what is wrong
   try { linkSync(from, to) } catch { copyFileSync(from, to) }
 }
 

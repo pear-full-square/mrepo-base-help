@@ -15,6 +15,11 @@ function execution (files = {}) {
   const writes = []
   const exec = {
     read: async path => { if (!(abs(path) in files)) throw new Error(`nothing at ${path}`); return files[abs(path)] },
+    // the rest of an execution context, standing in: a file that may not
+    // be there, the log (kept: entries), a step run as it is
+    find: async function (p) { try { return await this.read(p) } catch { return null } },
+    log: function (level, event, data = {}) { (this.entries ??= []).push({ level, event, ...data }) },
+    step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
     select: async pattern => {
       const p = abs(pattern)
       if (!p.endsWith('/*')) return p in files ? [[p, { type: 'blob' }]] : Object.keys(files).some(f => f.startsWith(p + '/')) ? [[p, { type: 'tree' }]] : []
@@ -33,7 +38,14 @@ function execution (files = {}) {
   return { exec, writes, files }
 }
 const ran = new Set()
-const act = (name, exec, form) => { ran.add(name); return mounted.actions.crud[name](exec, form) }
+// an action that wrote into the execution's log as it ran: every one must
+const logged = new Set()
+const act = async (name, exec, form) => {
+  ran.add(name)
+  const before = exec.entries?.length ?? 0
+  // (one refused has logged too, before it threw)
+  try { return await mounted.actions.crud[name](exec, form) } finally { if ((exec.entries?.length ?? 0) > before) logged.add(name) }
+}
 // a request's URI as the mrepo holds it for one from outside: the prefix
 // main, then what was written
 const at = u => ['main', u]
@@ -91,4 +103,5 @@ test('what each refuses, writing nothing', async (t) => {
 
 test('every action the config names was run here', (t) => {
   t.alike([...ran].sort(), Object.keys(mounted.protocols.crud.actions).sort(), 'create, delete and read')
+  t.alike([...logged].sort(), Object.keys(mounted.protocols.crud.actions).sort(), 'and each wrote into the request\'s log as it ran: an action that logs nothing fails this')
 })

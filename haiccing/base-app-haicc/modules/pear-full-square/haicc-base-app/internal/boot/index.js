@@ -24,6 +24,7 @@ function mrepos (dir) {
     for (const n of readdirSync(d).sort()) {
       const p = join(d, n)
       let folder = false
+      // catch: not there: not a folder
       try { folder = statSync(p).isDirectory() } catch {}
       if (!folder) continue
       if (existsSync(join(p, '.git'))) below.push(...mrepos(p)); else walk(p)
@@ -41,7 +42,7 @@ export async function teardown ({ work, root }) {
   const { stop } = await import('mrepo-base-runtime')
   let runtimes = 0
   for (const dir of mrepos(root)) {
-    try { if (await stop({ repo: dir })) runtimes++ } catch { throw new Failure(`a runtime under ${work} did not stop`, 1) }
+    try { if (await stop({ repo: dir })) runtimes++ } catch (err) { throw new Failure(`a runtime under ${work} did not stop`, 1, { cause: err }) }
   }
   // what boot/deploy put in place, by name: nothing else in the work folder
   for (const n of ['mrepos', 'packages', 'mrepo.json']) rmSync(join(work, n), { recursive: true, force: true })

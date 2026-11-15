@@ -176,7 +176,11 @@ document.
   duration, and nothing writes `/runtime/log.json`: the level cannot be
   set from the command line. **A task of its own since** (the human:
   the levels implemented, what goes at which level decided, "logging
-  level is request flag"): `tasks.md`, task 5.
+  level is request flag"): `tasks.md`, task 5, **built** (`readme.md`,
+  part 66): `--flags log=verbose` gives each step with what it took and
+  what it read and wrote, `exec.step` measures it for the action, and a
+  request's metrics are in every record. The XPath measurements read
+  those.
 
 **To settle**
 

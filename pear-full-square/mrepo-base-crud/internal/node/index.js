@@ -23,7 +23,14 @@ export function place (segments) {
 }
 
 const dir = (p, names) => [p.layer, ...names].join('/')
-const json = (exec, path) => exec.read(path).then(b => JSON.parse(b.toString()), () => undefined)
+// A document that may not be there: undefined then; one that is there
+// and is no document is an error, not a missing one.
+// log: none (one read; select says what was found)
+const json = async (exec, path) => {
+  const bytes = await exec.find(path)
+  if (bytes === null) return undefined
+  try { return JSON.parse(bytes.toString()) } catch (err) { throw new Error(`not a document: ${path}`, { cause: err }) }
+}
 const base = path => path.slice(path.lastIndexOf('/') + 1)
 
 // In main a URI does not run through a shortcut: none of the names above
@@ -34,12 +41,14 @@ async function inside (exec, p, names, through = false) {
     const position = names.slice(0, i).join('/')
     if ((await shortcutsAt(exec, position)).length) throw new Error(`${position} is a shortcut: a URI does not run through it (haicc ${position} haicc ${names.slice(i).join('/') || '.'} ...)`)
   }
+  exec.log('debug', 'inside', { layer: p.layer, positions: Math.max(0, names.length + (through ? 1 : 0) - 1) })
 }
 
 // The names of a node's children: the folders in it that are nodes (each
 // holding its document); a hidden folder, or one without, is none.
+// log: none (a listing; select says each node and its children)
 async function childrenOf (exec, p, names) {
-  const found = await Promise.resolve().then(() => exec.select(`${dir(p, names)}/*`)).catch(() => [])
+  const found = await exec.select(`${dir(p, names)}/*`)
   const out = []
   for (const [path, n] of found) {
     if (n.type !== 'tree' || base(path).startsWith('.')) continue
@@ -52,6 +61,7 @@ async function childrenOf (exec, p, names) {
 // its shortcuts where it has some (a node that is a link: where its data
 // comes from); null when there is none. The layer itself is a node, its
 // document {} when it has none.
+// log: in select, and in create: each node looked at, at debug
 export async function nodeAt (exec, p, names) {
   const value = await json(exec, `${dir(p, names)}/${NODE}`)
   if (value === undefined && names.length) return null
@@ -64,11 +74,17 @@ export async function nodeAt (exec, p, names) {
 // (none there: empty, not an error), or with '*' the children of the one
 // before it. -> [{ names, node }]
 export async function select (exec, p) {
-  await inside(exec, p, p.names, p.star)
-  const of = p.star ? (await childrenOf(exec, p, p.names)).map(n => [...p.names, n]) : [p.names]
-  const out = []
-  for (const names of of) { const node = await nodeAt(exec, p, names); if (node) out.push({ names, node }) }
-  return out
+  return exec.step('select', found => ({ uri: [p.layer, ...p.names, ...(p.star ? ['*'] : [])].join('/'), selected: found.length }), async () => {
+    await inside(exec, p, p.names, p.star)
+    const of = p.star ? (await childrenOf(exec, p, p.names)).map(n => [...p.names, n]) : [p.names]
+    const out = []
+    for (const names of of) {
+      const node = await nodeAt(exec, p, names)
+      exec.log('debug', 'node', { at: p.at(names), there: Boolean(node), children: node?.children.length ?? 0, shortcut: Boolean(node?.shortcuts) })
+      if (node) out.push({ names, node })
+    }
+    return out
+  })
 }
 
 export { dir as folderOf, inside }

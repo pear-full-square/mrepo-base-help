@@ -24,7 +24,8 @@ action run on a minimal execution.
   `help`; nothing extracted yet, a section or a subject that is not
   there, a subject with a leading slash, each said; it writes nothing.
 - **Nothing forgotten**: the last test fails when the config names an
-  action that was not run here.
+  action that was not run here, or one that wrote nothing into the
+  request's log as it ran.
 
 ## Not here
 

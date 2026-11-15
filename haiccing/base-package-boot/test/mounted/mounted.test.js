@@ -16,7 +16,14 @@ import * as mounted from '../../protocol.js'
 // string, made its segments: the prefix main, then the rest)
 const seg = u => (Array.isArray(u) ? u : u === 'main' ? ['main', '.'] : u.startsWith('main/') ? ['main', u.slice(5)] : [u])
 const ran = new Set()
-const act = (name, exec, form) => { ran.add(name); return mounted.actions.boot[name](exec, form) }
+// an action that wrote into the execution's log as it ran: every one must
+const logged = new Set()
+const act = async (name, exec, form) => {
+  ran.add(name)
+  const before = exec.entries?.length ?? 0
+  // (one refused has logged too, before it threw)
+  try { return await mounted.actions.boot[name](exec, form) } finally { if ((exec.entries?.length ?? 0) > before) logged.add(name) }
+}
 // Where a child at host is recorded: its node and its link in main, what
 // is local to this machine about it in the runtime layer.
 const NODE = '/main/host/.node.json'
@@ -32,11 +39,15 @@ function execution (dir, files = {}) {
   const exec = {
     runtime: { dir, uri: 'local/boot' },
     read: async uri => { if (!(abs(uri) in files)) throw new Error(`nothing at ${uri}`); return files[abs(uri)] },
+    // the rest of an execution context, standing in: a file that may not
+    // be there, the log (kept: entries), a step run as it is
+    find: async function (p) { try { return await this.read(p) } catch { return null } },
+    log: function (level, event, data = {}) { (this.entries ??= []).push({ level, event, ...data }) },
+    step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
     select: async uri => Object.keys(files).filter(p => p === abs(uri) || p.startsWith(abs(uri) + '/')).map(p => [p, {}]),
     put: (uri, bytes) => { writes.push(['put', abs(uri)]); files[abs(uri)] = Buffer.from(bytes) },
     remove: uri => { writes.push(['remove', abs(uri)]); delete files[abs(uri)] },
     commit: async () => { writes.push(['commit']) },
-    log: () => {}
   }
   return { exec, writes, files }
 }
@@ -128,4 +139,5 @@ test('redeploy: teardown first; what is not deployed, refused; the package it wa
 
 test('every action the config names was run here', (t) => {
   t.alike([...ran].sort(), Object.keys(mounted.protocols.boot.actions).sort(), 'none left out: an action added without its test fails this')
+  t.alike([...logged].sort(), Object.keys(mounted.protocols.boot.actions).sort(), 'and each wrote into the request\'s log as it ran: an action that logs nothing fails this')
 })
