@@ -278,6 +278,26 @@ yes, with what follows; put to the human)
     just that). To settle: whether the making refuses it (`crud/create`
     beside a shortcut, `boot/deploy` beside a node), or only a query
     that meets a mixed folder says so and stops.
+- **A mixed folder asks for a union** (the human: "doesn't the mixed
+  shortcut and subfolder require a union in xpath?"; ours: yes). The
+  set goes on two ways, and what comes back is two node sets made one:
+  what was found here, and what the hops returned. That is XPath's
+  union, applied by the engine instead of written by the asker (`a |
+  b`): one operation serves both. Three cases of it, by what it takes:
+  - **the sets of several local roots** (after a filter, each node left
+    is a root of the next segment): put together in one process, in
+    order: nothing to build;
+  - **the sets of several shortcuts** (a folder of links, `nodes/*`
+    then on into each): a hop each, their answers made one. The
+    constraint does not remove this one. It needs a request that waits
+    for several children, which is not built (a principal waits for
+    one);
+  - **a mixed folder**: both of the above at once: what the constraint
+    removes.
+  So for the very first implementation, ours to propose: a hop from a
+  single shortcut only, as `haicc` makes it today; a set of several
+  shortcuts that the query goes on from says "not yet" and stops. The
+  fan-out and its union are the step after.
 - **Open, asked and not answered**: where the first implementation
   lives: in `crud/read`'s URI first (ours), or in the request layer for
   every command.
