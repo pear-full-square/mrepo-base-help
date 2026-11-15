@@ -607,6 +607,39 @@ ancestry check away, the request's own record is still merged, and
 every merge asks it; so the check itself was made to read only what the
 two histories have apart.
 
+**On the human's laptop** (the local agent, 2026-11-15, `main` at
+`c8200f7`, after the repairs: `local-note.md`; 14 cores, an Intel Core
+Ultra 5 225H under WSL2, ext4 on its virtual disk; the same tool, 480
+seconds, no error). Beside ours, four cores:
+
+| | here, 4 cores | the laptop, 14 cores |
+|---|---|---|
+| a plain loop on all cores, against one | 2.5 to 4 times | 6.3 times |
+| one writer, commits a second | 107 to 119 | 183 to 207 |
+| 2 writers | 185 to 231 | 291 to 326 |
+| 4 | 240 to 262 | 414 to 525 |
+| 8 | 262 to 349 | 589 to 675 |
+| 12 | | 707 to 883 |
+| 14 | | 806 to 865 |
+| 16 | | 790 to 857 |
+| 24 | | 823 to 1064 |
+| a folder of 10 children, one writer | 137 | 225 |
+| of 100 | 119 | 206 |
+| of 1000 | 55 | 110 |
+| of 10,000 | 11 | 18 |
+| of 100, five levels deeper | 91 | 151 |
+| 12,000 commits on one branch | 130 to 148 | 231 to 310 |
+| `main` in the Corestore | 112 | 207 |
+| native git | 24 | 61 |
+| a request's cycle, requests 1 to 200 | 15 to 21 ms | 12.6 to 15 ms |
+
+(Threads and processes together in a row; two single runs far above
+the others, 1122 and 1214, left out.) The same shape, about twice as
+fast a writer: the commits go on gaining up to about the number of
+cores, 800 to 900 a second, and no further; threads and processes
+alike; width costs the same share; the cycle is flat there too, the
+branches listed in 1 ms, the ancestry check in 0.6 ms.
+
 **Ours** (not answered)
 
 - **Git is not the limit for the commits themselves**: about 110 to 140

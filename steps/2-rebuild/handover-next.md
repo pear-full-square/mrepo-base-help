@@ -158,15 +158,15 @@ with the human first, unless the task says it is ours ("Left to us").
 **With the human, open**
 
 - Testing by hand on the local machine: the local agent built and
-  tested `main` as of part 64 (`6ebec98`, 2026-11-14): every step
-  passed, `haicc` installed for the human; nothing to act on. It found
-  the older sources copy (`~/.haicc/sources/`, of `381bbae`) first in
-  `sources.list`, where it could shadow the new bundles, and unlinked
-  it. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 64. **Asked since**
-  (the human, 2026-11-14): the commits measured on the human's laptop,
-  twelve cores, with `tools/commit-bench.js` (the prompt's step 6); the
-  figures to be set beside ours in `xpath.md`, "Commits". Its notes come
+  tested `main` as of parts 65 and 66 (`c8200f7`, 2026-11-15): every
+  step passed (the `haicc` test 152 of 152 three times, all twelve
+  packages' `full`, the strict release), `haicc` installed for the
+  human; nothing to act on. It ran the commit measurements on the
+  human's laptop (14 cores): the figures are set beside ours in
+  `xpath.md`, "Commits": the same shape, about twice as fast a writer,
+  800 to 900 commits a second with all cores, the cycle flat at 13 to
+  15 ms. Its prompt, `prompt-local.md`, and its background,
+  `handover-local.md`, are current for parts 60 to 66. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent
