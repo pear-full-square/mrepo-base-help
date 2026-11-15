@@ -694,6 +694,49 @@ flag." To be discussed first, then built.
   not a contract).
 - **Not done discussing**: "Still items to discuss" (on our request for
   a go): nothing of this task is built yet.
+- **Three levels** (the human's proposal): "info, verbose, debug. Error
+  and warning always given. Silent not an option. Info has all standard
+  metrics and auditing, verbose more detail." So `log=info` (without
+  the flag), `log=verbose`, `log=debug`; an error and a warning are in
+  the record whatever the level. (Today: `error`, `warn`, `info`,
+  `debug`, one threshold over the four.)
+- **In the rules, and the existing code** (the human's question: "What
+  about with it in the rules and retrofitting existing code?"): our
+  answer below, to discuss.
+
+**Rules and retrofit** (ours, put to the human, not answered)
+
+- **The standard comes from the boundary, not from each action**
+  (`CLAUDE.md`, "Execution": metrics and audit only at the boundary).
+  The execution context already is every action's only way to read,
+  write and commit, so it can count and time them itself. At `info`
+  every request's record then holds its metrics (the time it took, the
+  reads, the writes, the commits) and its audit (what it changed: the
+  paths written and removed, on which layer), without the action doing
+  anything: nothing to remember, nothing to forget. The runtime adds
+  its own part the same way (the request begun, its branches, the
+  squash, the record's merge).
+- **So the retrofit is small**: the boundary is built once
+  (`mrepo-base-execute`, the runtime) and every existing action has its
+  `info` log the same day, untouched. An action adds only what it alone
+  knows: at `info` the meaning of what it did (a child deployed, a
+  command sent on), at `verbose` its steps, at `debug` its internals.
+  Those are written in as an action is touched; first where a
+  measurement is wanted (`crud`, then XPath).
+- **The rules** (the code rules, `package-docs-template`, checked):
+  - code run under a request logs through `exec.log`, never to the
+    console (checked over the modules; three places print today, each
+    with its reason: the app's own output, the follower's, the
+    runtime's last word when no request can take it: named
+    exceptions);
+  - an event's name is given short by the action and stored under its
+    protocol and action by the context (`crud.read.select`): nothing to
+    check;
+  - the standard entries are there for every action: tested once, where
+    they are made (the execute module's tests), and seen again in each
+    package's `mounted` test, which runs every action.
+- A warning or an error is kept at every level; an entry at a level
+  that is not one of the five is refused, as today.
 
 **Our input** (as the main reader of these records; put to the human,
 not answered)
@@ -710,14 +753,17 @@ not answered)
   thing (a node created, a child deployed, a command sent on, a test
   unit), and one closing line with its totals: the time it took, the
   reads, the writes, the commits. Enough to say what a request did and
-  roughly what it cost, always.
-- **`debug`**: the steps inside, each with what it took and how much
-  (`ms`, nodes selected, reads, writes); what a URI resolved to (a
-  position, a shortcut); which way a decision went (sent on, executed
-  here; one request, several); and the runtime's part for the request
-  (its branches made, the squash, the record's merge), which the action
-  does not see.
-- No level below `debug` for now (every path read, every value): the
+  roughly what it cost, always. (The human since: "Info has all
+  standard metrics and auditing".)
+- **`verbose`** (the human's level, "more detail"; ours: what was under
+  `debug` here, the part a measurement reads): the steps inside, each
+  with what it took and how much (`ms`, nodes selected, reads, writes);
+  what a URI resolved to (a position, a shortcut); which way a decision
+  went (sent on, executed here; one request, several).
+- **`debug`**: the internals: the runtime's part for the request call
+  by call (its branches made, the squash, the record's merge), a retry
+  with what it met, the shapes of what was passed.
+- Nothing below `debug` for now (every path read, every value): the
   record would hold the data twice.
 
 **What is there** (found 2026-11-15)
@@ -738,7 +784,7 @@ not answered)
 
 **Proposed** (ours, not answered: the list to discuss)
 
-- The logging flag: `log=<level>`, its values the four levels.
+- The logging flag: `log=<level>`, its values the three levels.
 - In the form the flags are a map: `flags: { "log": "debug",
   "error-on-empty": true }`.
 - A value that is not one of its flag's (`log=loud`): ignored with a
