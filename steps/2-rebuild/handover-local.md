@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-15 by the cloud session (parts 60 to 68), for the local agent (a Linux
+Updated 2026-11-15 by the cloud session (parts 60 to 69), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,7 +93,7 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 68, and `handover-next.md`. Before your last
+`readme.md`, parts 30 to 69, and `handover-next.md`. Before your last
 run (`6ebec98`): every package has its own tests and a test report
 (parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
 relative (61, 62); `crud` makes structure in `main`, the shortcuts are
@@ -109,7 +109,9 @@ XPath's first phase (67), and `crud` and `haicc` on it (68): a URI is a
 query (`haicc . crud/read "swarms/*[size>2]"`, quoted for the shell), a
 command is executed at a position inside `main` and at each position a
 URI selects (`haicc "swarms/*[state='started']" crud/read .`), and a URI
-runs on through shortcuts (`haicc host/node-1 help/get`). The `haicc`
+runs on through shortcuts (`haicc host/node-1 help/get`); a document's
+key is written in its URI form there (69: `publicKey` as `public-key`).
+The `haicc`
 test has 164 checks now. New
 for you: `tools/commit-bench.js` (the prompt's step 6), the commits
 measured on the human's laptop. Known and not

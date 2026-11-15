@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-15, part 68). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-15, part 69). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -12,7 +12,7 @@ removed, a race fixed; 65 the request train's two repairs: the squash
 into main; 66 logging: flags, three levels, the request's metrics and
 audit, errors caught at the request, the code quality check; 67 XPath's
 query engine in `mycelium-xpath`; 68 the repository, `crud` and `haicc`
-on it: task 6 built).
+on it: task 6 built; 69 a document's key in a query in its URI form).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -138,7 +138,8 @@ a shortcut); `crud` and `haicc`'s `goto` on it. Next with the human,
 point by point (short answers, one question at a time):
 - what was decided while building (both parts list it, "to confirm");
 - what was found open (part 68): a document's key in camelCase as a
-  step of a URI (the URI form of a data name); the outside reaching
+  step of a URI: answered and built (part 69: its URI form, `publicKey`
+  as `public-key`, the rules' own translation); the outside reaching
   `main` only, so the request records cannot be queried from the
   command line; what a query costs (about 1 ms a node read here: one
   request is right up to some hundreds of nodes; beyond, a cache of
@@ -199,7 +200,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 68. Its notes come
+  `handover-local.md`, are current for parts 60 to 69. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent

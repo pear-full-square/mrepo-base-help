@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-boot
 
-The package passed its `full` set: all 23 units, 315 of 315 tests and 2009 of 2009 asserts.
+The package passed its `full` set: all 23 units, 316 of 316 tests and 2018 of 2018 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 23 units, 315 of 315 tests and 2009 of 20
 | Set | `full` |
 | Result | passed |
 | Units | 23 of 23 passed |
-| Tests | 315 of 315 passed |
-| Asserts | 2009 of 2009 passed |
-| Run | 2026-11-15 12:35 UTC |
+| Tests | 316 of 316 passed |
+| Asserts | 2018 of 2018 passed |
+| Run | 2026-11-15 13:19 UTC |
 | Bare | v1.36.0 |
-| Content | `76d3c1ebdb013f985769a7dd6f9ee82040f94cf28cb19122664f3a7e38a0c8ed` |
+| Content | `0c36799bf93d9d70050a92bf97a480ad0a30eb3617ea1afeb605cc9ec4f9cad2` |
 
 ## Units
 
@@ -31,12 +31,12 @@ The package passed its `full` set: all 23 units, 315 of 315 tests and 2009 of 20
 | `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 162 of 162 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 122 of 122 |
 | `/test/modules/pear-full-square/mrepo-base-service` | passed | 3 of 3 | 15 of 15 |
-| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 44 of 44 |
+| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 47 of 47 |
 | `/test/modules/pear-full-square/mycelium-container-document` | passed | 1 of 1 | 8 of 8 |
 | `/test/modules/pear-full-square/mycelium-git` | passed | 144 of 144 | 777 of 777 |
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 190 of 190 |
 | `/test/modules/pear-full-square/mycelium-value-json` | passed | 1 of 1 | 3 of 3 |
-| `/test/modules/pear-full-square/mycelium-xpath` | passed | 19 of 19 | 115 of 115 |
+| `/test/modules/pear-full-square/mycelium-xpath` | passed | 20 of 20 | 121 of 121 |
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
