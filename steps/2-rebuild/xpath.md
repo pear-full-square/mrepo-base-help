@@ -316,6 +316,30 @@ yes, with what follows; put to the human)
     a shortcut is, where a segment has to stop; `haicc` makes the hop;
   - who uses it comes after, and is a caller's matter: `crud/read`
     reaches it today through the execution's `select`.
+- **A command's URI resolves to an array of references** (the human,
+  on our reading above: "A URI in crud/read or any other command needs
+  resolving in an array of references, the next 'local root' points for
+  the operation that follow - in the case of crud/read reading the
+  contents of an object"). So, for every command:
+  - its URI is the query; resolving it gives an array of references,
+    the node set as pointers, nothing read;
+  - each reference is a local root for the operation that follows, the
+    command's action; `crud/read` is the operation that reads the
+    content at each;
+  - the resolving is the same for all commands and comes before the
+    action; the action is handed where to work, it does not read the
+    URI itself (today each does: `crud`'s `place` and `select`, the
+    boot's `child`).
+  It is what was settled with relative URIs (`tasks.md`, task 1: all
+  node selections are arrays; a command executed once for each node
+  selected, that node the current root), now with what an element of
+  the array is: a reference.
+- **To settle with it**: a URI that names what is not there yet
+  (`crud/create swarms/swarm-1`, `boot/deploy host`): what it resolves
+  to. Ours, to propose: resolving goes as far as there is something,
+  and a reference says where it ended and what of the URI is left: at a
+  shortcut, the rest to send on; at the end of what exists, the rest to
+  make. Nothing left: the node itself.
 - **To settle with it**: a URI with a filter in it is not a valid URI
   today (`mycelium-uri` validates a URI before it is selected by): what
   of a query is validated as a URI, and where.
