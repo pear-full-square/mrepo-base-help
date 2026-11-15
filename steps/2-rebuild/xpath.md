@@ -378,6 +378,33 @@ select to the list of requests?"; put to the human, not answered)
   keys, costs nothing more. What cannot be done is to read only its
   end: a wide folder is read whole for its last entry, one more reason
   for subfolders by date (the latest is then in the last folder).
+- **How many to a folder** (the human, on keys by time and folders by
+  date: "ok, this will give us optimal number of folders, objects per
+  folder"). What the measurements say of it (here, and the laptop the
+  same in proportion): under a hundred entries a folder gains little
+  (10 children 137 commits a second, 100: 119); a thousand halves it
+  (55); ten thousand leaves a tenth (11). A level of depth costs about
+  a twentieth (the folder of 100 five levels deeper: 91). So the
+  sweet spot is one to a few hundred entries a folder, and as many
+  levels as that takes: a million records, three levels of a hundred.
+- **Branches are independent, for a commit and for a read** (the
+  human's question; ours: yes).
+  - A branch is a name that points to a commit. A commit on one branch
+    moves that name and no other: writers on different branches do not
+    wait for each other (measured: up to 24 at once, each on its own
+    branch, no error).
+  - A read holds a commit, so no commit on any branch, its own
+    included, changes what it sees.
+  - What they share is the store of objects, which is safe to share:
+    an object is named by its content, so the same one written from
+    two branches is one object. And the folder of branch names, which a
+    listing of the branches walks (part 65's repair).
+  - Where they are not independent: inside one branch (one writer: a
+    second commit on the same head is refused), and where one is
+    merged or squashed into another, the one point they meet.
+  - Our layers are branches with nothing in common, not even a first
+    commit; an execution's branch starts from its target and meets it
+    again once, at its squash.
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
