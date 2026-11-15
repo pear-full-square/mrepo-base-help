@@ -338,7 +338,8 @@ select to the list of requests?"; put to the human, not answered)
   changed between them.
 - **What is written again is a folder's listing, not its contents**
   (the human: "So folder tree gets duplicated and folder contents for
-  affected folders"; ours: the first half). For each folder on the
+  affected folders"; ours: the first half; the human: "listing is what
+  I meant, listing of the references of its content"). For each folder on the
   path, its listing is written again whole, with the change in it: a
   name and an id an entry, some forty bytes, whatever the size of what
   the entry names. The files and the folders it lists are not written
@@ -346,6 +347,23 @@ select to the list of requests?"; put to the human, not answered)
   files of a megabyte each, one file added: a new listing of 10,001
   entries, about 400 KB before it is compressed; none of the ten
   gigabytes. That listing is the cost of width measured above.
+- **A listing is in name order: an entry is neither appended nor
+  prepended** (the human: "What is the reason that new object refs
+  (folder contents) are appended and not prepended if they are without
+  order?"). Our diagrams misled: `a`, `b`, `c` stood in the order they
+  were added only because that is also their order by name. Git keeps
+  a listing sorted by name, and a new entry goes to its place in it,
+  anywhere. The reason is the id: a tree is named by the hash of its
+  listing, so one set of entries must have one way of being written,
+  whatever order they were added in; sorted, the same entries always
+  give the same id (and two listings can be compared by walking them
+  side by side). So a listing does have an order, by name; what it
+  does not have is the order of arrival: that is in the commits. With
+  keys that are GUIDs, as the app's are, the name order says nothing.
+- **To settle**: keys that sort by time (a timestamp first, as the
+  tests' keys have): then a listing's own order is the order of
+  arrival, the order a query gets unasked means something, and
+  subfolders by date follow from the key.
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
