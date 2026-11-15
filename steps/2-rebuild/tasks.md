@@ -704,7 +704,9 @@ flag." To be discussed first, then built.
   about with it in the rules and retrofitting existing code?"): our
   answer below, to discuss.
 
-**Rules and retrofit** (ours, put to the human, not answered)
+**Rules and retrofit** (ours; its first point confirmed by the human,
+asked whether `info` comes from the boundary so that existing actions
+need no change: "Yes from request")
 
 - **The standard comes from the boundary, not from each action**
   (`CLAUDE.md`, "Execution": metrics and audit only at the boundary).
@@ -737,6 +739,18 @@ flag." To be discussed first, then built.
     package's `mounted` test, which runs every action.
 - A warning or an error is kept at every level; an entry at a level
   that is not one of the five is refused, as today.
+- **What of it the code test holds** (the human: "Is all that in code
+  tests?"). Today none: the code test (`/test/code`, `pkgm-base-check`,
+  `internal/rules`) reads the code without running it and checks three
+  things: a module's structure, its imports, transient references.
+  Proposed:
+  - into the code test, read from the code: no console in code run
+    under a request (the named exceptions aside); a level written in a
+    call of `exec.log` is one of the five;
+  - not for the code test, because it has to run: that the standard
+    entries are in a request's record (the execute module's tests,
+    where they are made; each package's `mounted` test, which runs
+    every action; the two end to end tests, on a real record).
 
 **Our input** (as the main reader of these records; put to the human,
 not answered)
