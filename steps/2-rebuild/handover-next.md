@@ -129,6 +129,41 @@ the engine in `mycelium-xpath` first. One thing to confirm before the
 second part: whether a command's answer is always an array, also for
 one node. **Task 7, the inbox watched instead of looked at**, is noted
 to discuss.
+
+**Where the build of task 6 stands** (2026-11-15, before a context
+reset): part one, the engine, was begun and nothing of it is committed.
+A draft is in the working tree, untested, not exported:
+`pear-full-square/mycelium-xpath/lib/query.js` (if it is gone, it is to
+be written again from this):
+- `query(tree, root, text) -> { found, stopped }`; `tree` is handed in:
+  `children(node)` as `select`'s; `document(node)` (a node's document,
+  or null); `stop(ref)` (truthy where the query must not go on from a
+  node: a shortcut; what it says is handed back); `match`; `step(event,
+  data, fn)` (each round run through it, so the caller measures:
+  `exec.step`).
+- `found`: references `{ path, node }`, the node as `children` gave it,
+  nothing read; inside a document `{ path, value }`. `stopped`:
+  `{ path, node, rest, why }`, `rest` the query's text from there on.
+- The loop: a segment (steps up to a `[` or the end: walked, no
+  document read), then a filter (documents read, the set made smaller),
+  and so on. A step that names no child is looked for in the node's
+  document, and goes on inside it.
+- Phase 1 of the list in `xpath.md`: steps by name, `*`, `.`; filters:
+  a leaf `=`, `!=`, `<`, `<=`, `>`, `>=` a value, a leaf there, a path
+  inside the document, `and`, `or`, `not()`, several in a row,
+  `name()`, `starts-with()`, `contains()`, `@leaf` the same as `leaf`.
+- Still to do in part one: export it from the module's `index.js`, its
+  tests (on plain objects with `objectChildren`, and `test/tree.json`),
+  the module's READMEs (`README.md`, `lib/README.md`, `test/README.md`),
+  the checks, the pre-release of the packages that carry
+  `mycelium-xpath`, the part's record (67), the product repositories.
+- Part two after it: `mycelium-git`'s repository on it (a document read
+  as a tree below its file), `crud` (`read`, `delete` hand their URI to
+  it; `create` walks), `haicc` (`goto` executes the command at each
+  node the query selects: the current root moves). Before part two,
+  the one thing to confirm with the human (asked, not answered):
+  whether a command's answer is always an array, one result a node,
+  also for one node.
 XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
