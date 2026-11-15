@@ -657,11 +657,16 @@ flag." To be discussed first, then built.
   request flag, not for logging alone. **Space separated** (the human,
   on our reading with commas): `haicc --flags debug host crud/read
   swarms/*`, `haicc --flags debug error-on-empty host crud/read
-  swarms/*`. Our reading of where the list ends, to confirm: the flags
-  are an enumeration, a fixed set of words, so the list goes on while
-  the next word is one of them, and the first word that is not is the
-  URI. A position named like a flag is written with `./` (`./debug`),
-  as one named like a `haicc` command is (task 1).
+  swarms/*`. **A flag can carry a value** (the human, asked where the list ends):
+  "They could have key=value with no space." Our reading, to confirm: a
+  flag is a word of the enumeration, alone (`error-on-empty`) or with
+  its value (`log=debug`), nothing else; the list goes on while the next
+  word is one (its key known), and the first word that is not is the
+  URI: `haicc --flags log=debug error-on-empty host crud/read
+  swarms/*`. A position named like a flag is written with `./`
+  (`./debug`), as one named like a `haicc` command is (task 1). In the
+  form the flags are then a map: `flags: { "log": "debug",
+  "error-on-empty": true }`.
 
 **Our input** (as the main reader of these records; put to the human,
 not answered)
@@ -706,9 +711,9 @@ not answered)
 
 **Proposed** (ours, not answered: the list to discuss)
 
-- In the form: the flags a property of the request (`flags:
-  ["debug"]`); at the command line `--flags` goes where `--raw` and
-  `--output` go, before the URI.
+- The logging flag: `log=<level>`, its values the four levels.
+- At the command line `--flags` goes where `--raw` and `--output` go,
+  before the URI.
 - A request without the flag: `info`, as now. Whether the mrepo's own
   threshold (`/runtime/log.json`) stays as that default or goes.
 - A command sent on (a `haicc` hop): the flag goes with it; the child's
