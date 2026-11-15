@@ -363,7 +363,15 @@ select to the list of requests?"; put to the human, not answered)
 - **To settle**: keys that sort by time (a timestamp first, as the
   tests' keys have): then a listing's own order is the order of
   arrival, the order a query gets unasked means something, and
-  subfolders by date follow from the key.
+  subfolders by date follow from the key. **Git allows it** (the
+  human's question): a name is any bytes but a slash, and the order is
+  a plain comparison of the names, so nothing in git changes: only the
+  name we give. What it asks of the name: the time first, at a fixed
+  width (a number padded, or a date written year first). A GUID of
+  version 7 is that, its first 48 bits the time in milliseconds, and
+  still a GUID: the smallest change (ours are version 4, all random).
+  What git does not allow is another order than by name: a listing not
+  sorted is not a valid tree.
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
