@@ -239,6 +239,34 @@ the human, not answered)
   set such as a count or the last), and a filter with a path inside,
   which is a query of its own run for each node.
 
+**Cutting on a filter or a shortcut** (the human: "Are you happy with
+cutting the segments the way I proposed: on filter or shortcut?"; ours:
+yes, with what follows; put to the human)
+
+- **It cuts where the cost changes.** A stretch of steps without a
+  filter only walks listings: no document is read, and what it gives
+  is a pointer. A filter is the first thing that reads documents. So a
+  segment is cheap and lazy, a filter is where the work is: the right
+  place to measure, and the right place for a request's edge in the
+  several-requests mode.
+- **The rounds alternate**: a segment (walk, a pointer out), a filter
+  (read, a smaller set out), a segment from each node that is left, and
+  so on. Two filters in a row are a filter after an empty segment.
+- **The two cuts are found differently.** A filter is seen in the text
+  (its bracket): the parser stops there. A shortcut is seen only in the
+  data, by the round that meets it; and where a step selects many
+  (`*/swarms/*`), some of the set may be shortcuts and others not: the
+  set then goes two ways from the same place in the text, the ordinary
+  nodes on here, each shortcut by its hop, and the results are laid
+  side by side.
+- **A filter's side branch that itself crosses a shortcut** is a query
+  sent on for each node: after the first implementation.
+
+**The storage a type is kept in** (the human, on the measurements of
+git, the Corestore and a Hyperdrive: "this is very useful information
+for storage decisions on type"): noted for when a type's storage is
+chosen; the figures are under "Commits", above.
+
 **A node set as a pointer, in git** (ours, on the human's question:
 "If we take reference in our git based system, how would we point /
 select to the list of requests?"; put to the human, not answered)
