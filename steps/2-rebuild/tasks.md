@@ -10,7 +10,7 @@ its record is then a part in `readme.md`.
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
 the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Task 6, XPath, the first implementation, is built: parts 67 and 68; what was decided while building is in those parts, to confirm. Noted
-to discuss: task 7, the inbox watched.
+to discuss: task 7, the inbox watched. Task 8, the human's findings from the manual test (flags after the URI, a record packed on its lines, `haicc output`): settled with the local agent, waits for the go.
 
 How to read a task:
 
@@ -771,6 +771,52 @@ be better with a filewatcher?"
   committed); `mrepo-base-request/index.js` (`request`: a waiting
   principal's answer collected from the outbox folder);
   `haicc-base-app/internal/request/` (the app waiting for its answer).
+
+## 8. The human's findings from the manual test: flags after the URI; a record packed on its lines; `haicc output`
+
+The human tried `haicc` by hand on the laptop (`main` as of `c8200f7`)
+and settled three findings with the local agent, 2026-11-15:
+`local-note.md`, "the human's manual test", holds each with the human's
+words. Not built: the cloud session's to build, on the human's go.
+
+**Settled** (the human, through the local agent)
+
+- **Flags come after the URI** (part 66's reading was wrong): "The
+  flags should be after host and -- is used to say: this is where the
+  next command starts." `haicc host --flags log=debug -- crud/read .`:
+  the flags after a URI are that step's; `--` marks where the next
+  command starts, and is optional ("yes, -- optional"). A flag still
+  persists down the chain until changed.
+- **A record printed with its attributes packed on a line**: an opened
+  container's entries fill a line up to the width, separated by `, `;
+  an entry is never split across lines; one that does not fit on a line
+  of its own is opened below, as now (the sample in the note, confirmed
+  by the human).
+- **The width**: `auto` is the default, the terminal's width read each
+  time a record is printed (80 when the output is not a terminal);
+  `haicc output` says the width in force, `haicc output <number>` sets
+  a fixed width, `haicc output auto` back to the default ("Keep haicc
+  output (read and set number and auto) and auto as default"). It is
+  saved, in haicc's own folder, `~/.haicc` ("if it can be set, then it
+  needs to be saved"). `HAICC_WIDTH` is removed ("remove HAICC_WIDTH").
+
+**Left to us**
+
+- `output` becomes one of the command's own words: a position named so
+  is reached as `./output` (the local agent's proposal).
+- How the terminal's width is read (`bare-tty` is in the lockfile).
+- Where a flag list after the URI of a command that is not passed on
+  ends (to its end, as now).
+
+**Where**
+
+- `pear-full-square/mrepo-base-request/lib/flags.js` (`split`),
+  `lib/command.js` (`interpret`: a list in front, a list after);
+  `pear-full-square/haicc-base-app/internal/command/` (the flags in
+  front, `forMrepos`), `internal/unpack/` (the record printed),
+  `internal/usage.js`; `haiccing/base-linux-haicc/test/run.sh`, section
+  9b (the flags' checks); `haiccing/package-docs-mrepo/mrepo/request/`
+  ("Flags").
 
 ## Future additions
 
