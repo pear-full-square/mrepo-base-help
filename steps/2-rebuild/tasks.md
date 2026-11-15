@@ -656,9 +656,16 @@ like a good starting position".
 - The squash a writer's operation of its own in `mycelium-git`
   (`squash(from, into, message)`), `merge` left as it is; conflicts
   throw as they do, and the request layer runs the later request again.
-- A branch removed after its squash: its head is not in the target's
-  history, which `deleteBranch` asks for today. Proposed: the squash
-  removes the branch itself, in the one operation.
+- **The squash does not remove the branch that feeds in** (the human
+  asked, 2026-11-15; our first proposal, the squash removing it in the
+  one operation, withdrawn): as in git, a squash writes one commit on
+  the target and leaves the other branch as it was. The branch is
+  removed by the step that removes it today, `close` in
+  `mrepo-base-execute`, which goes to the backend and does not ask that
+  the branch was merged (it removes a failure's branch too). So a
+  branch can still be kept where that is wanted (a failure, to look at
+  it). The writer's own `deleteBranch`, which asks that the head is in
+  the target's history, is not used on this path and stays as it is.
 - Where the squash applies: an execution branch merged into its target
   (`main` first; the other atomic layers the same). The request's own
   record (`execute/<key>/request/execute` into `request/execute`, on to
