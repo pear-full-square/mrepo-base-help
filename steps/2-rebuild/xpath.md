@@ -354,6 +354,12 @@ yes, with what follows; put to the human)
     says it today, an `outcome` a node (`there`, `created`).
   - What follows (ours): the parent may be a selection, and the child
     is then added in each: `crud/create swarms/*/notes`.
+  - **Create walks the URI** (the human, asked whether a missing parent
+    is made or nothing is done: "yes, the logic of crud/create: it is
+    walking the URI, create if it does not exist, until the end of the
+    uri"). So as it does today: each part in turn, made where it is not
+    there, to the last. A part that selects (`*`, a filter) selects
+    among what is there and makes nothing.
 - **To settle with it**: a URI with a filter in it is not a valid URI
   today (`mycelium-uri` validates a URI before it is selected by): what
   of a query is validated as a URI, and where.
