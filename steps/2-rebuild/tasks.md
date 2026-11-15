@@ -786,7 +786,10 @@ reading, to confirm: `info` and a request's output are the request's
 matter, made at the boundary and covered by the many tests that run
 requests; `verbose` and `debug` entries are written into all the code,
 not only where it is touched next: the retrofit goes through every
-module. (Our "as an action is touched" is withdrawn.)
+module. (Our "as an action is touched" is withdrawn.) Confirmed, and
+what the word covers: "Retrofit means putting debug and verbose in
+place." So the retrofit is that and no more: the `verbose` and `debug`
+entries written into the existing code.
 
 **Errors** (the human's question: "errors caught at request level or
 intermediate and rethrown?"; ours, put to the human, not answered)
@@ -818,9 +821,11 @@ intermediate and rethrown?"; ours, put to the human, not answered)
   (`catch {}`, a rejection handler without a parameter) is a problem,
   unless it goes through the one helper that tells "not there" from the
   rest; an error thrown inside a catch carries a `cause`.
-- **The retrofit**: the forty places, each looked at: what it expects
-  named, the rest let through. Faults that are swallowed today will
-  show as errors: wanted, and to be expected in the first runs.
+- **The forty places**, each looked at (what it expects named, the
+  rest let through): we called this part of the retrofit; the human:
+  the retrofit is the `debug` and `verbose` entries. So this is not in
+  it: a piece of its own, not agreed, to ask about. Faults that are
+  swallowed today would show as errors in its first runs.
 
 **What is there** (found 2026-11-15)
 
