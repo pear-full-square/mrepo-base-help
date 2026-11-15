@@ -710,8 +710,10 @@ went, each answer in its words. This is what of it is to be built first.
   as it does.
 - **All commands are maps over an array of nodes** (the human): a
   command is its operation mapped over the nodes its URI resolves to.
-  To confirm before that part is built: whether the answer is always
-  the array, also for one node.
+  The array is of nodes, not of answers: a response stays any data
+  type, the action's own (the human: "what has response to do with URI
+  always returning an array?"). Results as attachments of a request:
+  the human's direction, not designed, not in this task.
 - **In two parts**: first the engine in `mycelium-xpath` with its own
   tests, which nothing else depends on; then the repository, `crud`
   and `haicc` on it.

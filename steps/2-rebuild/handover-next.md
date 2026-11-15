@@ -125,9 +125,7 @@ done). **Tasks 4 and 5 are built** (parts 65 and 66: the two repairs;
 logging). **Task 6, XPath's first implementation, has its go** (standard
 XPath in phases: the list in `xpath.md`; `haicc` and `crud` both its
 first users; all commands maps over an array of nodes): in two parts,
-the engine in `mycelium-xpath` first. One thing to confirm before the
-second part: whether a command's answer is always an array, also for
-one node. **Task 7, the inbox watched instead of looked at**, is noted
+the engine in `mycelium-xpath` first. **Task 7, the inbox watched instead of looked at**, is noted
 to discuss.
 
 **Where the build of task 6 stands** (2026-11-15, before a context
@@ -161,10 +159,10 @@ stale reports on `execute/main` until the part is done):
 - Part two after it: `mycelium-git`'s repository on it (a document read
   as a tree below its file), `crud` (`read`, `delete` hand their URI to
   it; `create` walks), `haicc` (`goto` executes the command at each
-  node the query selects: the current root moves). Before part two,
-  the one thing to confirm with the human (asked, not answered):
-  whether a command's answer is always an array, one result a node,
-  also for one node.
+  node the query selects: the current root moves). Answered since: the
+  array is of nodes, not of answers; a response stays any data type
+  (`xpath.md`, "All commands are maps"); results as attachments is a
+  direction to discuss, not in this task.
 XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
