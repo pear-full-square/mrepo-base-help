@@ -729,6 +729,38 @@ script, not kept). Operations a second:
   Corestore, a read a little faster, many documents in one commit of a
   wide folder half as fast. So the cost is the engine's (each object
   compressed, hashed, read back and parsed), not what it stores into.
+- **Files and folders on the Corestore without git** (the human: "is
+  there another one? folder and file type on corestore (no git)?").
+  There is: a Hyperdrive (13.3.4, here already: our git engine keeps its
+  objects in one, and `p2p-store` opens them). Used directly, a path a
+  file, operations a second:
+
+  | | a folder of 100 | of 10,000 |
+  |---|---|---|
+  | a document written over | 1,430 | 1,490 |
+  | a node added | 1,680 | 1,840 |
+  | a document read | 8,000 | 6,100 |
+  | read at a fixed version | 11,400 | 4,800 |
+  | the folder listed | 23 (1,100 entries) | 2 (11,000 entries) |
+  | documents a second, 1000 in one batch | 2,970 | 3,610 |
+
+  Against git on the same store: a write 12 times faster in the narrow
+  folder and over a hundred times in the wide one, because width does
+  not matter to it (the paths are keys in one sorted tree, not a
+  listing a folder); a read 20 to 280 times faster. Listing a folder is
+  its weak side: about 40 microseconds an entry, five times git's.
+  - **What it has of what git gives us**: every write a version, in
+    one line; the drive read as it was at a version (tried: one opened
+    at a version does not see what is written after: no dirty reads);
+    many writes as one batch, whole or not at all; the difference
+    between two versions; names in order; replication, its own.
+  - **What it has not**: branches (one line of versions a drive, one
+    writer), so no request's branch beside `main`, no merge, no
+    squash: a request's work would be a batch, or a drive of its own;
+    and no id for a folder's content, so nothing says "this folder is
+    the same as before" without comparing.
+  - To settle, if it is wanted: what a request's branch becomes without
+    branches, and whether two batches can be open at once.
 - **Per operation git is one to three orders slower**: a write about
   60 times (17 against a write forced to disk), a read about 800
   times. Listing is alike, an entry a few microseconds either way.
