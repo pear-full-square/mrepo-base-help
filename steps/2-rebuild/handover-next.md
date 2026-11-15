@@ -131,10 +131,11 @@ one node. **Task 7, the inbox watched instead of looked at**, is noted
 to discuss.
 
 **Where the build of task 6 stands** (2026-11-15, before a context
-reset): part one, the engine, was begun and nothing of it is committed.
-A draft is in the working tree, untested, not exported:
-`pear-full-square/mycelium-xpath/lib/query.js` (if it is gone, it is to
-be written again from this):
+reset): part one, the engine, was begun. A draft, untested and not
+exported, is committed on `execute/main` only, not merged into `main`
+(so `main` stays as validated; the packages that carry the module show
+stale reports on `execute/main` until the part is done):
+`pear-full-square/mycelium-xpath/lib/query.js`:
 - `query(tree, root, text) -> { found, stopped }`; `tree` is handed in:
   `children(node)` as `select`'s; `document(node)` (a node's document,
   or null); `stop(ref)` (truthy where the query must not go on from a
