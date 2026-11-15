@@ -149,6 +149,15 @@ point by point (short answers, one question at a time):
   resolves the usage restriction; descendants; positions), results as
   attachments, task 7.
 
+**Task 9 is in discussion** (`tasks.md`): the request records made
+reachable by switching the layer in the request, a flag, `layer=request`
+(the human's direction, 2026-11-15); our proposal there: the command's
+own URI read at that layer, read only outside `main`, a record answered
+as its document. The local agent's latest notes (an agent on `haicc`,
+Claude Code headless; `vision.md`, "Agents"; its proposal: the addon
+hashes left out of the printed log of `boot/deploy`) are read, not
+acted on.
+
 **Task 8 waits for the human's go** (`tasks.md`): three findings from
 the human's manual test of `c8200f7`, settled with the local agent
 (`local-note.md`, 2026-11-15, "the human's manual test"): flags after

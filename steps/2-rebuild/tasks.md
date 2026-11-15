@@ -10,7 +10,7 @@ its record is then a part in `readme.md`.
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
 the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Task 6, XPath, the first implementation, is built: parts 67 and 68; what was decided while building is in those parts, to confirm. Noted
-to discuss: task 7, the inbox watched. Task 8, the human's findings from the manual test (flags after the URI, a record packed on its lines, `haicc output`): settled with the local agent, waits for the go.
+to discuss: task 7, the inbox watched. Task 8, the human's findings from the manual test (flags after the URI, a record packed on its lines, `haicc output`): settled with the local agent, waits for the go. Task 9, the request records reachable by a flag, `layer=request` (the human's direction): in discussion.
 
 How to read a task:
 
@@ -817,6 +817,35 @@ words. Not built: the cloud session's to build, on the human's go.
   `internal/usage.js`; `haiccing/base-linux-haicc/test/run.sh`, section
   9b (the flags' checks); `haiccing/package-docs-mrepo/mrepo/request/`
   ("Flags").
+
+## 9. The request records reachable: the layer switched in the request
+
+Found open in part 68: the outside reaches `main` only, so the request
+records cannot be queried from the command line. The human, 2026-11-15:
+"we will have to make the request log records reachable, probably the
+easiest at this stage is to switch layer in the request. Maybe use a
+flag for that? layer=request". In discussion; not built.
+
+**Proposed** (ours, to confirm)
+
+- **A flag, `layer=<name>`**: the command's own URI is read at that
+  layer instead of `main`: `haicc . crud/read "done/*[value/uri='main/host']"
+  --flags layer=request`. The routing URI (`haicc <URI>`) stays in
+  `main`: positions and shortcuts are there. As any flag it holds
+  through a chain, so the records of a linked mrepo are read the same
+  way (`haicc host crud/read done/* --flags layer=request`).
+- **Read only outside `main`**: from outside, another layer is open to
+  an action whose config says it reads (`crud/read` for now); the
+  others stay refused there, as today.
+- **A record is a file**: `crud/read` answers with a file's document
+  there, `{ uri, value }` (today what is no node is left out).
+
+**Where**
+
+- `pear-full-square/mrepo-base-request/lib/flags.js` (`FLAGS`),
+  `lib/command.js` (`formOf`: the prefix, `OUTSIDE`), `index.js`
+  (`check`: the prefix `main`); `mrepo-base-crud/internal/node/`
+  (`select`: what is no node left out); `mrepo-base-xpath/internal/query/`.
 
 ## Future additions
 
