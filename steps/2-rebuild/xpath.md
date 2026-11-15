@@ -626,6 +626,9 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
 | value | an attribute by `@` | `[@name='sam']` | 1, the same as `[name='sam']`: a leaf is the document's key and its value |
 | | what is XML's alone: namespaces, comments, processing instructions, `id()`, `lang()`, `text()` | | not |
 
+- **Built** (part 67 of `readme.md`): phase 1, as `query` in
+  `mycelium-xpath`; what is of a later phase is refused, said as such.
+  What was decided while building, to confirm, is listed there.
 - **Standard only**: our one form outside it, `*` in a quoted value as
   a wildcard (`[name='s*']`), is not built: `starts-with` and `contains`
   say it. The human's first example in standard form:
@@ -661,10 +664,23 @@ references and the command is executed at each: the current root moves
 **All commands are maps over an array of nodes** (the human: "Also make
 sure all commands are maps over an array of nodes"). A command is its
 operation mapped over the nodes its URI resolves to, one node, none or
-many alike. To confirm, for it changes what is answered: whether a
-command's answer is then always the array, one result a node, also for
-one node (`service/start` answering an array of one), where on
-2026-11-14 the answer was "No, response can contain any data type".
+many alike.
+- **The array is of nodes, not of answers** (the human, on our question
+  whether a command's answer is then always an array: "what has
+  response to do with URI always returning an array? Request reponse is
+  not for structured data. it can be but probably we work better with
+  'attachments' of results. And response can be any data type, so what
+  is the issue?"). We had run two things together: what a URI resolves
+  to (always an array of nodes, which the command maps over) and what a
+  request answers (any data type, the action's own, as settled on
+  2026-11-14). Nothing changes in the answers.
+- **Results as attachments** (the human): a request's response is not
+  the place for structured results; they would rather go with the
+  request as attachments. Not designed: to discuss (what one is, where
+  it is kept, how it is referred to; `vision.md` has the like for a
+  pipeline: larger data on its branch, referred to by URI). Until
+  then, ours: a command that ran at several nodes answers with what
+  each gave, simply listed.
 
 ## Parallel execution: threads
 
@@ -1067,7 +1083,8 @@ What is there today, to start from; check it again, the code may have
 moved.
 
 - `pear-full-square/mycelium-xpath`: `select`, a plain path and `*` at
-  any step, names matched exactly; generic, knows no mrepo.
+  any step, names matched exactly; `query`, phase 1 of the list above
+  (part 67); generic, knows no mrepo.
 - `pear-full-square/mrepo-base-xpath/internal/resolve/`: a URI resolved
   to one position; one that runs through a shortcut is refused; a
   shortcut's sources are a list, the first one in use.

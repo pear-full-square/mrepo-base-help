@@ -3103,3 +3103,80 @@ checks among them. The READMEs: 241 in the sources, 490 in the help
 tree, no problems. The `haicc` test five times in a row, 152 of 152
 each. `base-component-boot`'s `validate` four times, its `boot` test
 passing each. Nothing left running.
+
+## 67. XPath, the first implementation, part one: the query engine in `mycelium-xpath` (2026-11-15)
+
+Task 6 of `tasks.md`, on the human's go ("And yes standard XPath, but in
+phases. Maybe make a list and then mark what goes in now. When that is
+done, then you can go the implementation."). The design and what the
+human said of it: `xpath.md`. The task is built in two parts; this is
+the first, the engine, which nothing else uses yet.
+
+- **`query(tree, root, text)`** in `mycelium-xpath` (`lib/query.js`),
+  beside `select`, generic as it is: the tree is reached only through
+  what is handed in. `children(node)` as `select`'s; `document(node)`,
+  a node's document; `stop(ref)`, where the query must not go on from a
+  node (a shortcut, for who hands it in); `match`; `step(event, data,
+  fn)`, each round run through it, so who calls measures (it has the
+  form of `exec.step`).
+- **Phase 1 of the list** (`xpath.md`, "Standard XPath, in phases"):
+  steps by name, `*`, `.`; a filter compares a leaf (`=`, `!=`, `<`,
+  `<=`, `>`, `>=`), asks whether a leaf is there, reaches a leaf by a
+  path; `and`, `or`, `not()`, brackets, several filters in a row;
+  `name()`, `starts-with()`, `contains()`; a quoted text, a number;
+  `@leaf` the same as `leaf`.
+- **Parse, process and continue** (the human's approach): a segment,
+  steps up to a filter or the end, is read and walked; a filter is read
+  and makes the set smaller; then the next bit. Between two rounds
+  there is a set of references and the rest of the text.
+- **What comes back**: `found`, an array of references, `{ path, node
+  }`, the node as `children` gave it, nothing of it read; inside a
+  document `{ path, value }`. And `stopped`: where it stopped with some
+  of the query left, `{ path, node, rest, why }`, `rest` a query for
+  who goes on elsewhere, from that node as its root (the jump from one
+  local root to the next).
+- **A document continues the tree below its node** (the human: "the
+  JSON doc as tree: yes"): a step that names no child is looked for
+  among the document's keys and goes on inside it. A leaf in a filter
+  is a key holding a value.
+
+**Decided while building, to confirm with the human** (each small, each
+in the module's README as built):
+
+- A filter on a node the query stops at goes with it: the node's
+  document is elsewhere, so `rest` starts with the filter
+  (`swarms/remote[state='started']/nodes` stops at `remote` with
+  `[state='started']/nodes` left).
+- A child comes before a document's key of the same name.
+- A segment reads a document only where a step names no child of a
+  node; a filter reads the documents of the nodes it filters, each once
+  a query.
+- A leaf of the tree itself (a file that is a text or a number, not an
+  object) has that as its value in a filter.
+- A list in a document is reached by its indexes as names, from 0
+  (`tags/1`): names, not XPath's positions, which are phase 2.
+- Compared as numbers when a side is a number or an order is asked
+  (`<`, `>`), else as text. `true` and `false` are not values in this
+  phase (`[ok='true']`).
+- What is not of this phase is refused and said as such, with where in
+  the text: `//`, `|`, `[1]`, `::`, a filter inside a filter, the other
+  functions. `..` is refused as looking back.
+
+**Not in it** (part two): the repository of `mycelium-git` on the
+engine (a document read as a tree below its file); the shortcut handed
+in as the stop; `crud` and `haicc` on it; a URI with a filter in
+`mycelium-uri`; the measurements through `--flags log=verbose`.
+
+**Validated**: the module's tests, 19 tests, 115 asserts (15 new: each
+form of phase 1, a document below its node, the stop with what is left,
+a document read once, the rounds, what is refused). The pre-release of
+the five packages that carry the module, each passing, the module's
+tests run from the bundle: `base-package-runtime` 22 units, 292 tests,
+1785 asserts; `base-package-service` 14, 233, 1324; `base-package-boot`
+23, 303, 1893; `base-component-boot` 23, 298, 1961; `base-app-haicc`
+23, 314, 1989. `tools/bare tools/release.js --strict`: twelve packages,
+every report current. `tools/bare tools/code-check.js`: 20 modules, 13
+packages, no problems. The READMEs: 241 in the sources, 490 in the help
+tree, no problems. Not run again: the `haicc` test and the boot's
+`validate` several times, nothing they run having changed (an export
+added, used by nothing). Nothing left running.

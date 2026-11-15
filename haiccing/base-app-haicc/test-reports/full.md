@@ -1,6 +1,6 @@
 # Test report: haiccing/base-app-haicc
 
-The package passed its `full` set: all 23 units, 299 of 299 tests and 1888 of 1888 asserts.
+The package passed its `full` set: all 23 units, 314 of 314 tests and 1989 of 1989 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 23 units, 299 of 299 tests and 1888 of 18
 | Set | `full` |
 | Result | passed |
 | Units | 23 of 23 passed |
-| Tests | 299 of 299 passed |
-| Asserts | 1888 of 1888 passed |
-| Run | 2026-11-15 08:38 UTC |
+| Tests | 314 of 314 passed |
+| Asserts | 1989 of 1989 passed |
+| Run | 2026-11-15 12:09 UTC |
 | Bare | v1.36.0 |
-| Content | `009d4b471e925a775201a4329b1c2a7f6daffd384064321bcf6e85b7e3f6b637` |
+| Content | `820867cd48b831205c6190ff23374bfd7b41619f0539d90cf55d06352d80a92e` |
 
 ## Units
 
@@ -36,7 +36,7 @@ The package passed its `full` set: all 23 units, 299 of 299 tests and 1888 of 18
 | `/test/modules/pear-full-square/mycelium-git` | passed | 139 of 139 | 737 of 737 |
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 19 of 19 | 166 of 166 |
 | `/test/modules/pear-full-square/mycelium-value-json` | passed | 1 of 1 | 3 of 3 |
-| `/test/modules/pear-full-square/mycelium-xpath` | passed | 4 of 4 | 14 of 14 |
+| `/test/modules/pear-full-square/mycelium-xpath` | passed | 19 of 19 | 115 of 115 |
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 33 of 33 | 163 of 163 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
