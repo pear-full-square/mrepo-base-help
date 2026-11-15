@@ -723,8 +723,7 @@ need no change: "Yes from request")
   `info` log the same day, untouched. An action adds only what it alone
   knows: at `info` the meaning of what it did (a child deployed, a
   command sent on), at `verbose` its steps, at `debug` its internals.
-  Those are written in as an action is touched; first where a
-  measurement is wanted (`crud`, then XPath).
+  (The human since: `verbose` and `debug` in all code.)
 - **The rules** (the code rules, `package-docs-template`, checked):
   - code run under a request logs through `exec.log`, never to the
     console (checked over the modules; three places print today, each
@@ -779,6 +778,49 @@ not answered)
   with what it met, the shapes of what was passed.
 - Nothing below `debug` for now (every path read, every value): the
   record would hold the data twice.
+
+**Where each level is made and tested** (the human, on the split
+between the code test and the tests that run): "There is a lot of
+request testing, info and output. Debug and verbose in all code." Our
+reading, to confirm: `info` and a request's output are the request's
+matter, made at the boundary and covered by the many tests that run
+requests; `verbose` and `debug` entries are written into all the code,
+not only where it is touched next: the retrofit goes through every
+module. (Our "as an action is touched" is withdrawn.)
+
+**Errors** (the human's question: "errors caught at request level or
+intermediate and rethrown?"; ours, put to the human, not answered)
+
+- **Today** (found): an error is thrown where it is found, with a
+  message that says what and with what (about 120 `throw new Error`),
+  and caught once, at the request's boundary (`mrepo-base-execute`):
+  the request rolled back, its `error` the message. Only the message is
+  kept: no stack, no step. Nothing is rethrown with its cause. About
+  forty places in between catch and go on with a default (a file not
+  there: `() => 'info'`, `catch {}`): meant for what is expected to be
+  missing, they take any error, silently (a file that is there and
+  does not parse reads as missing).
+- **Caught at the request level**: one place decides what an error
+  does to a request, the boundary. It writes the `error` entry (always
+  kept): the message, the step it happened in, what had been done and
+  was undone; the stack at `debug`.
+- **In between, a catch has one of two reasons**, and says which:
+  - to go on (a retry, a default for what may be missing): it names
+    what it expects (not there, taken meanwhile) and lets everything
+    else through; getting over something that was not expected is a
+    `warn`, the expected default a `debug` entry;
+  - to say more and throw again: the new error carries the one caught
+    as its `cause`, so the chain reaches the boundary whole (its
+    messages in the `error` entry, in order).
+  Never a new error in place of the one caught, and never an error
+  taken without a word.
+- **Checked, in the code test**: a catch that does not use its error
+  (`catch {}`, a rejection handler without a parameter) is a problem,
+  unless it goes through the one helper that tells "not there" from the
+  rest; an error thrown inside a catch carries a `cause`.
+- **The retrofit**: the forty places, each looked at: what it expects
+  named, the rest let through. Faults that are swallowed today will
+  show as errors: wanted, and to be expected in the first runs.
 
 **What is there** (found 2026-11-15)
 
