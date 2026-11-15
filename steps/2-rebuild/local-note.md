@@ -63,8 +63,9 @@ human in conversation (their words quoted); the code not changed here.
    terminal); `haicc output` says the width in force, `haicc output
    <number>` sets a fixed width, kept, `haicc output auto` back to the
    default. `HAICC_WIDTH` is removed (the human: "remove HAICC_WIDTH"):
-   the width is set only with `haicc output`. Still ours, not confirmed:
-   the width kept in `~/.haicc`.
+   the width is set only with `haicc output`. It is saved, in haicc's
+   own folder, `~/.haicc` (the human: "if it can be set, then it needs
+   to be saved"). All of finding 3 is now settled.
 
 The human also asked whether `haicc` is now a Node app: answered no, an
 app run with Bare from its bundle (`base-app-haicc`), the sh scripts of
