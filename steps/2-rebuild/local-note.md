@@ -7,6 +7,29 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-15: an agent on haicc, Claude Code headless
+
+On the human's word, the boot mrepo and the host brought up (`haicc
+boot/deploy`, `haicc . boot/deploy host base-component-haicc`, the
+service initialised and started, `haicc . crud/create swarms/swarm-1`),
+then Claude Code run headless with `haicc` as its only tool:
+
+```sh
+claude -p "You can only use the haicc command (run haicc --help first; use --raw for compact output). Look at the mrepo at '.' and at 'host': what exists in main, and which swarms are there? Report briefly, and list the haicc commands you ran." --allowedTools "Bash(haicc:*)"
+```
+
+Its answer was correct (one swarm, `swarm-1`, in the local mrepo; `host`
+a shortcut to `local/host`, its `main` empty; the host's packages). It
+ran `haicc --help`, `help/get` at `.` and `host` (and `help/get .
+packages`), then `crud/read` on `.`, `swarms`, `swarms/swarm-1`, `host`:
+nine commands, six turns, 24 s; it chose `--output` over `--raw` itself.
+The direction it supports is in `vision.md`, "Agents".
+
+Seen on the way: `haicc boot/deploy` prints a very long record, every
+package's full list of addon hashes in its log: much to read for a human
+or an agent. Proposal (ours): the hashes left out of the printed log, or
+counted. Left running for the human: the boot mrepo and the host.
+
 ## 2026-11-15: `c8200f7`, the human's manual test
 
 The human tried `haicc` by hand. Three findings, each settled with the
