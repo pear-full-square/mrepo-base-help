@@ -10,6 +10,7 @@ The methods of the app, called by its command line, never requested.
 | [unpack/](unpack/) | a record unpacked across lines, nothing of it changed |
 | [outcome/](outcome/) | a response's completed form: its output or its error |
 | [sources/](sources/) | the sources registered, and the `haicc sources` command |
+| [output/](output/) | the width a record is printed to, and the `haicc output` command |
 | [boot/](boot/) | the machine level: the root deployed, torn down |
 
 `config.js` is the app's config, `failure.js` a failure with its exit

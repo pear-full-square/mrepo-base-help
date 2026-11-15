@@ -3,32 +3,24 @@ import { Failure } from '../failure.js'
 import { MACHINE } from '../boot/index.js'
 
 // The commands that are neither for the mrepos nor the machine level.
-const OWN = ['sources']
+const OWN = ['sources', 'output']
 const USAGE = ['help', '--help', '-h']
 const none = name => new Failure(`no command '${name}' (haicc --help)`, 2)
 // A position written as the root: `.`, or `./` and nothing after.
 const isRoot = uri => uri.replace(/^(\.\/)+/, '') === '.' || uri.replace(/^(\.\/)+/, '') === ''
 
-// A request's flags: a list after this word, to the end of the command or
-// to a closing --.
+// A request's flags: a list after a URI, after this word: that step's.
 const FLAGS = '--flags'
 const END = '--'
 
 function forMrepos (args, print) {
-  // a flag list in front, closed by --: the command's own, sent in front
-  // of it as typed (one after the command is among its parts already)
-  let lead = []
-  if (args[0] === FLAGS) {
-    const end = args.indexOf(END)
-    if (end < 0 || end === args.length - 1) throw new Failure(`haicc ${FLAGS} <flag>... ${END} <URI> <protocol>/<action> ... (flags in front are closed by ${END}, a command follows)`, 2)
-    lead = args.slice(0, end + 1)
-    args = args.slice(end + 1)
-  }
+  if (args[0] === FLAGS) throw new Failure(`haicc <URI> ${FLAGS} <flag>... [${END}] <protocol>/<action> ... (flags follow a URI: they are that step's)`, 2)
   const [uri, ...parts] = args
   if (!parts.length) throw new Failure('haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)', 2)
-  // at the root the command is written plain; anywhere else the haicc
+  // at the root the command is written plain; anywhere else, and where
+  // flags follow the URI (they are the step's at that position), the haicc
   // command goes as it is, and the root mrepo resolves the position
-  return { kind: 'request', uri, parts: [...lead, ...(isRoot(uri) ? parts : ['haicc', uri, ...parts])], print }
+  return { kind: 'request', uri, parts: isRoot(uri) && parts[0] !== FLAGS ? parts : ['haicc', uri, ...parts], print }
 }
 
 export function command (argv) {

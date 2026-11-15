@@ -6,37 +6,44 @@ import { unpack, outcome } from '../index.js'
 const form = { command: ['haicc', 'host', 'service/start'], protocol: 'haicc', action: 'goto', uri: ['main', 'host'], args: ['service/start'], remote: { at: 'host', folder: 'main/host', key: '0c1d4c6e-6a52-4e0a-9b4a-0d7c2f0e2f11' }, output: { service: 'started', state: 'started' } }
 const core = { topic: '/haicc/terminal', key: 'f949ad01-34db-4dd9-a5bc-bf438a21028c', timestamp: '2026-11-13T02:02:29.000Z', headers: {}, value: form }
 const stored = v => JSON.stringify({ topic: '/outbox', key: core.key, timestamp: '2026-11-13T02:02:31.745Z', headers: {}, value: v }) + '\n'
-// packed again: line breaks, indentation and the space after an opened
-// object's keys taken off
-const packed = text => text.split('\n').map(l => l.replace(/^ */, '').replace(/([^\\])": /g, '$1":')).join('')
+// packed again: what unpacking added taken off: every space and line break
+// outside a string (a record as stored has none there)
+const packed = text => {
+  let out = ''
+  let instr = false
+  let esc = false
+  for (const c of text) {
+    if (instr) { out += c; if (esc) esc = false; else if (c === '\\') esc = true; else if (c === '"') instr = false; continue }
+    if (c === '"') instr = true
+    if (c !== ' ' && c !== '\n') out += c
+  }
+  return out
+}
 
-test('unpack: what fits stays as stored, what does not is opened, an entry a line', (t) => {
+test('unpack: what fits stays as stored, what does not is opened, its entries packed on lines', (t) => {
   const text = stored(core)
   t.is(unpack(text), `{
-  "topic": "/outbox",
-  "key": "f949ad01-34db-4dd9-a5bc-bf438a21028c",
-  "timestamp": "2026-11-13T02:02:31.745Z",
-  "headers": {},
+  "topic": "/outbox", "key": "f949ad01-34db-4dd9-a5bc-bf438a21028c",
+  "timestamp": "2026-11-13T02:02:31.745Z", "headers": {},
   "value": {
-    "topic": "/haicc/terminal",
-    "key": "f949ad01-34db-4dd9-a5bc-bf438a21028c",
-    "timestamp": "2026-11-13T02:02:29.000Z",
-    "headers": {},
+    "topic": "/haicc/terminal", "key": "f949ad01-34db-4dd9-a5bc-bf438a21028c",
+    "timestamp": "2026-11-13T02:02:29.000Z", "headers": {},
     "value": {
-      "command": ["haicc","host","service/start"],
-      "protocol": "haicc",
-      "action": "goto",
-      "uri": ["main","host"],
-      "args": ["service/start"],
+      "command": ["haicc","host","service/start"], "protocol": "haicc",
+      "action": "goto", "uri": ["main","host"], "args": ["service/start"],
       "remote": {
-        "at": "host",
-        "folder": "main/host",
+        "at": "host", "folder": "main/host",
         "key": "0c1d4c6e-6a52-4e0a-9b4a-0d7c2f0e2f11"
       },
       "output": {"service":"started","state":"started"}
     }
   }
-}`, 'the record at 80 columns')
+}`, 'the record at 80 columns: an opened container\'s entries fill a line up to the width; one that does not fit a line of its own is opened below, on lines of its own')
+  t.ok(unpack(text, 50).includes(`      "protocol": "haicc", "action": "goto",
+      "uri": ["main","host"],
+      "args": ["service/start"],
+`), 'narrower: fewer on a line, an entry never split')
+  t.ok(unpack(text, 60).split('\n').every(l => l.length <= 60), 'no line beyond the width where its entries fit one')
   t.is(unpack(text, 1000), text.trim(), 'a record that fits the width: left on one line')
   t.is(unpack('{}\n'), '{}', 'an empty object')
   t.is(unpack(''), '', 'nothing: nothing')

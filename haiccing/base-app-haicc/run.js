@@ -3,7 +3,7 @@
 // starts) or from the package's folder (bare run.js <argument>...).
 //   <argument>...   the haicc command line: haicc --help says its forms
 // The environment as it is (HAICC_HOME, HAICC_WORK, HAICC_TIMEOUT,
-// HAICC_RAW, HAICC_OUTPUT, HAICC_WIDTH); the Bare running this is the one
+// HAICC_RAW, HAICC_OUTPUT); the Bare running this is the one
 // the boot is run with. Its exit code: the command line's.
 // Our modules from the package's own modules/ (no node_modules above them here).
 import process from './modules/node_modules/bare-process/index.js'

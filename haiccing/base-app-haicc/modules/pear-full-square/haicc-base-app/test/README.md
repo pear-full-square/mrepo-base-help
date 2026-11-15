@@ -10,7 +10,7 @@ The tests of haicc-base-app, a section per file, each test by its name.
 
 ## `print.test.js`
 
-- unpack: what fits stays as stored, what does not is opened, an entry a line
+- unpack: what fits stays as stored, what does not is opened, its entries packed on lines
 - unpack: nothing of a record changed, at any width
 - outcome: the completed form three deep, its output or its error; neither: none
 

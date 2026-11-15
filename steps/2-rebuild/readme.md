@@ -3328,3 +3328,73 @@ carry them, each passing: `package-docs-mrepo` 8 units, 47 tests,
 --strict`: twelve packages, every report current. `tools/bare
 tools/code-check.js` and the READMEs: no problems. The `haicc` test,
 164 of 164. Nothing left running.
+
+## 70. `command-line-findings`: flags after the URI; a record packed on its lines; `haicc output` (2026-11-15)
+
+Task 8 of `tasks.md`: the human's three findings from trying `haicc` by
+hand, each settled by the human with the local agent (`local-note.md`,
+"the human's manual test": the human's words are there). First of the
+cleanup the human put at the head of the order of work.
+
+- **Flags come after the URI** (part 66 read it wrong; the human: "The
+  flags should be after host and -- is used to say: this is where the
+  next command starts"; "yes, -- optional"). `haicc host --flags
+  log=debug -- crud/read .`: the flags after a URI are that step's,
+  here the hop at `host`, and they hold down the chain until changed,
+  as before. `mrepo-base-request` (`lib/flags.js`, `split`; `lib/command.js`,
+  `interpret`): the list follows a command's URI; after the URI of a
+  command that passes its words on (`haicc`'s `goto`) `--` says where
+  the next command starts. A list in front of a command is no more:
+  refused by the mrepo, and by the command line with exit 2.
+- **A record printed with its entries packed** (the app's `unpack`): an
+  opened container's entries fill a line up to the width, separated by
+  `, `; an entry is never split; one that does not fit on a line of its
+  own is opened below, the same way: the sample the human confirmed.
+- **The width** (the app, `internal/output`): `auto` by default, the
+  terminal's width read each time a record is printed, 80 when the
+  output is no terminal; `haicc output` says the width in force and
+  where it comes from, `haicc output <width>` sets one, `haicc output
+  auto` goes back. Saved in haicc's own folder, `output.width`.
+  `HAICC_WIDTH` is removed.
+
+**Left to us, as built**
+
+- Without `--`, the list after the URI of a command that passes on ends
+  at the first word not written as a flag (`key=value`, or a flag that
+  stands alone and is one there is): a protocol alone (`haicc`) is the
+  next command. So a flag there is none of needs the `--` there; with
+  it, it is ignored with its warning, as before.
+- After the last command's URI the list runs to the end of the line, or
+  to a `--` with the command's arguments after it; one written after
+  its arguments is still taken.
+- At the root, `haicc . --flags log=debug -- crud/read .` is sent as the
+  `haicc` command it is, the flags being the step's at `.`.
+- `output` is one of the command's own words: a position named so is
+  `./output`. A width is a whole number of characters above 0.
+- The terminal's width is `bare-process`'s (`process.stdout.columns`):
+  tried under a terminal made for it, 132 read.
+
+**Validated**: the modules' tests (`mrepo-base-request` 16 tests, 164
+asserts; `haicc-base-app` 15, 161: the packing at several widths, every
+record packed again as stored, `haicc output` on a home folder, the
+terminal's width handed in; `mrepo-base-execute` 10, 89). The
+pre-release of the six packages that changed, each passing:
+`package-docs-mrepo` 8 units, 47 tests, 269 asserts;
+`base-package-service` 14, 241, 1400; `base-package-runtime` 22, 305,
+1912; `base-package-boot` 23, 316, 2020; `base-component-boot` 23, 311,
+2088; `base-app-haicc` 23, 327, 2136 (its own test: the packing, `haicc
+output`, counted among the kinds of command line). `tools/bare
+tools/release.js --strict`: twelve packages, every report current.
+`tools/bare tools/code-check.js`: 20 modules, 13 packages, no problems.
+The READMEs: 243 in the sources, 501 in the help tree, no problems. The
+`haicc` test, 172 of 172, twice (8 more checks: the flags after a URI
+with and without `--`, at the root, in front refused; `haicc output`
+said, set, kept and back to auto; the packing). `base-component-boot`'s
+`validate` three times. Nothing left running.
+
+**Found on the way**: a test whose title broke its file ran no test and
+said nothing a filter of mine showed: seen only when the file was run
+by itself. And an end to end run started while bundles were rebuilt
+under it hung, a command at a time: stopped by hand, its folder
+removed. Both ours to mind: read a test run's last lines, not a filter
+of them; one run at a time on the sources.

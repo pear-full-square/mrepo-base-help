@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-15, part 69). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-15, part 70). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -12,7 +12,9 @@ removed, a race fixed; 65 the request train's two repairs: the squash
 into main; 66 logging: flags, three levels, the request's metrics and
 audit, errors caught at the request, the code quality check; 67 XPath's
 query engine in `mycelium-xpath`; 68 the repository, `crud` and `haicc`
-on it: task 6 built; 69 a document's key in a query in its URI form).
+on it: task 6 built; 69 a document's key in a query in its URI form; 70
+`command-line-findings`: flags after the URI, a record packed on its
+lines, `haicc output`).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -175,7 +177,8 @@ as it stands"): cleanup of the open tasks; `mrepo-registry`;
 context sensitive); `package-review` (its criteria: full install tests,
 rules and decisions in the help and howto, proper howtos). That block
 is the milestone: ready for headless Claude and for the D&I process on
-`haicc`.
+`haicc` (D&I: design and development; afterwards HDLC, the haicc
+(software) development lifecycle: our terms).
 
 **Task 9 is in discussion** (`tasks.md`): the request records made
 reachable by switching the layer in the request, a flag, `layer=request`
@@ -186,18 +189,12 @@ Claude Code headless; `vision.md`, "Agents"; its proposal: the addon
 hashes left out of the printed log of `boot/deploy`) are read, not
 acted on.
 
-**Task 8 waits for the human's go** (`tasks.md`): three findings from
-the human's manual test of `c8200f7`, settled with the local agent
-(`local-note.md`, 2026-11-15, "the human's manual test"): flags after
-the URI, `--` the start of the next command and optional (part 66 read
-it wrong); a record printed with its attributes packed on a line up to
-the width; the width `auto` by default, set and read with `haicc
-output`, saved in `~/.haicc`, `HAICC_WIDTH` removed.
-XPath itself: a good
-first implementation, measured; its pipeline allows both modes, one
-request or several, by how long the processing takes (the human). The readings marked "to confirm" in
-`xpath.md` and its "To settle" lists are what to go through with the
-human, point by point.
+**`command-line-findings` (task 8) is built** (part 70): the human's
+three findings from the manual test. Next in the cleanup, each to
+discuss first: `request-layer-access` (task 9: our proposal waits for
+the human's answer, whether another layer is read only from outside),
+`inbox-watcher` (task 7), `teardown-cascade` (the local agent's
+finding), and `xpath-first`'s decisions to confirm (parts 67 to 69).
 
 **Then, the human's priority: swarm nodes up and running** ("The
 roadmap", item 2): a command at a deeper position (the execution's
@@ -237,7 +234,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 69. Its notes come
+  `handover-local.md`, are current for parts 60 to 70. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent
@@ -249,6 +246,14 @@ with the human first, unless the task says it is ours ("Left to us").
   nothing that is not in `main`; the human may delete it.
 
 ## How the human works with us
+
+- **A team, on equal terms** (2026-11-15: "it is not my terms or your
+  terms, but our terms: we are a team. It is not human or AI, it is us.
+  We are equal team members. Just remember. We discuss and decide, on
+  equal terms."). What is settled is ours, not one side's: say "we",
+  "our terms", "our order of work". Bring an opinion and a
+  recommendation, not only questions; a decision is made together, in
+  discussion. Who said what is still recorded, in the words used.
 
 - **Finish the discussion before building**: a reading of what the human
   said is confirmed by the human before any of it is built ("go"). Building

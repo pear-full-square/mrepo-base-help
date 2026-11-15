@@ -34,30 +34,44 @@ export function unpack (text, width = 80) {
     return n - 1
   }
   let out = ''
+  const container = i => (s[i] === '{' || s[i] === '[')
   // the value at i..e: ind the indentation of the line it is on, col the
-  // column it starts at
+  // column it starts at. One that fits stays as stored; one opened puts
+  // its entries on lines of their own, packed: as many on a line as fit
+  // the width, separated by `, `; an entry is never split, and one that
+  // does not fit on a line of its own is opened below.
   const emit = (i, e, ind, col) => {
     const c = s[i]
-    if ((c !== '{' && c !== '[') || e - i + 1 + col <= width || e === i + 1) { out += s.slice(i, e + 1); return }
+    if (!container(i) || e - i + 1 + col <= width || e === i + 1) { out += s.slice(i, e + 1); return }
     out += c + '\n'
+    const pad = ' '.repeat(ind + 2)
+    let line = ''
+    const flush = () => { if (line) { out += pad + line + '\n'; line = '' } }
     let p = skip(i + 1)
     while (p < e) {
-      out += ' '.repeat(ind + 2)
-      let ve
+      let head = ''
+      let v = p
       if (c === '{') {
         const ke = end(p)
-        const key = s.slice(p, ke + 1)
-        const v = skip(skip(ke + 1) + 1) // past the colon
-        out += `${key}: `
-        ve = end(v)
-        emit(v, ve, ind + 2, ind + 2 + key.length + 2)
-      } else {
-        ve = end(p)
-        emit(p, ve, ind + 2, ind + 2)
+        head = `${s.slice(p, ke + 1)}: `
+        v = skip(skip(ke + 1) + 1) // past the colon
       }
+      const ve = end(v)
       p = skip(ve + 1)
-      if (s[p] === ',') { out += ',\n'; p = skip(p + 1) } else out += '\n'
+      const more = s[p] === ','
+      if (more) p = skip(p + 1)
+      const whole = head + s.slice(v, ve + 1) + (more ? ',' : '')
+      if (pad.length + whole.length <= width || !container(v) || ve === v + 1) {
+        if (line && pad.length + line.length + 1 + whole.length > width) flush()
+        line += (line ? ' ' : '') + whole
+      } else {
+        flush()
+        out += pad + head
+        emit(v, ve, ind + 2, pad.length + head.length)
+        out += (more ? ',' : '') + '\n'
+      }
     }
+    flush()
     out += ' '.repeat(ind) + s[e]
   }
   const i = skip(0)

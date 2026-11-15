@@ -12,8 +12,10 @@ the Bare running it, and exits with what it returns.
 - `argv`: the command line's parts, after `haicc`.
 - `env`: the environment's variables, below.
 - `bare`: the Bare to run the boot with; the one running this by default.
-- `io`: `{ out, err, stdio }`, a line printed, a line said on stderr, and
-  the stdio the boot is run with; the console and `inherit` by default.
+- `io`: `{ out, err, stdio, columns }`, a line printed, a line said on
+  stderr, the stdio the boot is run with, and the terminal's width now
+  (`null` when the output is none); the console, `inherit` and the
+  console's terminal by default.
 
 ## Environment
 
@@ -22,7 +24,9 @@ the Bare running it, and exits with what it returns.
 - `HAICC_TIMEOUT`: seconds to wait for a response, 120.
 - `HAICC_RAW=1`: the response record printed as stored, one line.
 - `HAICC_OUTPUT=1`: the completed form's output alone printed.
-- `HAICC_WIDTH`: the width the unpacked record is fitted to, 80.
+
+The width the unpacked record is fitted to is no variable: `haicc
+output` sets it (`output`).
 
 ## Returns
 
@@ -37,5 +41,5 @@ The exit code, a number.
   stderr.
 - **The machine level**, `haicc boot/deploy` and `haicc boot/teardown`:
   above the root mrepo, in the same form.
-- **Its own**: `haicc sources`, the usage.
+- **Its own**: `haicc sources`, `haicc output`, the usage.
 - Every failure is said as `haicc: <message>`.

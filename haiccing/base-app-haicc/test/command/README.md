@@ -22,8 +22,10 @@ runtime would. No runtime is started.
   root's inbox, the core addressed back to the terminal, one key, the
   parts as typed; plain at the root, the `haicc` command elsewhere; a
   first word `/run`, passed on as typed.
-- **Its response**: unpacked by default and packed again the record as
-  stored; `--raw`, `--output` and their variables; an error, exit 1; a
+- **Its response**: unpacked by default, its entries packed on lines to
+  the width, and packed again the record as stored; the width set with
+  `haicc output` and back to `auto`; `--raw`, `--output` and their
+  variables; an error, exit 1; a
   form not completed, exit 5; none in time, exit 4.
 - **`boot/teardown`**: what the deploy put in place removed by name, the
   rest of the work folder kept.
