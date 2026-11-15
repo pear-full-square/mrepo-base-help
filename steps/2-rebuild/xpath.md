@@ -320,6 +320,22 @@ select to the list of requests?"; put to the human, not answered)
   of the repository: the measurements say the same (a folder of 100
   children 119 commits a second; the same five levels deeper 91; a
   folder of 10,000: 11).
+- **Two commits, two roots, shared below** (the human: "so commit 1
+  does not have a reference to a different tree than commit 2?"). It
+  does, at the top: a commit names one tree, its root, and the two
+  roots differ (`R1`, `R2`), since the root's entry for `swarms`
+  changed. The sharing is below them:
+
+  ```
+  c1 ──► R1 ──► S1 ──► swarm-1 ◄── S2 ◄── R2 ◄── c2
+          │                        │       │
+          └──────► N1 ◄────────────┼───────┘
+                                   └──► swarm-2
+  ```
+
+  Both roots point to the same `N1`; `S1` and `S2` to the same
+  `swarm-1`. Two commits name the same root only when nothing at all
+  changed between them.
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
