@@ -56,8 +56,14 @@ human in conversation (their words quoted); the code not changed here.
    output`, then the terminal's, then 80. `output` becomes one of the
    script's own words: a position named so is reached as `./output`.
    The human, on the order: the width set with the command wins, 80 only
-   when nothing is set; reading the terminal's width "is fine". So the
-   order above is confirmed.
+   when nothing is set; reading the terminal's width "is fine". Then:
+   "Keep haicc output (read and set number and auto) and auto as
+   default". Settled: `auto` is the default, the terminal's width read
+   each time a record is printed (80 when the output is not a
+   terminal); `haicc output` says the width in force, `haicc output
+   <number>` sets a fixed width, kept, `haicc output auto` back to the
+   default. Still ours, not confirmed: `HAICC_WIDTH` above all for one
+   command; the width kept in `~/.haicc`.
 
 The human also asked whether `haicc` is now a Node app: answered no, an
 app run with Bare from its bundle (`base-app-haicc`), the sh scripts of
