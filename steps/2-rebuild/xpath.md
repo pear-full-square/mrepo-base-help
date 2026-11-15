@@ -103,6 +103,15 @@ crud/read */swarms/*
 - **XPath's functions**: "if we can do it efficiently, yes functions
   please."
 
+- **An attribute is a leaf key and value of a node's document** (the
+  human, asked what `name` is in `users[name=s*]`: "name was supposed to
+  be an attribute in the example - leaf keyvalue"). So in a filter a
+  bare word is a field of the document, and `users[name=s*]` asks for
+  the nodes under `users` whose document holds `name`, a leaf, matching
+  `s*`.
+- **A node's own name is asked with the usual function**: "we will have
+  to use the usual function for e.g. node name": XPath's `name()`.
+
 **Proposed** (ours: the list shown to the human, the points not
 answered one by one). "Attribute" read as a field of the node's
 document.
@@ -111,8 +120,8 @@ document.
 |---|---|---|---|
 | Step | a child by name, `*` | `swarms/*` | inside one mrepo |
 | Step | descendants at any depth | `**/node-1` | inside one mrepo; the same rest handed on at each shortcut |
-| Filter | on the name | `users[name=s*]` | where the node lives |
-| Filter | on the document: a field equals, compares, exists | `swarms/*[size>2]` | where the node lives |
+| Filter | on the name, by its function | `users/*[name()=s*]` | where the node lives |
+| Filter | on the document: a leaf equals, matches, compares, exists | `users[name=s*]`, `swarms/*[size>2]` | where the node lives |
 | Filter | on what the node is: a shortcut, has children | `*[shortcut]` | where the node lives |
 | Filter | with a path inside | `swarms/*[nodes/*/state=started]` | a sub-query: a small pipeline of its own, may cross a link |
 | Filter | and, or, not | `[size>2 and name=s*]` | with its parts |
@@ -165,6 +174,11 @@ document.
   (`tasks.md`, "Future additions": how a package is made, what type of
   mrepo it is for; the configs well documented).
 
+- **The initial implementation: parse, process and continue** (the
+  human's proposal, 2026-11-15): "Parse sufficiently of the command to
+  have a segment, process it and then parse the next bit until done. All
+  in one request." Our answer, put to the human: below, "Parse, process
+  and continue".
 - **Its measurements go into the request's record** (the human,
   2026-11-15, asked whether timings should be written there at debug
   level: "Logging was decided to go to the request info": `readme.md`,
@@ -186,6 +200,31 @@ document.
 
 - Where the option is written: a protocol's config in its package
   (`protocol.js`), an action's, or the mrepo's own; and its default.
+
+**Parse, process and continue** (ours, on the human's proposal; put to
+the human, not answered)
+
+- **Agreed, and it is the same loop the rest needs.** What is between
+  two rounds is a node set and the rest of the query, as text. That is
+  what a hop hands on at a shortcut (the rest, unparsed, to the linked
+  mrepo), and what the several-requests mode would pass from one
+  request to the next. One loop, three uses.
+- **A segment, as we read it** (to confirm): one step of the path with
+  its filters, `*[size>2]`: enough parsed to select from the node set in
+  hand. The stretch up to a shortcut is found by processing, not by
+  parsing: the round that meets one ends the work here.
+- **Each round is a step of the action** (`exec.step`): at `verbose` the
+  request's record holds each with what it took and what it selected:
+  the measurement asked for, with nothing added.
+- **What it costs**: a mistake late in the query is found late, after
+  the rounds before it ran. Inside one request nothing is lost: the
+  error ends the request and what it did is undone. A first pass over
+  the whole text for its brackets and quotes alone would say such a
+  mistake before any work, cheaply: ours to add if it shows.
+- **What does not fit one round**, and stays for after the first
+  implementation: what wraps whole paths (a union, a function over the
+  set such as a count or the last), and a filter with a path inside,
+  which is a query of its own run for each node.
 
 **Proposed** (ours, not yet put to the human; written before the lines
 above: every step below is to work in both modes). Each as a feature is
