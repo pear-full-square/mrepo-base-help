@@ -12,6 +12,37 @@ links: a query as a pipeline of `haicc` segments and merges). Task 4,
 the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Task 6, XPath, the first implementation, is built: parts 67 and 68; what was decided while building is in those parts, to confirm. Noted
 to discuss: task 7, the inbox watched. Task 8, the human's findings from the manual test (flags after the URI, a record packed on its lines, `haicc output`): settled with the local agent, waits for the go. Task 9, the request records reachable by a flag, `layer=request` (the human's direction): in discussion.
 
+## Priorities (the human, 2026-11-15)
+
+"We need to set some priorities." As the human listed them, in that
+order, in the human's words; nothing of it discussed yet, none has a go.
+
+1. "Implementation of mrepos as shortcuts with a 'registry' of mrepos."
+   (With it: `local-note.md`, 2026-11-15, point 4, settled there: the
+   parent's `main/<name>/` holds the shortcut only, the mrepo is placed
+   elsewhere.)
+2. "Then creating node mrepos, how to create the container version."
+   (`local-note.md`, point 3: the nodes now are the bridgehead for the
+   container nodes.)
+3. "Then we can do simple demos with a p2p swarm."
+4. "We need to do a review of the package repos for 'full install
+   tests'."
+5. "We need to make sure that rules and design decisions live in the
+   help and howto where they are implemented (XPath e.g.)."
+6. "We need proper howtos, we need a proper help protocol."
+   (`local-note.md`, points 1 and 2: `haicc help/get` without a URI, the
+   machine level's help, settled; an mrepo's own help and where a howto
+   lives, proposed there, not answered.)
+7. "I want to use claude headless ASAP using the tailored help and
+   howtos." (`vision.md`, "Agents"; tried once: `local-note.md`.)
+8. "Then we need to 'haicc' the development process."
+
+Not placed in this list by the human, to ask where they go: task 7 (the
+inbox watched), task 8 (the findings of the manual test, settled, waits
+for the go), task 9 (the request records reachable), XPath's phase 2,
+and the local agent's finding that a teardown leaves a node inside the
+host running (`local-note.md`, point 5).
+
 How to read a task:
 
 - **Settled** is what the human said or confirmed. Build it as written.

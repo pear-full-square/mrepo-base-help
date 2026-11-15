@@ -149,6 +149,18 @@ point by point (short answers, one question at a time):
   resolves the usage restriction; descendants; positions), results as
   attachments, task 7.
 
+**The human's priorities** (2026-11-15; `tasks.md`, "Priorities", in
+the human's words, in order): mrepos as shortcuts with a registry of
+mrepos; node mrepos and the container version; simple demos with a p2p
+swarm; a review of the package repositories for full install tests;
+rules and design decisions living in the help and howto where they are
+implemented; proper howtos and a proper help protocol; Claude headless
+on the tailored help and howtos, as soon as possible; then the
+development process itself on `haicc`. Nothing of it discussed yet. The
+local agent's notes of 2026-11-15 (help, howtos, nodes, where a child
+mrepo is placed, the teardown that leaves a grandchild running) go with
+them: read, not acted on.
+
 **Task 9 is in discussion** (`tasks.md`): the request records made
 reachable by switching the layer in the request, a flag, `layer=request`
 (the human's direction, 2026-11-15); our proposal there: the command's
