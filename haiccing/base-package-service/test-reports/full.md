@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-service
 
-The package passed its `full` set: all 14 units, 218 of 218 tests and 1223 of 1223 asserts.
+The package passed its `full` set: all 14 units, 233 of 233 tests and 1324 of 1324 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 14 units, 218 of 218 tests and 1223 of 12
 | Set | `full` |
 | Result | passed |
 | Units | 14 of 14 passed |
-| Tests | 218 of 218 passed |
-| Asserts | 1223 of 1223 passed |
-| Run | 2026-11-15 08:26 UTC |
+| Tests | 233 of 233 passed |
+| Asserts | 1324 of 1324 passed |
+| Run | 2026-11-15 11:59 UTC |
 | Bare | v1.36.0 |
-| Content | `8be20e25189953aeab6448cb52062d358a11c5237e831f25be8c326ff65fdb90` |
+| Content | `c3b7470f7433ea696bc14400a7c5ddbf8e52fc58029aaa9fd3ceb3211679184d` |
 
 ## Units
 
@@ -30,7 +30,7 @@ The package passed its `full` set: all 14 units, 218 of 218 tests and 1223 of 12
 | `/test/modules/pear-full-square/mycelium-git` | passed | 139 of 139 | 737 of 737 |
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 19 of 19 | 166 of 166 |
 | `/test/modules/pear-full-square/mycelium-value-json` | passed | 1 of 1 | 3 of 3 |
-| `/test/modules/pear-full-square/mycelium-xpath` | passed | 4 of 4 | 14 of 14 |
+| `/test/modules/pear-full-square/mycelium-xpath` | passed | 19 of 19 | 115 of 115 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 17 of 17 | 46 of 46 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

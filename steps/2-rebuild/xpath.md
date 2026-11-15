@@ -626,6 +626,9 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
 | value | an attribute by `@` | `[@name='sam']` | 1, the same as `[name='sam']`: a leaf is the document's key and its value |
 | | what is XML's alone: namespaces, comments, processing instructions, `id()`, `lang()`, `text()` | | not |
 
+- **Built** (part 67 of `readme.md`): phase 1, as `query` in
+  `mycelium-xpath`; what is of a later phase is refused, said as such.
+  What was decided while building, to confirm, is listed there.
 - **Standard only**: our one form outside it, `*` in a quoted value as
   a wildcard (`[name='s*']`), is not built: `starts-with` and `contains`
   say it. The human's first example in standard form:
@@ -1080,7 +1083,8 @@ What is there today, to start from; check it again, the code may have
 moved.
 
 - `pear-full-square/mycelium-xpath`: `select`, a plain path and `*` at
-  any step, names matched exactly; generic, knows no mrepo.
+  any step, names matched exactly; `query`, phase 1 of the list above
+  (part 67); generic, knows no mrepo.
 - `pear-full-square/mrepo-base-xpath/internal/resolve/`: a URI resolved
   to one position; one that runs through a shortcut is refused; a
   shortcut's sources are a list, the first one in use.

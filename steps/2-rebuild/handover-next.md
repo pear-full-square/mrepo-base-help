@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-15, part 66). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-15, part 67). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -10,7 +10,8 @@ command as a Bare app; 61 relative URIs, piece A; 62 a URI inside an
 array of segments; 63 the crud protocol, the shortcuts in main; 64 the rest actions
 removed, a race fixed; 65 the request train's two repairs: the squash
 into main; 66 logging: flags, three levels, the request's metrics and
-audit, errors caught at the request, the code quality check).
+audit, errors caught at the request, the code quality check; 67 XPath's
+query engine in `mycelium-xpath`, part one of task 6).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -128,38 +129,25 @@ first users; all commands maps over an array of nodes): in two parts,
 the engine in `mycelium-xpath` first. **Task 7, the inbox watched instead of looked at**, is noted
 to discuss.
 
-**Where the build of task 6 stands** (2026-11-15, before a context
-reset): part one, the engine, was begun. A draft, untested and not
-exported, is committed on `execute/main` only, not merged into `main`
-(so `main` stays as validated; the packages that carry the module show
-stale reports on `execute/main` until the part is done):
-`pear-full-square/mycelium-xpath/lib/query.js`:
-- `query(tree, root, text) -> { found, stopped }`; `tree` is handed in:
-  `children(node)` as `select`'s; `document(node)` (a node's document,
-  or null); `stop(ref)` (truthy where the query must not go on from a
-  node: a shortcut; what it says is handed back); `match`; `step(event,
-  data, fn)` (each round run through it, so the caller measures:
-  `exec.step`).
-- `found`: references `{ path, node }`, the node as `children` gave it,
-  nothing read; inside a document `{ path, value }`. `stopped`:
-  `{ path, node, rest, why }`, `rest` the query's text from there on.
-- The loop: a segment (steps up to a `[` or the end: walked, no
-  document read), then a filter (documents read, the set made smaller),
-  and so on. A step that names no child is looked for in the node's
-  document, and goes on inside it.
-- Phase 1 of the list in `xpath.md`: steps by name, `*`, `.`; filters:
-  a leaf `=`, `!=`, `<`, `<=`, `>`, `>=` a value, a leaf there, a path
-  inside the document, `and`, `or`, `not()`, several in a row,
-  `name()`, `starts-with()`, `contains()`, `@leaf` the same as `leaf`.
-- Still to do in part one: export it from the module's `index.js`, its
-  tests (on plain objects with `objectChildren`, and `test/tree.json`),
-  the module's READMEs (`README.md`, `lib/README.md`, `test/README.md`),
-  the checks, the pre-release of the packages that carry
-  `mycelium-xpath`, the part's record (67), the product repositories.
-- Part two after it: `mycelium-git`'s repository on it (a document read
-  as a tree below its file), `crud` (`read`, `delete` hand their URI to
+**Where the build of task 6 stands** (2026-11-15): part one, the
+engine, is built and merged (part 67): `query(tree, root, text) ->
+{ found, stopped }` in `pear-full-square/mycelium-xpath/lib/query.js`,
+phase 1 of the list in `xpath.md`, documented in the module's README,
+used by nothing yet.
+- What was decided while building is listed in part 67, "to confirm
+  with the human": go through it with the human, point by point (a
+  filter on a node the query stops at goes with it; a child before a
+  document's key; a list by its indexes from 0; how values compare;
+  what is refused).
+- Part two is next: `mycelium-git`'s repository on the engine (a
+  document read as a tree below its file: `.node.json` for a node in
+  `main`, the file itself for a record), `mrepo-base-xpath` handing in
+  the shortcut as the stop, `crud` (`read`, `delete` hand their URI to
   it; `create` walks), `haicc` (`goto` executes the command at each
-  node the query selects: the current root moves). Answered since: the
+  node the query selects: the current root moves), a URI with a filter
+  valid in `mycelium-uri`, the usage restriction (one shortcut at a
+  time, else "not yet"), the tests (the `haicc` test with a filter),
+  the measurements (`--flags log=verbose`). Answered before: the
   array is of nodes, not of answers; a response stays any data type
   (`xpath.md`, "All commands are maps"); results as attachments is a
   direction to discuss, not in this task.
@@ -207,7 +195,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 66. Its notes come
+  `handover-local.md`, are current for parts 60 to 67. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent
