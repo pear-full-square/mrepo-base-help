@@ -147,6 +147,14 @@ point by point (short answers, one question at a time):
 - then phase 2 (the union and the fan-out over several shortcuts, which
   resolves the usage restriction; descendants; positions), results as
   attachments, task 7.
+
+**Task 8 waits for the human's go** (`tasks.md`): three findings from
+the human's manual test of `c8200f7`, settled with the local agent
+(`local-note.md`, 2026-11-15, "the human's manual test"): flags after
+the URI, `--` the start of the next command and optional (part 66 read
+it wrong); a record printed with its attributes packed on a line up to
+the width; the width `auto` by default, set and read with `haicc
+output`, saved in `~/.haicc`, `HAICC_WIDTH` removed.
 XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
