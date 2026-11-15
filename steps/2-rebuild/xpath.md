@@ -257,13 +257,34 @@ select to the list of requests?"; put to the human, not answered)
 - **The same id, the same set**: what a filter gave over a tree can be
   kept by that tree's id and given again without reading anything,
   for as long as the folder has not changed.
-- **A side branch goes on inside the document** (our reading, to
-  confirm): a record is one file, and the request's URI is three levels
+- **A side branch goes on inside the document** (our reading,
+  confirmed: "the JSON doc as tree: yes"): a record is one file, and the request's URI is three levels
   inside it (`value`, `value`, `uri`). So the tree does not end at the
   file: an object in the document is a node, its leaves the attributes
   (the human: "leaf keyvalue"). `mycelium-xpath` reads an object that
   way already (`objectChildren`). The example, in illustration:
   `request/done/*[value/value/uri='main/host']/value/value/output`.
+- **A folder as a list, append only** (the diagram the human asked
+  for): three requests done, `a`, `b`, `c`, one after another.
+
+  ```
+              c1 <──── c2 <──── c3 <──── request/done
+              │        │        │        (the branch names the newest commit)
+              ▼        ▼        ▼
+  the folder  T1       T2       T3
+  at that     └ a      ├ a      ├ a
+  commit               └ b      ├ b
+                                └ c
+
+  records     a        b        c        (each stored once: T2 and T3 point
+                                          to the same a, T3 to the same b)
+  ```
+
+  An append is one new record, one new tree, one new commit; nothing
+  before it is changed or removed. The set now is `T3`; the set as it
+  was is `T1` or `T2`, by its commit. The sequence is the commits
+  walked from the right: `c3` added `c`, `c2` added `b`, `c1` added
+  `a`. The cost shows too: each new tree lists every record again.
 - **Two ways to point at the list**, by what is asked:
   - the set: the layer's tree at a commit, its members in name order
     (the keys are GUIDs: that order says nothing);
