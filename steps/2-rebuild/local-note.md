@@ -53,6 +53,19 @@ tomorrow". Nothing changed in the code.
    under `mrepos/`, by its unique URI (`mrepos/boot`, `mrepos/local/host`,
    `mrepos/local/node-1`; later `mrepos/swarm-1/node-1`), the folder then
    one place to map into a node's container.
+5. **A teardown leaves the grandchild running** (seen tearing down for
+   the night). `haicc . boot/teardown host` answered `{"tornDown":"host"}`
+   but `node-1`, deployed inside the host, kept running; `haicc
+   boot/teardown` then answered `"runtimes":1` and left `~/.haicc/work`
+   in place, `node-1` having written its `.git` again into the removed
+   folder. A second `haicc boot/teardown` said `"runtimes":0` and still
+   left the folder. Cleaned by hand: `node-1` stopped by its pid, the work
+   folder removed. Proposed (ours): a teardown takes down the mrepos
+   deployed inside the target first, deepest first; `boot/teardown`
+   stops every runtime under the work folder and fails if the folder
+   stays. The handover says teardown "will sort itself out": this is
+   where it shows; with mrepos placed by their URI (point 4) the runtimes
+   are easier to find.
 
 ## 2026-11-15: an agent on haicc, Claude Code headless
 
