@@ -334,12 +334,26 @@ yes, with what follows; put to the human)
   node selections are arrays; a command executed once for each node
   selected, that node the current root), now with what an element of
   the array is: a reference.
-- **To settle with it**: a URI that names what is not there yet
-  (`crud/create swarms/swarm-1`, `boot/deploy host`): what it resolves
-  to. Ours, to propose: resolving goes as far as there is something,
-  and a reference says where it ended and what of the URI is left: at a
-  shortcut, the rest to send on; at the end of what exists, the rest to
-  make. Nothing left: the node itself.
+- **Two URIs, two uses** (the human, on our question what a URI that
+  names what is not there resolves to: "create operates on the parent
+  adding the folder. parent ref exists, child not. would be like a HTTP
+  200 and 201. But crud/create is different: it is command internal,
+  not routing xpath. Within the command the last bit should be chopped
+  off the URI and then resolved."). So:
+  - **the routing XPath**: where a command is executed (`haicc <URI>
+    <command>`): resolved to references, the local roots, before the
+    command runs;
+  - **a command's own URI** is the command's to deal with, with the
+    same module: `crud/read` resolves it and reads what is at each
+    reference; `crud/create` takes the last part off, resolves what is
+    before it, the parent, which exists, and adds the child there.
+  Our proposal (resolving as far as something exists, the rest handed
+  on) is withdrawn; and our line above, that an action does not read
+  its URI itself, holds for the routing URI only.
+  - **There already or made**: as HTTP's 200 and 201: `crud/create`
+    says it today, an `outcome` a node (`there`, `created`).
+  - What follows (ours): the parent may be a selection, and the child
+    is then added in each: `crud/create swarms/*/notes`.
 - **To settle with it**: a URI with a filter in it is not a valid URI
   today (`mycelium-uri` validates a URI before it is selected by): what
   of a query is validated as a URI, and where.
