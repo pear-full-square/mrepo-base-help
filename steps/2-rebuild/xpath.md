@@ -713,6 +713,22 @@ script, not kept). Operations a second:
 | the folder listed | 104 (2,100 entries by then) | 292 (400 entries) | 20 (12,000) | 26 (10,040) |
 | 1000 documents written in one commit | | 1,490 documents | | 850 documents |
 
+- **That was git on the filesystem** (the human: "are you testing git
+  on filesystem or git on corestore?"). The same engine with the
+  Corestore under it (a Hyperdrive, as `main` is stored with the `p2p`
+  storage), measured after, operations a second:
+
+  | | filesystem, 100 | Corestore, 100 | filesystem, 10,000 | Corestore, 10,000 |
+  |---|---|---|---|---|
+  | a commit | 114 | 99 | 11 | 9 |
+  | a document read | 354 | 472 | 22 | 22 |
+  | the folder listed | 474 | 664 | 21 | 26 |
+  | documents a second, all in one commit | 324 | 306 | 730 | 381 |
+
+  The same within the spread of a run: a commit a little slower on the
+  Corestore, a read a little faster, many documents in one commit of a
+  wide folder half as fast. So the cost is the engine's (each object
+  compressed, hashed, read back and parsed), not what it stores into.
 - **Per operation git is one to three orders slower**: a write about
   60 times (17 against a write forced to disk), a read about 800
   times. Listing is alike, an entry a few microseconds either way.
