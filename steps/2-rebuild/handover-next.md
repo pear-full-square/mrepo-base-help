@@ -110,7 +110,10 @@ requests can run on threads, several at once (reads of the Corestore are
 parallel, tried); the request train and the commit to `main` stay on one
 thread; the commits measured (`tools/commit-bench.js`: git is not the
 limit for the commits; the train's bookkeeping slows as requests are
-done). **Task 4, the two repairs, is built** (part 65). XPath itself: a good
+done). **Task 4, the two repairs, is built** (part 65). **Task 5,
+logging, waits**: to discuss with the human, then build (everything
+into the request, the level a request's flag, what goes at which level
+to decide). XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
 `xpath.md` and its "To settle" lists are what to go through with the

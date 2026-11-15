@@ -174,12 +174,12 @@ document.
   `/runtime/log.json` (`info` without it). What is not: no code logs at
   `debug` (one action logs at all, `runtime/run`), nothing records a
   duration, and nothing writes `/runtime/log.json`: the level cannot be
-  set from the command line.
+  set from the command line. **A task of its own since** (the human:
+  the levels implemented, what goes at which level decided, "logging
+  level is request flag"): `tasks.md`, task 5.
 
 **To settle**
 
-- How the log's level is set for a measurement: the mrepo's
-  (`/runtime/log.json`, by a command), or asked for with a request.
 - Where the option is written: a protocol's config in its package
   (`protocol.js`), an action's, or the mrepo's own; and its default.
 

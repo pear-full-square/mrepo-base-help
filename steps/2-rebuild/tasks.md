@@ -9,7 +9,8 @@ its record is then a part in `readme.md`.
 
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
-the request train's two repairs, is built: part 65.
+the request train's two repairs, is built: part 65. Waiting, to discuss
+then build: task 5, logging.
 
 How to read a task:
 
@@ -629,6 +630,71 @@ to 212 ms within 200). Left from it, each to come with what needs it:
   filesystem layers (`xpath.md`, "Commits", space).
 - **`p2p-git`'s own two defects on refs** (the handover, "Elsewhere"),
   untouched: the adapter works around both.
+
+## 5. Logging: the levels in use, the level a request's flag
+
+The human, 2026-11-15, while the XPath measurements were discussed
+(`xpath.md`, "The steps"): "put for discussion and implementation
+(another item) implement logging levels and decide what info at what
+level. Timings counts etc. All go in request, logging level is request
+flag." To be discussed first, then built.
+
+**Settled** (the human)
+
+- **Everything goes into the request**: "Logging was decided to go to
+  the request info" (`readme.md`, part 12: a request is its own record).
+  Timings, counts and the like too.
+- **The logging level is a request flag.**
+- **The levels are implemented**, and what information goes at which
+  level is decided: with the human.
+
+**What is there** (found 2026-11-15)
+
+- `exec.log(level, event, data)` in the execution context; the levels
+  `error`, `warn`, `info`, `debug`; an entry kept at or above a
+  threshold, with its time, in the request's own record (its `log`).
+- The threshold is the mrepo's: `/runtime/log.json`'s `level`, `info`
+  without it. Nothing writes that file: the level cannot be set today.
+- One action logs: `runtime/run`, a line a test unit, `info` or
+  `error`. No code logs at `debug`; nothing records a duration or a
+  count.
+- The runtime's own work for a request (begun, its branches made, the
+  squash, the record's merge, moved to done) leaves no entries. A
+  runtime's failed pass goes to standard error.
+- The storage modules (`p2p-store`, `p2p-mrepo`, `p2p-replicate`) emit
+  events to an observer when one is handed in: not the request's log.
+
+**Proposed** (ours, not answered: the list to discuss)
+
+- What at which level:
+  - `error`: what stopped the request (today its `error` alone);
+  - `warn`: something not as asked that was got over (a ref written
+    once more, a listing asked again, a hand-over found done);
+  - `info`: what the action did, a line a thing (a node created, a
+    child deployed, a command sent on, a test unit);
+  - `debug`: the steps inside, with what each took and how much: a
+    step's duration, the reads and writes counted, the commits, a
+    selection's size; and the runtime's part for the request (its
+    branches, the squash, the merge), which the action does not see.
+- The flag's form: a property of the request's form (`log: "debug"`),
+  as `errorOnEmpty` was proposed; at the command line an option before
+  the URI, where `--raw` and `--output` go: `haicc --log debug host
+  crud/read swarms/*`.
+- A request without the flag: `info`, as now. Whether the mrepo's own
+  threshold (`/runtime/log.json`) stays as that default or goes.
+- A command sent on (a `haicc` hop): the flag goes with it; the child's
+  entries come back with its response, under their jump.
+- Timings and counts in one shape (`ms`, `count`), so a tool can add
+  them up: the XPath measurements read them.
+- A debug log makes a record large: whether it is bounded.
+
+**Where**
+
+- `pear-full-square/mrepo-base-request/lib/record.js` (`logger`,
+  `LEVELS`, `complete`); `mrepo-base-execute/index.js` (the threshold
+  read, `exec.log`, `entries` into the completed form);
+  `mrepo-base-request` (`formOf`: a request's form);
+  `haicc-base-app/internal/command/` (the options before a command).
 
 ## Future additions
 
