@@ -9,7 +9,8 @@ its record is then a part in `readme.md`.
 
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
-the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66.
+the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Waiting for a go: task 6, XPath,
+the first implementation.
 
 How to read a task:
 
@@ -650,6 +651,81 @@ it, each to come with what needs it:
   place for it is there (`FLAGS`, `mrepo-base-request`).
 - **What the entries hold** is ours to change as we learn what we need
   (the human: "You decide output format, does not need to be fixed").
+
+## 6. XPath, the first implementation
+
+Discussed with the human, 2026-11-14 and 15: `xpath.md` holds it as it
+went, each answer in its words. This is what of it is to be built first.
+"It is to get going and gain experience."
+
+**Settled** (the human; `xpath.md` for each)
+
+- **A module in mycelium**: the engine is `mycelium-xpath`, generic.
+- **On git**: "So now we implement on git with a choice of git on
+  corestore or git on filesystem": the trees and documents as
+  `mycelium-git` gives them, on either storage, as today.
+- **Parse, process and continue, all in one request**: enough parsed
+  to have a segment, it processed, then the next.
+- **A segment runs up to a filter or a shortcut**; from one local root
+  to the next.
+- **A node set is a pointer**, not its nodes read out: a reference a
+  node.
+- **A command's URI resolves to an array of references**, the local
+  roots of the operation that follows; `crud/read` reads what is at
+  each. The routing URI (`haicc <URI>`) is resolved before the command;
+  a command's own URI is the command's, with the same module.
+- **An attribute is a leaf key and value of a node's document**; the
+  node's own name by the usual function.
+- **A JSON document is a tree**: a path goes on inside it.
+- **One read state**: the commit read at, for every part of the query.
+- **Create walks the URI**, making what is not there, to its end.
+- **The usage restriction**: a query goes on from one shortcut at a
+  time; from several, or from shortcuts beside ordinary nodes, it says
+  so and stops: a known issue, resolved with the union, the next step.
+- **Measured from the request's record** (`--flags log=verbose`), to
+  see whether a query should run as one request or several.
+
+**Proposed** (ours, to confirm before building)
+
+- **The filters, in XPath's own forms**: a leaf equals, differs or
+  compares (`[name='sam']`, `[size>2]`), exists (`[name]`), the node's
+  name (`[name()='swarm-1']`), starts with (`[starts-with(name,'s')]`),
+  two joined with `and`; a leaf further inside written as a path
+  (`[value/value/uri='main/host']`). And one form of ours: `*` in a
+  quoted value a wildcard (`[name='s*']`), the human's example.
+- **The steps**: a name, `*` (at any step). Not yet: descendants, a
+  union, functions over the set, a filter that crosses a shortcut, an
+  order.
+- **The module's interface**: it is handed the tree (`children(node)`,
+  as today), and, new, how a node's document is read and where a
+  segment has to stop (a shortcut). It answers with the references,
+  and, where it stopped, at which node and with what of the query left.
+- **A node's document**: for a node in `main`, its `.node.json`; for a
+  record in a layer, the file itself. Handed in by who calls.
+- **A reference**: the node's path and its id in the repository (a
+  tree's or a file's), at the state read.
+- **The first user**: `crud/read` and `crud/delete`, whose URI goes to
+  the module whole; `crud/create` walks as it does. The routing URI
+  (`haicc`'s) stays a plain position in this step.
+- **A URI with a filter is a valid URI**: `mycelium-uri` checks its
+  names as it does, and a filter for its brackets and quotes only; what
+  is in a filter is the module's to read.
+- **At the command line** a query is quoted, its brackets and stars
+  being the shell's too: `haicc . crud/read "users[name='s*']"`.
+- **Tests**: the module's own, on plain objects and on a repository on
+  each engine; `crud`'s; the `haicc` test with a filter; a demo first,
+  kept as its how-to.
+
+**Where**
+
+- `pear-full-square/mycelium-xpath/lib/xpath.js` (`select`: a path and
+  `*`; `objectChildren`); `mycelium-git/lib/repo.js` (the repository as
+  a tree: `children`, `select`, `read`, `find`);
+  `mrepo-base-xpath/internal/resolve/` (a shortcut: `shortcutsAt`);
+  `mrepo-base-crud/internal/node/` (`place`, `select`, `nodeAt`);
+  `mycelium-uri/lib/uri.js` (`validate`, `SEGMENT`);
+  `mrepo-base-execute/index.js` (`exec.select`, the execution's view
+  over its branch).
 
 ## Future additions
 

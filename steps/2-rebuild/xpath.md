@@ -334,6 +334,12 @@ yes, with what follows; put to the human)
   node selections are arrays; a command executed once for each node
   selected, that node the current root), now with what an element of
   the array is: a reference.
+- **On git, on either storage** (the human: "So now we implement on
+  git with a choice of git on corestore or git on filesystem"): the
+  first implementation reads trees and documents as `mycelium-git`
+  gives them, whichever storage is under it, as the mrepos do today
+  (not a Hyperdrive used directly). Written up to be built: `tasks.md`,
+  task 6.
 - **Two URIs, two uses** (the human, on our question what a URI that
   names what is not there resolves to: "create operates on the parent
   adding the folder. parent ref exists, child not. would be like a HTTP

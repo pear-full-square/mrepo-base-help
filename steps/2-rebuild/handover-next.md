@@ -122,7 +122,9 @@ parallel, tried); the request train and the commit to `main` stay on one
 thread; the commits measured (`tools/commit-bench.js`: git is not the
 limit for the commits; the train's bookkeeping slows as requests are
 done). **Tasks 4 and 5 are built** (parts 65 and 66: the two repairs;
-logging). XPath itself: a good
+logging). **Task 6, XPath's first implementation, is written up and
+waits for a go**: its "Proposed" (the filters' forms first) to confirm.
+XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
 `xpath.md` and its "To settle" lists are what to go through with the
