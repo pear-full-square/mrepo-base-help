@@ -47,19 +47,33 @@ linked at that position. Its sources are beside its document:
 A URI is resolved inside the mrepo it is in (`mrepo-base-xpath`): a
 position is a shortcut when its node has sources.
 
+- **A URI is a query.** It names one node, or selects several: a `*`
+  for every child, a filter for the nodes whose document it holds for:
+  `swarms/*[state='started']`. A leaf in a filter is a key of the
+  node's document; a URI can go on inside a document, to a value there.
+  What of XPath is read: `mycelium-xpath`'s README. Quoted at a command
+  line, its stars and brackets being the shell's too.
+
 - **Local linking only.** The linked mrepo's folder is found by logic: the
   `main/` folder on disk is a shadow structure of `main`, and what is
   linked at a position sits there at the same path, with its inbox and
   outbox folders inside. The shortcut at `host` leads to
   `<dir>/main/host/`.
-- **A URI does not run through a shortcut.** `host/packages` is not
-  resolved. The way across is a `haicc` at the shortcut:
-  `haicc host help/get . packages`.
+- **A shortcut stops it.** What is below a shortcut, and its document,
+  is in the mrepo it leads to. A command's own URI does not run through
+  one: `crud/read host/swarms` is refused, with the way across. The way
+  across is `haicc`: `haicc host crud/read swarms`, or
+  `haicc host/swarms crud/read .`: what is left of the URI goes on with
+  the command, from one local root to the next.
+- **One shortcut at a time.** A `haicc` URI that reaches a shortcut
+  among other positions, or several shortcuts, is refused, `not yet`: a
+  known issue, resolved when the query has its union.
 - **Own shortcuts only.** An mrepo resolves its own; those of a linked
   mrepo are not visible from here.
 
 ## Later
 
-What XPath does across linked mrepos: reading through a link, a
-selection that crosses one, several sources and local data combined at
-one node.
+What XPath does across linked mrepos: a selection that crosses several
+links or mixes them with local nodes (the union), several sources and
+local data combined at one node; descendants, positions, the other
+functions.

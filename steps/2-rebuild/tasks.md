@@ -9,7 +9,7 @@ its record is then a part in `readme.md`.
 
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
-the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Task 6, XPath, the first implementation: go given, in two parts. Noted
+the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Task 6, XPath, the first implementation, is built: parts 67 and 68; what was decided while building is in those parts, to confirm. Noted
 to discuss: task 7, the inbox watched.
 
 How to read a task:
@@ -718,7 +718,11 @@ went, each answer in its words. This is what of it is to be built first.
   tests, which nothing else depends on; then the repository, `crud`
   and `haicc` on it. **Part one is built** (part 67 of `readme.md`):
   `query(tree, root, text)`, phase 1 of the list, with what was decided
-  while building, to confirm. Part two is next.
+  while building, to confirm. **Part two is built** (part 68): a URI
+  with a filter valid, the repository as a tree for a query, the mrepo's
+  query in `mrepo-base-xpath`, `crud` and `haicc`'s `goto` on it, the
+  `haicc` test with filters; what was decided, what was found open and
+  what a query costs are in the part.
 - **A URI with a filter is a valid URI**: `mycelium-uri` checks its
   names as it does, and a filter for its brackets and quotes only; what
   is in a filter is the module's to read.

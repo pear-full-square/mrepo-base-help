@@ -30,7 +30,7 @@ segments: the request's prefix, then the node's own.
 ## Errors
 
 - No target, the layer itself: `missing argument: target`.
-- A selection: `*` is not a node to create.
+- A selection: a `*` or a filter names no node to create.
 - A name that is not a plain name: no extension, no capital.
 - A value that is not JSON.
 - A URI that runs through a shortcut.

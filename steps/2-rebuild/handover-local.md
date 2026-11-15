@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-15 by the cloud session (parts 60 to 67), for the local agent (a Linux
+Updated 2026-11-15 by the cloud session (parts 60 to 68), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,7 +93,7 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 67, and `handover-next.md`. Before your last
+`readme.md`, parts 30 to 68, and `handover-next.md`. Before your last
 run (`6ebec98`): every package has its own tests and a test report
 (parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
 relative (61, 62); `crud` makes structure in `main`, the shortcuts are
@@ -105,11 +105,15 @@ empty folders (65: a request's cycle no longer slows as requests are
 done); a request's log, in its record, with flags (`--flags
 log=verbose`, `log=debug`), errors caught at the request, and five new
 checks in the code test (66); a query engine in `mycelium-xpath`,
-XPath's first phase, used by nothing yet (67: only the tests' counts
-change for you). The `haicc` test has 152 checks now. New
+XPath's first phase (67), and `crud` and `haicc` on it (68): a URI is a
+query (`haicc . crud/read "swarms/*[size>2]"`, quoted for the shell), a
+command is executed at a position inside `main` and at each position a
+URI selects (`haicc "swarms/*[state='started']" crud/read .`), and a URI
+runs on through shortcuts (`haicc host/node-1 help/get`). The `haicc`
+test has 164 checks now. New
 for you: `tools/commit-bench.js` (the prompt's step 6), the commits
 measured on the human's laptop. Known and not
 built: our packages are not published, so `haicc sources download`
-fetches Bare only; a position deeper inside `main` is refused by
-`haicc`; teardown does not cascade (tear down a node before its host;
+fetches Bare only; a `haicc` URI that reaches a shortcut among other
+positions, or several, is refused (`not yet`); teardown does not cascade (tear down a node before its host;
 `haicc boot/teardown` stops everything).

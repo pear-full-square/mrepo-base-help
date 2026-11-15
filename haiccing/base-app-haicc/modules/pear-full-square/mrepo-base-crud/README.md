@@ -3,8 +3,9 @@
 The mrepo crud protocol: an mrepo's nodes created, read and deleted by URI.
 
 The generic actions on an mrepo's data, for putting structure into
-`main`. A node is a folder holding its document; a URI names one, or with
-`*` as its last name part its children. There is no update. Offered by
+`main`. A node is a folder holding its document; a URI names one, or
+selects several: a `*`, filters on the nodes' documents, a query read by
+`mycelium-xpath` through `mrepo-base-xpath`. There is no update. Offered by
 `haiccing/base-package-crud`.
 
 | | |
@@ -19,6 +20,7 @@ The generic actions on an mrepo's data, for putting structure into
 haicc . crud/create swarms/swarm-1 {"size":3}
 haicc . crud/read swarms
 haicc . crud/read swarms/*
+haicc . crud/read "swarms/*[state='started']"
 haicc . crud/delete swarms recurse
 ```
 

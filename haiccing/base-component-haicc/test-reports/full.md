@@ -1,6 +1,6 @@
 # Test report: haiccing/base-component-haicc
 
-The package passed its `full` set: all 8 units, 51 of 51 tests and 283 of 283 asserts.
+The package passed its `full` set: all 8 units, 53 of 53 tests and 307 of 307 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 8 units, 51 of 51 tests and 283 of 283 as
 | Set | `full` |
 | Result | passed |
 | Units | 8 of 8 passed |
-| Tests | 51 of 51 passed |
-| Asserts | 283 of 283 passed |
-| Run | 2026-11-15 08:26 UTC |
+| Tests | 53 of 53 passed |
+| Asserts | 307 of 307 passed |
+| Run | 2026-11-15 12:30 UTC |
 | Bare | v1.36.0 |
-| Content | `384b2112f33c168a54332e9920e8c63e98bc7df6a0fefe87857729026b0fdd75` |
+| Content | `b969df9e4d9a40ce530ba68926ab34abd11cf6bcbfcab400ea7fd23b13b74d3d` |
 
 ## Units
 
@@ -24,7 +24,7 @@ The package passed its `full` set: all 8 units, 51 of 51 tests and 283 of 283 as
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
 | `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
-| `/test/modules/pear-full-square/mycelium-uri` | passed | 19 of 19 | 166 of 166 |
+| `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 190 of 190 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 17 of 17 | 46 of 46 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

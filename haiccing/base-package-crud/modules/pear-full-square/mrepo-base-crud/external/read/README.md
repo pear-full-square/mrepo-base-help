@@ -2,8 +2,11 @@
 
 Reads the nodes a URI selects: each with its document and the names of its children.
 
-A URI names one node; with `*` as its last name part it selects the
-children of the node before it. Nothing there selects nothing: an empty
+A URI names one node, or selects: it is a query (`mycelium-xpath` says
+what of XPath is built). A `*` selects every child; a filter keeps the
+nodes whose document it holds for: `swarms/*[state='started']`,
+`swarms/*[size>2 and owner/name='ann']/nodes/*`. A leaf in a filter is a
+key of the node's document. Nothing there selects nothing: an empty
 array, not an error.
 
 ## Signature
@@ -26,8 +29,16 @@ An array of nodes:
 The layer itself, `.` from outside, is a node: its document `{}` when it
 has none.
 
+A URI that goes on inside a node's document selects the value there:
+`crud/read swarms/swarm-1/owner/name` gives `[{ "uri": [...], "value":
+"ann" }]`.
+
+What is no node, a file or a folder without a document, is not among
+them.
+
 ## Errors
 
-- A name that is not a plain name.
-- A URI that runs through a shortcut: what is below one is read in the
-  mrepo it leads to, with a `haicc` at it.
+- A name that is not a plain name; a query that does not read.
+- A URI that runs through a shortcut, a filter on one too: what is below
+  one, and its document, is read in the mrepo it leads to, with a `haicc`
+  at it.

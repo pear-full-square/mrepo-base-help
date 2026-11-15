@@ -626,9 +626,15 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
 | value | an attribute by `@` | `[@name='sam']` | 1, the same as `[name='sam']`: a leaf is the document's key and its value |
 | | what is XML's alone: namespaces, comments, processing instructions, `id()`, `lang()`, `text()` | | not |
 
-- **Built** (part 67 of `readme.md`): phase 1, as `query` in
+- **Built** (parts 67 and 68 of `readme.md`): phase 1, as `query` in
   `mycelium-xpath`; what is of a later phase is refused, said as such.
-  What was decided while building, to confirm, is listed there.
+  On it: the mrepo's query (`mrepo-base-xpath`), `crud`, and `haicc`'s
+  `goto`, which executes a command at each position a URI selects and
+  sends it on, with what is left of the URI, where it reaches a
+  shortcut. What was decided while building, to confirm, what was found
+  open, and what a query costs (about 1 ms a node read; a plain URI 12
+  to 17 ms; a filter over 1,000 nodes just under a second) are listed
+  there.
 - **Standard only**: our one form outside it, `*` in a quoted value as
   a wildcard (`[name='s*']`), is not built: `starts-with` and `contains`
   say it. The human's first example in standard form:

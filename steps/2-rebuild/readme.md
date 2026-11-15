@@ -3180,3 +3180,115 @@ packages, no problems. The READMEs: 241 in the sources, 490 in the help
 tree, no problems. Not run again: the `haicc` test and the boot's
 `validate` several times, nothing they run having changed (an export
 added, used by nothing). Nothing left running.
+
+## 68. XPath, the first implementation, part two: the repository, `crud` and `haicc` on the engine (2026-11-15)
+
+Task 6 of `tasks.md`, its second part, on the same go. With it a URI is
+a query everywhere a request carries one, and `haicc` executes a command
+at each position a query selects.
+
+- **A URI with a filter is a valid URI** (`mycelium-uri`): a part's name
+  is checked as it was, a filter for its brackets and quotes only, and
+  kept as written. `stepsOf` (its parts, split at the slashes outside
+  filters), `selects` (a `*` or a filter in it).
+- **The repository as a tree for a query** (`mycelium-git`): `node`,
+  `children`, `bytes` beside `select`, `read`, `find`; tested by the
+  contract, so on every engine and both storages, a query run over
+  each. The execution context offers the same three, as it sees the
+  repository (its own branch of a target once it has one); counted in
+  the request's metrics: a listing a select, a file's content a read.
+- **The mrepo's query** (`mrepo-base-xpath`, `query(exec, uri)`): it
+  hands the engine the mrepo as a tree. What is hidden (a name starting
+  with a dot) is no child; a folder's document is its `.node.json`, a
+  file's the file (the proposal: "for a node in `main`, its
+  `.node.json`; for a record in a layer, the file itself"); in `main` a
+  position with sources is where the query stops. It answers with what
+  is found, each with what it is (`node`, `folder`, `file`, `value`)
+  and its shortcut where it is one, and with where it stopped: the
+  position, what is left of the URI, the shortcut. Measured by the
+  execution context: `query`, and each round, `segment` or `filter`,
+  entries at `verbose` under the action that asked.
+- **`resolve` is gone** (one position resolved, a URI through a
+  shortcut refused): nothing uses it. The shortcut's own helpers stay,
+  in `internal/shortcut`, with `linkOf`.
+- **`crud`**: `read` and `delete` hand their URI to the query. `read`
+  answers with the nodes, as before, and with a value where the URI
+  goes on inside a document. `delete` removes nodes only. `create`
+  walks its URI as it did (part 63), and refuses one that selects. A
+  command's own URI still does not run through a shortcut: refused,
+  with the way across.
+- **`haicc`** (`goto`): the command that follows is executed at each
+  position the URI selects ("all commands are maps over an array of
+  nodes"), the current root moved there: the command stands at the
+  position, its URI read behind it. A position inside `main` is built
+  with it (the gate, `check`, takes a position's segments together).
+  Where the URI reaches a shortcut the command is sent on, and where it
+  runs on through one, what is left of it goes in front of the command,
+  a `haicc` there: from one local root to the next. `haicc
+  host/swarms/swarm-1 crud/read .` now does what `haicc host haicc
+  swarms/swarm-1 crud/read .` did.
+- **The usage restriction** (settled): a URI that reaches a shortcut
+  among other positions, or several, is refused, `not yet`, naming the
+  shortcuts: the known issue the union resolves.
+
+**Decided while building, to confirm with the human**
+
+- What `haicc` answers goes by the URI's form, not by what it found: a
+  URI that names one position answers with the command's value, as
+  before; one that selects answers with a list, `[{ at, value }]`, also
+  for one position or none. (The human: "the array is of nodes, not of
+  answers"; a response stays the action's own. The list is `haicc`'s
+  own response.)
+- Nothing selected is an empty list; a position named that is not
+  there is an error (`no node there`).
+- One position failing fails the request: what the earlier ones wrote
+  is undone with it.
+- A position is a folder in `main`; a file or a value inside a document
+  is none.
+- `crud/read` leaves out what is no node (a file, a folder without a
+  document), as before; `crud/delete` refuses a value inside a document
+  and the layer itself.
+- The log's entries of a read changed: `crud.read.select` is now
+  `crud.read.query` with its rounds.
+
+**Found, open**
+
+- **A document's key in camelCase** (`publicKey`) cannot be written as
+  a step of a URI: a name part is lowercase. Inside a filter it is read
+  as written. The rules give a data name a URI form (`public-key`); not
+  applied here yet. To discuss.
+- **The outside reaches `main` only**: the human's example, the request
+  records filtered by their URI, is not reachable from the command
+  line (`crud/read request/done/*` is read at `main`). The query itself
+  reads them (tested: a file its own document). To discuss.
+- **What a query costs** (measured on a repository on the filesystem,
+  1,000 nodes under one folder, this container): a plain URI 12 to 17
+  ms; `swarms/*` 460 ms (each node found is looked at once, to say what
+  it is: a listing each); `swarms/*[state='started']` 850 to 970 ms (a
+  listing and a document each); a filter by a path through each node's
+  children 1.2 s. About 1 ms a node read, against 15 to 20 ms for a
+  request's own cycle: one request is right up to some hundreds of
+  nodes; beyond, the reads are what to work on (a cache by id, reads in
+  parallel) before splitting a query over requests. With 100 nodes: 70,
+  110 to 140, 170 ms.
+
+**Validated**: every module's tests (`mycelium-xpath` 19 tests, 115
+asserts; `mycelium-uri` 21, 190; `mycelium-git` 144, 777: the tree and
+a query on each engine; `mrepo-base-xpath` 5, 44; `mrepo-base-crud` 8,
+75; `mrepo-base-haicc` 5, 38; `mrepo-base-request` 16, 162;
+`mrepo-base-execute` 10, 89; `mrepo-base-runtime` 6, 122: the cycle on
+both storages). Every package's pre-release, each passing:
+`package-docs-template` 7 units, 47 tests, 269 asserts;
+`package-docs-mrepo` 8, 47, 269; `base-package-help` 8, 54, 313;
+`base-package-protocol` 9, 56, 313; `base-package-haicc` 11, 83, 501;
+`base-package-crud` 11, 84, 551; `base-component-haicc` 8, 53, 307;
+`base-package-service` 14, 240, 1392; `base-package-runtime` 22, 304,
+1901; `base-package-boot` 23, 315, 2009; `base-component-boot` 23, 310,
+2077; `base-app-haicc` 23, 326, 2105. `tools/bare tools/release.js
+--strict`: twelve packages, every report current. `tools/bare
+tools/code-check.js`: 20 modules, 13 packages, no problems. The READMEs:
+242 in the sources, no problems. The `haicc` test, 164 of 164 (12 new
+checks: filters, a value inside a document, a command at a position and
+at each position selected, a URI through one and two shortcuts, the
+`not yet`), twice. `base-component-boot`'s `validate` three times, its
+`boot` test passing each. Nothing left running.

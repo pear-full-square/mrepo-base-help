@@ -1,25 +1,28 @@
 // node: a node as it is stored, and the nodes a URI selects (README.md
 // beside it). Paths are written relative, from the mrepo's root.
-import { segmented, joined, isName, ROOT } from 'mycelium-uri'
-import { shortcutsAt } from 'mrepo-base-xpath'
+import { segmented, joined, stepsOf, selects, isName, ROOT } from 'mycelium-uri'
+import { query, shortcutsAt, NODE } from 'mrepo-base-xpath'
 
-// A node is a folder holding its document under this name: hidden (no URI
-// has a name starting with a dot), and what keeps the folder in git.
-export const NODE = '.node.json'
+// A node is a folder holding its document under this name (NODE, the
+// mrepo's: mrepo-base-xpath).
+export { NODE }
 
-// place(uri): where a request's URI (its segments) points: its layer, the
-// names below it, whether the last selects ('*'), and uriOf(names): a
-// node's URI in the same format, the request's prefix kept.
+// place(uri): where a request's URI (its segments) points: its layer; the
+// names below it when it names one node (names; null when it selects: a
+// `*` or a filter in it, a query); and uriOf(names): a node's URI in the
+// same format, the request's prefix kept.
 export function place (segments) {
   const whole = joined(segmented(segments))
   if (whole === ROOT) throw new Error('not a node: . (the mrepo itself; a layer first: main)')
-  const [layer, ...names] = whole.split('/')
-  const star = names.at(-1) === '*'
-  for (const n of star ? names.slice(0, -1) : names) if (!isName(n)) throw new Error(`not a name for a node: ${n} (in ${whole}: lowercase words joined by hyphens, no extension)`)
+  const [layer, ...steps] = stepsOf(whole)
+  for (const step of steps) {
+    const n = step.includes('[') ? step.slice(0, step.indexOf('[')) : step
+    if (!isName(n) && n !== '*' && n !== '') throw new Error(`not a name for a node: ${n} (in ${whole}: lowercase words joined by hyphens, no extension)`)
+  }
   const prefix = segments.slice(0, -1)
   const skip = joined(prefix) === ROOT ? 0 : joined(prefix).split('/').length
   const uriOf = of => [...prefix, [layer, ...of].slice(skip).join('/') || ROOT]
-  return { layer, names: star ? names.slice(0, -1) : names, star, uriOf, at: of => of.join('/') || ROOT }
+  return { segments, layer, names: selects(whole) ? null : steps, uriOf, at: of => of.join('/') || ROOT }
 }
 
 const dir = (p, names) => [p.layer, ...names].join('/')
@@ -70,21 +73,26 @@ export async function nodeAt (exec, p, names) {
   return links.length ? { ...node, shortcuts: links } : node
 }
 
-// select(exec, p): the nodes the URI selects, an array: the one it names
-// (none there: empty, not an error), or with '*' the children of the one
-// before it. -> [{ names, node }]
+// select(exec, p): what the URI selects, an array (nothing there: empty,
+// not an error): the nodes, each as nodeAt gives it; a value inside a
+// node's document, { uri, value }. What is no node (a file, a folder
+// without a document) is not among them. A URI does not run through a
+// shortcut: refused, said with the way across. -> [{ names, node, value? }]
 export async function select (exec, p) {
-  return exec.step('select', found => ({ uri: [p.layer, ...p.names, ...(p.star ? ['*'] : [])].join('/'), selected: found.length }), async () => {
-    await inside(exec, p, p.names, p.star)
-    const of = p.star ? (await childrenOf(exec, p, p.names)).map(n => [...p.names, n]) : [p.names]
-    const out = []
-    for (const names of of) {
-      const node = await nodeAt(exec, p, names)
-      exec.log('debug', 'node', { at: p.at(names), there: Boolean(node), children: node?.children.length ?? 0, shortcut: Boolean(node?.shortcuts) })
-      if (node) out.push({ names, node })
-    }
-    return out
-  })
+  const { found, stopped } = await query(exec, p.segments)
+  if (stopped.length) {
+    const [{ at, rest }] = stopped
+    throw new Error(`${at} is a shortcut: a URI does not run through it (haicc ${at} haicc ${rest} ...)`)
+  }
+  const out = []
+  for (const f of found) {
+    const names = f.at === ROOT ? [] : f.at.split('/')
+    if (f.kind === 'value') { out.push({ names, node: { uri: p.uriOf(names), value: f.value }, value: true }); continue }
+    const node = f.kind === 'node' ? await nodeAt(exec, p, names) : null
+    exec.log('debug', 'node', { at: p.at(names), there: Boolean(node), children: node?.children.length ?? 0, shortcut: Boolean(node?.shortcuts) })
+    if (node) out.push({ names, node })
+  }
+  return out
 }
 
 export { dir as folderOf, inside }

@@ -11,22 +11,26 @@ it keeps the folder in git. `main/swarms/swarm-1` is
 
 - `place(uri)`: where a request's URI, its segments, points.
 - `nodeAt(exec, place, names)`: the node at those names below the layer.
-- `select(exec, place)`: the nodes the URI selects.
+- `select(exec, place)`: what the URI selects, through the mrepo's query
+  (`mrepo-base-xpath`).
 
 ## Returns
 
-- `place`: `{ layer, names, star, uriOf(names), at(names) }`. `star`: the
-  last name part was `*`. `uriOf` gives a node's URI in the request's own
-  format, its prefix kept.
+- `place`: `{ segments, layer, names, uriOf(names), at(names) }`. `names`:
+  the names below the layer when the URI names one node; `null` when it
+  selects (a `*` or a filter in it). `uriOf` gives a node's URI in the
+  request's own format, its prefix kept.
 - `nodeAt`: `{ uri, value, children }`, with `shortcuts` where the node
   is a link; `null` when there is none. The layer itself is a node.
-- `select`: `[{ names, node }]`, empty when nothing is there.
+- `select`: `[{ names, node }]`, empty when nothing is there: each node
+  as `nodeAt` gives it; a value inside a document as `{ uri, value }`,
+  marked `value: true` beside it. What is no node is not among them.
 
 ## Errors
 
 - The URI is the mrepo itself, above its layers.
-- A name that is not a plain name, or `*` anywhere but last.
-- In `main`, a URI that runs through a shortcut.
+- A name that is not a plain name.
+- In `main`, a URI that runs through a shortcut, or filters one.
 
 ## Design
 

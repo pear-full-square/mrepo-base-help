@@ -165,8 +165,10 @@ is "$(running | wc -l | tr -d ' ')" 3 "three runtimes running: the boot mrepo's,
 out=$(haicc --raw host haicc node-1 help/get . packages oneliner 2>&1); is $? 0 "haicc host haicc node-1 help/get . packages: chained through two shortcuts"
 has "$out" '"uri":"packages"' "answered by the node"
 case "$out" in *base-package-boot*) no "the node's packages, not the host's" "$out" ;; *) ok "the node's packages, not the host's" ;; esac
-out=$(haicc host/node-1 help/get 2>&1 >/dev/null); is $? 1 "a URI running through a shortcut: exit 1"
-has "$out" "host is a shortcut: a URI does not run through it (haicc host haicc node-1 ...)" "said, with the way across"
+out=$(haicc --raw host/node-1 help/get . packages oneliner 2>&1); is $? 0 "haicc host/node-1 help/get: a URI running through shortcuts: from one local root to the next"
+has "$out" '"uri":"packages"' "answered by the node: what is left of the URI went on with the command"
+case "$out" in *base-package-boot*) no "the node's packages, by the one URI" "$out" ;; *) ok "the node's packages, by the one URI" ;; esac
+out=$(haicc nowhere help/get 2>&1 >/dev/null); is "$out" "haicc: haicc nowhere: no node there" "a position that is not there: said, exit 1"
 out=$(haicc . help/get . packages 'no "such" section' 2>&1 >/dev/null); is $? 1 "an argument with spaces and quotes: sent whole"
 has "$out" 'no section "no "such" section" at packages' "and back in the error"
 out=$(haicc /host help/get 2>&1 >/dev/null); is $? 1 "a URI with a leading slash: refused, exit 1"
@@ -189,6 +191,16 @@ is "$(haicc --output . crud/read swarmz 2>&1)" '[]' "nothing there (a typo): an 
 is "$(haicc --output . crud/read host 2>&1)" '[{"uri":["main","host"],"value":{},"children":[],"shortcuts":[{"mrepo":"local/host"}]}]' "the host read as a node: a shortcut, with the mrepo its data comes from; only the link"
 is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["host","swarms"]}]' "the root: a node, its children the host and what was created"
 out=$(haicc . crud/read host/swarms 2>&1 >/dev/null); is "$out" "haicc: host is a shortcut: a URI does not run through it (haicc host haicc swarms ...)" "below a shortcut: not read here, the way across said"
+# a query: a filter on the nodes' documents; a command at a position inside
+# main, and at each position a query selects
+is "$(haicc --output . crud/read 'swarms/*[size>2]' 2>&1)" '[{"uri":["main","swarms/swarm-1"],"value":{"size":3},"children":[]}]' "haicc . crud/read 'swarms/*[size>2]': the nodes the filter holds for"
+is "$(haicc --output . crud/read "swarms/*[size='none' or not(size)]" 2>&1)" '[{"uri":["main","swarms/swarm-2"],"value":{},"children":[]}]' "or, not(), a quoted value: sent whole"
+is "$(haicc --output . crud/read swarms/swarm-1/size 2>&1)" '[{"uri":["main","swarms/swarm-1/size"],"value":3}]' "inside a node's document: the value there"
+is "$(haicc --output swarms/swarm-1 crud/read . 2>&1)" '[{"uri":["main","swarms/swarm-1","."],"value":{"size":3},"children":[]}]' "haicc swarms/swarm-1 crud/read .: executed at the position, the command's URI read behind it"
+is "$(haicc --output 'swarms/*[size=3]' crud/read . 2>&1)" '[{"at":"swarms/swarm-1","value":[{"uri":["main","swarms/swarm-1","."],"value":{"size":3},"children":[]}]}]' "haicc 'swarms/*[size=3]' crud/read .: at each position selected, a list of what each gave"
+is "$(haicc --output 'swarms/*[size>100]' crud/read . 2>&1)" '[]' "nothing selected: an empty list, exit 0"
+out=$(haicc '*' crud/read . 2>&1 >/dev/null); has "$out" "not yet: it reaches a shortcut (host) among 2 positions; a command goes on from one shortcut at a time" "a shortcut beside other positions: not yet, said so"
+out=$(haicc . crud/read 'swarms/*[1]' 2>&1 >/dev/null); has "$out" "a position: not in this phase" "what the query does not read yet: said"
 out=$(haicc . crud/delete swarms 2>&1 >/dev/null); is "$out" "haicc: swarms has children: not deleted (crud/delete swarms recurse)" "haicc . crud/delete swarms: it has children, refused, saying how"
 out=$(haicc . crud/update swarms '{}' 2>&1 >/dev/null); is "$out" "haicc: no action: crud update (create, delete, read)" "there is no update: said, with the actions there are"
 out=$(haicc . crud/create . 2>&1 >/dev/null); is "$out" "haicc: missing argument: target" "the root itself is not created"
@@ -197,6 +209,8 @@ is "$(haicc --output . crud/delete swarms recurse 2>&1)" '[]' "again: nothing th
 is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["host"]}]' "gone with everything below it; the host untouched"
 is "$(haicc --output host crud/create swarms/swarm-1 2>&1)" '[{"uri":["main","swarms"],"value":{},"children":["swarm-1"],"outcome":"created"},{"uri":["main","swarms/swarm-1"],"value":{},"children":[],"outcome":"created"}]' "haicc host crud/create swarms/swarm-1: in the host, started: its own main"
 is "$(haicc --output host crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["node-1","swarms"]}]' "the host's root: its node, a shortcut, and what was created there"
+is "$(haicc --output host/swarms/swarm-1 crud/read . 2>&1)" '[{"uri":["main","swarms/swarm-1","."],"value":{},"children":[]}]' "haicc host/swarms/swarm-1 crud/read .: through the shortcut, then at the position in the host"
+is "$(haicc --output 'host/swarms/*' crud/read . 2>&1)" '[{"at":"swarms/swarm-1","value":[{"uri":["main","swarms/swarm-1","."],"value":{},"children":[]}]}]' "a query through the shortcut: selected in the host"
 is "$(haicc --output . crud/read swarms 2>&1)" '[]' "nothing of it in the boot mrepo: each mrepo its own main"
 
 # 9b. a request's log, and its flags: info unasked; --flags log=verbose,
@@ -204,15 +218,15 @@ is "$(haicc --output . crud/read swarms 2>&1)" '[]' "nothing of it in the boot m
 out=$(haicc --raw host crud/read . 2>&1)
 has "$out" '"event":"request.metrics"' "a request's log, without a flag: its metrics, at info"
 has "$out" '"event":"request.sent"' "and where it was sent on"
-hasnt "$out" '"event":"crud.read.select"' "no steps: those are verbose"
+hasnt "$out" '"event":"crud.read.query"' "no steps: those are verbose"
 out=$(haicc --raw host crud/read . --flags log=verbose 2>&1)
 has "$out" '"args":["crud/read",".","--flags","log=verbose"]' "haicc host crud/read . --flags log=verbose: at the end of the line, the last command's: passed on as written"
-has "$out" '"event":"crud.read.select"' "the read's steps, from the host"
+has "$out" '"event":"crud.read.query"' "the read's steps, from the host"
 has "$out" '"jump":["host"]' "each entry of the host's under its jump"
 hasnt "$out" '"event":"haicc.goto.sent on"' "the boot mrepo's own hop still at info: the flag was the last command's"
 out=$(haicc --raw --flags log=verbose -- host crud/read . 2>&1)
 has "$out" '"event":"haicc.goto.sent on"' "haicc --flags log=verbose -- host crud/read .: in front, from the first command on"
-has "$out" '"event":"crud.read.select"' "and it held through the chain: the host's steps too"
+has "$out" '"event":"crud.read.query"' "and it held through the chain: the host's steps too"
 out=$(haicc --raw --flags log=debug -- host haicc node-1 help/get . packages 2>&1)
 has "$out" '"event":"help.get.index"' "log=debug through two hops: the node's internals"
 has "$out" '"jump":["host","node-1"]' "under both jumps, in order"

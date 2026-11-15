@@ -3,7 +3,7 @@ import { place, nodeAt, inside, folderOf, NODE } from '../../internal/node/index
 
 export async function create (exec, { uri, args = [] }) {
   const p = place(uri)
-  if (p.star) throw new Error('crud create: one node, not a selection (*)')
+  if (!p.names) throw new Error('crud create: one node, not a selection (a * or a filter)')
   if (!p.names.length) throw new Error('missing argument: target')
   let value = {}
   if (args[0] !== undefined) { try { value = JSON.parse(args[0]) } catch (err) { throw new Error(`not a document: ${args[0]} (JSON)`, { cause: err }) } }

@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-15, part 67). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-15, part 68). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -11,7 +11,8 @@ array of segments; 63 the crud protocol, the shortcuts in main; 64 the rest acti
 removed, a race fixed; 65 the request train's two repairs: the squash
 into main; 66 logging: flags, three levels, the request's metrics and
 audit, errors caught at the request, the code quality check; 67 XPath's
-query engine in `mycelium-xpath`, part one of task 6).
+query engine in `mycelium-xpath`; 68 the repository, `crud` and `haicc`
+on it: task 6 built).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -129,28 +130,23 @@ first users; all commands maps over an array of nodes): in two parts,
 the engine in `mycelium-xpath` first. **Task 7, the inbox watched instead of looked at**, is noted
 to discuss.
 
-**Where the build of task 6 stands** (2026-11-15): part one, the
-engine, is built and merged (part 67): `query(tree, root, text) ->
-{ found, stopped }` in `pear-full-square/mycelium-xpath/lib/query.js`,
-phase 1 of the list in `xpath.md`, documented in the module's README,
-used by nothing yet.
-- What was decided while building is listed in part 67, "to confirm
-  with the human": go through it with the human, point by point (a
-  filter on a node the query stops at goes with it; a child before a
-  document's key; a list by its indexes from 0; how values compare;
-  what is refused).
-- Part two is next: `mycelium-git`'s repository on the engine (a
-  document read as a tree below its file: `.node.json` for a node in
-  `main`, the file itself for a record), `mrepo-base-xpath` handing in
-  the shortcut as the stop, `crud` (`read`, `delete` hand their URI to
-  it; `create` walks), `haicc` (`goto` executes the command at each
-  node the query selects: the current root moves), a URI with a filter
-  valid in `mycelium-uri`, the usage restriction (one shortcut at a
-  time, else "not yet"), the tests (the `haicc` test with a filter),
-  the measurements (`--flags log=verbose`). Answered before: the
-  array is of nodes, not of answers; a response stays any data type
-  (`xpath.md`, "All commands are maps"); results as attachments is a
-  direction to discuss, not in this task.
+**Task 6 is built** (2026-11-15, parts 67 and 68): the engine,
+`query(tree, root, text)` in `mycelium-xpath` (phase 1 of the list in
+`xpath.md`); the mrepo's query in `mrepo-base-xpath` (`query(exec,
+uri)`: what a URI selects, each with what it is, and where it stopped at
+a shortcut); `crud` and `haicc`'s `goto` on it. Next with the human,
+point by point (short answers, one question at a time):
+- what was decided while building (both parts list it, "to confirm");
+- what was found open (part 68): a document's key in camelCase as a
+  step of a URI (the URI form of a data name); the outside reaching
+  `main` only, so the request records cannot be queried from the
+  command line; what a query costs (about 1 ms a node read here: one
+  request is right up to some hundreds of nodes; beyond, a cache of
+  reads by id and reads in parallel before a query over several
+  requests);
+- then phase 2 (the union and the fan-out over several shortcuts, which
+  resolves the usage restriction; descendants; positions), results as
+  attachments, task 7.
 XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
@@ -195,7 +191,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 67. Its notes come
+  `handover-local.md`, are current for parts 60 to 68. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent
@@ -398,9 +394,10 @@ Not built yet, and the platform is not deployed until the first two are
    the `xpath` layer into `main` (`.shortcuts.json`, several sources for
    one node, local data beside them: overlays).
    **Open, each to settle with the human first**:
-   - a position deeper inside `main` (`haicc /swarms/swarm-1 boot/deploy
-     node-1`): `goto` refuses it for now; it needs the execution context
-     opened at the position, and it comes with the first demo;
+   - a position deeper inside `main` (`haicc swarms/swarm-1 boot/deploy
+     node-1`): built (part 68), a command stands at the position; what
+     each protocol does there is its own (`boot/deploy` at a position is
+     not looked at yet);
    - a node's unique URI, `<swarm>/<node>`: a child takes its parent's
      swarm today, so everything is `local/<name>`;
    - into a node's container: mapped inbox and outbox folders, or an

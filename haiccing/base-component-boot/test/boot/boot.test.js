@@ -180,8 +180,8 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     t.alike(far?.output?.links?.map(l => l.uri).filter(u => u.includes('base-package-boot')), [], 'the host\'s packages, not the boot mrepo\'s (it does not link the boot)')
     t.ok(near?.output?.links?.some(l => l.uri.includes('base-package-boot')), 'the boot mrepo\'s own do')
     t.alike((await p2pgitBackend(gitdirOf(work, 'boot'), { fs }).listBranches()).map(([b]) => b).filter(b => b.startsWith('execute/')), [], 'no request branch left: the principal\'s removed once it was returned')
-    t.ok(/host is a shortcut: a URI does not run through it \(haicc host haicc packages \.\.\.\)/.test((await typed(['haicc', 'host/packages', 'help/get']))?.error ?? ''), 'a URI running through a shortcut: not resolved; the way across is a haicc at the shortcut')
-    t.ok(/a position inside main is not built yet/.test((await typed(['haicc', 'nowhere', 'help/get']))?.error ?? ''), 'a position inside main: not built yet')
+    t.is((await typed(['haicc', 'host/packages', 'help/get']))?.error, 'no action: haicc (haicc has no default action)', 'a URI running through a shortcut: sent on, what is left of it a haicc there (which this host does not link)')
+    t.is((await typed(['haicc', 'nowhere', 'help/get']))?.error, 'haicc nowhere: no node there', 'a position that is not there: said')
     t.is((await typed(['haicc', 'host', 'haicc', '.', 'help/get']))?.error, 'no action: haicc (haicc has no default action)', 'chained: the second haicc is the host\'s to execute, and this host does not link the haicc protocol: its error returned')
     t.is((await typed(['boot/deploy', 'host', 'haiccing/base-package-runtime']))?.error, 'deployed already: host', 'a plain command at the root, the name read from where it stands: main/host')
     // the runtime protocol, built in: a linked package's tests, through its

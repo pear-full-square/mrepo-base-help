@@ -14,9 +14,10 @@ minimal execution in memory.
   `read` and `delete` anywhere in `main`, no `update`; a target for
   `create` and `delete`, their optional arguments; no state.
 - **Its actions**: a node created with its path, what is written and
-  what is answered; read as one node and as a selection; deleted, with
-  and without `recurse`; each repeated.
-- **What each refuses**, writing nothing; a shortcut read as a node.
+  what is answered; read as one node, as a selection, with a filter and
+  inside a document; deleted, with and without `recurse`; each repeated.
+- **What each refuses**, writing nothing: a URI through a shortcut or a
+  filter on one, a query not read yet; a shortcut read as a node.
 - **Nothing forgotten**: the last test fails when the config names an
   action that was not run here, or one that wrote nothing into the
   request's log as it ran.

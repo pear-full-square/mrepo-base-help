@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-app-haicc",
-  "content": "820867cd48b831205c6190ff23374bfd7b41619f0539d90cf55d06352d80a92e",
+  "content": "d84cd4791c976f207c52018787b1a1798bbc65cc632afde159c3dc26e1855776",
   "bare": "v1.36.0",
-  "date": "2026-11-15T12:09:31.677Z",
+  "date": "2026-11-15T12:43:28.754Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -88,12 +88,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-crud",
       "ok": true,
       "tests": {
-        "passed": 7,
-        "total": 7
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 55,
-        "total": 55
+        "passed": 75,
+        "total": 75
       },
       "failures": []
     },
@@ -105,8 +105,8 @@
         "total": 10
       },
       "asserts": {
-        "passed": 88,
-        "total": 88
+        "passed": 89,
+        "total": 89
       },
       "failures": []
     },
@@ -144,8 +144,8 @@
         "total": 16
       },
       "asserts": {
-        "passed": 158,
-        "total": 158
+        "passed": 162,
+        "total": 162
       },
       "failures": []
     },
@@ -179,12 +179,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-xpath",
       "ok": true,
       "tests": {
-        "passed": 2,
-        "total": 2
+        "passed": 5,
+        "total": 5
       },
       "asserts": {
-        "passed": 25,
-        "total": 25
+        "passed": 44,
+        "total": 44
       },
       "failures": []
     },
@@ -205,12 +205,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-git",
       "ok": true,
       "tests": {
-        "passed": 139,
-        "total": 139
+        "passed": 144,
+        "total": 144
       },
       "asserts": {
-        "passed": 737,
-        "total": 737
+        "passed": 777,
+        "total": 777
       },
       "failures": []
     },
@@ -218,12 +218,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-uri",
       "ok": true,
       "tests": {
-        "passed": 19,
-        "total": 19
+        "passed": 21,
+        "total": 21
       },
       "asserts": {
-        "passed": 166,
-        "total": 166
+        "passed": 190,
+        "total": 190
       },
       "failures": []
     },
@@ -257,12 +257,12 @@
       "unit": "/test/modules/pear-full-square/p2p-mrepo",
       "ok": true,
       "tests": {
-        "passed": 33,
-        "total": 33
+        "passed": 34,
+        "total": 34
       },
       "asserts": {
-        "passed": 163,
-        "total": 163
+        "passed": 171,
+        "total": 171
       },
       "failures": []
     },

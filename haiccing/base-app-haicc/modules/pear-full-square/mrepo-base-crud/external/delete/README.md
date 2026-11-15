@@ -26,6 +26,8 @@ An array, each node as it was, with `"outcome": "deleted"`.
   of the selection is removed then.
 - An argument other than `recurse`.
 - A URI that runs through a shortcut.
+- A URI that selects a value inside a document, or the layer itself:
+  nodes are removed, nothing else.
 
 ## Design
 
