@@ -36,6 +36,23 @@ yet, none has a go.
 | P7 | `claude-headless` | "I want to use claude headless ASAP using the tailored help and howtos." | self-containment |
 | P8 | `dev-on-haicc` | "Then we need to 'haicc' the development process." | self-containment (dev pipeline) |
 
+**The order, as it stands** (the human, 2026-11-15, after the list:
+"if the priority list start with the open tasks first (cleanup), then
+registry design + mrepo as shortcut, then swarm node creation (container
+mrepo). What else on that list?"):
+
+1. **Cleanup**: the open tasks: `xpath-first`'s decisions confirmed,
+   `command-line-findings`, `request-layer-access`, `inbox-watcher`,
+   `teardown-cascade`. (Which of them are cleanup is our reading, to
+   confirm.)
+2. `mrepo-registry`: the registry's design, an mrepo as a shortcut.
+3. `node-mrepos`: swarm node creation, the container mrepo.
+4. What is left, in the list's order, not placed again by the human:
+   `swarm-demos`, `install-tests-review`, `rules-in-help`,
+   `help-and-howtos`, `claude-headless`, `dev-on-haicc`. And from
+   before the list: `xpath-phase-2`; "Deployed tests" and "Coverage"
+   (below).
+
 What the local agent's notes of 2026-11-15 hold for them
 (`local-note.md`):
 
