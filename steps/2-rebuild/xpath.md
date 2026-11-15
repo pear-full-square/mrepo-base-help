@@ -590,6 +590,82 @@ demo kept as its how-to.
 6. **Filters with a path inside, the union**; then position, what comes
    back, aggregates.
 
+## Standard XPath, in phases
+
+The human, 2026-11-15, on our filters' forms: "And yes standard XPath,
+but in phases. Maybe make a list and then mark what goes in now." The
+list is XPath 1.0's, what looks forward of it (settled: nothing that
+looks back or up). Phase 1 is the first implementation (`tasks.md`,
+task 6); 2 the step after (the union, with the fan-out over shortcuts);
+3 later; "not" stays out.
+
+| | XPath | example | phase |
+|---|---|---|---|
+| step | a child by name | `swarms/swarm-1` | 1 (there) |
+| step | any child | `swarms/*` | 1 (there) |
+| step | the node itself | `.` | 1 |
+| step | descendants at any depth | `swarms//node-1` | 2 |
+| step | the axes written out (`child::`, `descendant::`, `self::`) | `child::swarms` | 3 |
+| step | the siblings after a node | `following-sibling::*` | 3 (needs an order) |
+| step | the parent, the ancestors, what comes before | `..`, `ancestor::`, `preceding::` | not (looks back) |
+| filter | a leaf equals, differs, compares | `[name='sam']`, `[size>2]`, `[size!=3]` | 1 |
+| filter | a leaf is there | `[name]` | 1 |
+| filter | a leaf further inside, by a path | `[value/value/uri='main/host']` | 1 |
+| filter | joined: `and`, `or`, `not()` | `[size>2 and name='sam']` | 1 |
+| filter | several in a row | `*[size>2][name]` | 1 |
+| filter | by position | `*[1]`, `*[last()]`, `[position()<3]` | 2 (needs an order) |
+| filter | a path in it that crosses a shortcut | `[nodes/*/state='started']` | 3 |
+| set | the union of two paths | `a/* \| b/*` | 2 |
+| function | `name()` | `*[name()='swarm-1']` | 1 |
+| function | `starts-with()`, `contains()` | `[starts-with(name,'s')]` | 1 |
+| function | `count()`, `last()`, `position()` | `count(swarms/*)` | 2 |
+| function | the other string ones: `concat`, `substring`, `substring-before`, `substring-after`, `string-length`, `normalize-space`, `translate`, `string` | | 3 |
+| function | numbers: `number`, `sum`, `floor`, `ceiling`, `round`; `+ - * div mod` | `[size*2>10]` | 3 |
+| function | booleans: `true()`, `false()`, `boolean()` | | 3 |
+| value | a quoted string, a number | `'sam'`, `3` | 1 |
+| value | an attribute by `@` | `[@name='sam']` | 1, the same as `[name='sam']`: a leaf is the document's key and its value |
+| | what is XML's alone: namespaces, comments, processing instructions, `id()`, `lang()`, `text()` | | not |
+
+- **Standard only**: our one form outside it, `*` in a quoted value as
+  a wildcard (`[name='s*']`), is not built: `starts-with` and `contains`
+  say it. The human's first example in standard form:
+  `users[starts-with(name,'s')]`.
+- **A leaf in a filter** is, as XPath reads it, a child holding a value:
+  a document's key with a leaf under it. `@name` is accepted and means
+  the same.
+
+**Where the existing implementation is, and what uses it** (the
+human's question: "Did you find where the existing simple
+implementation resides? Did we use anything of that already?")
+
+- It is `mycelium-xpath`'s `select(children, root, path, match)`: steps
+  by name and `*` at any step, over a tree reached through
+  `children(node)`; and `objectChildren`, a plain object read as a
+  tree. No fuller one was ever in this repository (looked for in its
+  history).
+- It is used, under every read: `mycelium-git`'s repository goes
+  through it for `select`, `read` and `find`, so an execution's reads
+  do. `objectChildren` is used by its own tests only.
+- Three places beside it handle paths their own way, and come onto the
+  module as it is built: `mrepo-base-xpath`'s `resolve` (a position
+  walked part by part, for shortcuts), `mrepo-base-crud`'s `place` and
+  `select` (a `*` as the last part), `mrepo-base-request`'s `matches`
+  (a config's URI patterns: `<name>`, `**`).
+
+**The first users: `haicc` and `crud`, both** (the human, on our
+proposal of `crud` alone). So the routing URI is a query too in the
+first implementation: `haicc <query> <command>` resolves to an array of
+references and the command is executed at each: the current root moves
+(today `goto` refuses a position inside `main`).
+
+**All commands are maps over an array of nodes** (the human: "Also make
+sure all commands are maps over an array of nodes"). A command is its
+operation mapped over the nodes its URI resolves to, one node, none or
+many alike. To confirm, for it changes what is answered: whether a
+command's answer is then always the array, one result a node, also for
+one node (`service/start` answering an array of one), where on
+2026-11-14 the answer was "No, response can contain any data type".
+
 ## Parallel execution: threads
 
 Raised by the human with the XPath pipeline, 2026-11-14; it reaches
@@ -955,7 +1031,14 @@ script, not kept). Operations a second:
   takes them in. So a request waits up to 200 ms at each hop, and again
   for its answer; and both listings grow for ever, nothing being
   removed from the inbox: the wide folder again, here read five times
-  a second.
+  a second. **A watcher instead** (the human: "wouldn't it be better
+  with a filewatcher?"; ours: yes): Bare has one (`bare-fs`'s `watch`).
+  A file dropped is then taken in at once, and nothing is listed while
+  nothing happens. With it: one listing as the runtime starts (what
+  came while it was down), and a slow look kept as a net (a watcher can
+  miss an event; some filesystems, a network one, WSL's, tell less).
+  The growing folder is a second matter: what was taken in moved out
+  of it, or folders by date. A task of its own: `tasks.md`, task 7.
 
 ## To settle
 

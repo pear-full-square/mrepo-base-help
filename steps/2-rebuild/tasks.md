@@ -9,8 +9,8 @@ its record is then a part in `readme.md`.
 
 A design in discussion, a file of its own: `xpath.md` (XPath across
 links: a query as a pipeline of `haicc` segments and merges). Task 4,
-the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Waiting for a go: task 6, XPath,
-the first implementation.
+the request train's two repairs, is built: part 65. Task 5, logging, is built: part 66. Task 6, XPath, the first implementation: go given, in two parts. Noted
+to discuss: task 7, the inbox watched.
 
 How to read a task:
 
@@ -687,15 +687,14 @@ went, each answer in its words. This is what of it is to be built first.
 
 **Proposed** (ours, to confirm before building)
 
-- **The filters, in XPath's own forms**: a leaf equals, differs or
-  compares (`[name='sam']`, `[size>2]`), exists (`[name]`), the node's
-  name (`[name()='swarm-1']`), starts with (`[starts-with(name,'s')]`),
-  two joined with `and`; a leaf further inside written as a path
-  (`[value/value/uri='main/host']`). And one form of ours: `*` in a
-  quoted value a wildcard (`[name='s*']`), the human's example.
-- **The steps**: a name, `*` (at any step). Not yet: descendants, a
-  union, functions over the set, a filter that crosses a shortcut, an
-  order.
+- **What of XPath goes in now**: phase 1 of the list in `xpath.md`,
+  "Standard XPath, in phases" (the human: "yes standard XPath, but in
+  phases. Maybe make a list and then mark what goes in now. When that
+  is done, then you can go the implementation"): steps by name, `*` and
+  `.`; filters on a leaf (equals, differs, compares, is there, by a
+  path inside the document), joined with `and`, `or`, `not()`, several
+  in a row; `name()`, `starts-with()`, `contains()`; strings and
+  numbers. Standard only: no wildcard in a value.
 - **The module's interface**: it is handed the tree (`children(node)`,
   as today), and, new, how a node's document is read and where a
   segment has to stop (a shortcut). It answers with the references,
@@ -704,9 +703,18 @@ went, each answer in its words. This is what of it is to be built first.
   record in a layer, the file itself. Handed in by who calls.
 - **A reference**: the node's path and its id in the repository (a
   tree's or a file's), at the state read.
-- **The first user**: `crud/read` and `crud/delete`, whose URI goes to
-  the module whole; `crud/create` walks as it does. The routing URI
-  (`haicc`'s) stays a plain position in this step.
+- **The first users** (the human: "haicc and crud - both"): the routing
+  URI, `haicc <query> <command>`: the command executed at each node
+  the query selects, the current root moved there; and `crud`'s own
+  URI: `read` and `delete` hand it to the module whole, `create` walks
+  as it does.
+- **All commands are maps over an array of nodes** (the human): a
+  command is its operation mapped over the nodes its URI resolves to.
+  To confirm before that part is built: whether the answer is always
+  the array, also for one node.
+- **In two parts**: first the engine in `mycelium-xpath` with its own
+  tests, which nothing else depends on; then the repository, `crud`
+  and `haicc` on it.
 - **A URI with a filter is a valid URI**: `mycelium-uri` checks its
   names as it does, and a filter for its brackets and quotes only; what
   is in a filter is the module's to read.
@@ -726,6 +734,35 @@ went, each answer in its words. This is what of it is to be built first.
   `mycelium-uri/lib/uri.js` (`validate`, `SEGMENT`);
   `mrepo-base-execute/index.js` (`exec.select`, the execution's view
   over its branch).
+
+## 7. The inbox watched, not looked at
+
+Noted 2026-11-15, to discuss. The human, on how a file in the inbox
+folder gets into git (the runtime looks every 200 ms, lists the whole
+folder and the whole `inbox` layer, commits what is new): "wouldn't it
+be better with a filewatcher?"
+
+**Proposed** (ours, not answered)
+
+- The inbox folder watched (`bare-fs`'s `watch`): a file dropped taken
+  in at once; nothing listed while nothing happens. The same for a
+  waiting request's answer in a child's outbox folder, and for the
+  `haicc` app waiting for its response.
+- One listing as the runtime starts, for what came while it was down;
+  a slow look kept as a net, for an event missed.
+- The folder that only grows is a second matter: what was taken in
+  moved out of the folder, or folders by date (`xpath.md`: how many to
+  a folder).
+- Measured before and after: a request's time through a running mrepo,
+  from its record.
+
+**Where**
+
+- `pear-full-square/mrepo-base-runtime/index.js` (the poller, `every`);
+  `mrepo-base-request/lib/boxes.js` (`post`: the folder's new files
+  committed); `mrepo-base-request/index.js` (`request`: a waiting
+  principal's answer collected from the outbox folder);
+  `haicc-base-app/internal/request/` (the app waiting for its answer).
 
 ## Future additions
 
