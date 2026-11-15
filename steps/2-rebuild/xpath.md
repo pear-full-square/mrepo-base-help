@@ -209,10 +209,23 @@ the human, not answered)
   what a hop hands on at a shortcut (the rest, unparsed, to the linked
   mrepo), and what the several-requests mode would pass from one
   request to the next. One loop, three uses.
-- **A segment, as we read it** (to confirm): one step of the path with
-  its filters, `*[size>2]`: enough parsed to select from the node set in
-  hand. The stretch up to a shortcut is found by processing, not by
-  parsing: the round that meets one ends the work here.
+- **A segment** (ours first: one step of the path with its filters;
+  the human's, which holds): "a segment runs upto a filter or a
+  shortcut. Upto a filter because one needs an initial nodeset first to
+  filter from." So a segment is the stretch of steps that gives a node
+  set: it ends where that set is to be filtered, or where a shortcut is
+  met. The human's example: select all request records where the
+  request's URI is some value: "the initial nodeset is all requests and
+  then the filter is applied, so all requests is initial segment";
+  "once filtered the next segment could e.g. the request response".
+- **A filter may be a side branch** (the human): it "goes some nodes
+  deep" from each node of the set, as the request's URI lies inside its
+  record.
+- **Lazily** (the human): "a pointer to rather than materialised": a
+  node set is held as what points to it, not as its nodes read out.
+- **The limits of this first approach are known** (the human, on what
+  we said does not fit one round): "it is to get going and gain
+  experience."
 - **Each round is a step of the action** (`exec.step`): at `verbose` the
   request's record holds each with what it took and what it selected:
   the measurement asked for, with nothing added.
@@ -225,6 +238,47 @@ the human, not answered)
   implementation: what wraps whole paths (a union, a function over the
   set such as a count or the last), and a filter with a path inside,
   which is a query of its own run for each node.
+
+**A node set as a pointer, in git** (ours, on the human's question:
+"If we take reference in our git based system, how would we point /
+select to the list of requests?"; put to the human, not answered)
+
+- **A folder at a commit is a tree object**, named by the hash of its
+  content: that id is the pointer. "All requests done" is the tree at
+  the root of the layer `request/done` at one commit: a record a file
+  there, `<key>.json`. Holding `{ commit, path }` (or the tree's id)
+  holds the whole set, fixed: it cannot change under the query, which
+  is the rule of no dirty reads, and a run can be repeated from it
+  (`mycelium-git`'s `pinned`: a repository at a recorded state).
+- **Listing it reads one object**: the tree gives each member's name and
+  its own id, none of their content. A member is read only when a
+  filter looks into it. A filtered set is then a list of names and
+  ids: still pointers.
+- **The same id, the same set**: what a filter gave over a tree can be
+  kept by that tree's id and given again without reading anything,
+  for as long as the folder has not changed.
+- **A side branch goes on inside the document** (our reading, to
+  confirm): a record is one file, and the request's URI is three levels
+  inside it (`value`, `value`, `uri`). So the tree does not end at the
+  file: an object in the document is a node, its leaves the attributes
+  (the human: "leaf keyvalue"). `mycelium-xpath` reads an object that
+  way already (`objectChildren`). The example, in illustration:
+  `request/done/*[value/value/uri='main/host']/value/value/output`.
+- **Two ways to point at the list**, by what is asked:
+  - the set: the layer's tree at a commit, its members in name order
+    (the keys are GUIDs: that order says nothing);
+  - the sequence: the layer's history from a commit back, a commit a
+    request done: the order they were done in, walked only as far as
+    needed (the last ten). `mrepo-base-request`'s `arrived` reads the
+    order this way already.
+- **A finding with it**: `request/done` is one flat folder that every
+  request adds to, and a commit writes again the tree of each folder on
+  its path. Measured ("Commits", above): a folder of 100 children 119
+  commits a second, of 10,000: 11. So the list of requests itself wants
+  subfolders (by date, say): each older one then never changes, its id
+  stays, and what was filtered from it stays valid.
+- Outside reaches `main` only: the request layers are read by the
+  mrepo's own requests, or through a protocol that offers them.
 
 **Proposed** (ours, not yet put to the human; written before the lines
 above: every step below is to work in both modes). Each as a feature is
