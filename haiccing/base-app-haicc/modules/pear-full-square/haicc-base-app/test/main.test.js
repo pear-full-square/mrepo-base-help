@@ -5,7 +5,7 @@ import test from 'brittle'
 import { mkdtempSync, mkdirSync, rmSync, readdirSync, readFileSync, writeFileSync, existsSync } from 'bare-fs'
 import { tmpdir } from 'bare-os'
 import { join } from 'bare-path'
-import { main, LIST, USAGE, CONFIG } from '../index.js'
+import { main, LIST, USAGE, CONFIG, WIDTH } from '../index.js'
 
 function setup () {
   const home = mkdtempSync(join(tmpdir(), 'haicc-app-'))
@@ -81,8 +81,9 @@ test('a command for the mrepos: its response printed unpacked, as stored, or its
     t.is(envelope.value.topic, CONFIG.reply, 'its core addressed back to the terminal')
     t.alike(envelope.value.value, ['boot/deploy', 'host', 'base-component-haicc'], 'at the root: the command plain')
     t.is(s.out.length, 1)
-    t.ok(s.out[0].includes('\n    "topic": "/haicc/terminal",\n'), 'by default the record unpacked: the core two deep, an entry a line')
-    t.is(s.out[0].split('\n').map(l => l.replace(/^ */, '').replace(/([^\\])": /g, '$1":')).join(''), text.trim(), 'packed again: the record as stored')
+    t.ok(s.out[0].includes('\n    "topic": "/haicc/terminal", "key": "'), 'by default the record unpacked: the core two deep, its entries packed on lines')
+    t.ok(s.out[0].split('\n').length > 3 && s.out[0].split('\n').every(l => l.length <= 80), 'to 80 columns: the output is no terminal, no width set')
+    t.is(JSON.stringify(JSON.parse(s.out[0])), text.trim(), 'packed again: the record as stored')
 
     a = answer(s.root, { output: long })
     t.is(await s.run(['--raw', 'host', 'service/start']), 0)
@@ -95,8 +96,22 @@ test('a command for the mrepos: its response printed unpacked, as stored, or its
     t.is(s.out[0].split('\n').length, 1, 'HAICC_RAW=1: the same')
 
     a = answer(s.root, { output: long })
-    t.is(await s.run(['.', 'help/get'], { HAICC_WIDTH: '1000' }), 0); await a
-    t.is(s.out[0].split('\n').length, 1, 'HAICC_WIDTH: a record that fits it left on one line')
+    t.is(await s.run(['output', '1000']), 0)
+    t.alike(s.out, ['1000 (set: haicc output auto for the terminal\'s width)'], 'haicc output <width>: set, kept in haicc\'s own folder')
+    t.is(readFileSync(join(s.home, WIDTH), 'utf8'), '1000\n')
+    a = answer(s.root, { output: long })
+    t.is(await s.run(['.', 'help/get'], { HAICC_WIDTH: '10' }), 0); await a
+    t.is(s.out[0].split('\n').length, 1, 'a record that fits the width set: left on one line (HAICC_WIDTH is no more)')
+    t.is(await s.run(['output']), 0)
+    t.alike(s.out, ['1000 (set: haicc output auto for the terminal\'s width)'], 'haicc output: the width in force, where it comes from')
+    t.is(await s.run(['output', 'auto']), 0)
+    t.alike([s.out, existsSync(join(s.home, WIDTH))], [['auto: 80 (the output is no terminal)'], false], 'haicc output auto: back to the default')
+    t.is(await s.run(['output', 'wide']), 2)
+    t.alike(s.err, ['haicc: haicc output [<width> | auto] (a width: a number of characters, or auto)'])
+    t.is(await s.run(['output', '80', '90']), 2)
+    a = answer(s.root, { output: long })
+    t.is(await main(['.', 'help/get'], { env: { HAICC_HOME: s.home }, bare: '/no/bare', io: { out: l => s.out.splice(0, s.out.length, l), err: () => {}, stdio: 'ignore', columns: () => 132 } }), 0); await a
+    t.ok(s.out[0].split('\n').some(l => l.length > 80) && s.out[0].split('\n').every(l => l.length <= 132), 'auto: the terminal\'s width, read as the record is printed')
 
     a = answer(s.root, { output: { service: 'started', state: 'started' } })
     t.is(await s.run(['--output', 'host', 'service/start']), 0); await a

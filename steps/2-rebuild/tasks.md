@@ -42,8 +42,8 @@ registry design + mrepo as shortcut, then swarm node creation (container
 mrepo). What else on that list?"):
 
 1. **Cleanup**: the open tasks: `xpath-first`'s decisions confirmed,
-   `command-line-findings`, `request-layer-access`, `inbox-watcher`,
-   `teardown-cascade`. (Which of them are cleanup is our reading, to
+   `command-line-findings` (built, part 70), `request-layer-access`,
+   `inbox-watcher`, `teardown-cascade`. (Which of them are cleanup is our reading, to
    confirm.)
 2. `mrepo-registry`: the registry's design, an mrepo as a shortcut.
 3. `node-mrepos`: swarm node creation, the container mrepo.
@@ -62,7 +62,10 @@ mrepo). What else on that list?"):
 
 **The milestone** this block (5 and 6) achieves (the human): "ready to
 start using headless claude (AI autonomy) and tackling the D&I process
-using haicc": `claude-headless`, then `dev-on-haicc`.
+using haicc": `claude-headless`, then `dev-on-haicc`. D&I: "design and
+development, which will then become HDLC afterwards (haicc (software)
+development lifecycle)": our terms ("it is not my terms or your terms,
+but our terms: we are a team").
 
 From before the list, not placed: `xpath-phase-2`; "Deployed tests" and
 "Coverage" (below).
@@ -97,8 +100,9 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 4 | `request-train-repairs` | a removed branch's folders, the squash into `main` | built, part 65 |
 | 5 | `logging` | flags, three levels, the request's metrics and audit | built, part 66 |
 | 6 | `xpath-first` | XPath phase 1: the engine, `crud` and `haicc` on it | built, parts 67 to 69; decisions to confirm |
+| | `data-names-in-queries` | a document's key in its URI form in a query | built, part 69 |
 | 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | noted, to discuss |
-| 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | settled, waits for the go |
+| 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, part 70 |
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | in discussion |
 | P1 to P8 | above | the priorities | not discussed yet |
 
@@ -867,7 +871,7 @@ be better with a filewatcher?"
 The human tried `haicc` by hand on the laptop (`main` as of `c8200f7`)
 and settled three findings with the local agent, 2026-11-15:
 `local-note.md`, "the human's manual test", holds each with the human's
-words. Not built: the cloud session's to build, on the human's go.
+words. **Built**: part 70 of `readme.md`, with what was left to us.
 
 **Settled** (the human, through the local agent)
 

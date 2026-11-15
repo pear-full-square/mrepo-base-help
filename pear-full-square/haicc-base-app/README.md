@@ -3,7 +3,7 @@
 The haicc command's app: the command line that boots the local root and sends commands to the mrepos.
 
 Run with Bare, so it works wherever Bare does. It reads a command line,
-and either answers it itself (the usage, the sources), runs the machine
+and either answers it itself (the usage, the sources, the output's width), runs the machine
 level (`boot/deploy`, `boot/teardown`), or writes the command as a record
 into the root mrepo's inbox folder and prints the response. Offered by
 `haiccing/base-app-haicc`, whose `run.js` calls `main`.
@@ -26,6 +26,7 @@ from, `haiccing`; the component the root mrepo is built from,
 ```
 <home>/                 HAICC_HOME, else ~/.haicc
   sources.list          the sources registered, a line each
+  output.width          the width a record is printed to, when one is set
   work/                 HAICC_WORK, else this: the work folder
     mrepos/boot/        the root mrepo: its inbox and outbox folders
     packages/           the package store

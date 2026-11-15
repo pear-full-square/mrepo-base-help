@@ -48,7 +48,7 @@ out=$(sh "$pkg/haicc-install.sh" --home="$T/home" --bin="$T/bin" 2>&1)
 is $? 0 "installed: sh haicc-install.sh --home --bin"
 [ -x "$T/bin/haicc" ] && [ -f "$T/home/pins" ] && ok "the command registered in the bin folder, its scripts and pins in its own" || no "the command registered" "$out"
 PATH=$T/bin:$PATH; export PATH
-unset HAICC_HOME HAICC_WORK HAICC_OUTPUT HAICC_RAW HAICC_WIDTH 2>/dev/null
+unset HAICC_HOME HAICC_WORK HAICC_OUTPUT HAICC_RAW 2>/dev/null
 HAICC_TIMEOUT=180; export HAICC_TIMEOUT
 
 # 2. before Bare is there: the first step's own commands, in sh; anything
@@ -121,22 +121,29 @@ has "$out" '"deployed":"host","mrepo":"local/host","package":"haiccing/base-comp
 has "$out" '"topic":"/haicc/terminal"' "--raw: the response record as it is stored, the core addressed back to the terminal"
 is "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" 1 "one line"
 out=$(haicc . help/get . oneliner 2>&1); is $? 0 "haicc . help/get .: by default the record unpacked"
-has "$out" '    "topic": "/haicc/terminal",' "across lines, an entry a line, indented: the core two deep"
-has "$out" '      "protocol": "help",' "the form three deep"
-[ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" -gt 10 ] && ok "many lines" || no "many lines" "$out"
+has "$out" '    "topic": "/haicc/terminal", "key": "' "across lines, indented, its entries packed on a line up to the width: the core two deep"
+has "$out" '      "command": ["help/get",".","oneliner"], "protocol": "help",' "the form three deep, packed too"
+has "$out" '        "uri": ".", "title": "mrepo/",' "and its output, opened below: an entry that does not fit a line of its own"
+[ "$(printf '%s\n' "$out" | wc -l | tr -d ' ')" -gt 5 ] && ok "several lines" || no "several lines" "$out"
 out=$(haicc host help/get 2>&1 >/dev/null); is "$out" "haicc: no help extracted in this mrepo yet (help/extract)" "the host, booted: help active from boot, extracted by its initialise hook, not yet"
 # nothing of a record changed by the unpacking: what is printed, its line
-# breaks, indentation and the space after an opened object's keys taken off
-# again, is the record as it is stored in the outbox (an output, an error)
+# breaks and spaces taken off, is the record as it is stored in the outbox,
+# its spaces taken off the same way (an output, an error; the exact check,
+# strings minded, is the app's own test)
 back=yes
 for c in ". help/get . oneliner" ". help/get . packages oneliner" ". boot/deploy host base-component-haicc"; do
   out=$(haicc $c 2>/dev/null)
-  key=$(printf '%s\n' "$out" | sed -n 's/^  "key": "\(.*\)",$/\1/p')
-  packed=$(printf '%s\n' "$out" | sed -e 's/^ *//' -e 's/\([^\\]\)": /\1":/g' | tr -d '\n')
-  [ -n "$key" ] && [ "$packed" = "$(cat "$T/home/work/mrepos/boot/outbox/$key.json")" ] || { no "unpacked and packed again: the record as stored" "haicc $c"; back=''; break; }
+  key=$(printf '%s\n' "$out" | sed -n 's/^  "topic": "[^"]*", "key": "\([^"]*\)".*$/\1/p')
+  packed=$(printf '%s\n' "$out" | tr -d ' \n')
+  [ -n "$key" ] && [ "$packed" = "$(tr -d ' \n' < "$T/home/work/mrepos/boot/outbox/$key.json")" ] || { no "unpacked and packed again: the record as stored" "haicc $c"; back=''; break; }
 done
 [ -z "$back" ] || ok "unpacked and packed again: every record in the outbox as stored"
-is "$(HAICC_WIDTH=100000 haicc . help/get . oneliner | wc -l | tr -d ' ')" 1 "a record that fits the width: left on one line"
+is "$(haicc output 2>&1)" "auto: 80 (the output is no terminal)" "haicc output: the width in force: auto, 80 here"
+is "$(haicc output 100000 2>&1)" "100000 (set: haicc output auto for the terminal's width)" "haicc output 100000: set"
+is "$(haicc . help/get . oneliner | wc -l | tr -d ' ')" 1 "a record that fits the width set: left on one line"
+is "$(cat "$T/home/output.width")" "100000" "kept, in haicc's own folder"
+out=$(haicc output wide 2>&1 >/dev/null); is "$?" "2" "haicc output wide: no width, exit 2"
+is "$(haicc output auto 2>&1)" "auto: 80 (the output is no terminal)" "haicc output auto: back to the default"
 out=$(haicc . boot/deploy host base-component-haicc 2>&1 >/dev/null); is $? 1 "deployed again: exit 1"
 is "$out" "haicc: deployed already: host" "its error on stderr: host is there already"
 out=$(haicc host boot/deploy node-1 base-package-runtime 2>&1 >/dev/null); is $? 1 "the host booted: its boot protocol behind the service's door"
@@ -214,7 +221,8 @@ is "$(haicc --output 'host/swarms/*' crud/read . 2>&1)" '[{"at":"swarms/swarm-1"
 is "$(haicc --output . crud/read swarms 2>&1)" '[]' "nothing of it in the boot mrepo: each mrepo its own main"
 
 # 9b. a request's log, and its flags: info unasked; --flags log=verbose,
-# log=debug; through a chain; a flag that is none
+# log=debug, after a URI: that step's, held down the chain; a flag that is
+# none
 out=$(haicc --raw host crud/read . 2>&1)
 has "$out" '"event":"request.metrics"' "a request's log, without a flag: its metrics, at info"
 has "$out" '"event":"request.sent"' "and where it was sent on"
@@ -224,17 +232,20 @@ has "$out" '"args":["crud/read",".","--flags","log=verbose"]' "haicc host crud/r
 has "$out" '"event":"crud.read.query"' "the read's steps, from the host"
 has "$out" '"jump":["host"]' "each entry of the host's under its jump"
 hasnt "$out" '"event":"haicc.goto.sent on"' "the boot mrepo's own hop still at info: the flag was the last command's"
-out=$(haicc --raw --flags log=verbose -- host crud/read . 2>&1)
-has "$out" '"event":"haicc.goto.sent on"' "haicc --flags log=verbose -- host crud/read .: in front, from the first command on"
-has "$out" '"event":"crud.read.query"' "and it held through the chain: the host's steps too"
-out=$(haicc --raw --flags log=debug -- host haicc node-1 help/get . packages 2>&1)
-has "$out" '"event":"help.get.index"' "log=debug through two hops: the node's internals"
+out=$(haicc --raw host --flags log=verbose -- crud/read . 2>&1)
+has "$out" '"event":"haicc.goto.sent on"' "haicc host --flags log=verbose -- crud/read .: after the URI, that step's: the hop at host"
+has "$out" '"event":"crud.read.query"' "and it held down the chain: the host's steps too"
+has "$out" '"args":["crud/read","."]' "-- says where the next command starts: the command as it is"
+out=$(haicc --raw host --flags log=debug haicc node-1 help/get . packages 2>&1)
+has "$out" '"event":"help.get.index"' "without --: log=debug through two hops: the node's internals"
 has "$out" '"jump":["host","node-1"]' "under both jumps, in order"
+out=$(haicc --raw . --flags log=verbose -- crud/read . 2>&1)
+has "$out" '"event":"crud.read.query"' "haicc . --flags log=verbose -- crud/read .: at the root too"
 out=$(haicc --raw . crud/read . --flags nope log=loud 2>&1); is "$?" "0" "a flag that is none, a value its flag does not take: the request done all the same"
 has "$out" '"event":"request.flag"' "each ignored, with a warning in its log"
 hasnt "$out" '"level":"verbose"' "and the log at info"
-out=$(haicc --flags log=debug host crud/read . 2>&1 >/dev/null); is "$?" "2" "flags in front without their closing --: refused, exit 2"
-has "$out" "flags in front are closed by --" "said"
+out=$(haicc --flags log=debug -- host crud/read . 2>&1 >/dev/null); is "$?" "2" "flags in front of the URI: refused, exit 2"
+has "$out" "flags follow a URI: they are that step's" "said"
 
 # 10. torn down: the node; the service stopped and shut down; the host
 is "$(haicc --output host boot/teardown node-1 2>&1)" '{"tornDown":"node-1"}' "haicc host boot/teardown node-1"

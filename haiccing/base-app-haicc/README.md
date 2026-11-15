@@ -83,8 +83,9 @@ The parts go as typed, unnamed; the mrepo interprets them.
 ## Environment
 
 `HAICC_HOME` and `HAICC_WORK` name haicc's own folder and the work
-folder; `HAICC_TIMEOUT`, `HAICC_RAW`, `HAICC_OUTPUT` and `HAICC_WIDTH`
-set the wait and the printing. The module's `main` documents each.
+folder; `HAICC_TIMEOUT`, `HAICC_RAW` and `HAICC_OUTPUT` set the wait
+and the printing. The module's `main` documents each. The width a
+record is printed to is set with `haicc output`.
 
 ## Package
 

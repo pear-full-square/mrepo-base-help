@@ -14,19 +14,24 @@ An error goes into the request it happened to.
 ## Flags
 
 What is asked of the way a request is handled, beside what it asks for.
-Written with a command after the word `--flags`, space separated, to the
-end of the command or to a closing `--`; a flag stands alone, or carries
-a value, `key=value`, no space.
+Written after a URI, after the word `--flags`, space separated: the
+flags of that step. A flag stands alone, or carries a value,
+`key=value`, no space.
 
 ```
+haicc host --flags log=debug -- haicc node-1 crud/read swarms
+haicc host --flags log=debug haicc node-1 crud/read swarms
 haicc host crud/read swarms --flags log=verbose
-haicc --flags log=debug -- host haicc node-1 crud/read swarms
 ```
 
+- **`--` says where the next command starts**, and is optional: without
+  it the list ends at the first word not written as a flag. After the
+  URI of the last command the list runs to the end of the line, or to a
+  `--` with the command's arguments after it.
 - **In the form** they are a map: `"flags": { "log": "debug" }`.
-- **A flag holds through a chain until changed**: one written in front
-  of a chain goes with each command sent on; one written at the end of
-  the line is the last command's.
+- **A flag holds down a chain until changed**: one written at a step
+  goes with each command sent on from there; one written after the last
+  command's URI is that command's.
 - **A flag that is none**, or a value its flag does not take: ignored,
   with a warning in the request's log.
 - The flags there are: `log`, below.

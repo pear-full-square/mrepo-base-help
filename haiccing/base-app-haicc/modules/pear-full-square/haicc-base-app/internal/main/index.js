@@ -2,19 +2,22 @@
 import { existsSync } from 'bare-fs'
 import { join } from 'bare-path'
 import os from 'bare-os'
+import process from 'bare-process'
 import { viewOf } from 'mrepo-base-request'
 import { command } from '../command/index.js'
 import { request } from '../request/index.js'
 import { unpack } from '../unpack/index.js'
 import { outcome } from '../outcome/index.js'
 import { sourcesCommand } from '../sources/index.js'
+import { outputCommand, widthOf } from '../output/index.js'
 import { MACHINE } from '../boot/index.js'
 import { CONFIG } from '../config.js'
 import { Failure } from '../failure.js'
 import { USAGE } from '../usage.js'
 
 // console: the command line's own output: what the user asked for, and what went wrong
-const CONSOLE = { out: line => console.log(line), err: line => console.error(line), stdio: 'inherit' }
+// (columns: the terminal's width now, null when the output is none)
+const CONSOLE = { out: line => console.log(line), err: line => console.error(line), stdio: 'inherit', columns: () => (process.stdout.isTTY ? process.stdout.columns : null) }
 
 export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE } = {}) {
   const home = env.HAICC_HOME || join(os.homedir(), '.haicc')
@@ -25,6 +28,10 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
     if (c.kind === 'usage') { io.out(USAGE); return 0 }
     if (c.kind === 'sources') {
       for (const line of sourcesCommand(home, c.args, { org: CONFIG.org, err: io.err })) io.out(line)
+      return 0
+    }
+    if (c.kind === 'output') {
+      for (const line of outputCommand(home, c.args, io.columns?.() ?? null)) io.out(line)
       return 0
     }
     if (c.kind === 'machine') {
@@ -39,7 +46,7 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
     const { text } = await request(root, c.parts, { uri: CONFIG.root.uri, reply: CONFIG.reply, timeout })
     const print = c.print ?? (env.HAICC_OUTPUT === '1' ? 'output' : env.HAICC_RAW === '1' ? 'raw' : 'record')
     if (print === 'raw') io.out(text.replace(/\n$/, ''))
-    if (print === 'record') io.out(unpack(text, Number(env.HAICC_WIDTH) > 0 ? Number(env.HAICC_WIDTH) : 80))
+    if (print === 'record') io.out(unpack(text, widthOf(home, io.columns?.() ?? null).width))
     const o = outcome(text)
     if (!o) throw new Failure('the response holds no completed form', 5)
     if ('error' in o) throw new Failure(o.error, 1)

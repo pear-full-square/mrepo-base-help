@@ -4,17 +4,25 @@ export const USAGE = `haicc <URI> <protocol>/<action> <argument>...   a command 
                                                 execute the command that
                                                 follows; its response record
                                                 printed, unpacked across lines
+                                                to the width (haicc output)
 haicc --raw <URI> <protocol>/<action> ...       the record as it is stored,
                                                 one line
 haicc --output <URI> <protocol>/<action> ...    the completed form's output
                                                 alone
-haicc <URI> <command> --flags <flag>...         flags for the request, space
-                                                separated, to the end of the
-                                                command or to a closing --:
+haicc <URI> --flags <flag>... [--] <command>    flags after a URI: that
+                                                step's, space separated; --
+                                                says where the next command
+                                                starts (optional); they hold
+                                                down the chain until changed:
                                                 log=info|verbose|debug, how
-                                                much its log holds (info
-                                                without it)
-haicc --flags <flag>... -- <URI> <command>      in front: for the whole chain
+                                                much the request's log holds
+                                                (info without it)
+haicc <URI> <command> <URI> --flags <flag>...   after the last command's URI:
+                                                that command's
+haicc output                                    the width a record is printed
+                                                to: auto, the terminal's (80
+                                                when the output is none)
+haicc output <width> | auto                     set, kept; back to auto
 haicc boot/deploy                               the machine level: the boot
                                                 mrepo put in place at the
                                                 root, its runtime started
@@ -33,13 +41,13 @@ haicc sources https | no-https                  https as the backup, or not
   haicc host boot/deploy node-1 base-package-runtime
   haicc host haicc node-1 help/get
   haicc host crud/read . --flags log=verbose
-  haicc --flags log=debug -- host haicc node-1 crud/read .
+  haicc host --flags log=debug -- haicc node-1 crud/read .
   haicc host boot/teardown node-1
   haicc . boot/teardown host
   haicc boot/teardown
 
 A URI is relative, without a leading slash: . is the local root, host the
 position host in it. A position named like a command of haicc itself is
-written with ./ in front: ./sources, ./boot.
+written with ./ in front: ./sources, ./boot, ./output.
 
 Help in an mrepo: haicc . help/get, haicc host help/get . packages`

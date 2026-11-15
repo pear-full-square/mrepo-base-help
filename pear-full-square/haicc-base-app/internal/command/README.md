@@ -18,8 +18,10 @@ One of:
 - `{ kind: 'request', uri, parts, print }`: a command for the mrepos.
   `parts` is what is sent; `print` is `raw` or `output` when `--raw` or
   `--output` came before the URI, else null. A request's flags are among
-  the parts, as typed: a list after the command (`--flags log=debug`, to
-  the end or to `--`), or one in front of the URI, closed by `--`.
+  the parts, as typed: a list after a URI (`--flags log=debug`), that
+  step's.
+- `{ kind: 'output', args }`: `haicc output`, the width a record is
+  printed to.
 - `{ kind: 'machine', protocol, action }`: `boot/deploy`, `boot/teardown`.
 - `{ kind: 'sources', args }`.
 - `{ kind: 'usage' }`: nothing, `help`, `--help` or `-h`.
@@ -31,8 +33,7 @@ A `Failure` with exit code 2:
 - One word that is no command of haicc's own.
 - A URI with no command after it.
 - `--raw` or `--output` with nothing after it.
-- `--flags` in front without its closing `--`, or with no command after
-  it.
+- `--flags` in front of the URI: flags follow a URI.
 - A machine level protocol alone, an action it does not have, or
   arguments after one.
 
@@ -51,15 +52,19 @@ typed, unnamed; the mrepo interprets them, so a URI that is not one, a
 leading slash among them, is refused there.
 
 A position named like one of haicc's own first words is written with
-`./` in front: `haicc ./sources help/get`, `haicc ./boot service/start`.
+`./` in front: `haicc ./sources help/get`, `haicc ./boot service/start`,
+`haicc ./output help/get`.
 
 Flags are not read here: which there are, and what one does, is the
-mrepo's (`mrepo-base-request`, `lib/flags.js`). The command line only
-finds the URI behind a list in front:
+mrepo's (`mrepo-base-request`, `lib/flags.js`). The command line sends
+them as typed; where they follow the URI at the root, the `haicc`
+command goes as it is, the flags being that step's:
 
 ```
-haicc host crud/read swarms --flags log=debug
-    sent as   haicc host crud/read swarms --flags log=debug
-haicc --flags log=debug -- host crud/read swarms
-    sent as   --flags log=debug -- haicc host crud/read swarms
+haicc host --flags log=debug -- crud/read swarms
+    sent as   haicc host --flags log=debug -- crud/read swarms
+haicc . --flags log=debug -- crud/read swarms
+    sent as   haicc . --flags log=debug -- crud/read swarms
+haicc . crud/read swarms --flags log=debug
+    sent as   crud/read swarms --flags log=debug
 ```

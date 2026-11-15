@@ -135,19 +135,25 @@ test('a command for the mrepos: its record in the root\'s inbox, value by value'
 
 test('its response: the record unpacked, as stored, or the output alone; the exit code from its completed form', async (t) => {
   const output = { deployed: 'host', mrepo: 'local/host', package: 'haiccing/base-component-haicc', runtime: { pid: 4242, started: '2026-11-14T00:00:00.000Z' } }
-  const packed = s => s.split('\n').map(l => l.replace(/^ */, '').replace(/([^\\])": /g, '$1":')).join('')
+  // (packed again: what the unpacking added taken off; the exact check, strings minded, is the module's)
+  const packed = s => JSON.stringify(JSON.parse(s))
   let a = answer({ output })
   let r = await haicc(['.', 'boot/deploy', 'host', 'base-component-haicc'])
   let { text } = await a
   t.alike([r.code, r.err], [0, ''], 'an output: exit 0')
-  t.ok(r.out.includes('\n    "topic": "/haicc/terminal",\n'), 'by default the record unpacked across lines: the core two deep')
-  t.ok(r.out.includes('\n      "command": ["boot/deploy","host","base-component-haicc"],\n'), 'the form three deep; what fits on a line left as stored')
+  t.ok(r.out.includes('\n    "topic": "/haicc/terminal", "key": "'), 'by default the record unpacked across lines: the core two deep, its entries packed on a line')
+  t.ok(r.out.includes('\n      "command": ["boot/deploy","host","base-component-haicc"],'), 'the form three deep; what fits on a line left as stored, an entry never split')
+  t.ok(r.out.trimEnd().split('\n').every(l => l.length <= 80), 'to 80 columns: the output is no terminal, no width set')
   t.is(packed(r.out), text.trim(), 'packed again: the record as stored, nothing of it changed')
 
   a = answer({ output })
-  r = await haicc(['.', 'help/get'], { env: { HAICC_WIDTH: '1000' } })
+  r = asked('output', await haicc(['output', '1000']))
+  t.alike([r.code, r.out], [0, '1000 (set: haicc output auto for the terminal\'s width)\n'], 'haicc output 1000: the width set, kept in haicc\'s own folder')
+  r = await haicc(['.', 'help/get'])
   ;({ text } = await a)
-  t.is(r.out, text, 'HAICC_WIDTH: a record that fits it left on one line')
+  t.is(r.out, text, 'a record that fits the width set: left on one line')
+  r = await haicc(['output', 'auto'])
+  t.alike([r.code, r.out], [0, 'auto: 80 (the output is no terminal)\n'], 'haicc output auto: back to the default')
 
   for (const [args, env] of [[['--raw', '.', 'help/get'], {}], [['.', 'help/get'], { HAICC_RAW: '1' }]]) {
     a = answer({ output })
@@ -191,7 +197,7 @@ test('boot/teardown: what boot/deploy put in place removed by name, the rest kep
 })
 
 test('every kind of command line was run here', (t) => {
-  t.alike([...ran].sort(), ['boot/deploy', 'boot/teardown', 'request', 'sources', 'usage'], 'the usage, the sources, a command for the mrepos, and each machine level action')
+  t.alike([...ran].sort(), ['boot/deploy', 'boot/teardown', 'output', 'request', 'sources', 'usage'], 'the usage, the sources, the output\'s width, a command for the mrepos, and each machine level action')
   rmSync(home, { recursive: true, force: true })
   t.absent(existsSync(home), 'the home folder made for the tests removed')
 })
