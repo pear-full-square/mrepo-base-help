@@ -652,21 +652,25 @@ flag." To be discussed first, then built.
   logged is decided from what we need to find a fault or read a
   measurement from a request's record alone: "Our input", below.
 - **The flag's form**: "Let's do a --flags followed by enumeration."
-  One option before the URI, `--flags`, then the flags a request
-  carries; a level's name is one of them. It is the place for every
-  request flag, not for logging alone. **Space separated** (the human,
-  on our reading with commas): `haicc --flags debug host crud/read
-  swarms/*`, `haicc --flags debug error-on-empty host crud/read
-  swarms/*`. **A flag can carry a value** (the human, asked where the list ends):
-  "They could have key=value with no space." Our reading, to confirm: a
-  flag is a word of the enumeration, alone (`error-on-empty`) or with
-  its value (`log=debug`), nothing else; the list goes on while the next
-  word is one (its key known), and the first word that is not is the
-  URI: `haicc --flags log=debug error-on-empty host crud/read
-  swarms/*`. A position named like a flag is written with `./`
-  (`./debug`), as one named like a `haicc` command is (task 1). In the
-  form the flags are then a map: `flags: { "log": "debug",
-  "error-on-empty": true }`.
+  One option, `--flags`, then the flags a request carries; it is the
+  place for every request flag, not for logging alone.
+  - **Space separated** (on our reading with commas).
+  - **A flag can carry a value**: "They could have key=value with no
+    space": `log=debug`; one without a value stands alone
+    (`error-on-empty`).
+  - **Where the list is, and where it ends**: "Flags are last of
+    command or ended by --." So the flags come at the end of the
+    command, everything after `--flags` a flag; or earlier, the list
+    closed with `--`:
+
+    ```
+    haicc host crud/read swarms/* --flags log=debug error-on-empty
+    haicc --flags log=debug error-on-empty -- host crud/read swarms/*
+    ```
+
+    (Our earlier reading, the list ended by the first word that is not
+    a known flag, is withdrawn: the end is explicit, so a word that is
+    no flag is an error said, not a URI.)
 
 **Our input** (as the main reader of these records; put to the human,
 not answered)
@@ -712,8 +716,13 @@ not answered)
 **Proposed** (ours, not answered: the list to discuss)
 
 - The logging flag: `log=<level>`, its values the four levels.
-- At the command line `--flags` goes where `--raw` and `--output` go,
-  before the URI.
+- In the form the flags are a map: `flags: { "log": "debug",
+  "error-on-empty": true }`.
+- A flag that is not known, or a value that is not one of its flag's:
+  refused, with the flags there are.
+- In a chain (`haicc host haicc node-1 crud/read swarms --flags
+  log=debug`) the flags are the whole command's: they go with what is
+  sent on, hop by hop.
 - A request without the flag: `info`, as now. Whether the mrepo's own
   threshold (`/runtime/log.json`) stays as that default or goes.
 - A command sent on (a `haicc` hop): the flag goes with it; the child's
