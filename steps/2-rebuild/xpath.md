@@ -261,6 +261,26 @@ yes, with what follows; put to the human)
   side by side.
 - **A filter's side branch that itself crosses a shortcut** is a query
   sent on for each node: after the first implementation.
+- **From one local root to the next** (the human: "and we jump from
+  one 'local root' to the next"). Our reading: a segment is evaluated
+  from a root of its own: the mrepo's at first; after a filter, each
+  node that is left; after a shortcut, the root of the mrepo linked
+  there. Each is a jump, as `haicc` makes them, and the jumps in order
+  are the prefix of what is found.
+- **A folder holds shortcuts or subfolders, not both** (the human: "We
+  can start with the constraint that a folder contain shortcuts of
+  subfolders, not both"). So what a step selects from one folder is
+  all links or all ordinary nodes: the set never goes two ways from
+  one place, as we had it above. A constraint to start with, not for
+  good.
+  - **It does not hold today**: the boot mrepo's root holds `host`, a
+    shortcut, beside `swarms`, made with `crud` (the `haicc` test does
+    just that). To settle: whether the making refuses it (`crud/create`
+    beside a shortcut, `boot/deploy` beside a node), or only a query
+    that meets a mixed folder says so and stops.
+- **Open, asked and not answered**: where the first implementation
+  lives: in `crud/read`'s URI first (ours), or in the request layer for
+  every command.
 
 **The storage a type is kept in** (the human, on the measurements of
 git, the Corestore and a Hyperdrive: "this is very useful information
