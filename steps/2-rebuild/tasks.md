@@ -652,11 +652,16 @@ flag." To be discussed first, then built.
   logged is decided from what we need to find a fault or read a
   measurement from a request's record alone: "Our input", below.
 - **The flag's form**: "Let's do a --flags followed by enumeration."
-  Our reading, to confirm: one option before the URI, `--flags`, then
-  the flags a request carries, listed; a level's name is one of them:
-  `haicc --flags debug host crud/read swarms/*`,
-  `haicc --flags debug,error-on-empty ...`. It is the place for every
-  request flag, not for logging alone.
+  One option before the URI, `--flags`, then the flags a request
+  carries; a level's name is one of them. It is the place for every
+  request flag, not for logging alone. **Space separated** (the human,
+  on our reading with commas): `haicc --flags debug host crud/read
+  swarms/*`, `haicc --flags debug error-on-empty host crud/read
+  swarms/*`. Our reading of where the list ends, to confirm: the flags
+  are an enumeration, a fixed set of words, so the list goes on while
+  the next word is one of them, and the first word that is not is the
+  URI. A position named like a flag is written with `./` (`./debug`),
+  as one named like a `haicc` command is (task 1).
 
 **Our input** (as the main reader of these records; put to the human,
 not answered)
