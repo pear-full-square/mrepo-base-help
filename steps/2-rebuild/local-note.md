@@ -55,6 +55,9 @@ human in conversation (their words quoted); the code not changed here.
    order: `HAICC_WIDTH` for one command, then the width set with `haicc
    output`, then the terminal's, then 80. `output` becomes one of the
    script's own words: a position named so is reached as `./output`.
+   The human, on the order: the width set with the command wins, 80 only
+   when nothing is set; reading the terminal's width "is fine". So the
+   order above is confirmed.
 
 The human also asked whether `haicc` is now a Node app: answered no, an
 app run with Bare from its bundle (`base-app-haicc`), the sh scripts of
