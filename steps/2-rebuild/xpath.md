@@ -158,13 +158,17 @@ document.
   where the one becomes the other. Across a link a hop is a request in
   both modes.
 
+- **The mode is a config option** (the human, asked who chooses: the
+  one who asks, or the pipeline from an estimate): "That is a config
+  option." So neither an option on the query nor an estimate: it is set
+  in the config, a local matter, as the flag `error-on-empty` is
+  (`tasks.md`, "Future additions": how a package is made, what type of
+  mrepo it is for; the configs well documented).
+
 **To settle**
 
-- Who chooses the mode, and when: the one who asks (an option on the
-  query); the plan, from an estimate before it runs (how much a step
-  selects); or a query started in one request and carried on as several
-  once it has run too long.
-
+- Where the option is written: a protocol's config in its package
+  (`protocol.js`), an action's, or the mrepo's own; and its default.
 
 **Proposed** (ours, not yet put to the human; written before the lines
 above: every step below is to work in both modes). Each as a feature is
