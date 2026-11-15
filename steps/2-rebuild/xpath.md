@@ -267,17 +267,21 @@ yes, with what follows; put to the human)
   node that is left; after a shortcut, the root of the mrepo linked
   there. Each is a jump, as `haicc` makes them, and the jumps in order
   are the prefix of what is found.
-- **A folder holds shortcuts or subfolders, not both** (the human: "We
-  can start with the constraint that a folder contain shortcuts of
-  subfolders, not both"). So what a step selects from one folder is
-  all links or all ordinary nodes: the set never goes two ways from
-  one place, as we had it above. A constraint to start with, not for
-  good.
-  - **It does not hold today**: the boot mrepo's root holds `host`, a
-    shortcut, beside `swarms`, made with `crud` (the `haicc` test does
-    just that). To settle: whether the making refuses it (`crud/create`
-    beside a shortcut, `boot/deploy` beside a node), or only a query
-    that meets a mixed folder says so and stops.
+- **A folder holds shortcuts or subfolders, not both**: the human's
+  first thought ("We can start with the constraint..."), then dropped,
+  on our note that it does not hold today (the boot mrepo's root holds
+  `host`, a shortcut, beside `swarms`) and that the mixed folder is one
+  case of the union: "Drop the constraint, we take it as a usage
+  restriction of xpath. Then when we put union in it gets resolved
+  (initial known issue)". So nothing is refused at the making; the
+  structure stays free.
+- **The usage restriction of the first implementation** (settled: the
+  human's "good, so that is for next step implementation" on our limit,
+  and the line above): a query goes on from one shortcut at a time, as
+  `haicc` does. Where its set holds several shortcuts, or shortcuts
+  beside ordinary nodes, and the query goes on from there, it says so
+  and stops: a known issue from the start. The fan-out and the union
+  are the next step, and resolve it.
 - **A mixed folder asks for a union** (the human: "doesn't the mixed
   shortcut and subfolder require a union in xpath?"; ours: yes). The
   set goes on two ways, and what comes back is two node sets made one:
@@ -294,10 +298,10 @@ yes, with what follows; put to the human)
     one);
   - **a mixed folder**: both of the above at once: what the constraint
     removes.
-  So for the very first implementation, ours to propose: a hop from a
-  single shortcut only, as `haicc` makes it today; a set of several
-  shortcuts that the query goes on from says "not yet" and stops. The
-  fan-out and its union are the step after.
+  So for the very first implementation: a hop from a single shortcut
+  only, as `haicc` makes it today; a set of several shortcuts that the
+  query goes on from says "not yet" and stops. The fan-out and its
+  union are the step after. (Agreed: above, "The usage restriction".)
 - **Open, asked and not answered**: where the first implementation
   lives: in `crud/read`'s URI first (ours), or in the request layer for
   every command.
