@@ -6,7 +6,8 @@ A URI names one node, or selects: it is a query (`mycelium-xpath` says
 what of XPath is built). A `*` selects every child; a filter keeps the
 nodes whose document it holds for: `swarms/*[state='started']`,
 `swarms/*[size>2 and owner/name='ann']/nodes/*`. A leaf in a filter is a
-key of the node's document. Nothing there selects nothing: an empty
+key of the node's document, in its URI form: `publicKey` is written
+`public-key`. Nothing there selects nothing: an empty
 array, not an error.
 
 ## Signature

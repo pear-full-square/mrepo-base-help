@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-crud
 
-The package passed its `full` set: all 11 units, 84 of 84 tests and 551 of 551 asserts.
+The package passed its `full` set: all 11 units, 85 of 85 tests and 560 of 560 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 11 units, 84 of 84 tests and 551 of 551 a
 | Set | `full` |
 | Result | passed |
 | Units | 11 of 11 passed |
-| Tests | 84 of 84 passed |
-| Asserts | 551 of 551 passed |
-| Run | 2026-11-15 12:30 UTC |
+| Tests | 85 of 85 passed |
+| Asserts | 560 of 560 passed |
+| Run | 2026-11-15 13:14 UTC |
 | Bare | v1.36.0 |
-| Content | `88d85aff93287bd00d4f55554e1b2a3cb0f63ba2c1db40de3268bba2994a41c8` |
+| Content | `0b20608e7f5c5a1f10879a1eff04df9804eab15c8bc23ab90732e01cb601d50d` |
 
 ## Units
 
@@ -25,9 +25,9 @@ The package passed its `full` set: all 11 units, 84 of 84 tests and 551 of 551 a
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 75 of 75 |
 | `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
-| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 44 of 44 |
+| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 47 of 47 |
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 190 of 190 |
-| `/test/modules/pear-full-square/mycelium-xpath` | passed | 19 of 19 | 115 of 115 |
+| `/test/modules/pear-full-square/mycelium-xpath` | passed | 20 of 20 | 121 of 121 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 17 of 17 | 46 of 46 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

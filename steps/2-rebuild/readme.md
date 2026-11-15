@@ -3292,3 +3292,39 @@ checks: filters, a value inside a document, a command at a position and
 at each position selected, a URI through one and two shortcuts, the
 `not yet`), twice. `base-component-boot`'s `validate` three times, its
 `boot` test passing each. Nothing left running.
+
+## 69. A document's key in a query: its URI form (2026-11-15)
+
+Found open in part 68: a key in camelCase could not be written as a
+step of a URI. The human: "We already set rules for translation. I
+think camelCase becomes camel-case as we have that issue in JS object
+names." The rule is `rules.md`'s, "Data names": in a URI a data name
+takes its URI form, each capital as `-` and the letter in lowercase,
+exact both ways (`mycelium-uri`: `uriFormOf`, `dataNameOf`).
+
+- **The engine** (`mycelium-xpath`): the tree handed in may say the
+  name a document's key has in a query and in a path, `name(key)`; the
+  key itself by default. A step, a leaf in a filter, `*`, `name()` and
+  the path of a value found all go by it.
+- **The mrepo's query** (`mrepo-base-xpath`) hands in `uriFormOf`:
+  `publicKey` is `public-key`, as a step
+  (`swarms/swarm-1/owner/public-key`), in a filter
+  (`swarms/*[owner/public-key='k1']`) and in the position of a value
+  found. One way of writing: the key as stored (`publicKey`) names
+  nothing, in a filter too.
+
+**To confirm**: in a filter the key as stored selects nothing, without
+an error (a filter's content is not checked as a step is). If that
+turns out a trap, a capital in a filter's path can be refused.
+
+**Validated**: the modules' tests (`mycelium-xpath` 20 tests, 121
+asserts; `mrepo-base-xpath` 5, 47; `mrepo-base-crud` 8, 75;
+`mrepo-base-haicc` 5, 38). The pre-release of the eight packages that
+carry them, each passing: `package-docs-mrepo` 8 units, 47 tests,
+269 asserts; `base-package-haicc` 11, 84, 510; `base-package-crud` 11,
+85, 560; `base-package-service` 14, 241, 1398; `base-package-runtime`
+22, 305, 1910; `base-package-boot` 23, 316, 2018;
+`base-component-boot` 23, 311, 2086; `base-app-haicc` 23, 327, 2114. `tools/bare tools/release.js
+--strict`: twelve packages, every report current. `tools/bare
+tools/code-check.js` and the READMEs: no problems. The `haicc` test,
+164 of 164. Nothing left running.

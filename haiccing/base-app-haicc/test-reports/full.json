@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-app-haicc",
-  "content": "d84cd4791c976f207c52018787b1a1798bbc65cc632afde159c3dc26e1855776",
+  "content": "04caad38685c3723a1694a90cf6a7aba4471deff5be04684a97a66d63fbda3f6",
   "bare": "v1.36.0",
-  "date": "2026-11-15T12:43:28.754Z",
+  "date": "2026-11-15T13:26:53.429Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -183,8 +183,8 @@
         "total": 5
       },
       "asserts": {
-        "passed": 44,
-        "total": 44
+        "passed": 47,
+        "total": 47
       },
       "failures": []
     },
@@ -244,12 +244,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-xpath",
       "ok": true,
       "tests": {
-        "passed": 19,
-        "total": 19
+        "passed": 20,
+        "total": 20
       },
       "asserts": {
-        "passed": 115,
-        "total": 115
+        "passed": 121,
+        "total": 121
       },
       "failures": []
     },

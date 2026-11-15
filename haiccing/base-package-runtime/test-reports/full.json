@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-package-runtime",
-  "content": "c463834a775fb96425bb180a2ea01d91abbf785a3cfe575a9a957bb7b1bfcfcd",
+  "content": "7f64ab4ba949410a93c36b37e706eff3f269b4c54d02f8b4d28e0dbaf93796df",
   "bare": "v1.36.0",
-  "date": "2026-11-15T12:32:53.001Z",
+  "date": "2026-11-15T13:17:11.021Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -170,8 +170,8 @@
         "total": 5
       },
       "asserts": {
-        "passed": 44,
-        "total": 44
+        "passed": 47,
+        "total": 47
       },
       "failures": []
     },
@@ -231,12 +231,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-xpath",
       "ok": true,
       "tests": {
-        "passed": 19,
-        "total": 19
+        "passed": 20,
+        "total": 20
       },
       "asserts": {
-        "passed": 115,
-        "total": 115
+        "passed": 121,
+        "total": 121
       },
       "failures": []
     },

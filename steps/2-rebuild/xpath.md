@@ -634,7 +634,8 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
   shortcut. What was decided while building, to confirm, what was found
   open, and what a query costs (about 1 ms a node read; a plain URI 12
   to 17 ms; a filter over 1,000 nodes just under a second) are listed
-  there.
+  there. A document's key is written in its URI form (part 69; the
+  human: "camelCase becomes camel-case"): `[owner/public-key='k1']`.
 - **Standard only**: our one form outside it, `*` in a quoted value as
   a wildcard (`[name='s*']`), is not built: `starts-with` and `contains`
   say it. The human's first example in standard form:
