@@ -1,12 +1,12 @@
 # mrepo-base-execute
 
 The mrepo execute protocol: it runs the request in `request/execute` and
-merges its changes back.
+squashes its changes into their targets.
 
 An action runs on the request's own execution branches,
 `execute/<key>/<target>`, inside an execution context: it reads the targets
 overlaid and writes only those branches. It may commit locally as it goes. When it ends, each
-branch is merged back into its target; a failure resets instead. The runtime,
+branch is squashed into its target, one commit there; a failure resets instead. The runtime,
 `mrepo-base-runtime`, runs it, with the actions the mrepo's packages offer.
 
 | | |
@@ -19,8 +19,11 @@ branch is merged back into its target; a failure resets instead. The runtime,
 - **Request branches**: a request is processed on its own,
   `execute/<key>/<target>`. Its branch of `request/execute` holds its
   principal, begun there by the request protocol, and only ever adds; the
-  others are made as the request first writes a target. Merged back and
-  removed at its end, discarded on a failure. No history kept in them.
+  others are made as the request first writes a target. At its end each
+  is squashed into its target (one commit there, the request's: what it
+  did on its branch, commit by commit, stays out of the target's
+  history) and removed; discarded on a failure. Its branch of
+  `request/execute`, the request's record, is merged, a plain merge.
 - **A command sent on** (`exec.forward(to, command)`, `lib/remote.js`): an
   action that finds its position a shortcut sends the command that follows
   to the mrepo linked there, unchanged, into its inbox folder. Nothing of
@@ -43,7 +46,7 @@ branches made from their targets (`execute/main`, `execute/runtime`,
 `execute/request/execute`), its action run inside the execution context
 (read-only to it: the targets read overlaid, the execution branches written,
 the runtime's context read through `exec.runtime`), its record completed,
-each branch merged back into its own target. `executed(ctx, name, record)`
+each branch squashed into its own target. `executed(ctx, name, record)`
 hands over a form completed elsewhere the same way (the boot's own request).
 Run by the repository's runtime
 (`mrepo-base-runtime`). It has no actions of its own: they are the
@@ -68,4 +71,4 @@ dropped), `rollback()` (the last local commit undone), `log(level, event, data)`
 execution
 ditched, back to the start), the action going on; global, the runtime's,
 not the action's: when the action ends, its writes committed and the
-execution branches merged back, once; a failure resets.
+execution branches squashed into their targets, once; a failure resets.

@@ -8,8 +8,8 @@ kept here for what they left. Task 0, a Bare app for `haicc`, is built:
 its record is then a part in `readme.md`.
 
 A design in discussion, a file of its own: `xpath.md` (XPath across
-links: a query as a pipeline of `haicc` segments and merges). The next
-to build: task 4, the request train's two repairs.
+links: a query as a pipeline of `haicc` segments and merges). Task 4,
+the request train's two repairs, is built: part 65.
 
 How to read a task:
 
@@ -614,84 +614,21 @@ the `xpath` layer removed. Left from it, each to come with what needs it:
 
 ## 4. The request train: two repairs
 
-From the measurements of 2026-11-14 (`xpath.md`, "Commits: how often,
-and what git handles"): the commits themselves are not the limit; a
-request's cycle on the one thread slows as requests are done (44 ms for
-the first fifty, 180 ms for requests 151 to 200), from two causes,
-neither the writing. The human: "Yes, put them on the task list. Sounds
-like a good starting position".
+Built (`readme.md`, part 65): a removed branch takes its empty folders
+with it; an execution's branches are squashed into their targets; the
+ancestry check reads what two histories have apart. A request's cycle on
+one thread stays near 20 ms however many are done (it was 42 ms rising
+to 212 ms within 200). Left from it, each to come with what needs it:
 
-**Settled** (the human)
-
-- **The merge into `main` squashes**: "We squash the commits when
-  merging into main so less history growth there, and much lower
-  frequency." Today it is a plain merge.
-- **Request branches are cleaned up**: "Request branches should be
-  cleaned up under normal circumstance." Today the branch goes; its
-  empty folders under `refs/` and its objects stay.
-- **Two requests that wrote the same path**: "the later one is run
-  again on the new state - initial implementation."
-
-**To build**
-
-1. **A removed branch takes its empty folders with it**: the listing of
-   branches walks every folder under `refs/`, six times a request
-   (after 200 requests: one branch, 203 folders; a call 3 ms at first,
-   18 ms then). It counts for every layer of the repository.
-2. **The squash into `main`**: one commit on `main` with the merged
-   tree and one parent; the request's branch then removed. With it the
-   ancestry check that walks the whole of `main`'s history (twice a
-   request: 5 ms a call at first, 42 ms after 150) has nothing to look
-   for: a squashed request is never in `main`'s history.
-3. **Measured again after each**: `tools/bare tools/commit-bench.js
-   --only cycle`; the figures into the part's record. The `cycle`
-   measurement follows the change (a squash where it merges).
-
-**Proposed** (ours, to confirm before building)
-
-- Repair 1 in `mycelium-git`'s adapter (`lib/isogit.js`,
-  `deleteBranch`: after the ref, each folder above it that is left
-  empty, up to `refs/heads`), not in `p2p-git`, which is not here. The
-  native adapter is checked for the same.
-- The squash a writer's operation of its own in `mycelium-git`
-  (`squash(from, into, message)`), `merge` left as it is; conflicts
-  throw as they do, and the request layer runs the later request again.
-- **The squash does not remove the branch that feeds in** (the human
-  asked, 2026-11-15; our first proposal, the squash removing it in the
-  one operation, withdrawn): as in git, a squash writes one commit on
-  the target and leaves the other branch as it was. The branch is
-  removed by the step that removes it today, `close` in
-  `mrepo-base-execute`, which goes to the backend and does not ask that
-  the branch was merged (it removes a failure's branch too). So a
-  branch can still be kept where that is wanted (a failure, to look at
-  it). The writer's own `deleteBranch`, which asks that the head is in
-  the target's history, is not used on this path and stays as it is.
-- Where the squash applies: an execution branch merged into its target
-  (`main` first; the other atomic layers the same). The request's own
-  record (`execute/<key>/request/execute` into `request/execute`, on to
-  `request/done`) stays as it is.
-- What `main`'s commit says: the request it answers, as today's merge
-  message does.
-- The READMEs that say "plain merge" follow (`mycelium-git`,
-  `mrepo-base-execute`, `package-docs-mrepo`). This repository's own
-  rule (`rules.md`: plain merges, no squash) is about this repository
-  and stays.
-
-**Not in it** (`xpath.md`, to settle): the objects a removed branch
-leaves (a collection for the filesystem layers); requests executed on
-threads.
-
-**Where**
-
-- `pear-full-square/mycelium-git/lib/write.js`: `merge`, `deleteBranch`,
-  `createExecution` (`free`, `branches`: the listing);
-  `lib/isogit.js`: `listBranches`, `isAncestor` (`depth: -1`),
-  `deleteBranch`, `mergeTrees`; `lib/native.js`, `lib/mixed.js`.
-- `pear-full-square/mrepo-base-execute/index.js`: where an execution's
-  branches are merged back and removed (`w.merge(...)`, `close`).
-- The packages that carry these modules: their pre-release; the boot's
-  test and the `haicc` test several times (the request layers change).
-- `tools/commit-bench.js`, its `cycle` measurement.
+- **The later request run again** (the human: "initial implementation"):
+  a squash onto a target that moved merges, and a conflict throws, as a
+  merge did. With one request at a time it does not occur; the rerun
+  comes with requests executed in parallel (`xpath.md`, "Parallel
+  execution: threads").
+- **The objects a removed branch leaves**: a collection for the
+  filesystem layers (`xpath.md`, "Commits", space).
+- **`p2p-git`'s own two defects on refs** (the handover, "Elsewhere"),
+  untouched: the adapter works around both.
 
 ## Future additions
 

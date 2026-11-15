@@ -4,7 +4,7 @@ The tests of mrepo-base-execute, a section per file, each test by its name.
 
 ## `execute.test.js`
 
-- execute: execution branches from their targets, the record completed, merged back into each target
+- execute: execution branches from their targets, the record completed, squashed into each target
 - the execution context: read-only to the action, the runtime's context read through it
 - local commit and rollback in an action; the global commit at its end, a failure rolling back globally
 - exec.log: entries into the request's record, at or above the threshold

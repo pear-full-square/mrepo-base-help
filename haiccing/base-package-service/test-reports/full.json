@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-package-service",
-  "content": "6d55d7d5b4857fab7b70f44bd0c6a39b261a1e9a0fb4f1001724afc493e4809d",
+  "content": "e4c7ef3fa64c4e57a5fdbb432e48cc17e1c1d471d9916b89e6d7c389ab364835",
   "bare": "v1.36.0",
-  "date": "2026-11-14T09:45:05.622Z",
+  "date": "2026-11-15T01:22:51.791Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -127,12 +127,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-git",
       "ok": true,
       "tests": {
-        "passed": 114,
-        "total": 114
+        "passed": 134,
+        "total": 134
       },
       "asserts": {
-        "passed": 432,
-        "total": 432
+        "passed": 712,
+        "total": 712
       },
       "failures": []
     },

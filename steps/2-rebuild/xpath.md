@@ -306,7 +306,8 @@ this."
 - **The same measured on the human's laptop** (twelve cores), by the
   local agent: in `prompt-local.md`.
 
-**Against what is built** (found, 2026-11-14)
+**Against what is built** (found, 2026-11-14; both repaired since:
+`readme.md`, part 65, and "After the repairs" below)
 
 - **The merge into `main` is a plain merge today**, not a squash
   (`mrepo-base-execute`: `w.merge(...)`; `mycelium-git`'s `merge` makes
@@ -380,20 +381,35 @@ measurement; about six and a half minutes here).
   in the Corestore (the `p2p` storage's mixed backend: the objects
   carried over); writes forced to disk.
 
+**After the repairs** (part 65, 2026-11-15; the same measurement, the
+cycle now as the execution does it: squashed, the branch removed)
+
+| requests | before | a removed branch takes its folders | and the squash, the ancestry check bounded |
+|---|---|---|---|
+| 1 to 50 | 42 ms | 28 | 17 |
+| 51 to 100 | 90 | 46 | 15 |
+| 101 to 150 | 152 | 61 | 20 |
+| 151 to 200 | 212 | 80 | 21 |
+
+Over 3000 requests it stays there: 18 to 21 ms a request, about fifty a
+second on the one thread, at this level (the repository alone: the
+request's own record, its envelope and the runtime's pass come on top).
+The branches listed: 1 ms a call throughout. The ancestry check: under
+1 ms a call. Found on the way: the squash alone does not take the
+ancestry check away, the request's own record is still merged, and
+every merge asks it; so the check itself was made to read only what the
+two histories have apart.
+
 **Ours** (not answered)
 
 - **Git is not the limit for the commits themselves**: about 110 to 140
   a second a writer, more with the cores, steady over a long history.
   Multithreading helps the executions; it does not help the train,
   which is one thread by design.
-- **The limit is the train's bookkeeping**: two repairs first, then
-  measure again, before a frequency is chosen:
-  1. a removed branch takes its empty folders with it;
-  2. the ancestry check bounded, or gone with the squash (a squashed
-     request is never in `main`'s history).
-  After them a request's cycle should stay near its first figure (44 ms
-  with the plain merge, about 20 requests a second on the one thread);
-  an expectation, not measured.
+- **The limit was the train's bookkeeping**: repaired (above). What a
+  request costs at this level is now steady, so a frequency can be
+  chosen from it: about 20 ms a request's cycle with one commit, 6 to
+  7 ms each commit more.
 - **Keep folders narrow**: under about a thousand children a folder; a
   wider set split over subfolders. A commit a step, not a commit a node.
 - **Space**: about 20 KB a commit on the filesystem and nothing
@@ -403,13 +419,12 @@ measurement; about six and a half minutes here).
 
 **To settle**
 
-- The squash's rule in `mycelium-git` (a commit on `main` with the
-  merged tree and one parent; the request's branch then removed though
-  its head is not in `main`'s history) and what `main`'s commit says of
-  the request (its record is in `request/done`).
-- Where the two repairs go: `mycelium-git`'s adapter, or `p2p-git`
-  (which has two open defects on refs already: the handover,
-  "Elsewhere").
+- The objects a removed branch leaves: a collection for the filesystem
+  layers.
+- What the request layers cost on top (the record's own branch, its
+  merges, the envelope, the runtime's pass): the cycle measured through
+  a running mrepo, a request a time.
+
 ## To settle
 
 - **The syntax**: XPath's own or ours. A URI is typed in a shell: `*`,

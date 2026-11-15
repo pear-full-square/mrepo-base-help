@@ -2899,3 +2899,98 @@ The two repositories of part 60, `haiccing/base-app-haicc` and
 `pear-full-square/haicc-base-app`, were created by the human (2026-11-14)
 and pushed: every package and module here now has its own repository,
 up to date.
+
+## 65. The request train's two repairs: a removed branch takes its folders; the squash into main (2026-11-15)
+
+Task 4 of `tasks.md`, on the human's go. From the measurements of the
+day before (`xpath.md`, "Commits: how often, and what git handles"):
+the commits themselves are not the limit; a request's cycle on the one
+thread (its branch made from `main`, a commit, merged into `main`, the
+branch removed) slowed as requests were done, 42 ms for the first fifty
+and 212 ms for requests 151 to 200, from two causes, neither the
+writing.
+
+- **A removed branch takes the folders it leaves empty**
+  (`mycelium-git`, the isomorphic-git-style adapter, `deleteBranch`).
+  The engines (p2p-git, isomorphic-git) remove a ref's file and leave
+  its folders under `refs/heads`, and their listing of the branches
+  walks every folder: after 200 requests, one branch and 203 folders,
+  the listing 18 ms a call, six calls a request. Now each folder the
+  ref leaves empty goes with it, up to its first segment's folder
+  (`execute`, a layer's), which stays: it is shared by all. Only an
+  empty folder is removed, so one another branch is in stays.
+  `updateBranch` writes once more when its folder went from under it.
+  Native git does this itself: the same test passes on every engine.
+- **An execution's branches are squashed into their targets**
+  (`mycelium-git`'s writer, `squash(from, into, message)`;
+  `mrepo-base-execute`, where a request's execution branches reach
+  `main`, `runtime`, `help`, `protocols`): one commit on the target,
+  the request's, its only parent the target's head; what the request
+  did on its branch, commit by commit, stays out of the target's
+  history (the human: "We squash the commits when merging into main so
+  less history growth there"). Where the target has not moved the
+  commit takes the branch's tree; else the two are merged and a
+  conflict throws; a branch that changed nothing in the end makes no
+  commit. With `main` in the Corestore only that one commit and what
+  it holds is carried over. The commit says the request, as the merge's
+  message did, without "Merge".
+- **The squash leaves the branch that feeds in** (the human asked; our
+  first proposal, the squash removing it, withdrawn): as git's. It is
+  removed by the step that removed it before, `close` in
+  `mrepo-base-execute`, which goes to the backend and does not ask that
+  it was merged. `merge` and the writer's `deleteBranch` are as they
+  were.
+- **The request's own record is still merged**, a plain merge
+  (`execute/<key>/request/execute` into `request/execute`): it keeps
+  its steps.
+- **The ancestry check reads what two histories have apart** (ours,
+  found while building; not in the task as written). The task said the
+  squash leaves the check nothing to look for. It does on `main`; but
+  the record's merge stays, and every merge asks whether the target
+  already holds the branch: the engines answer by walking the target's
+  whole history (5 ms a call at first, 42 ms after 150 requests). Tried
+  first: reading it from the merge base. It broke a test (a branch
+  merged, then merged again): the engines' merge base is the first
+  commit both histories reach, not the best one, so it cannot decide.
+  Built instead, in the adapter, as git does it: both histories walked
+  together, the newest commit first, each commit marked with which of
+  the two reaches it; a commit both reach is stale, and all below it.
+  The walk ends when one reaches the other, or only stale commits are
+  left. The dates only order the walk: a test runs it with commits a
+  second apart and with all in one second, the same answers.
+
+**Measured** (`tools/bare tools/commit-bench.js --only cycle`, which
+follows the change: the cycle as the execution does it), ms a request:
+
+| requests | before | a removed branch takes its folders | and the squash, the ancestry check bounded |
+|---|---|---|---|
+| 1 to 50 | 42 | 28 | 17 |
+| 51 to 100 | 90 | 46 | 15 |
+| 101 to 150 | 152 | 61 | 20 |
+| 151 to 200 | 212 | 80 | 21 |
+
+Over 3000 requests: 18 to 21 ms throughout. The branches listed 1 ms a
+call, the ancestry check under 1 ms. This is the repository alone: the
+request's record, its envelope and the runtime's pass come on top, and
+are not measured yet.
+
+**Not in it**: the later of two requests run again on a conflict (the
+human: "initial implementation"): with one request at a time a conflict
+does not occur; it comes with requests executed in parallel. The objects
+a removed branch leaves. `p2p-git`'s own two defects on refs.
+
+**Validated**: every module's tests (21 modules; `mycelium-git` 134
+tests, 712 asserts: the squash, the folders and the ancestry check on
+every engine, among them a Hyperdrive; `mrepo-base-execute` 7, 48: one
+commit in `main` a request, its only parent `main` as it was). The
+rebuild said which packages were stale, seven; their pre-release, each
+passing: `package-docs-mrepo` 8 units, 42 tests, 225 asserts;
+`base-package-crud` 10, 56, 345; `base-package-service` 14, 208, 1144;
+`base-package-runtime` 22, 263, 1549; `base-package-boot` 23, 274,
+1655; `base-component-boot` 23, 269, 1722; `base-app-haicc` 23, 285,
+1745. `tools/bare tools/release.js --strict`: twelve packages, every
+report current. `tools/bare tools/code-check.js`: 20 modules, 13
+packages, no problems. The READMEs: 241 in the sources, 490 in the help
+tree, no problems. The `haicc` test four times in a row, 136 of 136
+each. `base-component-boot`'s `validate` three times, its `boot` test
+120 of 120 each. Nothing left running.

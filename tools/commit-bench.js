@@ -13,9 +13,10 @@
 //   history    one writer, one branch, 12000 commits: the rate as it grows
 //   corestore  one writer, main in a Corestore (a Hyperdrive under p2p-git)
 //   native     one writer, native git (a git process an operation)
-//   cycle      a request's cycle on one thread, 200 times: its branch made
-//              from main, a commit, a plain merge into main, the branch
-//              removed; with the two calls that grow
+//   cycle      a request's cycle on one thread, 200 times, as the
+//              execution does it: its branch made from main, a commit,
+//              squashed into main, the branch removed; with the two calls
+//              that grew before the repairs of part 65
 //
 // Everything is on the filesystem with the p2p-git engine unless its name
 // says otherwise. A commit puts one small document at
@@ -186,8 +187,8 @@ const measures = {
     remove(repo)
   },
 
-  // What the one thread does for a request, and what of it grows: the
-  // backend's calls timed, the two that grow reported.
+  // What the one thread does for a request, and whether any of it grows:
+  // the backend's calls timed, the two that grew reported.
   async cycle () {
     const calls = {}
     const timedBackend = gitdir => {
@@ -199,8 +200,9 @@ const measures = {
       }
       return timed
     }
-    const { repo, gitdir, w } = await seeded(100, timedBackend)
-    const step = { branch: 0, commit: 0, merge: 0, remove: 0 }
+    const { repo, gitdir, backend, w } = await seeded(100, timedBackend)
+    const heads = async () => Object.fromEntries(await backend.listBranches())
+    const step = { branch: 0, commit: 0, squash: 0, remove: 0 }
     const timed = async (name, f) => { const t0 = Date.now(); await f(); step[name] += Date.now() - t0 }
     const each = n => Number((n / 50).toFixed(1))
     const aCall = k => calls[k] ? { msACall: Number((calls[k].ms / calls[k].n).toFixed(1)), callsARequest: Number((calls[k].n / 50).toFixed(1)) } : null
@@ -209,11 +211,11 @@ const measures = {
       const branch = `execute/q${n}/main`
       await timed('branch', () => w.createExecution('main', `q${n}`))
       await timed('commit', async () => { const change = await w.change(branch); await change.put(`swarms/n${n % 100}/.node.json`, doc(n)); await change.commit('commit', { author }) })
-      await timed('merge', () => w.merge(branch, 'main', 'merge', { author }))
-      await timed('remove', () => w.deleteBranch(branch, 'main'))
+      await timed('squash', () => w.squash(branch, 'main', 'squash', { author }))
+      await timed('remove', async () => backend.deleteBranch(branch, (await heads())[branch]))
       if (n % 50 === 0) {
-        const together = step.branch + step.commit + step.merge + step.remove
-        say({ measure: 'cycle', requests: `${n - 49} to ${n}`, msEach: { branchMade: each(step.branch), aCommit: each(step.commit), mergeIntoMain: each(step.merge), branchRemoved: each(step.remove), together: each(together) }, listBranches: aCall('listBranches'), isAncestor: aCall('isAncestor') })
+        const together = step.branch + step.commit + step.squash + step.remove
+        say({ measure: 'cycle', requests: `${n - 49} to ${n}`, msEach: { branchMade: each(step.branch), aCommit: each(step.commit), squashIntoMain: each(step.squash), branchRemoved: each(step.remove), together: each(together) }, listBranches: aCall('listBranches'), isAncestor: aCall('isAncestor') })
         for (const k in step) step[k] = 0
         for (const k in calls) delete calls[k]
       }

@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-package-boot",
-  "content": "9f8b004edb3de895b8920157a51ba64484d262b1768b8d5acf536a12e062b7a0",
+  "content": "8308aa2b0ec0fd21fd1fbd3ebd0f31c031ad410226fc8e7b5aa9bf1957573ce1",
   "bare": "v1.36.0",
-  "date": "2026-11-14T11:40:27.423Z",
+  "date": "2026-11-15T01:26:53.834Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -105,8 +105,8 @@
         "total": 7
       },
       "asserts": {
-        "passed": 46,
-        "total": 46
+        "passed": 48,
+        "total": 48
       },
       "failures": []
     },
@@ -205,12 +205,12 @@
       "unit": "/test/modules/pear-full-square/mycelium-git",
       "ok": true,
       "tests": {
-        "passed": 114,
-        "total": 114
+        "passed": 134,
+        "total": 134
       },
       "asserts": {
-        "passed": 432,
-        "total": 432
+        "passed": 712,
+        "total": 712
       },
       "failures": []
     },
@@ -257,12 +257,12 @@
       "unit": "/test/modules/pear-full-square/p2p-mrepo",
       "ok": true,
       "tests": {
-        "passed": 28,
-        "total": 28
+        "passed": 32,
+        "total": 32
       },
       "asserts": {
-        "passed": 102,
-        "total": 102
+        "passed": 158,
+        "total": 158
       },
       "failures": []
     },

@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-14, part 64). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-15, part 65). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -8,7 +8,8 @@ latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
 pin, every package brought to the template one by one; 60 the `haicc`
 command as a Bare app; 61 relative URIs, piece A; 62 a URI inside an
 array of segments; 63 the crud protocol, the shortcuts in main; 64 the rest actions
-removed, a race fixed).
+removed, a race fixed; 65 the request train's two repairs: the squash
+into main).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -41,7 +42,7 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
 
 ## Right now
 
-**The state** (2026-11-14, everything in `main`, every repository pushed)
+**The state** (2026-11-15, everything in `main`, every repository pushed)
 
 - The `haicc` command installs, boots, deploys a host from
   `base-component-haicc`, starts its service, deploys a node inside it
@@ -76,12 +77,17 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
 
 - The `rest` actions are removed; a race of `haicc boot/deploy` run again
   while the boot mrepo's runtime runs is fixed (part 64).
+- **An execution's branches are squashed into their targets** (part
+  65): one commit in `main` a request; a removed branch takes its empty
+  folders; the ancestry check reads what two histories have apart. A
+  request's cycle at the repository's level stays near 20 ms however
+  many are done (`tools/bare tools/commit-bench.js --only cycle`).
 - **Every package and module has its own repository, up to date**
   (2026-11-14): `haiccing/base-app-haicc` and
   `pear-full-square/haicc-base-app` were the last two created.
 
 **Next: a planning round with the human.** The task list (`tasks.md`) is
-built out: tasks 0 to 3 are done (parts 60 to 64). What it still holds
+built out: tasks 0 to 4 are done (parts 60 to 65). What it still holds
 is what they left, each to come with what needs it:
 
 - of relative URIs (task 1): more than the two segments of a URI
@@ -104,9 +110,7 @@ requests can run on threads, several at once (reads of the Corestore are
 parallel, tried); the request train and the commit to `main` stay on one
 thread; the commits measured (`tools/commit-bench.js`: git is not the
 limit for the commits; the train's bookkeeping slows as requests are
-done). **The next to build: `tasks.md`, task 4**, the two repairs (a
-removed branch takes its empty folders; the merge into `main` a squash):
-its "Proposed" is confirmed with the human first. XPath itself: a good
+done). **Task 4, the two repairs, is built** (part 65). XPath itself: a good
 first implementation, measured; its pipeline allows both modes, one
 request or several, by how long the processing takes (the human). The readings marked "to confirm" in
 `xpath.md` and its "To settle" lists are what to go through with the
