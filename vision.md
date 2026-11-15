@@ -272,3 +272,33 @@ it records that they are), and a transaction that is not completed is
 simply never shown and can be cleared. It is the pipeline's request
 branch, one commit at the end, across mrepos.
 
+
+## Agents: each mrepo's help and howto their interface
+
+Discussed with the human, 2026-11-15. What the human said is stated as
+it is; what is marked ours is not agreed.
+
+- **The direction** (the human): "The beauty of haicc is that it will
+  have custom help and howto tailored to each specific mrepo. That means
+  that you only see what is there and the right version etc. I think this
+  is perfect for agents work."
+- **What follows from it** (ours): an agent learns an mrepo the way a
+  human does, from the mrepo itself: its help (what its packages offer,
+  at their installed version) and its howto (how to do things there). It
+  sees only what is there, so it cannot reach for what is absent, and the
+  help cannot be stale, so it does not guess. Every step it takes is an
+  ordinary request: gated, logged, audited, committed.
+- **Tried** (2026-11-15, the local machine; `steps/2-rebuild/local-note.md`):
+  Claude Code headless, `claude -p`, allowed only the `haicc` command,
+  asked what `.` and `host` hold. Told nothing but that `haicc --help`
+  exists, it read `help/get` at each, then `crud/read`, and answered
+  correctly: six turns, 24 seconds, no command tried that does not exist.
+- **Two ways to run an agent** (discussed): Claude drives haicc from
+  outside (`claude -p` with `haicc` its only tool: works today, on the
+  human's subscription); or haicc starts the agent, a protocol of its own
+  whose tools are the mrepo's protocols (to design). The human: with a
+  swarm, Claude runs on one node and works from there.
+- **Ties in with**: command help (the roadmap's item 8: the structured
+  external API, the help flag answered in the request's context, AI
+  enhanced help as its third stage) and HAICC, human–AI creative
+  collaboration (above). The howto is new: not designed.
