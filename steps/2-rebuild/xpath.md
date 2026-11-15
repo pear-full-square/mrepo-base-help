@@ -699,6 +699,47 @@ cores, 800 to 900 a second, and no further; threads and processes
 alike; width costs the same share; the cycle is flat there too, the
 branches listed in 1 ms, the ancestry check in 0.6 ms.
 
+**Git against plain files** (the human: "how does this git performance
+compare to filesystem folder file operations?"; measured here,
+2026-11-15, four cores, ext4, one thread, the same small document at
+`swarms/n<x>/.node.json`; our engine, p2p-git, in JavaScript; a scratch
+script, not kept). Operations a second:
+
+| | plain files, a folder of 100 | git, 100 | plain files, 10,000 | git, 10,000 |
+|---|---|---|---|---|
+| a document written over | 8,200 (2,200 forced to disk) | 129 (a commit each) | 13,500 (1,900) | 13 |
+| a node added | 3,600 | 105 | 42,600 | 11 |
+| a document read | 196,000 | 232 | 134,000 | 24 |
+| the folder listed | 104 (2,100 entries by then) | 292 (400 entries) | 20 (12,000) | 26 (10,040) |
+| 1000 documents written in one commit | | 1,490 documents | | 850 documents |
+
+- **Per operation git is one to three orders slower**: a write about
+  60 times (17 against a write forced to disk), a read about 800
+  times. Listing is alike, an entry a few microseconds either way.
+- **Why a write**: a commit is five objects (the document, a tree a
+  folder on its path, the commit), each compressed, hashed and written,
+  then the branch moved. **Why a read**: nothing is kept between two
+  reads; each walks from the branch down: the branches listed (0.6 ms),
+  the commit, the root, the folder, the node (0.3 ms an object), the
+  document: 2.6 ms. The wide folder's listing alone takes 36 ms to read
+  at 10,000 entries (1 ms at 100): width costs a read as it costs a
+  commit.
+- **What is had for it**: a change that is whole or not at all, its
+  history, a fixed state to read at, an id for every folder's content,
+  writers side by side on branches, and replication.
+- **What narrows it**:
+  - **many changes a commit**: 1000 documents in one commit, 1,490 a
+    second, eleven times one commit each: the grain is a step's batch,
+    not a record;
+  - **keeping what was read, by its id**: an object never changes, so a
+    tree read once need not be read again: a read is then its document
+    alone (0.25 ms), or nothing. Nothing does this today. The XPath
+    node set as a pointer is the same idea: each tree read once a
+    query;
+  - **narrow folders**, for reads as for commits;
+  - to look at: how much of the 36 ms is our own (the listing sorted
+    again as it is read).
+
 **Ours** (not answered)
 
 - **Git is not the limit for the commits themselves**: about 110 to 140
