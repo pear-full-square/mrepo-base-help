@@ -336,6 +336,16 @@ select to the list of requests?"; put to the human, not answered)
   Both roots point to the same `N1`; `S1` and `S2` to the same
   `swarm-1`. Two commits name the same root only when nothing at all
   changed between them.
+- **What is written again is a folder's listing, not its contents**
+  (the human: "So folder tree gets duplicated and folder contents for
+  affected folders"; ours: the first half). For each folder on the
+  path, its listing is written again whole, with the change in it: a
+  name and an id an entry, some forty bytes, whatever the size of what
+  the entry names. The files and the folders it lists are not written
+  again: the new listing points to the same ones. A folder of 10,000
+  files of a megabyte each, one file added: a new listing of 10,001
+  entries, about 400 KB before it is compressed; none of the ten
+  gigabytes. That listing is the cost of width measured above.
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
