@@ -7,6 +7,53 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-15: help, howtos, nodes and where an mrepo is placed (for 2026-11-16)
+
+Discussed with the human after the headless run; the human: "that is for
+tomorrow". Nothing changed in the code.
+
+1. **Help** (the human: "help isn't properly implemented yet"). Seen:
+   `haicc . help/get` and `haicc host help/get` give the same answer, the
+   generic mrepo documentation (`package-docs-mrepo`); nothing says what
+   this mrepo is or what can be done there.
+   - **Settled** (the human): beside `haicc . help/get` there is
+     `haicc help/get`, without a URI: the machine level's help, the
+     app's.
+   - **Proposed** (ours, not answered): an mrepo's own help at `.` comes
+     from the package that defines it, the last of its list (as its
+     runtime config does): what the mrepo is, its active protocols with
+     a one-line example an action, its howtos; the generic documentation
+     a link below.
+2. **Howtos** (the human: "we need howto's"). Proposed (ours, not
+   answered): a howto lives with the package that makes it possible, so
+   it shows only where it can be done. The first, tried today and
+   working:
+
+   ```sh
+   haicc host boot/deploy node-1 base-component-haicc
+   haicc host haicc node-1 service/initialise
+   haicc host haicc node-1 service/start
+   haicc host haicc node-1 crud/create config
+   haicc host haicc node-1 crud/read .
+   ```
+3. **Nodes now** (the human): a node is deployed with the same package
+   as the host, `base-component-haicc`; its internal structure is created
+   by hand. These nodes are the bridgehead for the container nodes,
+   which need development. Seen: a node goes one name below `main` only
+   (not `swarms/swarm-1/node-1`), and its unique URI is `local/node-1`:
+   both already open on the roadmap.
+4. **Where a child mrepo is placed** (the human: "It needs a shortcut in
+   that folder and the mrepo placed elsewhere"; "we need to change
+   that"). Today the child is built inside its parent's `main/` folder
+   (`mrepos/boot/main/host/`, `.../host/main/node-1/`), while the parent's
+   `main` branch holds only `host/.node.json` and `host/.shortcuts.json`,
+   hidden by their dots: the human found the host nowhere. Settled: the
+   parent's `main/<name>/` holds the shortcut only; the mrepo is placed
+   elsewhere. Proposed (ours, not answered): every mrepo side by side
+   under `mrepos/`, by its unique URI (`mrepos/boot`, `mrepos/local/host`,
+   `mrepos/local/node-1`; later `mrepos/swarm-1/node-1`), the folder then
+   one place to map into a node's container.
+
 ## 2026-11-15: an agent on haicc, Claude Code headless
 
 On the human's word, the boot mrepo and the host brought up (`haicc
