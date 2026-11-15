@@ -302,9 +302,23 @@ yes, with what follows; put to the human)
   only, as `haicc` makes it today; a set of several shortcuts that the
   query goes on from says "not yet" and stops. The fan-out and its
   union are the step after. (Agreed: above, "The usage restriction".)
-- **Open, asked and not answered**: where the first implementation
-  lives: in `crud/read`'s URI first (ours), or in the request layer for
-  every command.
+- **Where it lives** (asked twice as "in `crud/read`'s URI, or in the
+  request layer"; the human: "xpath is a module in mycelium"). Neither:
+  the engine is the module, `mycelium-xpath`, in the base layer, as it
+  is today for a plain path and `*` (`vision.md`: `mycelium-uri` and
+  `mycelium-xpath` are the shared vocabulary). Our reading, to confirm:
+  - the module stays generic: it knows no git and no mrepo; it reaches
+    a tree only through the `children(node)` it is handed, so the same
+    engine walks a git tree, a document's objects, anything given so;
+  - what belongs to a tree is handed in by who calls it: `mycelium-git`
+    hands in a repository's trees (and, new, a document read as a tree
+    below its file); the mrepo layer (`mrepo-base-xpath`) hands in what
+    a shortcut is, where a segment has to stop; `haicc` makes the hop;
+  - who uses it comes after, and is a caller's matter: `crud/read`
+    reaches it today through the execution's `select`.
+- **To settle with it**: a URI with a filter in it is not a valid URI
+  today (`mycelium-uri` validates a URI before it is selected by): what
+  of a query is validated as a URI, and where.
 
 **The storage a type is kept in** (the human, on the measurements of
 git, the Corestore and a Hyperdrive: "this is very useful information
