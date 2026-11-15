@@ -308,6 +308,18 @@ select to the list of requests?"; put to the human, not answered)
   is the commit and the path, which lead to that folder's tree; and a
   folder that did not change (`notes`) has the same id at `c1` and
   `c2`: what was filtered from it at `c1` still holds at `c2`.
+- **A commit does not write the whole tree again** (the human: "does
+  that mean that for each commit the whole tree and its objects are
+  redrawn?"; ours: no). Each commit shows the whole tree, but writes
+  only what is on the path of the change: the new or changed file, one
+  tree a folder from it up to the root, the commit. In the diagram
+  above `c2` wrote five objects: the root, `swarms`, `swarm-2`, its
+  document, the commit; `notes`, `swarm-1` and all below them were not
+  touched, however much that is. So a commit costs the depth of the
+  path times the width of each folder on it, and nothing for the rest
+  of the repository: the measurements say the same (a folder of 100
+  children 119 commits a second; the same five levels deeper 91; a
+  folder of 10,000: 11).
 - **One commit, one node set for every part of the query** (the
   human's question: "when we read at fixed commit, it selects the
   nodeset that goes with it for each part of the query?"; ours: yes).
