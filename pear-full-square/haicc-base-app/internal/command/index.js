@@ -14,7 +14,7 @@ const FLAGS = '--flags'
 const END = '--'
 
 function forMrepos (args, print) {
-  if (args[0] === FLAGS) throw new Failure(`haicc <URI> ${FLAGS} <flag>... [${END}] <protocol>/<action> ... (flags follow a URI: they are that step's)`, 2)
+  if (args[0] === FLAGS) throw new Failure(`haicc <URI> ${FLAGS} <flag>... ${END} <protocol>/<action> ... (flags follow a URI: they are that step's)`, 2)
   const [uri, ...parts] = args
   if (!parts.length) throw new Failure('haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)', 2)
   // at the root the command is written plain; anywhere else, and where

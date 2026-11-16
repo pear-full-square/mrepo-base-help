@@ -34,7 +34,7 @@ Only its note is committed.
 >    with `crud`, queries (a filter, a command at each position a URI
 >    selects, a URI through shortcuts), a request's log and its flags,
 >    the teardowns. One line a
->    check (172 of them); the last
+>    check (177 of them); the last
 >    lines say
 >    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
 >    leaves nothing running: check with `pgrep -fa "bin/bare"`.

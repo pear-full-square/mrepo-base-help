@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-15 by the cloud session (parts 60 to 70), for the local agent (a Linux
+Updated 2026-11-15 by the cloud session (parts 60 to 71), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,7 +93,7 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 70, and `handover-next.md`. Before your last
+`readme.md`, parts 30 to 71, and `handover-next.md`. Before your last
 run (`6ebec98`): every package has its own tests and a test report
 (parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
 relative (61, 62); `crud` makes structure in `main`, the shortcuts are
@@ -112,13 +112,14 @@ URI selects (`haicc "swarms/*[state='started']" crud/read .`), and a URI
 runs on through shortcuts (`haicc host/node-1 help/get`); a document's
 key is written in its URI form there (69: `publicKey` as `public-key`).
 The human's three findings from the manual test are built (70): flags
-after the URI (`haicc host --flags log=debug -- crud/read .`, `--`
-optional; a list in front of the URI is refused), a record printed
+after the URI (`haicc host --flags log=debug -- crud/read .`; a list is
+closed by `--` or by the end of the command, nothing else (71); a list
+in front of the URI is refused), a record printed
 with its entries packed on a line up to the width, the width set and
 read with `haicc output` (auto by default: the terminal's; saved in
 `~/.haicc/output.width`), `HAICC_WIDTH` gone. To try by hand with the
 human. The `haicc`
-test has 172 checks now. New
+test has 177 checks now. New
 for you: `tools/commit-bench.js` (the prompt's step 6), the commits
 measured on the human's laptop. Known and not
 built: our packages are not published, so `haicc sources download`
