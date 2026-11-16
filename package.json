@@ -26,7 +26,8 @@
     "pear-full-square/haicc-base-app",
     "pear-full-square/mrepo-base-crud",
     "pear-full-square/mrepo-base-container",
-    "pear-full-square/splectral-server"
+    "pear-full-square/splectral-server",
+    "pear-full-square/mrepo-base-howto"
   ],
   "dependencies": {
     "bare-bundle": "1.11.0",

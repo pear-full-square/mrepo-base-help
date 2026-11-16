@@ -115,7 +115,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
 | P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | built, parts 75 and 76 (the links layer, an mrepo's own; the mrepo registry, the boot mrepo's); the rest for the next design round |
-| | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `howto` and `haici` | queued for building (2026-11-16; `help.md` the design) |
+| | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `howto` and `haici` | in three steps (2026-11-16): `howto/extract` and `howto/get` with the first how-tos built, part 82; then `package-review`; then the flag unit, `help/annotate`, `haici/feedback`, `explore` and `plan` scoped |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -1602,6 +1602,29 @@ to 81, asked what actions the MVP proposes; not built yet)
   now, or the two scoped only (ours: scoped only; the call, the runtime
   starting `claude -p` with `haicc` its only tool, a piece of its own;
   `claude` is in the cloud session, 2.1.325).
+
+**The order, and the go** (the human, 2026-11-16, the same session)
+
+- "Do you think we should build the extract/get and feedback before we
+  start our review?" Ours: `howto/extract` and `howto/get` yes (the
+  review writes each package's how-tos, so the how-to's form and its
+  check must be there first); `haici/feedback` no (the review's findings
+  belong in its record; feedback comes with the flag unit and
+  `help/annotate`, one batch, since they change `mrepo-base-request`).
+  The order put: 1. `howto/extract` and `howto/get`, with the first
+  how-tos; 2. the package review, one package at a time: its install
+  test, its rules and decisions moved into its help, its how-tos; 3.
+  the flag unit, `help/annotate` and `haici/feedback`, with `explore`
+  and `plan` scoped.
+- The go: "repositories are all there already. Go ahead with
+  implementation" (the four: `mrepo-base-howto`, `base-package-howto`,
+  `mrepo-base-haici`, `base-package-haici`).
+- **Step 1 is built**: part 82 of `readme.md`. As specified above, but:
+  no `howto/run` (amended); a how-to's steps are in a section of their
+  own (`## Steps`), so its summary stays a summary; `howto/get` answers
+  what is not there with `{ asked, found: false, why, activities }`.
+- **Step 2, `package-review`, is next**: not started; its form to put
+  to the human first (below, "P4 to P6").
 
 **Not in it** (later, each when the work reaches it): guided runs (each
 step's help before it, a run resumed); `haicc howto boot` as a short form

@@ -12,13 +12,14 @@ value, then against the packages listed, read from the sources.
 - **Its hooks, file by file**: each with its transition and its command;
   the state the mrepo starts in. A hook file not named in the test fails
   it.
-- **The packages it lists**: each has its bundle in the sources; the eight
+- **The packages it lists**: each has its bundle in the sources; the nine
   protocols they provide, one a package.
 - **Every hook names what exists**: a protocol and an action a listed
   package provides; the protocol it opens or closes is provided too.
 - **What its hooks do**: run with the listed packages' own actions, on a
-  minimal execution in memory. After the boot `haicc`, `help`, `runtime`
-  and `service` are open; `initialise` extracts the help; `start` opens
+  minimal execution in memory. After the boot `haicc`, `help`, `howto`,
+  `runtime` and `service` are open; `initialise` extracts the help and
+  the how-tos; `start` opens
   `boot`, `container` and `crud`, `stop` closes them again, `shutdown` returns to booted. Every
   hook file must have run in that walk.
 - **Nothing left closed by forgetting**: every protocol the listed

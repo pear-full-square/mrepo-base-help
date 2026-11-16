@@ -13,6 +13,7 @@ created.
 |---|---|
 | [mrepo/](mrepo/) | its part of the structure: the list of its packages |
 | [scripts/](scripts/) | its scripts: what to go on with after a deploy |
+| [howto/](howto/) | its how-tos: what is done in a host |
 | [test/](test/) | its tests: its list and its hooks as configured, and the generic ones |
 | [test-reports/](test-reports/) | the report of its last pre-release |
 | [modules/](modules/) | its code, assembled: ours and the third-party code |
@@ -23,6 +24,7 @@ created.
 |---|---|
 | `base-package-runtime` | the runtime, its layers, the `runtime` protocol |
 | `base-package-help` | the `help` protocol and the help layer |
+| `base-package-howto` | the `howto` protocol and the howto layer |
 | `base-package-protocol` | the `protocol` protocol: activate, deactivate |
 | `base-package-boot` | the `boot` protocol: deploy, teardown, redeploy |
 | `base-package-service` | the `service` protocol and the service state |
@@ -35,7 +37,7 @@ created.
 
 By the boot mrepo, with a command at the root. The mrepo starts `booted`:
 its boot protocol, its crud protocol and its container protocol are
-behind the service's door, activated by hooks on `start`. Its help is extracted by a hook on `initialise`. Each service
+behind the service's door, activated by hooks on `start`. Its help and its how-tos are extracted by hooks on `initialise`. Each service
 command answers what was done and the state now.
 
 ```

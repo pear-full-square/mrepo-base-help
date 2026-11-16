@@ -22,6 +22,7 @@ the work reaches it.
 
 - `haiccing/`: the packages, each at the path of its repository:
   `base-package-runtime`, `base-package-protocol`, `base-package-help`,
+  `base-package-howto`,
   `base-package-boot`, `base-package-service`, `base-package-haicc`,
   `base-package-crud`, `base-package-container`,
   `base-package-splectral` (one package, one protocol; the last also

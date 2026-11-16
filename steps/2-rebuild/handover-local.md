@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-16 by the cloud session (parts 60 to 81), for the local agent (a Linux
+Updated 2026-11-16 by the cloud session (parts 60 to 82), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -61,6 +61,17 @@ outbox folder and reads only. `haicc splectral service/stop` ends the
 server; `haicc boot/teardown` ends it with the rest. What we would like
 to hear from the laptop: how the page looks and behaves in the human's
 browser while the cluster script runs.
+
+## How-tos (part 82)
+
+`haicc . howto` and `haicc host howto` answer what can be done there,
+by activity; `haicc host howto/get . node/deploy` one how-to: its steps
+as typed commands, each with why, the last the check. A how-to is a
+folder in the package it is about (`howto/<name>/`, its README), and is
+extracted into the mrepo's `howto` layer where the help is. The steps
+are written from the mrepo that holds the how-to: typed at the
+terminal, `haicc . crud/create swarms/swarm-1` at the host is `haicc
+host crud/create swarms/swarm-1`.
 
 ## What a run is
 
