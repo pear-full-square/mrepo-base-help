@@ -1626,6 +1626,32 @@ to 81, asked what actions the MVP proposes; not built yet)
 - **Step 2, `package-review`, is next**: not started; its form to put
   to the human first (below, "P4 to P6").
 
+**Corrected after step 1 was shown** (the human, 2026-11-16, on `haicc
+. howto` and `haicc host howto/get . node/deploy`; not rebuilt yet)
+
+- "haicc . howto is an annotate"
+- "haicc host howto/get . node/deploy why the dot after get, the haicc
+  command sets the position."
+- "And get should retrieve the 'static' information not the context. So
+  I expect a command at root (or independent on a URI position)
+  howto/get boot. To start with we would retrieve protocol or protocol
+  action specific info"
+- Our reading, put back: `get` is static and takes what it is asked
+  directly, as the command's own URI, no dot: `haicc host howto/get
+  boot`, `haicc host howto/get boot/deploy`; what it is asked is a
+  protocol, or a protocol's action, and it answers the how-tos filed
+  under it, the same wherever in the mrepo the command stands. "What
+  can be done here" is context: an annotate, not `get`; so `howto`
+  alone is not `get` (no default action until the annotate is built,
+  step 3). A how-to is filed by the protocol, or the protocol's action,
+  it declares (`Activity: boot/deploy`), in place of a free word. The
+  same would hold for `help/get` (`haicc host help/get packages`, no
+  dot), which was agreed with the dot in `relative-uris`: to change in
+  step 3 unless said otherwise.
+- **Open**: whether a how-to is filed by what it declares, wherever it
+  lives (ours), or each protocol's package carries the how-tos of its
+  own actions.
+
 **Not in it** (later, each when the work reaches it): guided runs (each
 step's help before it, a run resumed); `haicc howto boot` as a short form
 at the machine level; an action not implemented in code calling hc
