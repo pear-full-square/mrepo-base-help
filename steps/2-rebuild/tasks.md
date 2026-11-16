@@ -28,6 +28,7 @@ yet, none has a go.
 | | label | the human | aim (our reading) |
 |---|---|---|---|
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
+| | `demo-scripts` | a script of commands run after a deploy: demos that run on their own, howtos that run | in discussion |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1126,6 +1127,35 @@ runtime's process) in the parent's runtime layer,
 parent. `pear-full-square/mrepo-base-boot/internal/child.js`,
 `mrepo-base-xpath/internal/shortcut/` (`shadowOf`, `linkOf`: where a
 shortcut leads on disk).
+
+## `demo-scripts`: a script of commands run after a deploy, for demos that run on their own
+
+Raised 2026-11-16, once `mrepo-registry` was built ("now we can use
+this to deploy host and a swarm with some (bare) nodes"). In
+discussion; nothing built.
+
+**Said**: "What we will need for the demos (that run on their own) is a
+script of commands that gets executed on boot. So haicc . boot/deploy
+host base-demo-haicc install the haicc component and then executes a
+script (for further configuration or end-to-end deploy to teardown. The
+demo repo could contain more than one demo, then we can use the flags:
+haicc . boot/deploy base-demo-haicc --flags post-deploy=[script] These
+scripts then can become part of howtos. What do you think?"
+
+**Our view, put back** (ours, to settle together)
+
+- Yes: a script is a howto that runs, so it cannot go stale, and it is
+  the "demo first, kept as its how-to" we already work by.
+- A script: a named list of commands, in the package (its `mrepo/`
+  part), written from where the deployed mrepo stands, so it does not
+  depend on where it is deployed.
+- Run by the deployed mrepo itself, as its own requests, one after the
+  other, each waited for, stopping at the first that fails: a command
+  sent on to a linked mrepo has to be answered before the next starts,
+  which a hook does not wait for today.
+- The flag picks the script for that deploy; run again later by name.
+- To settle: from whose place the commands are written; where a script
+  lives and what names it; what says a demo is done and how it went.
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded
 

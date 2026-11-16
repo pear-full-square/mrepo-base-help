@@ -214,6 +214,10 @@ key, not for the outside; and the **mrepo registry**, in the boot
 mrepo's `main` at the position `registry`, a node an mrepo by its
 unique URI (`haicc registry/local crud/read "*"`). `main` holds what is
 needed to show a link (the shortcut: the mrepo, the link's key).
+**In discussion: `demo-scripts`** (`tasks.md`): a script of commands a
+package brings, run after a deploy (`--flags post-deploy=<script>`),
+for demos that run on their own and howtos that run; our view is put
+back there, to settle. Docker is fine for the first container node.
 KISS: enough for the swarm demos; a further
 design round comes with the next step. A rule since (`rules.md`): deploy
 and teardown, no upgrade in place. **Next in our order: `node-mrepos`**
