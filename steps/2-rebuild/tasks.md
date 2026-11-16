@@ -1014,6 +1014,33 @@ master and slave, which we had read as who writes)
   be a layered approach of who can do what, but we will build it up
   gradually."
 
+**Then, on our asking whether only the boot mrepo creates local
+mrepos** (2026-11-16): "for the host registry: currently haicc registry
+is for the mrepos created by the haicc install on the host. Keep it
+simple for the moment, our aim is to achieve simple swarm demos and
+that is it. We just need enough functionality to achieve that and will
+do a further design round with the next step: KISS."
+
+**Proposed first build** (ours, to confirm: the least that clears the
+way for the swarm demos)
+
+- **Placed by its unique URI**: an mrepo deployed is placed side by
+  side with the others under the work folder, `mrepos/<swarm>/<name>`
+  (`mrepos/local/host`), not inside its parent's `main/` folder. The
+  parent's `main/<name>/` holds the shortcut only (settled).
+- **A `registry` layer** in the mrepo that deploys, an entry a mrepo it
+  deployed, by unique URI: where it is on this machine, the package it
+  came from, what runs it, the position that links to it. It replaces
+  today's record in the runtime layer (`runtime/deployed/<name>.json`).
+  Written by `boot/deploy`, `redeploy` and `teardown` only.
+- **Where a shortcut leads** is read from the registry, not worked out
+  from the folder structure.
+- **A teardown of several** is a query over the registry, read with
+  `layer=registry`.
+- Not in it, for the next design round: who may deploy; a shortcut to
+  an mrepo that was not deployed here (linked); the reverse index; the
+  visible state in `main`; the `swarm` protocol and the containers.
+
 **Our reading so far, to confirm** (ours, put back in the discussion)
 
 - The registry is a record of shortcuts, not of deployments: a layer,
