@@ -103,10 +103,26 @@ extracted like help (`tasks.md`).
   proposed, its target, a status; raised and accepted by a human or an
   AI alike. A guided run's steps read together by a run id on each
   request: the first use of the headers, to plan.
+- **A finding is rooted where it belongs**: in the package that owns
+  what it is about (the help layer's URI names the package a README
+  comes from; a protocol's config names its package), not where it was
+  seen; one seen through `base-component-haicc` may be the service
+  protocol's, and reach the packages that use it.
 - **`haici` proposes; the change goes through the development process**
   (author, checks, pre-release): it never edits a package. Its findings
   the input to `dev-on-haicc`. Not answered; the human: haici "goes much
   further".
+
+**Settled** (the human, on `haici`)
+
+- "The information in the request log is rich, and we start simple
+  learning from it. Slowly we build up sophistication. It will
+  definitely identify additions and improvements to help and to howto
+  so an install will generate ci information that then needs to be
+  applied to the resp. packages. And an improvement in e.g. the haicc
+  component package is e.g. for the service protocol so information
+  needs to be rooted where it belongs and affects other packages as
+  well." (ci: continuous improvement.)
 
 ## Headless Claude
 
@@ -116,6 +132,18 @@ extracted like help (`tasks.md`).
 - "Headless Claude as generator as well, not only user."
 - "And generating dynamic howto feedback."
 - It fills the gap of what is not built yet (above).
+- "Our setup is recursive and fractal. Headless claude is launched from
+  the platform and sends commands to the platform."
+- "As the protocols take shape, actions identified but not all
+  implemented we use hc (headless claude) to fill in the missing
+  implementations (as a 'functions call') where required. We continue
+  to provide code implementations. Higher level reports and assessments
+  will always remain with hc." (hc: headless Claude.)
+- "Now you will be the biggest consumer of the platform, so generate the
+  most usage data, and that should help us to improve the platform
+  experience - I wonder, we need feedback commands to gather 'in the
+  field experiences' as they happen. Maybe as a flag so it can be
+  attached to the command it refers to."
 
 **Proposed** (ours)
 
@@ -136,11 +164,22 @@ extracted like help (`tasks.md`).
 - **Filling the gap**: what a protocol does not do yet, headless Claude
   does, until it is built; the request log shows where it did, and so
   what to build next.
+- **An action implemented by hc**: an action documented (its
+  `external/<action>/` README: signature, arguments, returns, errors)
+  and not coded is marked so in its `protocol.js`; the runtime runs hc
+  with that README as its contract and the request as its input, and
+  its answer is the action's answer. The commands hc sends on the way
+  are ordinary requests to the platform. A code implementation replaces
+  it, the README unchanged; reports and assessments stay hc's.
+- **Feedback with the command**: `--flags feedback="..."` on any
+  command, recorded in that request's record beside its log, so
+  `haici` reads it with its context and its result.
 
 **To settle**
 
 - One structured form for every help and howto answer, a record (JSON)
   the agent reads as it is and the terminal shows to a person.
-- How headless Claude fills a gap: from outside, driving `haicc` and
-  reading the request log (`layer=request`), or started by the mrepo
-  (`vision.md`, "Agents": the two ways).
+- Feedback on a response already seen (the experience comes after the
+  result): attached to that earlier request.
+- How a finding travels from an install back to where its package is
+  developed.
