@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 78). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 79). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -25,7 +25,9 @@ the registry layer, several torn down by a query; 76 the same
 corrected: the links layer, an mrepo's own, and the mrepo registry, the
 boot mrepo's; 77 `continuation`: a command answers with a script to go
 on with, the terminal runs it; 78 the cluster script: the swarm
-cluster we work towards, written as a script of the component).
+cluster we work towards, written as a script of the component; 79 a
+swarm's nodes and their containers: a node at `swarms/<swarm>/<name>`,
+the `container` protocol, the cluster script with both).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -43,6 +45,12 @@ tools/bare tools/release.js   # every package assembled and bundled into sources
 Then the validation in `CLAUDE.md` works. To see the whole thing run:
 `sh haiccing/base-linux-haicc/test/run.sh`.
 
+**Docker**: the container protocol's tests and the `haicc` test's
+cluster make real containers. In a cloud session Docker is installed
+but no daemon runs when the session starts: `sh tools/docker.sh` starts
+it (as root) and waits for it; it does not survive the session's
+container. Without a daemon those tests fail, they do not skip.
+
 - **Work on `execute/main`**, merged into `main` with a plain merge, both
   pushed (a cloud session may be given a branch of its own: it is not
   used for the work).
@@ -58,38 +66,37 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
 
 ## Right now
 
-**Pick up here** (2026-11-16, after part 78; everything in `main`,
-`execute/main` level with it, every repository pushed; written before a
-context reset)
+**Pick up here** (2026-11-16, after part 79; everything in `main`,
+`execute/main` level with it; the product repositories: see "With the
+human, open")
 
-- **The next step, in the words used** (2026-11-16): "The next step
-  will be the creation of container mrepos. You could do this we a
-  continuation on the node commands - we can set a default for
-  continuation then one can use a standard command (i.e. haicc
-  swarms/swarm-1/node-1 service/initialise and there is a continuation
-  to deploy the container mrepo. What about creating a container
-  protocol with the methods to achieve this? Don't be too picky as to
-  what methods, create those that achieve our goal. That is sufficient
-  for the moment."
-- **Our view of it, not yet answered** (`tasks.md`, `swarm-cluster`,
-  "The next step"): yes to a `container` protocol; its first methods
-  only those the goal needs (a node's replica made in a container,
-  started, stopped, removed, its state said); a default continuation:
-  an mrepo's config names the script that follows an action, so a
-  standard command (`service/initialise`) answers with it without a
-  flag. Put this back to the human in a few lines, get the go, then
-  build; do not build on this reading alone.
 - **Where it stands**: `base-component-haicc`'s `scripts/cluster.json`
-  is the target written down and its check (part 78): the host in
-  service, `swarms/swarm-1` in its `main`, two nodes deployed and in
-  service. Each step a swarm still needs is designed together, built,
-  then added as a line of it. The nodes are still `local/node-1`,
-  `local/node-2`, one name below the host's `main`.
-- **No container tool runs in the cloud session** (Docker's client is
-  there, no daemon): what talks to Docker is written so a test can
-  stand in for it, and the real thing is tried on the human's laptop by
-  the local agent (`prompt-local.md`, `handover-local.md`: current for
-  part 78; a step for the container would be added to the prompt).
+  runs to its end: the host in service, `swarms/swarm-1` in its `main`,
+  two nodes deployed at `swarms/swarm-1/node-1` and `node-2`
+  (`swarm-1/node-1`, `swarm-1/node-2`), each in service, each with its
+  replica in a Docker container (`container/create`, `container/start`),
+  the replica in service too, reached through its node (`haicc
+  swarms/swarm-1/node-1 haicc container ...`). Part 79.
+- **What the human said on the way** (`tasks.md`, `swarm-cluster`): the
+  default continuation is skipped, "needs a better design"; the script
+  calls the container protocol explicitly; KISS.
+- **Next, to settle together before building** (one question at a
+  time):
+  1. **Splectral** (`tasks.md`, "`splectral`": what was found, and our
+     reading): the core comes back as it is; its adapters are written
+     new, on `haicc`; it is an application on the component. Put to the
+     human at the end of part 79; not answered. Do not build on it
+     alone.
+  2. **The nodes finding each other**: what a working cluster does, and
+     how the script checks it; a node made a swarm node (the `swarm`
+     protocol; master and slave); what flows between a bridgehead and
+     its replica. Earlier code to read, in the history (`42a5a66^`):
+     `p2p-connect`, `p2p-dht` (a private DHT a swarm, the master its
+     bootstrap, `firewalled: false`), `p2p-rns`, `p2p-node`.
+- **Docker runs in the cloud session** (the earlier note here was
+  wrong): `sh tools/docker.sh`. The real thing is still tried on the
+  human's laptop by the local agent (`prompt-local.md`, current for
+  part 79: Docker is a prerequisite there now).
 - **How we work** (below, "How the human works with us", in full): a
   team on equal terms: "we", an opinion and a recommendation with every
   question; short answers, one question at a time; tasks named by their
@@ -101,11 +108,14 @@ context reset)
   message breaks the file, and a filter on the output hides it: read a
   test run's last lines. One run at a time on `sources/`: a `haicc`
   test started while bundles are rebuilt hangs. A full validation is
-  about 25 minutes: every package's pre-release
+  about 30 minutes: every package's pre-release
   (`tools/bare tools/package-test.js haiccing/<package>`, in a loop),
   `tools/bare tools/release.js --strict` (its exit code), the boot's
   `validate` a few times, `sh haiccing/base-linux-haicc/test/run.sh`
-  (207 checks). Long runs go to the background, their output to a file
+  (229 checks, four and a half minutes with the containers). A
+  container left by a run that broke off: `docker ps -a --filter
+  label=haicc.folder`, then `docker rm -f` it. Two mrepos never share a
+  unique URI: an answer is addressed by it (part 79). Long runs go to the background, their output to a file
   in the scratchpad, waited for.
 
 **What is built since part 66**, each a part of `readme.md`: 67 to 69
@@ -121,19 +131,22 @@ under `mrepos/`; the `links` layer, an mrepo's own; the mrepo registry
 in the boot mrepo's `main`, `haicc registry/local crud/read "*"`); 77
 `continuation` (a command answers with a script to go on with, the
 `haicc` command runs it; `--flags continuation=<script>` on a deploy);
-78 the cluster script.
+78 the cluster script; 79 a swarm's node at `swarms/<swarm>/<name>`
+and the `container` protocol (`haicc swarms/swarm-1/node-1
+container/create`, `start`, `stop`, `remove`, `status`).
 
 
-**The state** (as of 2026-11-16, part 78: everything in `main`, every repository pushed; the paragraphs below are older, kept for what they say)
+**The state** (as of 2026-11-16, part 79: everything in `main`; the paragraphs below are older, kept for what they say)
 
 - The `haicc` command installs, boots, deploys a host from
   `base-component-haicc`, starts its service, deploys a node inside it
   and chains commands through both (parts 30 to 45).
-- All twelve bundle packages are brought to the package template and
+- All thirteen bundle packages (`base-package-container` the newest,
+  part 79) are brought to the package template and
   pinned, each with a test of its own and a current, passing report
   (parts 47 to 64). `tools/bare tools/release.js --strict` passes;
   `tools/bare tools/code-check.js` and the README checks have no
-  problems; the `haicc` test 207 of 207 (part 78); `base-component-boot`'s
+  problems; the `haicc` test 229 of 229 (part 79); `base-component-boot`'s
   `boot` test passing.
 - The `haicc` command is a Bare app, `base-app-haicc` (part 60); the
   shell, `base-linux-haicc`, is the first step only. The command's form

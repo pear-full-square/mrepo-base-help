@@ -14,6 +14,7 @@ another can use it.
 | `install.sh` | the dependencies replayed from the lockfile, without npm |
 | `ensure-bare.sh` | Bare's runtime put in place from its pinned tarball |
 | `bare` | Bare, as this repository runs it |
+| `docker.sh` | Docker's daemon made sure to answer, started where a cloud session has none running |
 
 ## A package: built, tested, brought to the template
 

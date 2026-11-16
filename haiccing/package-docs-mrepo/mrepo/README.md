@@ -68,6 +68,19 @@ folder's package store, named in its packages manifest).
 Every mrepo has a unique URI, `<swarm>/<node>`, in its runtime layer. What
 the boot mrepo creates is `local/<name>`: the boot mrepo is `local/boot`,
 the host `local/host`. Its inbox is addressed by it: `/local/host/inbox`.
+An mrepo deployed one name below `main` is in its parent's swarm. A
+swarm's node is deployed at `swarms/<swarm>/<name>`, below its swarm's
+node, and is in the swarm its position names: `swarm-1/node-1`, placed
+at `<work>/mrepos/swarm-1/node-1/`.
+
+A swarm's node can have a replica in a container, made by the
+`container` protocol (`base-package-container`): a second mrepo, its
+unique URI the node's with `container` behind it
+(`swarm-1/node-1/container`), its folder beside the mrepos:
+`<work>/containers/<swarm>/<name>/`, the one folder its container can
+write. The node on the host, the bridgehead, links it at the position
+`container` and reaches it through its inbox and outbox folders, as any
+linked mrepo.
 
 ```
 <dir>/

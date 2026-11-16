@@ -23,7 +23,8 @@ the work reaches it.
 - `haiccing/`: the packages, each at the path of its repository:
   `base-package-runtime`, `base-package-protocol`, `base-package-help`,
   `base-package-boot`, `base-package-service`, `base-package-haicc`,
-  `base-package-crud` (one package, one protocol); the components `base-component-boot` (the
+  `base-package-crud`, `base-package-container` (one package, one
+  protocol); the components `base-component-boot` (the
   initial boot mrepo and the program that puts it in place) and
   `base-component-haicc`
   (several packages deployed together, `main` empty; a list ends with its
@@ -52,7 +53,8 @@ the work reaches it.
   repository, the package pinned to that commit), the product
   repositories (`products.sh` for the modules, `packages.sh` for the
   packages), the checks (`help-extract.js`, `code-check.js`), the commits
-  measured (`commit-bench.js`). `sources/`
+  measured (`commit-bench.js`), Docker's daemon made sure to answer
+  (`docker.sh`). `sources/`
   and `node_modules/` are ignored by git: a fresh clone needs
   `sh tools/install.sh`, then `tools/bare tools/release.js`.
 - `rules.md`: this repository's own rules (branches, layers, commits,
@@ -96,6 +98,11 @@ the work reaches it.
 - The `haicc` command end to end, when anything it touches changed (the
   app, the scripts, the boot, the component, the request form):
   `sh haiccing/base-linux-haicc/test/run.sh`.
+- **Docker**, for what makes containers (the container protocol's
+  tests, the cluster in the `haicc` test): a daemon that answers. In a
+  cloud session none runs when it starts: `sh tools/docker.sh`. Those
+  tests fail without it; no container is left after
+  (`docker ps -a --filter label=haicc.folder`).
 - **A package tests what it provides**, in a test of its own, a folder in
   its `test/`; where nothing is specific to it, a dummy that says so, an
   explicit decision. A test that runs nothing by accident fails. A new

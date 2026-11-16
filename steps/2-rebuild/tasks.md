@@ -29,7 +29,8 @@ yet, none has a go.
 |---|---|---|---|
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
 | | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | built, part 77: a simple script, no nesting, ceiling 100 |
-| | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | the work now: `cluster.json` begun, part 78; the swarm's own steps to design |
+| | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | the work now: `cluster.json` begun, part 78; a swarm's nodes with their containers, part 79; next: the nodes finding each other, and Splectral on it |
+| | `splectral` | the view of the swarm in a browser, for the demos ("like we had before") | looked into, part 79: what was found and our reading, below; to settle before it is built |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1215,36 +1216,147 @@ with the methods to achieve this? Don't be too picky as to what
 methods, create those that achieve our goal. That is sufficient for the
 moment."
 
-Our view, put back, not yet answered (ours):
+Our view, put back (2026-11-16, after the context reset), and the go:
 
-- **A `container` protocol**, yes: a module and a package of its own,
-  as every protocol; its first methods only what the goal needs: a
-  node's replica made in a container from its bridgehead, started,
-  stopped, removed; its state said. Named as we build, not designed
-  ahead.
-- **A default continuation**: an mrepo's own config names the script
-  that follows an action (`service/initialise`: the script that makes
-  its container replica), so a standard command answers with it, no
-  flag written; the flag still picks another, or none.
-- **Docker behind one small part**, so the tests stand in for it here
-  (no daemon in the cloud session) and the laptop runs the real thing.
-- **The script grows by it**: `cluster.json` gets the lines once they
-  run.
-- To settle first: what a replica is when it is made (a copy of the
-  bridgehead's layers; its runtime inside the container; what the two
-  exchange, and how: folders mapped, as inbox and outbox are today?).
+- A `container` protocol, a module and a package of its own, its
+  methods only what the goal needs; a default continuation, an mrepo's
+  config naming the script that follows an action; Docker behind one
+  small part; the replica kept simple: the container runs Bare on the
+  same package, its inbox and outbox folders mapped to the host, the
+  bridgehead reaching it like any linked mrepo; the nodes moved to
+  `swarms/swarm-1/node-1`, their unique URI `swarm-1/node-1`.
+- "how do you do the docker test in your sandbox?" Checked then: the
+  handover was wrong. Docker's daemon is installed in the cloud
+  session, not started; started by hand (`dockerd`, as root) it runs
+  real containers, Bare in them, a folder mapped both ways, two
+  containers reaching each other. So the tests make real containers:
+  no stand-in.
+- The go: "yes please. Can you also look into the SPLectral stuff now,
+  so you can implement it together?"
+- Then, on our asking whether the node gets a component of its own
+  (the default continuation sits in an mrepo's config, which comes from
+  its defining package; host and nodes share one, so the host would get
+  a container too): "ok, skip default continuation for now - needs a
+  better design. Just do the standard script and explicitly use the
+  container protocol to set up the container node. KISS". So: no
+  default continuation, no node component; `cluster.json` calls the
+  container protocol, line by line.
+
+**Built** (part 79 of `readme.md`): a swarm's node deployed at
+`swarms/<swarm>/<name>`, its unique URI `<swarm>/<name>`; the
+`container` protocol (`mrepo-base-container`, `base-package-container`:
+`create`, `start`, `stop`, `remove`, `status`), in
+`base-component-haicc`'s list, behind the service's door; `cluster.json`
+with both nodes and their containers; the machine-level teardown
+removing the containers.
+
+**Left from it**
+
+- **The default continuation**: "needs a better design". Not built.
+- **A node's teardown does not know of its replica**: `boot/teardown` of
+  a bridgehead leaves its container and the replica's folder
+  (`container/remove` first; the machine-level teardown clears both).
+- **The replica is not in a swarm yet**: it is on Docker's default
+  bridge, its own unique URI the node's with `container` behind it; it
+  follows nothing and replicates nothing: an mrepo in a container,
+  reached through its node. Master and slave, and what flows between
+  the two, come with the `swarm` protocol.
+- **Linux only**: the runtime's socket in the mapped folder says the
+  replica is up; that needs the host and the container on one kernel.
+- **The image's base is pulled** by Docker the first time
+  (`debian:bookworm-slim`): the one download; `docker load` from the
+  sources was the alternative agreed in the earlier review, not built.
 
 **To design together, each a line of the script once built**
 
-- Where a swarm's node sits and what it is called: today one name below
-  the host's `main`, `local/node-1`; a swarm's would be at
+- ~~Where a swarm's node sits and what it is called~~: built, part 79:
   `swarms/swarm-1/node-1`, `swarm-1/node-1`.
 - A node made a swarm node: the `swarm` protocol's first action; what
   it writes (the swarm, the role).
-- Its replica in a container: what runs there, how it is reached, what
-  flows between the two.
+- Its replica in a container: built, part 79: what runs there and how
+  it is reached; what flows between the two is still to design.
 - The nodes finding each other: what a working cluster does, and how
   the script checks it.
+
+## `splectral`: the view of a swarm in a browser, brought back for the demos
+
+"Would be nice if we could have splectral in those demos (like we had
+before)", then, with the go for the containers (2026-11-16): "Can you
+also look into the SPLectral stuff now, so you can implement it
+together?" Looked into: what follows. Nothing of it is built: what it
+becomes on the mrepos is a design to settle together first.
+
+**What it was** (the tree before the clean-up, `42a5a66^`; its wiring
+into a swarm one step earlier, `b88d884^`; each module has its own
+repository still, `pear-full-square/splectral-*`, and the views and
+demos under the `splectral` organisation): about 1,400 lines, all on
+Bare.
+
+- **The core, which knows nothing of p2p**: `splectral-contract` (the
+  abstract world: hosts, nodes, resources, links; its events:
+  nodeStarting, joined, gone, absent, present, left, resource,
+  connected, disconnected, requestSent, requestAnswered, changed,
+  actionResult, say; the extension kinds: source, mapper, page,
+  scenario, action), `splectral-model` (events folded into a state; the
+  same code in the server and in the browser), `splectral-transport`
+  (the server to the browser: Server-Sent Events, `GET /stream`, a
+  snapshot then an event a change; `POST /act`), `splectral-server`
+  (`bare-http1` on `127.0.0.1`, port 4400 in the demos: loads the
+  extensions, runs the sources, maps their records, dispatches the
+  actions, serves the app), `splectral-shell` (the browser: React 18
+  and htm from `node_modules`, no build step), `splectral-timeline`,
+  `splectral-scenario` (a scenario's steps run and shown: say, do,
+  await an event), `splectral-replay`; the views `base-view-map` (hosts
+  as frames, nodes as circles, links as lines, resources as dots) and
+  its node page.
+- **The adapters, which knew the old p2p node**: `splectral-p2p-watchers`
+  (the sources: `docker logs -f` of each node's container, a JSON line
+  an event, mapped to the world), `splectral-p2p-actions` (start, stop,
+  pause, resume a node; send a request; invite a node on another host),
+  `splectral-p2p-observer` (inside a node). They rest on what is gone:
+  `p2p-node`, `p2p-node-manager`, `p2p-connect`, `p2p-dht`, `p2p-rns`,
+  `p2p-channel`, `mycelium-topic`, `haicc-deployment`.
+- **What it showed**: only what the p2p modules said on their observer
+  (`{ module, kind, time, ... }`, a JSON line on the node's stdout):
+  node-started, connections opened and closed, the name service's
+  absent, present and left, requests taken and executed. `p2p-store`,
+  `p2p-replicate` and `p2p-mrepo`, which we still have, still take an
+  observer and say the same.
+- **Not here any more, of others' code**: `react`, `react-dom`, `htm`,
+  `hyperswarm`, `hyperdht` are out of the lockfile; `bare-http1` is in.
+- **The demos**: `base-demo-liveness` (a node paused, seen absent, a
+  request to it refused, resumed, answered, stopped, seen left),
+  `base-demo-other-host` (a node invited from another host).
+- **Found in the review then** (`steps/1-review/findings.md`): p2p
+  knew Splectral (the node imported the observer); the contract leaked
+  p2p keys; the adapters read others' layouts (Docker, `node.json`, the
+  topics); bugs in the model's `restore` and the node page's links; no
+  test of the browser side. Its decision: "Splectral wrapped in HAICC:
+  the server and its `act` through HAICC".
+
+**Our reading, to settle** (ours, put to the human, 2026-11-16)
+
+- **The core comes back as it is**, brought to the rules (READMEs, the
+  code rules, tests): contract, model, transport, server, shell, the
+  map and the timeline. The contract's p2p leaks are corrected on the
+  way.
+- **The adapters are written new, on `haicc`**: a source that asks the
+  mrepos what is there (the host's `swarms/*`, each node's links, each
+  node's `container/status`) and follows what happens (the request
+  records, `layer=request`); the actions are `haicc` commands
+  (`container/stop`, `container/start`, a request sent on). Nothing of
+  the old adapters is kept: what they knew is gone.
+- **It is an application on the component**, deployed as one
+  (`boot/deploy`), its server started and stopped by the service's
+  hooks: not wired into the boot.
+- **A first demo is then possible without p2p**: the cluster seen, a
+  node's container stopped and started, a request seen going through.
+  Connections, presence and replication show once the nodes find each
+  other: the p2p modules' observers are the source then.
+- To settle first: what Splectral is in our terms (a package and its
+  protocol? an app, as `base-app-haicc`?); what it reads (requests
+  only, or the mrepos' layers); whether the nodes finding each other
+  comes before it.
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded
 

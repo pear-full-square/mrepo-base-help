@@ -1,7 +1,9 @@
 # Prompt for the local agent
 
 Give this to Claude Code on the local machine (Linux x86-64; git, curl,
-tar; `gh` for a release; `git` also for one measurement of step 6).
+tar; Docker, its daemon running and the user allowed to use it, for the
+nodes' containers; `gh` for a release; `git` also for one measurement
+of step 6).
 Nothing is signed. The sources are built
 locally and used locally; a release is created only when the human asks.
 Only its note is committed.
@@ -27,21 +29,31 @@ Only its note is committed.
 > 4. **Run the test of the `haicc` command**, from the clone's folder,
 >    three times (a race shows one run in a few):
 >    `sh haiccing/base-linux-haicc/test/run.sh`. It works in a temporary
->    folder and ends by itself (two to three minutes): the installer, the
+>    folder and ends by itself (four to five minutes; the first run
+>    longer: Docker pulls `debian:bookworm-slim` once, for the image the
+>    nodes' containers are made from): the installer, the
 >    sources linked, Bare put in place, the boot, the host deployed from
 >    `base-component-haicc`, its service started, a node deployed inside
 >    it, commands chained through both, nodes created, read and deleted
 >    with `crud`, queries (a filter, a command at each position a URI
 >    selects, a URI through shortcuts), a request's log and its flags,
->    the teardowns. One line a
->    check (207 of them); the last
+>    the cluster (a swarm's two nodes deployed at `swarms/swarm-1/<name>`,
+>    each with its replica in a Docker container, commands sent on into
+>    a container, a container stopped, started and removed), the
+>    teardowns. One line a
+>    check (229 of them); the last
 >    lines say
 >    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
->    leaves nothing running: check with `pgrep -fa "bin/bare"`.
+>    leaves nothing running: check with `pgrep -fa "bin/bare"` and
+>    `docker ps -a --filter label=haicc.folder` (no container). Before
+>    the first run: `docker version` must show a server; if it does not,
+>    say so in your note and run the rest: the checks about the
+>    containers then fail, the others pass.
 > 5. **Run the packages' own tests**, each from its bundle, from the clone's
 >    folder, for each of `base-package-runtime`, `base-package-protocol`,
 >    `base-package-help`, `base-package-boot`, `base-package-service`,
->    `base-package-haicc`, `base-package-crud`, `base-component-boot`,
+>    `base-package-haicc`, `base-package-crud`, `base-package-container`
+>    (it makes a real container: Docker again), `base-component-boot`,
 >    `base-component-haicc`, `base-app-haicc`, `package-docs-mrepo`,
 >    `package-docs-template`:
 >    `SOURCES=$PWD/sources tools/bare sources/haiccing/<package>.bundle /test/full`
@@ -84,10 +96,22 @@ Only its note is committed.
 >    `haicc host service/initialise`, `haicc host service/start`,
 >    `haicc host help/get`, `haicc . crud/create swarms/swarm-1`,
 >    `haicc . crud/read swarms`, `haicc . crud/read .`,
+>    then a swarm's node with its container, at the host:
+>    `haicc host crud/create swarms/swarm-1`,
+>    `haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc`,
+>    `haicc host haicc swarms/swarm-1/node-1 service/initialise`,
+>    `haicc host haicc swarms/swarm-1/node-1 service/start`,
+>    `haicc host haicc swarms/swarm-1/node-1 container/create`,
+>    `haicc host haicc swarms/swarm-1/node-1 container/start`,
+>    `haicc host/swarms/swarm-1/node-1/container crud/read .` (answered
+>    from inside the container; `docker ps` shows it); or all of it in
+>    one, instead of the host's three commands above:
+>    `haicc . boot/deploy host base-component-haicc --flags continuation=cluster`;
 >    `haicc host crud/read . --flags log=verbose` (a request's log with
 >    its action's steps), `haicc --flags log=debug -- host crud/read .`
 >    (flags in front, closed by `--`: for the whole chain); and to undo:
->    `haicc . boot/teardown host`, then `haicc boot/teardown`. A URI has
+>    `haicc boot/teardown` (every runtime stopped, the containers
+>    removed). A URI has
 >    no leading slash any more: `.` is the root, `host` the position
 >    `host`. A work folder left by an earlier version (`~/.haicc/work`)
 >    is not carried over: `haicc boot/teardown` first, with the `haicc`
