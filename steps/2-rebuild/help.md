@@ -144,6 +144,11 @@ extracted like help (`tasks.md`).
   experience - I wonder, we need feedback commands to gather 'in the
   field experiences' as they happen. Maybe as a flag so it can be
   attached to the command it refers to."
+- **The feedback flag's rule**: "it has to be the last flag on the last
+  command part. All text following the flag is the feedback text."
+  (`haicc host crud/read swarms --flags log=verbose feedback the answer
+  does not say which layer it read`: the text as it is, `--` and `=`
+  included; the shell's own quoting still applies.)
 
 **Proposed** (ours)
 
@@ -171,9 +176,10 @@ extracted like help (`tasks.md`).
   its answer is the action's answer. The commands hc sends on the way
   are ordinary requests to the platform. A code implementation replaces
   it, the README unchanged; reports and assessments stay hc's.
-- **Feedback with the command**: `--flags feedback="..."` on any
-  command, recorded in that request's record beside its log, so
-  `haici` reads it with its context and its result.
+- **Feedback with the command**: the `feedback` flag (its rule above),
+  recorded in the record of the request as typed, the first, which
+  holds the whole command and its answer, so `haici` reads it with its
+  context and its result.
 
 **To settle**
 
