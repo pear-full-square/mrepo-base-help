@@ -1142,6 +1142,21 @@ demo repo could contain more than one demo, then we can use the flags:
 haicc . boot/deploy base-demo-haicc --flags post-deploy=[script] These
 scripts then can become part of howtos. What do you think?"
 
+**Then, on our proposing that the deployed mrepo runs its script
+itself**: "you can use a script from host by using the registry to
+target the mrepo directly rather that through the parent. That
+functionality will be added later, not now. Can you pace the requests
+from the response seen in the terminal? Read the script from the bundle
+and execute it in the terminal, I think that is better. So adding the
+post-deploy flag returns the script in the response and the terminal
+uses it to execute the script from there. What do you think?"
+
+So: the terminal runs the script, not the mrepo. The deploy answers
+with the script, read from the package's bundle; the `haicc` command
+then sends its commands one by one, each after the response of the one
+before. Simpler than ours below (no runner in the runtime), and the
+demo is seen as it runs. Our earlier view, kept for the record:
+
 **Our view, put back** (ours, to settle together)
 
 - Yes: a script is a howto that runs, so it cannot go stale, and it is
