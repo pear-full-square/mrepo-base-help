@@ -100,10 +100,16 @@ among them: `pear-full-square/mrepo-base-container`,
   with implementation"; `tasks.md`, `help-mvp`, "The order, and the
   go"): 1. `howto/extract` and `howto/get` with the first how-tos:
   **built**, part 82 (`haicc . howto`, `haicc host howto`, `haicc host
-  howto/get . node/deploy`). 2. **`package-review`, next**: one package
-  at a time: its install test, its rules and decisions moved into its
-  help, its how-tos; its form is to be put to the human first, in a few
-  lines, then worked through. 3. the flag unit, `help/annotate`,
+  howto/get . node/deploy`). 2. **`package-review`, started**: its first
+  pass is `review.md` (the help and howto extracts as they are, measured
+  on a host; the sixteen packages against the three criteria; nothing
+  changed). The human corrected `howto/get` on seeing step 1 (static,
+  asked directly with no dot, by protocol or protocol action; "what can
+  be done here" an annotate: `tasks.md`, `help-mvp`, "Corrected") and
+  set the approach: review the extract's structure, then devise the
+  static `get` for help and howto from it, together. So `get` is not
+  rebuilt yet. Next: devise the extract's structure and `get` with the
+  human, one question at a time; then the packages, one at a time. 3. the flag unit, `help/annotate`,
   `haici/feedback`, with `howto/explore` and `howto/plan` scoped
   (headless Claude their placeholder; the call itself a piece of its
   own): `tasks.md`, `help-mvp`, as amended there. The four repositories

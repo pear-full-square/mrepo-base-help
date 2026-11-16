@@ -1651,6 +1651,14 @@ to 81, asked what actions the MVP proposes; not built yet)
 - **Open**: whether a how-to is filed by what it declares, wherever it
   lives (ours), or each protocol's package carries the how-tos of its
   own actions.
+- Then, the approach (the human): "what I propose: we start the review
+  and review the extract data structure. Then based on the extract
+  structure we devise the (static) get for help and howto. Do you agree
+  with that approach?" Ours: yes: the extract is the data, `get` a view
+  of it. So `get` is not rebuilt on the reading above: the review's
+  first pass, the extracts as they are and the sixteen packages, is in
+  `review.md`; `get` for `help` and `howto` is devised from it,
+  together.
 
 **Not in it** (later, each when the work reaches it): guided runs (each
 step's help before it, a run resumed); `haicc howto boot` as a short form
