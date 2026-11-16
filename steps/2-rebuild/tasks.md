@@ -111,7 +111,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
-| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | first build done, part 75; the rest for the next design round |
+| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | first build done, part 75: it mixed the link registry (an mrepo's own) and the mrepo registry (the boot's) up: to correct |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -1069,6 +1069,29 @@ from this repository when what nothing used was removed
 in the history and in its own repositories; reviewed in
 `steps/1-review/findings.md`. To bring back when the work reaches the
 demos.
+
+**The first build mixed two registries up** (2026-11-16, on seeing
+`haicc . crud/read "local/*" --flags layer=registry`): "You have mixed
+up registries. There is the registry in boot: haicc registry/local
+crud/read * And there is the mrepo runtime registry, but that is for
+mrepo use, not external. I think in mrepo the layer should be links or
+something like that. The repo wants an easy lookup of all linked mrepos
+with full detail, not keyed on URI so it can use it for reverse lookups
+(indexing). So mrepo internal it is a link registry, the boot contains
+a mrepo registry."
+
+So there are two, and part 75 built one thing for both:
+
+- **The link registry**, inside every mrepo that links others: a layer,
+  `links` or the like, for the mrepo's own use, not for the outside: all
+  the mrepos it links, with full detail, not keyed on their URI.
+- **The mrepo registry**, in the boot mrepo: the mrepos of the haicc
+  install, reached as a position: `haicc registry/local crud/read *`.
+
+To correct, once our reading of both is confirmed (below, in the
+discussion): what part 75 named `registry` is the link registry, keyed
+wrongly and offered to the outside wrongly; the mrepo registry in the
+boot mrepo is not built.
 
 **Our reading so far, to confirm** (ours, put back in the discussion)
 

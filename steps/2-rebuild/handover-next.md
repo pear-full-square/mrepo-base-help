@@ -204,7 +204,12 @@ too (part 73), and the decisions made while building `xpath-first` are
 gone through together (part 74). **The cleanup is done.**
 `teardown-cascade` is not cleanup: it goes with `mrepo-registry` ("that
 is a better place to do 'bulk teardown'"), then dropped ("it can be done
-with xpath"). **`mrepo-registry`'s first build is done** (part 75;
+with xpath"). **`mrepo-registry`'s first build is done but mixed two
+registries up, to correct** (`tasks.md`, "The first build mixed two
+registries up": the link registry, an mrepo's own, a layer `links` or
+the like, not for the outside, not keyed on a URI; the mrepo registry,
+in the boot mrepo, reached as a position, `haicc registry/local
+crud/read *`). Confirm our reading of both before rebuilding (part 75;
 `tasks.md`, "P1 · `mrepo-registry`": the discussion in the words used,
 the proposal, the go). KISS: enough for the swarm demos; a further
 design round comes with the next step. A rule since (`rules.md`): deploy
