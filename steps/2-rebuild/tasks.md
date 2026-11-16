@@ -30,7 +30,7 @@ yet, none has a go.
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
 | | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | built, part 77: a simple script, no nesting, ceiling 100 |
 | | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | the work now: `cluster.json` begun, part 78; a swarm's nodes with their containers, part 79; next: the nodes finding each other, and Splectral on it |
-| | `splectral` | the view of the swarm in a browser, for the demos ("like we had before") | the MVP built, part 80: an mrepo of its own beside the host, one page: the commands of the install as they complete; what comes next to settle |
+| | `splectral` | the view of the swarm in a browser, for the demos ("like we had before") | the MVP built, part 80: an mrepo of its own beside the host, one page: the commands of the install as they complete; part 81: the install as a tree above them; what comes next to settle |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1367,6 +1367,13 @@ host, or an app beside `haicc`.
 
 **Built**: part 80 of `readme.md`.
 
+**Then, the structure of the install beside the log** (2026-11-16): our
+recommendation for what comes next (the mrepos as a tree: boot, host,
+swarm, nodes, containers, each with its state), and the one thing to
+settle first: is a swarm node shown as one node, or as its bridgehead
+and its container separately? The human: "swarm node as a node. keep it
+simple, this is just POC." **Built**: part 81.
+
 **Where it is to go** (the human, above; nothing of it designed)
 
 - **An app within haicc, alongside host**: where it sits now.
@@ -1380,18 +1387,19 @@ host, or an app beside `haicc`.
 
 **To settle next, one at a time** (ours, not put yet)
 
-- The world: what a node is now (each mrepo? the swarm node, bridgehead
-  and container as one?), what a link is (a shortcut now; a p2p
-  connection later), what a resource is. The old contract's world:
-  hosts, nodes, resources, links.
+- The world, the rest of it: a node is an mrepo, a swarm node one node
+  with its container (settled, part 81); what a link is (a shortcut
+  now; a p2p connection later), what a resource is. The old contract's
+  world: hosts, nodes, resources, links.
 - Components as packages in its list: how a package brings a page, a
   subscription, an action (the old manifest, `splectral.json`).
 - Scenarios and continuation scripts: a scenario was a list of steps
   (say, do, await an event); a script is a list of commands. One thing?
 - The map and the model back (React and htm, or plain JavaScript as the
   MVP's page).
-- The structure shown: asked with `haicc` commands (each mrepo's links,
-  its service state, `container/status`).
+- The structure as it is, not only as the commands made it: asked with
+  `haicc` commands (each mrepo's links, its service state,
+  `container/status`), for what ended without a command.
 - The first demo beyond the log.
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded

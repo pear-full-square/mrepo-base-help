@@ -358,6 +358,14 @@ out=$(curl -s "$splectral/records")
 has "$out" '"command":"haicc host haicc swarms/swarm-1/node-2 container/start","ok":true,"error":null,"through":["local/host","swarm-1/node-2"]' "Splectral: a command of the cluster script, sent on through the host to the node"
 has "$out" '"through":["local/host","swarm-1/node-1","swarm-1/node-1/container"]' "one that went on into a container: all three"
 has "$out" '"ok":false,"error":"no unique URI to make a replica by: swarm-1/node-1/container (<swarm>/<name>)"' "one that failed: its error"
+# and the install as those commands made it: a tree, a swarm node one node
+tree=$(curl -s "$splectral/structure")
+has "$tree" '{"root":"local/boot","nodes":[{"uri":"local/boot","parent":null,"at":".","package":null,"service":null,"container":null,"depth":0},{"uri":"local/host","parent":"local/boot","at":"host","package":"haiccing/base-component-haicc","service":"started","container":null,"depth":1}' "Splectral: the install's structure, folded from the commands: the root, the host below it, started"
+has "$tree" '{"uri":"swarm-1/node-1","parent":"local/host","at":"swarms/swarm-1/node-1","package":"haiccing/base-component-haicc","service":"started","container":null,"depth":2}' "a swarm's node below the host, started; its container removed: none"
+has "$tree" '{"uri":"swarm-1/node-2","parent":"local/host","at":"swarms/swarm-1/node-2","package":"haiccing/base-component-haicc","service":"started","container":{"name":"haicc-swarm-1-node-2-' "the other: one node, its container part of it"
+has "$tree" '"state":"running","service":"started"},"depth":2}' "its container running, the replica in it in service"
+hasnt "$tree" '"uri":"swarm-1/node-2/container"' "a replica is no node of its own"
+has "$tree" '{"uri":"local/splectral","parent":"local/boot","at":"splectral","package":"haiccing/base-package-splectral","service":"started","container":null,"depth":1}' "Splectral itself, beside the host"
 key=$(printf '%s' "$out" | sed -n 's/.*{"key":"\([0-9a-f-]*\)"[^{]*"command":"haicc host haicc swarms\/swarm-1\/node-1 container\/remove".*/\1/p')
 has "$(curl -s "$splectral/record/$key")" '"output":{"removed":"container","container":"haicc-swarm-1-node-1-' "a line's record whole: its output and its log"
 is "$(haicc --output splectral service/stop 2>&1)" '{"service":"stopped","state":"initialised"}' "haicc splectral service/stop: its stop hook ends the server"

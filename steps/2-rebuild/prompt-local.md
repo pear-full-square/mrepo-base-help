@@ -42,7 +42,7 @@ Only its note is committed.
 >    a container, a container stopped, started and removed), Splectral
 >    (its mrepo deployed beside the host, its page and its lines asked
 >    with curl), the teardowns. One line a
->    check (243 of them); the last
+>    check (249 of them); the last
 >    lines say
 >    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
 >    leaves nothing running: check with `pgrep -fa "bin/bare"` and
