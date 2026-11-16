@@ -9,7 +9,9 @@ each at `haiccing/<repo>`, in the package structure
   `base-package-help/`, help; `base-package-boot/`, the boot protocol;
   `base-package-service/`, the service; `base-package-haicc/`, haicc;
   `base-package-crud/`, structure in `main`; `base-package-container/`,
-  an mrepo's replica in a container.
+  an mrepo's replica in a container; `base-package-splectral/`,
+  Splectral: the commands of an install shown in a browser, an mrepo of
+  its own beside the host.
 - Components, several packages deployed together: `base-component-boot/`,
   the initial boot mrepo and the program that puts it in place;
   `base-component-haicc/`, the haicc mrepo.

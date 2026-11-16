@@ -23,8 +23,9 @@ the work reaches it.
 - `haiccing/`: the packages, each at the path of its repository:
   `base-package-runtime`, `base-package-protocol`, `base-package-help`,
   `base-package-boot`, `base-package-service`, `base-package-haicc`,
-  `base-package-crud`, `base-package-container` (one package, one
-  protocol); the components `base-component-boot` (the
+  `base-package-crud`, `base-package-container`,
+  `base-package-splectral` (one package, one protocol; the last also
+  defines an mrepo of its own, Splectral's, deployed beside the host); the components `base-component-boot` (the
   initial boot mrepo and the program that puts it in place) and
   `base-component-haicc`
   (several packages deployed together, `main` empty; a list ends with its

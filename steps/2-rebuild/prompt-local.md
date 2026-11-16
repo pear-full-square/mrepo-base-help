@@ -39,9 +39,10 @@ Only its note is committed.
 >    selects, a URI through shortcuts), a request's log and its flags,
 >    the cluster (a swarm's two nodes deployed at `swarms/swarm-1/<name>`,
 >    each with its replica in a Docker container, commands sent on into
->    a container, a container stopped, started and removed), the
->    teardowns. One line a
->    check (229 of them); the last
+>    a container, a container stopped, started and removed), Splectral
+>    (its mrepo deployed beside the host, its page and its lines asked
+>    with curl), the teardowns. One line a
+>    check (243 of them); the last
 >    lines say
 >    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
 >    leaves nothing running: check with `pgrep -fa "bin/bare"` and
@@ -53,7 +54,8 @@ Only its note is committed.
 >    folder, for each of `base-package-runtime`, `base-package-protocol`,
 >    `base-package-help`, `base-package-boot`, `base-package-service`,
 >    `base-package-haicc`, `base-package-crud`, `base-package-container`
->    (it makes a real container: Docker again), `base-component-boot`,
+>    (it makes a real container: Docker again), `base-package-splectral`,
+>    `base-component-boot`,
 >    `base-component-haicc`, `base-app-haicc`, `package-docs-mrepo`,
 >    `package-docs-template`:
 >    `SOURCES=$PWD/sources tools/bare sources/haiccing/<package>.bundle /test/full`
@@ -107,6 +109,11 @@ Only its note is committed.
 >    from inside the container; `docker ps` shows it); or all of it in
 >    one, instead of the host's three commands above:
 >    `haicc . boot/deploy host base-component-haicc --flags continuation=cluster`;
+>    and, before any of it, Splectral, to watch the commands arrive in
+>    a browser on the laptop:
+>    `haicc . boot/deploy splectral base-package-splectral --flags continuation=start`,
+>    `haicc splectral splectral/status` (it says the page's URL:
+>    `http://127.0.0.1:4400`, another port when that one is taken);
 >    `haicc host crud/read . --flags log=verbose` (a request's log with
 >    its action's steps), `haicc --flags log=debug -- host crud/read .`
 >    (flags in front, closed by `--`: for the whole chain); and to undo:

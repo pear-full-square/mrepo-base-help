@@ -308,7 +308,19 @@ out=$(haicc boot/deploy 2>&1); is $? 0 "haicc boot/deploy again"
 has "$out" '"already":true' "already built: kept"
 is "$(running | wc -l | tr -d ' ')" 1 "still one runtime"
 
-# 12. the cluster: the host deployed with the cluster script: itself in
+# 12. Splectral: an mrepo of its own beside the host, deployed by the
+# boot mrepo; its server started with its service, following the boot
+# mrepo's outbox folder: every command from here on a line of its page
+out=$(haicc --output . boot/deploy splectral base-package-splectral --flags continuation=start 2>&1); is $? 0 "haicc . boot/deploy splectral base-package-splectral --flags continuation=start: Splectral deployed and brought into service"
+has "$out" '"deployed":"splectral","mrepo":"local/splectral"' "an mrepo of its own, beside the host: local/splectral"
+out=$(haicc --output splectral splectral/status 2>&1)
+has "$out" '{"running":true,"url":"http://127.0.0.1:' "haicc splectral splectral/status: its server running, started by the service's start hook"
+has "$out" "\"outbox\":\"$T/home/work/mrepos/boot/outbox\"" "following the boot mrepo's outbox folder"
+splectral=$(printf '%s' "$out" | sed -n 's/.*"url":"\([^"]*\)".*/\1/p')
+has "$(curl -s "$splectral/")" "<title>Splectral</title>" "its page served"
+has "$(curl -s "$splectral/records")" '"command":"haicc splectral service/start","ok":true,"error":null,"through":["local/splectral"]' "its lines: the commands of the install so far, each with where it was sent on to"
+
+# 12b. the cluster: the host deployed with the cluster script: itself in
 # service, a swarm in its main, two nodes deployed below it and in service,
 # each with its replica in a container, in service too
 docker version --format '{{.Server.Version}}' >/dev/null 2>&1 && ok "Docker answers: the nodes can have their containers" || no "Docker answers: the nodes can have their containers" "no Docker daemon answers: the container checks below fail"
@@ -321,7 +333,7 @@ has "$out" '"started":"container","container":"haicc-swarm-1-node-2-' "its conta
 has "$out" '[{"uri":["main","swarms/swarm-1/node-1"],"value":{},"children":[],"shortcuts":[{"mrepo":"swarm-1/node-1","link":"' "its last command: the swarm's nodes read: each a shortcut"
 [ -d "$T/home/work/mrepos/swarm-1/node-1/inbox" ] && [ -d "$T/home/work/mrepos/swarm-1/node-2/inbox" ] && ok "each node at its place, by its unique URI: mrepos/swarm-1/<name>" || no "each node at its place"
 [ -d "$T/home/work/containers/swarm-1/node-1/inbox" ] && [ -d "$T/home/work/containers/swarm-1/node-2/inbox" ] && ok "each replica at its place, beside the mrepos: containers/swarm-1/<name>" || no "each replica at its place"
-is "$(running | wc -l | tr -d ' ')" 4 "four runtimes running on the host: the boot mrepo's, the host's, the two nodes'"
+is "$(running | wc -l | tr -d ' ')" 6 "six processes of the install on the host: five runtimes (the boot mrepo's, Splectral's, the host's, the two nodes') and Splectral's server"
 is "$(containers | wc -l | tr -d ' ')" 2 "two containers: a replica's runtime in each"
 is "$(haicc --output host/swarms/swarm-1/node-2 crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["container"]}]' "a node in service, answering through the host: its replica linked at container"
 N="host haicc swarms/swarm-1/node-1"
@@ -341,13 +353,26 @@ is "$(haicc --output $N container/status 2>&1)" '{"replica":null,"state":"none"}
 [ ! -e "$T/home/work/containers/swarm-1/node-1" ] && ok "its folder removed" || no "its folder removed"
 is "$(containers | wc -l | tr -d ' ')" 1 "one container left: node-2's"
 is "$(haicc --output $N crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "its link out of the node's main"
+# on Splectral's page: the cluster's commands, each with the mrepos it went through
+out=$(curl -s "$splectral/records")
+has "$out" '"command":"haicc host haicc swarms/swarm-1/node-2 container/start","ok":true,"error":null,"through":["local/host","swarm-1/node-2"]' "Splectral: a command of the cluster script, sent on through the host to the node"
+has "$out" '"through":["local/host","swarm-1/node-1","swarm-1/node-1/container"]' "one that went on into a container: all three"
+has "$out" '"ok":false,"error":"no unique URI to make a replica by: swarm-1/node-1/container (<swarm>/<name>)"' "one that failed: its error"
+key=$(printf '%s' "$out" | sed -n 's/.*{"key":"\([0-9a-f-]*\)"[^{]*"command":"haicc host haicc swarms\/swarm-1\/node-1 container\/remove".*/\1/p')
+has "$(curl -s "$splectral/record/$key")" '"output":{"removed":"container","container":"haicc-swarm-1-node-1-' "a line's record whole: its output and its log"
+is "$(haicc --output splectral service/stop 2>&1)" '{"service":"stopped","state":"initialised"}' "haicc splectral service/stop: its stop hook ends the server"
+curl -s -o /dev/null "$splectral/"; is $? 7 "its page gone"
+is "$(haicc --output splectral service/start 2>&1)" '{"service":"started","state":"started"}' "started again: the server back"
+has "$(haicc --output splectral splectral/status 2>&1)" '{"running":true,' "running"
 
 # 13. the machine level torn down: every runtime stopped, the replicas'
 # containers removed, what boot/deploy put in place removed; Bare, the
 # sources and the scripts stay
 out=$(haicc boot/teardown 2>&1); is $? 0 "haicc boot/teardown"
-has "$out" '"tornDown":".","runtimes":4,"containers":1' "said: the root torn down, four runtimes stopped, the nodes the host deployed among them, and the container left removed"
-is "$(running | wc -l | tr -d ' ')" 0 "no runtime left: every runtime of the install stopped"
+has "$out" '"tornDown":".","runtimes":5,"containers":1' "said: the root torn down, five runtimes stopped, the nodes the host deployed among them, and the container left removed"
+# (Splectral's server ends by itself, with its runtime: a moment later)
+i=0; while [ -n "$(running)" ] && [ "$i" -lt 50 ]; do sleep 0.1 2>/dev/null || sleep 1; i=$((i + 1)); done
+is "$(running | wc -l | tr -d ' ')" 0 "no process of the install left: every runtime stopped, Splectral's server ended with its own"
 is "$(containers | wc -l | tr -d ' ')" 0 "no container left"
 [ ! -e "$T/home/work/mrepos" ] && [ ! -e "$T/home/work/containers" ] && [ ! -e "$T/home/work/packages" ] && [ ! -e "$T/home/work/mrepo.json" ] && ok "the mrepos, the replicas, the package store and the setting removed" || no "what boot/deploy put in place removed" "$(ls "$T/home/work")"
 [ -x "$T/home/bare/bin/bare" ] && [ -f "$T/home/sources.list" ] && [ -x "$T/home/bin/haicc" ] && ok "Bare, the sources list and the scripts kept" || no "Bare, the sources list and the scripts kept"
