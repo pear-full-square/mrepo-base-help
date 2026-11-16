@@ -111,7 +111,8 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
-| P1 to P8 | above | the priorities | not discussed yet |
+| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | in discussion, design first |
+| P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
 
@@ -961,6 +962,43 @@ flag for that? layer=request". **Built**: part 72 of `readme.md`.
   `lib/command.js` (`formOf`: the prefix, `OUTSIDE`), `index.js`
   (`check`: the prefix `main`); `mrepo-base-crud/internal/node/`
   (`select`: what is no node left out); `mrepo-base-xpath/internal/query/`.
+
+## P1 · `mrepo-registry`: mrepos as shortcuts, with a registry of the host-local mrepos
+
+Next in our order of work, after the cleanup (done, parts 70 to 74). In
+discussion since 2026-11-16; nothing built. Design first.
+
+**Said so far** (2026-11-16, on what is settled and what the registry
+is)
+
+- "what is settled is the structure within the repo: swarm/node and
+  local/host plus other local mrepos. The local repos are created in
+  the boot mrepo (like host) and sit at root. (duplicated in registry)"
+- "This clears the way for the mrepo deployment with shortcut."
+- "Note that the registry is only for 'host local' mrepos. (not those
+  in containers)."
+- "With the registry we don't need special cascading teardown, it can
+  be done with xpath so that item can be dropped." (`teardown-cascade`
+  is dropped: a teardown of several is a query over the registry.)
+- "If you like you can do the container node creation as well."
+  (`node-mrepos`, P2.)
+- A question put to us: "Do we create a swarm protocol?"
+
+**From before** (`local-note.md`, 2026-11-15, point 4): the parent's
+`main/<name>/` holds the shortcut only, the mrepo is placed elsewhere;
+proposed there, not answered: every mrepo side by side under `mrepos/`,
+by its unique URI.
+
+**What is there today, to start from**: a child is built inside its
+parent's `main/` folder on disk (the shadow of `main`); in the parent's
+`main` its node and its shortcut (`main/<name>/.node.json`,
+`.shortcuts.json`: `{ mrepo: local/<name> }`); what is local to the
+machine about it (its package, the packages placed, its layers, its
+runtime's process) in the parent's runtime layer,
+`runtime/deployed/<name>.json`: a registry of a kind already, one a
+parent. `pear-full-square/mrepo-base-boot/internal/child.js`,
+`mrepo-base-xpath/internal/shortcut/` (`shadowOf`, `linkOf`: where a
+shortcut leads on disk).
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded
 
