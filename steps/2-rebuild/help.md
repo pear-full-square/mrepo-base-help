@@ -155,6 +155,11 @@ extracted like help (`tasks.md`).
   that exists as command. By suffixing feedback whatever it is attached
   to is not executed but feedback submission is (like help flag trigger
   help protocol)."
+- **The help flag written the same way**, `--flags help` at the end of
+  the last part, a rewrite into the `help` protocol (asked: one kind of
+  flag with `feedback`): "yes if you are happy with having one flexible
+  flag setup. But we need to design a proper flag handling unit, or at
+  least review if the existing implementation is scalable."
 
 **Proposed** (ours)
 
@@ -193,10 +198,6 @@ extracted like help (`tasks.md`).
   haicc host crud/read swarms --flags feedback the answer does not say which layer it read
       runs haici/feedback: the command crud/read swarms at host, the text; crud/read not run
   ```
-- **The help flag written the same way**: `--flags help` at the end of
-  the last part, a rewrite into the `help` protocol; `help` and
-  `feedback` one kind, a flag that turns a command into another
-  protocol's, nothing executed.
 
 **To settle**
 
@@ -204,3 +205,33 @@ extracted like help (`tasks.md`).
   the agent reads as it is and the terminal shows to a person.
 - How a finding travels from an install back to where its package is
   developed.
+
+## Flags
+
+**The review** (ours, 2026-11-16, of `mrepo-base-request/lib/flags.js`
+and its users): right for its three flags (`log`, `layer`,
+`continuation`), not for what comes. One central enumeration (a new
+flag changes a module every package carries; `continuation` is boot's);
+one kind only (a modifier: nothing for a rewrite); no flag takes the
+rest of the line (`--` in a feedback text would close the list); every
+flag carried down a chain (right for `log`, not for `layer` or a
+rewrite); flags not documented, so help cannot list them.
+
+**Proposed** (ours): a flag unit that parses and resolves only.
+
+- A flag declared by the package that owns it, in its `protocol.js`
+  beside its actions: its values, its kind, its scope (`log`, `layer`:
+  the request's own package). The runtime collects them from the linked
+  packages as it collects protocols: the flags there are depend on where
+  one stands.
+- Kinds: a modifier (how a request is handled: `log`, `layer`, `guide`);
+  an option, given to one action (`continuation`); a rewrite, the
+  command turned into another protocol's, nothing executed (`help` into
+  `help`, `feedback` into `haici`), before the command is checked at the
+  door, so help can say why a command is not allowed.
+- Scopes: the chain (`log`), the step (`layer`, `continuation`), the
+  last part (a rewrite).
+- A tail flag takes the rest of the line as its value, and is last
+  (`feedback`).
+- Each flag documented as an action is, a README in its module: help
+  lists the flags there are here.
