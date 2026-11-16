@@ -235,3 +235,26 @@ package's own that deploys it in a real, running mrepo.
   names an action: a keyword back into those pages. Static: one
   protocol, `info` (`extract`, `get`); `help` keeps what depends on the
   context (`annotate`); `howto` keeps `explore` and `plan`.
+
+- The reading confirmed, and more (the human): "yes, and if we need an
+  agent to generate a page the we do that on first request and cache
+  it. So you can weigh the pros and cons of code or agent generated
+  pieces. Do you think we need a data transform of the extract
+  information in order to get the static structure?"
+- Ours, put back (not answered): a transform of the addresses, not of
+  the content, and inside `extract`, not a stage of its own. The pages
+  stay as extracted, each once, at the place of its source (a package,
+  a module); beside them one map, keyword path to page, with each
+  keyword's one-liner and the keywords below it, made from the
+  protocols' configs and the bundles' files. `get` resolves a keyword
+  through the map and answers the page and its keywords; a section is
+  read from the page when asked. Why not a transformed copy: a page
+  keeps its source, so a finding can be rooted in the package it
+  belongs to; nothing is written twice. Code or agent: code for the map
+  and for every keyword that has a page of its own (the same answer
+  every time, tested, at no cost); an agent only for a keyword that has
+  none (the top page over all protocols, a protocol's page where its
+  package and its module each say a part, config options gathered from
+  several places), generated on first request, cached under the same
+  keyword with what it was made from, so it is made again when a source
+  changes, and marked as generated.
