@@ -66,6 +66,13 @@ container. Without a daemon those tests fail, they do not skip.
 
 ## Right now
 
+**In discussion since (2026-11-16, after part 79): help, howto, haici**
+(`help.md` here): the human opened the full design of help; three
+protocols, `help` (static and dynamic), `howto` (the entry point by
+activity), `haici` (human ai continuous improvement, from the request
+log), headless Claude their user, their generator and the filler of what
+is not built. Nothing of it built.
+
 **Pick up here** (2026-11-16, after part 79; everything in `main`,
 `execute/main` level with it, every repository pushed, the two new ones
 among them: `pear-full-square/mrepo-base-container`,
