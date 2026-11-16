@@ -196,8 +196,9 @@ is "$(haicc --output . crud/create swarms/swarm-2 2>&1)" '[{"uri":["main","swarm
 is "$(haicc --output . crud/read swarms 2>&1)" '[{"uri":["main","swarms"],"value":{},"children":["swarm-1","swarm-2"]}]' "haicc . crud/read swarms: an array of one node, its children by name"
 is "$(haicc --output . crud/read 'swarms/*' 2>&1)" '[{"uri":["main","swarms/swarm-1"],"value":{"size":3},"children":[]},{"uri":["main","swarms/swarm-2"],"value":{},"children":[]}]' "haicc . crud/read swarms/*: its children, each a node"
 is "$(haicc --output . crud/read swarmz 2>&1)" '[]' "nothing there (a typo): an empty array, exit 0"
-is "$(haicc --output . crud/read host 2>&1)" '[{"uri":["main","host"],"value":{},"children":[],"shortcuts":[{"mrepo":"local/host"}]}]' "the host read as a node: a shortcut, with the mrepo its data comes from; only the link"
-is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["host","swarms"]}]' "the root: a node, its children the host and what was created"
+out=$(haicc --output . crud/read host 2>&1)
+has "$out" '[{"uri":["main","host"],"value":{},"children":[],"shortcuts":[{"mrepo":"local/host","link":"' "the host read as a node: a shortcut, with the mrepo its data comes from and its link's key: what is needed to show it"
+is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["host","registry","swarms"]}]' "the root: a node, its children the host, the mrepo registry and what was created"
 out=$(haicc . crud/read host/swarms 2>&1 >/dev/null); is "$out" "haicc: host is a shortcut: a URI does not run through it (haicc host haicc swarms ...)" "below a shortcut: not read here, the way across said"
 # a query: a filter on the nodes' documents; a command at a position inside
 # main, and at each position a query selects
@@ -207,7 +208,7 @@ is "$(haicc --output . crud/read swarms/swarm-1/size 2>&1)" '[{"uri":["main","sw
 is "$(haicc --output swarms/swarm-1 crud/read . 2>&1)" '[{"uri":["main","swarms/swarm-1","."],"value":{"size":3},"children":[]}]' "haicc swarms/swarm-1 crud/read .: executed at the position, the command's URI read behind it"
 is "$(haicc --output 'swarms/*[size=3]' crud/read . 2>&1)" '[{"at":"swarms/swarm-1","value":[{"uri":["main","swarms/swarm-1","."],"value":{"size":3},"children":[]}]}]' "haicc 'swarms/*[size=3]' crud/read .: at each position selected, a list of what each gave"
 is "$(haicc --output 'swarms/*[size>100]' crud/read . 2>&1)" '[]' "nothing selected: an empty list, exit 0"
-out=$(haicc '*' crud/read . 2>&1 >/dev/null); has "$out" "not yet: it reaches a shortcut (host) among 2 positions; a command goes on from one shortcut at a time" "a shortcut beside other positions: not yet, said so"
+out=$(haicc '*' crud/read . 2>&1 >/dev/null); has "$out" "not yet: it reaches a shortcut (host) among 3 positions; a command goes on from one shortcut at a time" "a shortcut beside other positions: not yet, said so"
 is "$(haicc --output . crud/read 'swarms/*[2]' 2>&1)" '[{"uri":["main","swarms/swarm-2"],"value":{},"children":[]}]' "a position, from 1: the second"
 out=$(haicc . crud/read 'swarms/*[count(*)>1]' 2>&1 >/dev/null); has "$out" "not a function of this phase: count" "what the query does not read yet: said"
 out=$(haicc . crud/read "swarms/*[Size>2]" 2>&1 >/dev/null); has "$out" "bad filter" "a name in a filter that is no URI's: refused as a URI"
@@ -216,7 +217,7 @@ out=$(haicc . crud/update swarms '{}' 2>&1 >/dev/null); is "$out" "haicc: no act
 out=$(haicc . crud/create . 2>&1 >/dev/null); is "$out" "haicc: missing argument: target" "the root itself is not created"
 is "$(haicc --output . crud/delete swarms recurse 2>&1)" '[{"uri":["main","swarms"],"value":{},"children":["swarm-1","swarm-2"],"outcome":"deleted"}]' "with recurse: deleted, answered as it was"
 is "$(haicc --output . crud/delete swarms recurse 2>&1)" '[]' "again: nothing there, nothing selected, exit 0"
-is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["host"]}]' "gone with everything below it; the host untouched"
+is "$(haicc --output . crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["host","registry"]}]' "gone with everything below it; the host and the registry untouched"
 is "$(haicc --output host crud/create swarms/swarm-1 2>&1)" '[{"uri":["main","swarms"],"value":{},"children":["swarm-1"],"outcome":"created"},{"uri":["main","swarms/swarm-1"],"value":{},"children":[],"outcome":"created"}]' "haicc host crud/create swarms/swarm-1: in the host, started: its own main"
 is "$(haicc --output host crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["node-1","swarms"]}]' "the host's root: its node, a shortcut, and what was created there"
 is "$(haicc --output host/swarms/swarm-1 crud/read . 2>&1)" '[{"uri":["main","swarms/swarm-1","."],"value":{},"children":[]}]' "haicc host/swarms/swarm-1 crud/read .: through the shortcut, then at the position in the host"
@@ -252,16 +253,15 @@ has "$out" '"event":"request.flag"' "ignored, with a warning in the log"
 has "$out" '"event":"crud.read.query"' "the others in force"
 out=$(haicc host --flags log=debug crud/read . 2>&1 >/dev/null); is "$?" "1" "a list not closed where a command follows: exit 1"
 has "$out" "no command after the flags of haicc (-- closes a flag list, the command follows it)" "said: only -- or the end of the command closes a list"
-# the registry: what this mrepo deployed, an entry each by its unique URI;
-# several torn down at once by a query over it
-out=$(haicc --output . crud/read 'local/*' --flags layer=registry 2>&1)
-has "$out" '"uri":["registry","local/host"]' "haicc . crud/read 'local/*' --flags layer=registry: the host's entry, by its unique URI"
-has "$out" '"at":"host","folder":"../local/host","package":"haiccing/base-component-haicc"' "what this machine knows of it: the position that links to it, where it is, what it came from"
-out=$(haicc --output host crud/read 'local/*' --flags layer=registry 2>&1)
-has "$out" '"uri":["registry","local/node-1"]' "the host's own registry: the node it deployed"
+# the mrepo registry, in the boot mrepo: the mrepos it deployed, a node each
+# by its unique URI, reached as a position; several torn down by a query
+out=$(haicc --output registry/local crud/read '*' 2>&1)
+has "$out" '"uri":["main","registry/local","host"]' "haicc registry/local crud/read '*': the host, in the mrepo registry by its unique URI"
+has "$out" '"uri":"local/host","at":"host","how":"deployed","folder":"../local/host","package":"haiccing/base-component-haicc"' "what the install knows of it: which mrepo, linked where, how it came, where it is, what it came from"
+is "$(haicc --output host crud/read registry 2>&1)" '[]' "no registry in the host: the boot mrepo keeps it"
 haicc . boot/deploy extra-1 base-package-runtime >/dev/null 2>&1; haicc . boot/deploy extra-2 base-package-runtime >/dev/null 2>&1
 [ -d "$T/home/work/mrepos/local/extra-1/inbox" ] && [ -d "$T/home/work/mrepos/local/extra-2/inbox" ] && ok "two more deployed, each at its place" || no "two more deployed"
-is "$(haicc --output . boot/teardown "local/*[starts-with(at,'extra')]" --flags layer=registry 2>&1)" '[{"tornDown":"extra-1"},{"tornDown":"extra-2"}]' "haicc . boot/teardown \"local/*[starts-with(at,'extra')]\" --flags layer=registry: those the query selects torn down"
+is "$(haicc --output . boot/teardown "registry/local/*[starts-with(at,'extra')]" 2>&1)" '[{"tornDown":"extra-1"},{"tornDown":"extra-2"}]' "haicc . boot/teardown \"registry/local/*[starts-with(at,'extra')]\": the mrepos the query selects in the registry torn down"
 [ ! -e "$T/home/work/mrepos/local/extra-1" ] && [ ! -e "$T/home/work/mrepos/local/extra-2" ] && [ -d "$T/home/work/mrepos/local/host" ] && ok "their folders removed, the host left" || no "their folders removed, the host left"
 is "$(running | wc -l | tr -d ' ')" 3 "three runtimes running again"
 # main is the default layer; layer=<name> changes it: the request records read

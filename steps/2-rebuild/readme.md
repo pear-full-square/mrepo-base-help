@@ -3649,3 +3649,79 @@ checks: an mrepo at its place and nothing of it inside the one that
 deployed it, the registry read at the root and in the host, two more
 deployed and torn down by one query, the host left). Nothing left
 running.
+
+## 76. `mrepo-registry` corrected: the links layer, an mrepo's own; the mrepo registry, the boot mrepo's (2026-11-16)
+
+Part 75 built one thing where there are two, a layer named `registry`
+in every mrepo that deploys, keyed by the linked mrepo's URI and
+offered to the outside: "You have mixed up registries. There is the
+registry in boot: haicc registry/local crud/read * And there is the
+mrepo runtime registry, but that is for mrepo use, not external. I
+think in mrepo the layer should be links or something like that. The
+repo wants an easy lookup of all linked mrepos with full detail, not
+keyed on URI so it can use it for reverse lookups (indexing). So mrepo
+internal it is a link registry, the boot contains a mrepo registry."
+And: "the deploy protocol needs to create and use the main shortcuts
+info and the links layer." The key left to us ("you are doing the
+implementation, and this is for internal use. So you tell me. The link
+layer is all the link information organised for admin, main contain the
+information for rendering").
+
+- **The links layer** (`links`, brought by `base-package-boot`; the
+  layer of part 75, renamed): a document a link, by the link's own key
+  (`links/<key>.json`): which mrepo, the position that links to it, how
+  it came about (`deployed`), where it is on this machine, its package,
+  what runs it. For the mrepo's own use: found from a shortcut by the
+  key, from an mrepo or a position by what the records say. Not offered
+  to the outside: the `layer=registry` forms and their howto are gone.
+- **`main` holds what is needed to show a link**: the shortcut names
+  the mrepo and the link's key (`[{ "mrepo", "link" }]`). Ours: a key
+  of its own a link (a GUID, as our records have), so a link keeps its
+  identity whatever its position, and the detail is one read away.
+- **The deploy protocol creates and uses both**: `boot/deploy` writes
+  the shortcut and the link's record, `teardown` removes both; where a
+  shortcut leads is read from its link's record (`linkOf`).
+- **The mrepo registry, in the boot mrepo**: a position in its `main`,
+  `registry`, a node an mrepo it deployed, by unique URI
+  (`registry/local/host`), with the same record. Written by
+  `boot/deploy` and `teardown` there where `main` has the node
+  `registry`; the boot mrepo makes it as it boots (a boot hook of
+  `base-component-boot`: `crud/create main/registry`). Read and queried
+  as any position: `haicc registry/local crud/read "*"`.
+- **Several torn down by a query** there: `haicc . boot/teardown
+  "registry/local/*"`: each mrepo the query selects, at the position
+  that links to it.
+
+What part 75 built and stays: an mrepo placed by its unique URI under
+`mrepos/`; `haicc boot/teardown` stopping every runtime of the install.
+
+**Left as it is, known**: an mrepo deployed by another than the boot
+mrepo (a node by the host) has its link in that mrepo's `links`, and no
+node in the boot mrepo's registry.
+
+**Ours to mind**: part 75 was built on a reading that was not put back
+for confirmation in its own words (two registries read as one). A
+reading is confirmed before it is built, the more so where a name
+carries the design.
+
+**Validated**: the modules' tests (`mrepo-base-boot` 5 tests, 74
+asserts; `mrepo-base-xpath` 5, 52; `mrepo-base-haicc` 5, 38;
+`mrepo-base-crud` 9, 82; `mrepo-base-execute` 10, 89). Every package's
+pre-release, each passing; those the correction changed:
+`package-docs-mrepo` 8 units, 47 tests, 274 asserts;
+`base-package-haicc` 11, 85, 540; `base-package-crud` 11, 87, 598;
+`base-package-service` 14, 242, 1438; `base-package-runtime` 22, 307,
+1962; `base-package-boot` 23, 318, 2082; `base-component-boot` 23, 313,
+2151 (its `boot` test: the registry made as the boot mrepo boots, the
+host's node in it and its link's record the same, a redeploy keeping
+the link's key so `main` says nothing of it); `base-app-haicc` 23, 330,
+2188. `tools/bare tools/release.js --strict`: exit 0, twelve packages,
+every report current. `tools/bare tools/code-check.js`: no problems.
+The READMEs: 245 in the sources, no problems. `base-component-boot`'s
+`validate` three times. The `haicc` test, 194 of 194, twice (the
+registry read as a position, nothing of it in the host, two more
+deployed and torn down by one query into it). Nothing left running.
+
+A redeploy keeps its link's key: the same link, its mrepo built again;
+so `main` is the same after it, and its audit names the link's record
+and the registry's node only.

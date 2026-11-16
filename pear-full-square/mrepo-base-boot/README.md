@@ -4,7 +4,7 @@ The mrepo boot protocol: deploy, tear down and redeploy a child mrepo, executed 
 
 Deploy builds a child from a target package's list, links its packages
 and starts its runtime. Teardown stops the runtime and removes the child,
-one or several (a query over the registry); redeploy does both. The
+one or several (a query over the boot mrepo's registry); redeploy does both. The
 module also holds the install routine. Carried by
 `haiccing/base-package-boot`, which offers the actions, and by
 `haiccing/base-component-boot`, which builds the boot mrepo with the same
@@ -35,10 +35,12 @@ routine.
 
 A child is placed by its unique URI, side by side with the others under
 the work folder's `mrepos/` (`mrepos/local/host`), not inside its parent.
-The parent holds a node for it in its `main`, a shortcut: only the link;
-and an entry in its `registry` layer, a node by the child's unique URI:
-what this machine knows of it (where it is, the position that links to
-it, its package, what runs it).
+The parent holds a node for it in its `main`, a shortcut: which mrepo,
+and the link's key; and the link's record in its `links` layer, by that
+key: what this machine knows of it (where it is, the position that
+links to it, how it came about, its package, what runs it). The boot
+mrepo, whose `main` has the node `registry`, keeps the mrepo registry
+besides: the same record as a node there, by the child's unique URI.
 
 ## Tests
 

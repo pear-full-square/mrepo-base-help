@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 75). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 76). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -21,7 +21,9 @@ layer, `layer=<name>`, a record read as its document; 73
 `xpath-first`'s decisions gone through together: lists and positions as
 XPath has them, a filter's names by the URI's rules; 75
 `mrepo-registry`, the first build: an mrepo placed by its unique URI,
-the registry layer, several torn down by a query).
+the registry layer, several torn down by a query; 76 the same
+corrected: the links layer, an mrepo's own, and the mrepo registry, the
+boot mrepo's).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -204,14 +206,15 @@ too (part 73), and the decisions made while building `xpath-first` are
 gone through together (part 74). **The cleanup is done.**
 `teardown-cascade` is not cleanup: it goes with `mrepo-registry` ("that
 is a better place to do 'bulk teardown'"), then dropped ("it can be done
-with xpath"). **`mrepo-registry`'s first build is done but mixed two
-registries up, to correct** (`tasks.md`, "The first build mixed two
-registries up": the link registry, an mrepo's own, a layer `links` or
-the like, not for the outside, not keyed on a URI; the mrepo registry,
-in the boot mrepo, reached as a position, `haicc registry/local
-crud/read *`). Confirm our reading of both before rebuilding (part 75;
-`tasks.md`, "P1 · `mrepo-registry`": the discussion in the words used,
-the proposal, the go). KISS: enough for the swarm demos; a further
+with xpath"). **`mrepo-registry` is built** (parts 75 and 76; `tasks.md`, "P1 ·
+`mrepo-registry`": the discussion in the words used). Two things, told
+apart in part 76 after part 75 had built them as one: the **links
+layer** (`links`), every mrepo's own, a record a link by the link's own
+key, not for the outside; and the **mrepo registry**, in the boot
+mrepo's `main` at the position `registry`, a node an mrepo by its
+unique URI (`haicc registry/local crud/read "*"`). `main` holds what is
+needed to show a link (the shortcut: the mrepo, the link's key).
+KISS: enough for the swarm demos; a further
 design round comes with the next step. A rule since (`rules.md`): deploy
 and teardown, no upgrade in place. **Next in our order: `node-mrepos`**
 (P2): a swarm node is a bridgehead mrepo on the host and its replica in
@@ -262,7 +265,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 75. Its notes come
+  `handover-local.md`, are current for parts 60 to 76. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent

@@ -74,8 +74,8 @@ const LISTED = 100
 const causesOf = err => { const out = []; for (let c = err?.cause; c && out.length < 20; c = c.cause) out.push(c.message ?? String(c)); return out }
 
 // The targets an action writes, those the mrepo has: main, runtime, help,
-// protocols, registry.
-export const TARGETS = ['main', 'runtime', 'help', 'protocols', 'registry']
+// protocols, links.
+export const TARGETS = ['main', 'runtime', 'help', 'protocols', 'links']
 
 // A path as the execution reads and writes by, given either way: relative
 // from the mrepo's root (runtime/service.json), or slash-led

@@ -1,27 +1,28 @@
 // teardown(exec, { uri }): the boot protocol's teardown (README.md beside it).
 import { rmSync } from 'bare-fs'
 import { stop } from 'mrepo-base-runtime'
-import { segmented, ROOT } from 'mycelium-uri'
-import { query, registered, REGISTRY, MAIN } from 'mrepo-base-xpath'
+import { segmented, joined } from 'mycelium-uri'
+import { query, REGISTRY, MAIN } from 'mrepo-base-xpath'
 import { child } from '../../internal/child.js'
 
-// Several at once: a URI read at the registry (layer=registry) selects
-// entries there, by unique URI (local/*, a filter on what an entry says):
-// each torn down at the position that links to it. -> a list
+// Several at once: a URI into the mrepo registry (main/registry/...: the
+// boot mrepo's) selects mrepos there, by unique URI or by what their
+// nodes say: each torn down at the position that links to it. -> a list
 async function several (exec, uri) {
   const { found } = await query(exec, uri)
   const out = []
   for (const f of found) {
-    // (an entry is a node; a folder above the entries, a swarm's, is none)
-    const entry = f.kind === 'node' && f.at !== ROOT ? await registered(exec, f.at) : null
-    if (entry?.at) out.push(await teardown(exec, { uri: [MAIN, entry.at] }))
+    // (an mrepo's node says where it is linked; a swarm's node above them does not)
+    const at = f.kind === 'node' ? JSON.parse((await exec.find(`${MAIN}/${f.at}/.node.json`))?.toString() ?? '{}').at : null
+    if (at) out.push(await teardown(exec, { uri: [MAIN, at] }))
   }
-  exec.log('verbose', 'several', { uri: uri.join('/'), tornDown: out.length })
+  exec.log('verbose', 'several', { uri: joined(uri), tornDown: out.length })
   return out
 }
+const inRegistry = uri => { const u = joined(segmented(uri)); return u === `${MAIN}/${REGISTRY}` || u.startsWith(`${MAIN}/${REGISTRY}/`) }
 
 export async function teardown (exec, { uri }) {
-  if (segmented(uri)[0] === REGISTRY) return several(exec, uri)
+  if (inRegistry(uri)) return several(exec, uri)
   const c = child(exec, uri)
   const recorded = await c.recorded()
   if (!recorded) { await c.refuse(); throw new Error(`not deployed: ${c.at}`) }
@@ -32,7 +33,8 @@ export async function teardown (exec, { uri }) {
   // its link, the node it was made at, and what was local about it
   exec.remove(c.links)
   exec.remove(c.node)
-  if (await exec.find(c.local) !== null) exec.remove(c.local)
+  if (recorded.link && await exec.find(c.local(recorded.link)) !== null) exec.remove(c.local(recorded.link))
+  if (await exec.find(c.registry) !== null) exec.remove(c.registry)
   exec.log('info', 'torn down', { at: c.at, mrepo: c.mrepo, runtime: stopped ?? null })
   return { tornDown: c.at }
 }

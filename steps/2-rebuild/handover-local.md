@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-16 by the cloud session (parts 60 to 75), for the local agent (a Linux
+Updated 2026-11-16 by the cloud session (parts 60 to 76), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,7 +93,7 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 75, and `handover-next.md`. Before your last
+`readme.md`, parts 30 to 76, and `handover-next.md`. Before your last
 run (`6ebec98`): every package has its own tests and a test report
 (parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
 relative (61, 62); `crud` makes structure in `main`, the shortcuts are
@@ -129,10 +129,11 @@ name in a filter is lowercase, by the URI's rules (`public-key`). And
 where an mrepo is placed changed (75): by its unique URI, side by side
 under the work folder (`~/.haicc/work/mrepos/local/host`,
 `.../local/node-1`), no longer inside the folder of the one that
-deployed it; what an mrepo deployed is in its `registry` layer (`haicc
-. crud/read "local/*" --flags layer=registry`), and several are torn
-down by a query (`haicc . boot/teardown "local/*" --flags
-layer=registry`). `haicc boot/teardown` now stops every runtime of the
+deployed it. The boot mrepo keeps the mrepo registry (76), a position
+in its `main`: `haicc registry/local crud/read "*"` lists the local
+mrepos, and several are torn down by a query there (`haicc .
+boot/teardown "registry/local/*"`). An mrepo's own record of what it
+links is its `links` layer, not for the outside. `haicc boot/teardown` now stops every runtime of the
 install, a node inside the host too. An install that is there is not
 migrated (our rule: deploy and teardown, no upgrade in place): tear
 down with the old `haicc` first, then install and deploy anew. To try

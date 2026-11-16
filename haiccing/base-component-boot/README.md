@@ -65,8 +65,12 @@ command as typed and a GUID. Each step's outcome is logged in it.
 - Its unique URI is `local/boot`. It is the root: commands are addressed
   to it, and it passes on those for the mrepos linked in it.
 - No `service`: it is not service managed. Its `boot` hooks, fired by its
-  runtime each time it starts, activate its protocols and extract its
-  help.
+  runtime each time it starts, activate its protocols, extract its
+  help and make sure the node `registry` is in its `main`.
+- **It keeps the mrepo registry**: the mrepos of the install, a node
+  each by its unique URI under `registry` in its `main`
+  (`registry/local/host`), written by `boot/deploy` and `boot/teardown`:
+  `haicc registry/local crud/read "*"`.
 
 ## Package
 

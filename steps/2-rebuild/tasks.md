@@ -111,7 +111,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
-| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | first build done, part 75: it mixed the link registry (an mrepo's own) and the mrepo registry (the boot's) up: to correct |
+| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | built, parts 75 and 76 (the links layer, an mrepo's own; the mrepo registry, the boot mrepo's); the rest for the next design round |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -1091,10 +1091,11 @@ So there are two, and part 75 built one thing for both:
 - **The mrepo registry**, in the boot mrepo: the mrepos of the haicc
   install, reached as a position: `haicc registry/local crud/read *`.
 
-To correct, once our reading of both is confirmed (below, in the
-discussion): what part 75 named `registry` is the link registry, keyed
-wrongly and offered to the outside wrongly; the mrepo registry in the
-boot mrepo is not built.
+Corrected: part 76 of `readme.md`. The key, on our asking: "you are
+doing the implementation, and this is for internal use. So you tell me.
+The link layer is all the link information organised for admin, main
+contain the information for rendering." Ours: a key of its own a link,
+named by its shortcut in `main`.
 
 **Our reading so far, to confirm** (ours, put back in the discussion)
 

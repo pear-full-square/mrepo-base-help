@@ -14,7 +14,7 @@ Each layer, its README:
 | [packages/](packages/) | the code it runs |
 | [protocols/](protocols/) | its external API |
 | [help/](help/) | its documentation |
-| [registry/](registry/) | the mrepos it deployed, what this machine knows of each |
+| [links/](links/) | the mrepos it links, what this machine knows of each: its own use |
 | [inbox/](inbox/) | records posted to it |
 | [outbox/](outbox/) | records it sends |
 | [request/](request/) | the request layers: pending, executing, done |
@@ -59,8 +59,9 @@ An mrepo is a folder, `<dir>`. The first, the boot mrepo, put in place by
 `base-component-boot`, is `<work>/mrepos/boot/`; every other is placed by its
 unique URI, side by side with it: `<work>/mrepos/<swarm>/<name>/` (the
 host: `mrepos/local/host/`). The mrepo that deployed it has a node for it
-in `main`, a shortcut: the link, nothing of its data; and an entry in its
-`registry` layer: where it is on this machine. A running mrepo sees only forward
+in `main`, a shortcut: the link, nothing of its data; and a record in its
+`links` layer: where it is on this machine. The boot mrepo keeps the
+mrepo registry besides, in its `main`: the mrepos of the install. A running mrepo sees only forward
 (a URI has no `..`); outside is reached through a mapping (the work
 folder's package store, named in its packages manifest).
 

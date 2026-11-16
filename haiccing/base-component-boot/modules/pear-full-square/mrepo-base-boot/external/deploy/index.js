@@ -3,6 +3,7 @@ import { mkdtempSync, mkdirSync, writeFileSync, rmSync, existsSync } from 'bare-
 import { join, dirname } from 'bare-path'
 import { tmpdir } from 'bare-os'
 import { start } from 'mrepo-base-runtime'
+import { guid } from 'mrepo-base-request'
 import { build } from '../../internal/build/index.js'
 import { parseSource } from '../../internal/fetch/index.js'
 import { lay } from '../../internal/lay/index.js'
@@ -12,7 +13,8 @@ import { child } from '../../internal/child.js'
 // The organisation of a package named without one.
 const ORG = 'haiccing'
 
-export async function deploy (exec, { uri, args = [] }) {
+// (link: the key of the link, when it has one already: a redeploy keeps it)
+export async function deploy (exec, { uri, args = [] }, { link: kept = null } = {}) {
   const c = child(exec, uri)
   if (await c.recorded()) throw new Error(`deployed already: ${c.at}`)
   // a position that exists locally (data in main there): not a target
@@ -41,8 +43,9 @@ export async function deploy (exec, { uri, args = [] }) {
     const { packages } = await exec.step('place', r => ({ packages: Object.keys(r.packages).length }), () => place({ dir: c.dir, store, sources, list }))
     // What is local to this machine about it: not in main, which replicates.
     const record = { package: target, packages: Object.keys(packages), layers }
-    // (its entry in the registry says besides: which mrepo, where, linked at which position)
-    const entry = () => ({ uri: c.mrepo, at: c.at, folder: c.folder, ...record })
+    // (its link's record says besides: which mrepo, linked where, how, placed where)
+    const link = kept ?? guid()
+    const entry = () => ({ key: link, uri: c.mrepo, at: c.at, how: 'deployed', folder: c.folder, ...record })
     // Its runtime started, from its own packages/ (its pinned runtime), by
     // its directory: its inbox operational. Not when it has no runtime.
     const runtime = join(c.dir, 'packages', 'haiccing', 'base-package-runtime.bundle')
@@ -51,10 +54,17 @@ export async function deploy (exec, { uri, args = [] }) {
       if (!s) throw new Error(`its runtime did not start: ${c.dir}`)
       record.runtime = { pid: s.pid }
     } else exec.log('verbose', 'no runtime', { package: target })
-    // Its node, in main, and beside it its shortcuts: the link, only that.
+    // Its node, in main, and beside it its shortcuts: which mrepo, and the
+    // link's key: what is needed to show it. The rest in the links layer.
     exec.put(c.node, Buffer.from('{}\n'))
-    exec.put(c.links, Buffer.from(JSON.stringify([{ mrepo: c.mrepo }], null, 2) + '\n'))
-    exec.put(c.local, Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
+    exec.put(c.links, Buffer.from(JSON.stringify([{ mrepo: c.mrepo, link }], null, 2) + '\n'))
+    exec.put(c.local(link), Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
+    // The mrepo registry, where this mrepo keeps one (the boot mrepo): the
+    // mrepo's node there, by its unique URI, with the same record.
+    if (await c.registers()) {
+      if (await exec.find(c.swarm) === null) exec.put(c.swarm, Buffer.from('{}\n'))
+      exec.put(c.registry, Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
+    }
     exec.log('info', 'deployed', { at: c.at, mrepo: c.mrepo, package: target })
     return { deployed: c.at, mrepo: c.mrepo, ...record }
   } finally { rmSync(tmp, { recursive: true, force: true }) }

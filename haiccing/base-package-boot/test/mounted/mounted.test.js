@@ -24,13 +24,14 @@ const act = async (name, exec, form) => {
   // (one refused has logged too, before it threw)
   try { return await mounted.actions.boot[name](exec, form) } finally { if ((exec.entries?.length ?? 0) > before) logged.add(name) }
 }
-// Where a child at host is recorded: its node and its link in main, what
-// is local to this machine about it in the registry, by its unique URI.
+// Where a child at host is recorded: its node and its shortcut in main
+// (which mrepo, the link's key), what is local to this machine about it
+// in the links layer, by that key.
 // Where it is placed: by its unique URI, under the work folder's mrepos/.
 const NODE = '/main/host/.node.json'
 const SHORTCUT = '/main/host/.shortcuts.json'
-const LOCAL = '/registry/local/host/.node.json'
-const LINKED = { [NODE]: Buffer.from('{}'), [SHORTCUT]: Buffer.from(JSON.stringify([{ mrepo: 'local/host' }])) }
+const LOCAL = '/links/k-host.json'
+const LINKED = { [NODE]: Buffer.from('{}'), [SHORTCUT]: Buffer.from(JSON.stringify([{ mrepo: 'local/host', link: 'k-host' }])) }
 const abs = p => (p.startsWith('/') ? p : `/${p}`)
 
 // An execution as an action sees it: the parent's folder and unique URI,
@@ -68,7 +69,7 @@ test('its config, value by value: each action at a child\'s name, a target neede
   t.alike(Object.keys(cfg).sort(), ['actions', 'description', 'package'], 'nothing else: no default action')
   t.alike(Object.keys(cfg.actions).sort(), ['deploy', 'redeploy', 'teardown'])
   for (const [name, a] of Object.entries(cfg.actions)) {
-    t.alike(a.uris, name === 'teardown' ? ['<name>', '<swarm>/<name>'] : ['<name>'], `${name}: at one name below the mrepo, the child's${name === 'teardown' ? '; and, read at the registry, by a unique URI: several at once' : ''}`)
+    t.alike(a.uris, name === 'teardown' ? ['<name>', 'registry/<swarm>/<name>'] : ['<name>'], `${name}: at one name below the mrepo, the child's${name === 'teardown' ? '; and into the mrepo registry, by a unique URI: several at once' : ''}`)
     t.is(a.target, true, `${name}: a target is needed, the mrepo itself is none`)
     t.ok(a.description, `${name}: its description`)
     t.absent(a.states, `${name}: no state of its own: behind a door only where a hook puts it there`)
@@ -122,7 +123,7 @@ test('teardown: a child without a runtime, its folder and its shortcut removed; 
     const { exec, writes, files } = execution(dir, { ...LINKED, [LOCAL]: B({ package: 'haiccing/p' }) })
     t.alike(await act('teardown', exec, { uri: ['main', 'host'] }), { tornDown: 'host' }, 'what it returns')
     t.absent(existsSync(folder), 'its folder, where it was placed by its unique URI: removed')
-    t.alike([writes, Object.keys(files)], [[['remove', SHORTCUT], ['remove', NODE], ['remove', LOCAL]], []], 'its link and its node out of main, its entry out of the registry')
+    t.alike([writes, Object.keys(files)], [[['remove', SHORTCUT], ['remove', NODE], ['remove', LOCAL]], []], 'its shortcut and its node out of main, its link\'s record out of the links layer')
     await t.exception(act('teardown', exec, { uri: ['main', 'host'] }), /not deployed: host/, 'torn down already: not deployed')
     await t.exception(act('teardown', execution(dir, { '/main/data/x.json': B({}) }).exec, { uri: ['main', 'data'] }), /data exists locally: the boot protocol cannot target it/, 'data in main there: not a child')
     await t.exception(act('teardown', exec, { uri: ['main', '.'] }), /missing argument: target/, 'the mrepo itself')

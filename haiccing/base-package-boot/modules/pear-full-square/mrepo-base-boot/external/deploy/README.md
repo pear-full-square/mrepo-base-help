@@ -27,13 +27,17 @@ the child's unique URI.
 What it writes in the parent:
 
 - `main/<name>/.node.json`: the child's node, an empty document.
-- `main/<name>/.shortcuts.json`: its shortcut, `[{ "mrepo" }]`: only the
-  link, since `main` replicates.
-- `registry/<swarm>/<name>/.node.json`: its entry in the registry, a
-  node by its unique URI: what is local to this machine about it: its
-  URI, the position that links to it (`at`), where it is (`folder`,
-  from this mrepo's own folder), the package it was deployed from, the
-  packages placed, its layers, its runtime's process.
+- `main/<name>/.shortcuts.json`: its shortcut, `[{ "mrepo", "link" }]`:
+  which mrepo, and the link's own key: what is needed to show it, since
+  `main` replicates.
+- `links/<key>.json`: the link's record in the links layer, by that
+  key: what is local to this machine about it: its URI, the position
+  that links to it (`at`), how it came about (`deployed`), where it is
+  (`folder`, from this mrepo's own folder), the package it was deployed
+  from, the packages placed, its layers, its runtime's process.
+- `main/registry/<swarm>/<name>/.node.json`: the same record as a node
+  of the mrepo registry, by its unique URI; only where `main` has the
+  node `registry`: the boot mrepo.
 
 Where the child is built: by its unique URI under the work folder's
 `mrepos/`, `<work>/mrepos/<swarm>/<name>`, side by side with the others;
