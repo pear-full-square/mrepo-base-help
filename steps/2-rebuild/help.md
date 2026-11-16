@@ -222,6 +222,12 @@ in `protocol.js`): "I think a folder that contains a subfolder for each
 flag, and all the required info within that subfolder. Then flags can be
 independently added."
 
+- Where the folders live (asked: in the module that owns each flag):
+  "it should live in the module that processes flags - request. Request
+  is always there." So `mrepo-base-request/flags/<name>/`, every flag
+  there is (`log`, `layer`, `continuation`, `help`, `feedback`), in
+  every mrepo.
+
 **Proposed** (ours): a flag unit that parses and resolves only: it
 finds a flag's folder and applies it by kind and scope, and knows no
 flag by name.
@@ -231,12 +237,8 @@ flag by name.
   its handling (how a modifier changes the request; the command a
   rewrite makes); `README.md` what it does, with an example, extracted
   into help, checked as a method is.
-- The folder in the module that owns the flag, beside `external/` and
-  `internal/`: `mrepo-base-request/flags/log/`, `flags/layer/`;
-  `mrepo-base-boot/flags/continuation/`; `mrepo-base-help/flags/help/`;
-  the haici module's `flags/feedback/`. The runtime collects them from
-  the linked packages as it collects protocols: a flag is there only
-  where its package is, at its version.
+- A flag whose target is not there (`help` where the `help` protocol
+  is not active) says so, naming what is missing; never ignored.
 - Kinds: a modifier (how a request is handled: `log`, `layer`, `guide`);
   an option, given to one action (`continuation`); a rewrite, the
   command turned into another protocol's, nothing executed (`help` into
