@@ -28,7 +28,7 @@ yet, none has a go.
 | | label | the human | aim (our reading) |
 |---|---|---|---|
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
-| | `demo-scripts` | a script of commands run after a deploy: demos that run on their own, howtos that run | in discussion |
+| | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | in discussion |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1128,7 +1128,7 @@ parent. `pear-full-square/mrepo-base-boot/internal/child.js`,
 `mrepo-base-xpath/internal/shortcut/` (`shadowOf`, `linkOf`: where a
 shortcut leads on disk).
 
-## `demo-scripts`: a script of commands run after a deploy, for demos that run on their own
+## `continuation` (was `demo-scripts`): a command answers with a script to continue with; the terminal runs it
 
 Raised 2026-11-16, once `mrepo-registry` was built ("now we can use
 this to deploy host and a swarm with some (bare) nodes"). In
@@ -1150,6 +1150,12 @@ from the response seen in the terminal? Read the script from the bundle
 and execute it in the terminal, I think that is better. So adding the
 post-deploy flag returns the script in the response and the terminal
 uses it to execute the script from there. What do you think?"
+
+**And its name, and its reach** (on our terms for it): "then we should
+not call it post deploy, it is more something like 'continuation'. And
+it can be used in general. For instance any command may return with a
+continuation, i.e. now continue executing this script. It is a bit like
+an JIT pipeline."
 
 So: the terminal runs the script, not the mrepo. The deploy answers
 with the script, read from the package's bundle; the `haicc` command
