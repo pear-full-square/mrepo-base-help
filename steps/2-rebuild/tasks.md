@@ -29,6 +29,7 @@ yet, none has a go.
 |---|---|---|---|
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
 | | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | built, part 77: a simple script, no nesting, ceiling 100 |
+| | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | the work now: `cluster.json` begun, part 78; the swarm's own steps to design |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1179,6 +1180,42 @@ demo is seen as it runs. Our earlier view, kept for the record:
 - The flag picks the script for that deploy; run again later by name.
 - To settle: from whose place the commands are written; where a script
   lives and what names it; what says a demo is done and how it went.
+
+## `swarm-cluster`: a working swarm cluster, written as scripts of the component
+
+The work now (2026-11-16): "Let's add scripts to the component for what
+we still want to achieve - working swarm cluster. Once that is finished
+we can start with the other items on the list." It takes `node-mrepos`
+(P2) and `swarm-demos` (P3) together: the script is the target and its
+check.
+
+**Built so far** (part 78): `base-component-haicc`'s
+`scripts/cluster.json`: the host in service, a place for the swarm in
+its `main`, two nodes deployed and in service.
+
+**Said before, on a swarm node** (in the `mrepo-registry` discussion,
+above): a swarm node has a local bridgehead mrepo and an mrepo in a
+container; a `swarm` protocol on top of others like `service`: "deploy
+local bridgehead node as standard mrepo then initialise it as a swarm
+node (master or not), then replicate in container (default
+configuration is bridgehead is master and container is slave)"; master
+and slave: "who is boss, who manages and who follow. Master write
+config, slave follow it. Both get info from the swarm (flow into
+container then bridgehead) but the master acts on it. Plus the
+bridgehead master can take input from host." Docker for the first
+container node ("that is fine"). Splectral in the demos, if we can.
+
+**To design together, each a line of the script once built**
+
+- Where a swarm's node sits and what it is called: today one name below
+  the host's `main`, `local/node-1`; a swarm's would be at
+  `swarms/swarm-1/node-1`, `swarm-1/node-1`.
+- A node made a swarm node: the `swarm` protocol's first action; what
+  it writes (the swarm, the role).
+- Its replica in a container: what runs there, how it is reached, what
+  flows between the two.
+- The nodes finding each other: what a working cluster does, and how
+  the script checks it.
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded
 

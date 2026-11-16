@@ -3802,3 +3802,47 @@ twice. The `haicc` test, 202 of 202 (8 more checks: a deploy with
 `continuation=start`, its script said and run in order, the mrepo in
 service after it; a script the package has not, refused, nothing
 built). Nothing left running.
+
+## 78. The cluster script: the swarm cluster we work towards, written as a script of the component (2026-11-16)
+
+On the continuation: "I think this continuation idea is another good
+one. Since we keep request state the system can write the next set of
+commands on the fly tailored for the mrepo and the interacting user -->
+please execute at your end. (and we can drive the continuation
+internally as well, not going to the inbox. I think I am going to make
+it the heart of a JIT pipeline engine." Noted in `vision.md`
+("Continuations: the heart of a JIT pipeline engine"); nothing of it
+designed.
+
+And what comes next: "Let's add scripts to the component for what we
+still want to achieve - working swarm cluster. Once that is finished we
+can start with the other items on the list." So no demo package of its
+own for now: the scripts are `base-component-haicc`'s.
+
+- **`scripts/cluster.json`** (`base-component-haicc`): what of a swarm
+  cluster runs today, as one script, written from the deployed mrepo's
+  place: the mrepo brought into service; `swarms/swarm-1` created in
+  its `main`; `node-1` and `node-2` deployed from the same component,
+  each initialised and started; the host read. `haicc . boot/deploy
+  host base-component-haicc --flags continuation=cluster` does it all,
+  each command shown as it runs.
+- **It grows with what is built**: what a swarm still needs is added to
+  it as it comes: a node made a swarm node, its replica in a container,
+  the nodes finding each other. The script is the target written down,
+  and the check that it is reached.
+
+**Known as it stands**: the nodes are deployed one name below the
+host's `main` and are `local/node-1`, `local/node-2`: not yet at a
+position under the swarm, nor with the swarm in their unique URI. No
+container tool runs in this cloud session (Docker's client is there,
+no daemon): a container node is tried on the laptop.
+
+**Validated**: `base-component-haicc`'s pre-release, passing (8 units,
+53 tests); every other package's report current. `tools/bare
+tools/release.js --strict`: exit 0. `tools/bare tools/code-check.js`
+and the READMEs (246): no problems. The `haicc` test, 207 of 207 (5
+more checks: the host deployed with the cluster script, both nodes
+deployed by it, the host read at its end, a node answering through the
+host, each at its place; then `haicc boot/teardown` stopping four
+runtimes, the nodes the host deployed among them). Nothing left
+running.

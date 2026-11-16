@@ -1,0 +1,12 @@
+[
+  ["service/initialise"],
+  ["service/start"],
+  ["crud/create", "swarms/swarm-1"],
+  ["boot/deploy", "node-1", "base-component-haicc"],
+  ["haicc", "node-1", "service/initialise"],
+  ["haicc", "node-1", "service/start"],
+  ["boot/deploy", "node-2", "base-component-haicc"],
+  ["haicc", "node-2", "service/initialise"],
+  ["haicc", "node-2", "service/start"],
+  ["crud/read", "."]
+]

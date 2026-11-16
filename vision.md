@@ -302,3 +302,25 @@ it is; what is marked ours is not agreed.
   external API, the help flag answered in the request's context, AI
   enhanced help as its third stage) and HAICC, human–AI creative
   collaboration (above). The howto is new: not designed.
+
+## Continuations: the heart of a JIT pipeline engine
+
+Said 2026-11-16, once a command could answer with a continuation (a
+script to go on with, run by the terminal: `steps/2-rebuild/readme.md`,
+part 77). What was said is stated as it is; nothing of it is designed.
+
+- "I think this continuation idea is another good one. Since we keep
+  request state the system can write the next set of commands on the
+  fly tailored for the mrepo and the interacting user --> please
+  execute at your end. (and we can drive the continuation internally as
+  well, not going to the inbox. I think I am going to make it the heart
+  of a JIT pipeline engine."
+- Earlier, on its reach: "any command may return with a continuation,
+  i.e. now continue executing this script. It is a bit like an JIT
+  pipeline."
+- What is built is the simple case: a fixed script, answered by a
+  deploy, run by the terminal, no nesting, at most 100 commands. Open
+  from here: a continuation written on the fly from the request's state;
+  one driven inside an mrepo, not through the inbox; nesting; a script
+  used from elsewhere through the registry ("that functionality will be
+  added later, not now").
