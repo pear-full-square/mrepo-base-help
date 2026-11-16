@@ -119,8 +119,17 @@ among them: `pear-full-square/mrepo-base-container`,
      `-contract`, `-shell`, `-timeline`, `-scenario`, `-replay`;
      `splectral/base-view-map`); `splectral-server`'s old code was
      written over (its repository's history has it).
-  2. **The nodes finding each other**: what a working cluster does, and
-     how the script checks it; a node made a swarm node (the `swarm`
+  2. **The nodes finding each other: the next phase** (the human,
+     2026-11-16: "I prefer to leave this until the next phase so we can
+     run through a meaningful program. If we can show a cluster with
+     nodes, and a splectrum showing some information then that is good
+     enough for me. I want to have the packages review for help and
+     howto done as quickly as possible so we can start developing
+     functionality in earnest."). `swarm-cluster` is closed for this
+     phase; what comes now is help and howto (`help-mvp`, queued in
+     `tasks.md`), then `package-review`. Our five questions for then,
+     with what we recommended: `tasks.md`, `swarm-cluster`. For then:
+     what a working cluster does, and how the script checks it; a node made a swarm node (the `swarm`
      protocol; master and slave); what flows between a bridgehead and
      its replica. Earlier code to read, in the history (`42a5a66^`):
      `p2p-connect`, `p2p-dht` (a private DHT a swarm, the master its
