@@ -102,8 +102,9 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 6 | `xpath-first` | XPath phase 1: the engine, `crud` and `haicc` on it | built, parts 67 to 69; decisions to confirm |
 | | `data-names-in-queries` | a document's key in its URI form in a query | built, part 69 |
 | 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | noted, to discuss |
-| 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, part 70 |
-| 9 | `request-layer-access` | the request records reachable, `layer=request` | in discussion |
+| 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
+| 9 | `request-layer-access` | the request records reachable, `layer=request` | in discussion: no door closed with it |
+| | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
 | P1 to P8 | above | the priorities | not discussed yet |
 
 How to read a task:
@@ -880,7 +881,10 @@ words. **Built**: part 70 of `readme.md`, with what was left to us.
   next command starts." `haicc host --flags log=debug -- crud/read .`:
   the flags after a URI are that step's; `--` marks where the next
   command starts, and is optional ("yes, -- optional"). A flag still
-  persists down the chain until changed.
+  persists down the chain until changed. Then, on our first build
+  (part 70), which ended an unclosed list by guessing: "Strict
+  implementation please: -- or end-of-command closes the flag section"
+  (part 71).
 - **A record printed with its attributes packed on a line**: an opened
   container's entries fill a line up to the width, separated by `, `;
   an entry is never split across lines; one that does not fit on a line
@@ -928,9 +932,13 @@ flag for that? layer=request". In discussion; not built.
   `main`: positions and shortcuts are there. As any flag it holds
   through a chain, so the records of a linked mrepo are read the same
   way (`haicc host crud/read done/* --flags layer=request`).
-- **Read only outside `main`**: from outside, another layer is open to
-  an action whose config says it reads (`crud/read` for now); the
-  others stay refused there, as today.
+- ~~Read only outside `main`~~: dropped. Our answer together,
+  2026-11-15: "we don't need to 'close functionality doors' at this
+  moment, but we will need to design an 'external request (allowed
+  protocol & actions) API. I want it done properly, not with hard-coded
+  rules." So the flag opens the layer to whatever the protocols offer
+  there, and what the outside may ask becomes a design of its own:
+  `external-request-api`, below.
 - **A record is a file**: `crud/read` answers with a file's document
   there, `{ uri, value }` (today what is no node is left out).
 
@@ -940,6 +948,20 @@ flag for that? layer=request". In discussion; not built.
   `lib/command.js` (`formOf`: the prefix, `OUTSIDE`), `index.js`
   (`check`: the prefix `main`); `mrepo-base-crud/internal/node/`
   (`select`: what is no node left out); `mrepo-base-xpath/internal/query/`.
+
+## `external-request-api`: what the outside may ask, designed, not hard-coded
+
+Raised 2026-11-15, with `request-layer-access`: "we will need to design
+an 'external request (allowed protocol & actions) API. I want it done
+properly, not with hard-coded rules." To discuss; not placed in the
+order of work yet.
+
+**What is there today, to start from**: a request from outside is
+checked in `mrepo-base-request` (`check`): its protocol loaded and
+active, its action in the protocol's config, its URI one the action's
+config names (`uris`), the service's state where the action names
+states; and, hard-coded, the prefix `main`. The protocols' configs are
+in the `protocols` layer, a file a protocol.
 
 ## Future additions
 

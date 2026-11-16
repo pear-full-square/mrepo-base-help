@@ -236,14 +236,19 @@ out=$(haicc --raw host --flags log=verbose -- crud/read . 2>&1)
 has "$out" '"event":"haicc.goto.sent on"' "haicc host --flags log=verbose -- crud/read .: after the URI, that step's: the hop at host"
 has "$out" '"event":"crud.read.query"' "and it held down the chain: the host's steps too"
 has "$out" '"args":["crud/read","."]' "-- says where the next command starts: the command as it is"
-out=$(haicc --raw host --flags log=debug haicc node-1 help/get . packages 2>&1)
-has "$out" '"event":"help.get.index"' "without --: log=debug through two hops: the node's internals"
+out=$(haicc --raw host --flags log=debug -- haicc node-1 help/get . packages 2>&1)
+has "$out" '"event":"help.get.index"' "log=debug through two hops: the node's internals"
 has "$out" '"jump":["host","node-1"]' "under both jumps, in order"
 out=$(haicc --raw . --flags log=verbose -- crud/read . 2>&1)
 has "$out" '"event":"crud.read.query"' "haicc . --flags log=verbose -- crud/read .: at the root too"
 out=$(haicc --raw . crud/read . --flags nope log=loud 2>&1); is "$?" "0" "a flag that is none, a value its flag does not take: the request done all the same"
 has "$out" '"event":"request.flag"' "each ignored, with a warning in its log"
 hasnt "$out" '"level":"verbose"' "and the log at info"
+out=$(haicc --raw host --flags nope log=verbose -- crud/read . 2>&1); is "$?" "0" "a flag there is none of, before the --: the request done all the same"
+has "$out" '"event":"request.flag"' "ignored, with a warning in the log"
+has "$out" '"event":"crud.read.query"' "the others in force"
+out=$(haicc host --flags log=debug crud/read . 2>&1 >/dev/null); is "$?" "1" "a list not closed where a command follows: exit 1"
+has "$out" "no command after the flags of haicc (-- closes a flag list, the command follows it)" "said: only -- or the end of the command closes a list"
 out=$(haicc --flags log=debug -- host crud/read . 2>&1 >/dev/null); is "$?" "2" "flags in front of the URI: refused, exit 2"
 has "$out" "flags follow a URI: they are that step's" "said"
 

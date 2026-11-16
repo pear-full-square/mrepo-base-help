@@ -20,14 +20,15 @@ flags of that step. A flag stands alone, or carries a value,
 
 ```
 haicc host --flags log=debug -- haicc node-1 crud/read swarms
-haicc host --flags log=debug haicc node-1 crud/read swarms
 haicc host crud/read swarms --flags log=verbose
 ```
 
-- **`--` says where the next command starts**, and is optional: without
-  it the list ends at the first word not written as a flag. After the
-  URI of the last command the list runs to the end of the line, or to a
-  `--` with the command's arguments after it.
+- **A list is closed by `--` or by the end of the command**, nothing
+  else: every word in between is a flag. Where a command follows, the
+  `--` says where it starts; left out, the command is taken for flags,
+  and that is said. After the URI of the last command the list runs to
+  the end of the line, or to a `--` with the command's arguments after
+  it.
 - **In the form** they are a map: `"flags": { "log": "debug" }`.
 - **A flag holds down a chain until changed**: one written at a step
   goes with each command sent on from there; one written after the last

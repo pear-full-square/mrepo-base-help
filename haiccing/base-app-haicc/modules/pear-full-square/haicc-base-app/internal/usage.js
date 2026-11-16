@@ -9,16 +9,17 @@ haicc --raw <URI> <protocol>/<action> ...       the record as it is stored,
                                                 one line
 haicc --output <URI> <protocol>/<action> ...    the completed form's output
                                                 alone
-haicc <URI> --flags <flag>... [--] <command>    flags after a URI: that
-                                                step's, space separated; --
-                                                says where the next command
-                                                starts (optional); they hold
+haicc <URI> --flags <flag>... -- <command>      flags after a URI: that
+                                                step's, space separated,
+                                                closed by --, the next
+                                                command after it; they hold
                                                 down the chain until changed:
                                                 log=info|verbose|debug, how
                                                 much the request's log holds
                                                 (info without it)
 haicc <URI> <command> <URI> --flags <flag>...   after the last command's URI:
-                                                that command's
+                                                that command's, closed by the
+                                                end of the line
 haicc output                                    the width a record is printed
                                                 to: auto, the terminal's (80
                                                 when the output is none)

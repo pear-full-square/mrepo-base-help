@@ -3398,3 +3398,36 @@ by itself. And an end to end run started while bundles were rebuilt
 under it hung, a command at a time: stopped by hand, its folder
 removed. Both ours to mind: read a test run's last lines, not a filter
 of them; one run at a time on the sources.
+
+## 71. A flag list is closed by `--` or by the end of the command, nothing else (2026-11-15)
+
+Part 70 left `--` optional where a command follows a flag list: the
+list then ended at the first word not written as a flag, so a flag
+there is none of, standing alone, was read as the next command. Raised
+by us, answered: "that is why -- should be used and why the current
+implementation is poor. Unknown flag should give warning but not cause
+issues. Strict implementation please: -- or end-of-command closes the
+flag section".
+
+- **One rule** (`mrepo-base-request`, `lib/flags.js`, `split`): a list
+  starts at `--flags`, after a URI, and runs to the first `--` or to
+  the end of the command. Every word in between is a flag; one there is
+  none of is ignored with its warning, as before, and causes nothing
+  else.
+- **Where a command follows** (`haicc`'s `goto`), it starts after the
+  `--`: `haicc host --flags log=debug -- crud/read .`. A list not
+  closed there takes the command for flags: refused, and said (`no
+  command after the flags of haicc (-- closes a flag list, the command
+  follows it)`).
+- After the last command's URI the end of the line closes the list:
+  `haicc host crud/read . --flags log=verbose`, no `--` needed.
+
+**Validated**: the modules' tests (`mrepo-base-request` 16 tests, 164
+asserts; `haicc-base-app` 15, 161). The
+pre-release of the six packages that carry them, each passing. `tools/bare
+tools/release.js --strict`: twelve packages, every report current.
+`tools/bare tools/code-check.js` and the READMEs: no problems. The
+`haicc` test, 177 of 177 (5 more checks: a flag there is none of before
+the `--`, ignored with its warning, the others in force; a list not
+closed where a command follows, refused and said). One run at a time on
+the sources. Nothing left running.
