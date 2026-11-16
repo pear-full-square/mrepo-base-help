@@ -1,4 +1,4 @@
-# package-docs-template
+# package-docs-package
 
 The haiccing package structure, documented. Each folder here is a part
 of a structure unit; its README says what goes there.
@@ -162,7 +162,7 @@ line or right above it: `// log: ...`, `// catch: ...`, `// console: ...`,
   "type": "module",
   "main": "run.js",
   "modules": ["<org>/<module>"],
-  "template": { "repository": "haiccing/package-docs-template", "commit": "<commit>" },
+  "template": { "repository": "haiccing/package-docs-package", "commit": "<commit>" },
   "scripts": { "test": "bare test/run.js" }
 }
 ```

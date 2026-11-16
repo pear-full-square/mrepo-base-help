@@ -31,7 +31,7 @@ created.
 | `base-package-haicc` | the `haicc` protocol: goto |
 | `base-package-crud` | the `crud` protocol: create, read, delete: structure in `main` |
 | `base-package-container` | the `container` protocol: create, start, stop, remove, status: its replica in a container |
-| `package-docs-mrepo`, `package-docs-template` | the documentation |
+| `package-docs-mrepo`, `package-docs-package` | the documentation |
 
 ## Deploying
 

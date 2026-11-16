@@ -1,10 +1,10 @@
-# Test report: haiccing/package-docs-template
+# Test report: haiccing/package-docs-package
 
 The package passed its `full` set: all 7 units, 47 of 47 tests and 274 of 274 asserts.
 
 | | |
 |---|---|
-| Package | `haiccing/package-docs-template` |
+| Package | `haiccing/package-docs-package` |
 | Set | `full` |
 | Result | passed |
 | Units | 7 of 7 passed |

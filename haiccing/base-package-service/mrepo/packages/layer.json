@@ -6,7 +6,7 @@
     "haiccing/base-package-help",
     "haiccing/base-package-protocol",
     "haiccing/package-docs-mrepo",
-    "haiccing/package-docs-template",
+    "haiccing/package-docs-package",
     "haiccing/base-package-service"
   ]
 }
