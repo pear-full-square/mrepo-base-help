@@ -29,12 +29,16 @@ A document by the link's own key:
 - `key`: the link's own, the one its shortcut in `main` names.
 - `uri`: the linked mrepo's unique URI.
 - `at`: the position in `main` that links to it.
-- `how`: how the link came about: `deployed` here.
+- `how`: how the link came about: `deployed` here, by the boot protocol;
+  `container`: the mrepo's replica in a container, made by the
+  container protocol.
 - `folder`: where the mrepo is on this machine, from this mrepo's own
   folder. An mrepo is placed by its unique URI under the work folder's
-  `mrepos/`, side by side with the others.
+  `mrepos/`, side by side with the others; a replica under its
+  `containers/`.
 - `package`, `packages`, `layers`: what it was deployed from.
 - `runtime`: the process running it, when it has one.
+- `container`: a replica's container, its name and its image.
 
 ## Written and read
 

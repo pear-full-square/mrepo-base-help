@@ -35,6 +35,9 @@ routine.
 
 A child is placed by its unique URI, side by side with the others under
 the work folder's `mrepos/` (`mrepos/local/host`), not inside its parent.
+One name below `main` it is in its parent's swarm; at
+`swarms/<swarm>/<name>` it is that swarm's node, `<swarm>/<name>`
+(`mrepos/swarm-1/node-1`).
 The parent holds a node for it in its `main`, a shortcut: which mrepo,
 and the link's key; and the link's record in its `links` layer, by that
 key: what this machine knows of it (where it is, the position that

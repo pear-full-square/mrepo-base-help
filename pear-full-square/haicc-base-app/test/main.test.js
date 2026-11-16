@@ -207,7 +207,7 @@ test('boot/teardown: what boot/deploy put in place removed, nothing else; no run
     for (const d of ['mrepos/boot/.git', 'mrepos/boot/inbox', 'mrepos/local/host/.git', 'mrepos/swarm-1/node-1/.git', 'packages/haiccing', 'kept']) mkdirSync(join(work, d), { recursive: true })
     writeFileSync(join(work, 'mrepo.json'), '{}')
     t.is(await s.run(['boot/teardown']), 0)
-    t.alike(s.out, [JSON.stringify({ tornDown: '.', runtimes: 0, work })], 'said: the root torn down, the runtimes stopped, the work folder')
+    t.alike(s.out, [JSON.stringify({ tornDown: '.', runtimes: 0, containers: 0, work })], 'said: the root torn down, the runtimes stopped, the containers removed, the work folder')
     t.alike(readdirSync(work), ['kept'], 'the mrepos, the package store and the setting removed; the rest of the work folder kept')
     t.is(await s.run(['boot/teardown']), 3, 'twice: nothing there, exit 3')
   } finally { s.remove() }

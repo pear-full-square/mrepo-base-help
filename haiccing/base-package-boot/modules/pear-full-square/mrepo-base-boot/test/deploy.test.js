@@ -84,7 +84,7 @@ function context (dir, backend, work) {
   return { exec, commit, repo }
 }
 
-test('deploy from a target package\'s list, placed by its unique URI, its link recorded; redeploy; teardown; a script answered as a continuation; the mrepo registry, several torn down', async (t) => {
+test('deploy from a target package\'s list, placed by its unique URI, its link recorded; redeploy; teardown; a script answered as a continuation; the mrepo registry, several torn down; a swarm\'s node', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'deploy-'))
   const pkgs = mkdtempSync(join(tmpdir(), 'deploy-src-'))
   try {
@@ -183,7 +183,28 @@ test('deploy from a target package\'s list, placed by its unique URI, its link r
     t.alike(await teardown(exec, { uri: ['main', 'registry/local/*'] }), [], 'nothing registered: nothing torn down, no error')
     await t.exception(deploy(exec, { uri: ['main', 'x'], args: ['haiccing/none'] }), /not in the store nor the sources/)
     await t.exception(deploy(exec, { uri: ['main', '../x'], args: ['haiccing/target'] }), /bad segment/, 'no way up')
-    await t.exception(deploy(exec, { uri: ['main', 'a/b'], args: ['haiccing/target'] }), /not a name for an mrepo: a\/b/, 'one name below main')
+    await t.exception(deploy(exec, { uri: ['main', 'a/b'], args: ['haiccing/target'] }), /not a position for an mrepo: a\/b \(<name>, or swarms\/<swarm>\/<name>/, 'one name below main, or a swarm\'s node')
+    await t.exception(deploy(exec, { uri: ['main', 'swarms/swarm-1/node-1/deeper'], args: ['haiccing/target'] }), /not a position for an mrepo/, 'nothing deeper')
+    await t.exception(deploy(exec, { uri: ['main', 'swarms/local/node-1'], args: ['haiccing/target'] }), /not a swarm: local/, 'local is the swarm of what is in none')
+    // a swarm's node: swarms/<swarm>/<name>, its unique URI <swarm>/<name>
+    await t.exception(deploy(exec, { uri: ['main', 'swarms/swarm-1/node-1'], args: ['haiccing/target'] }), /no node there: swarms\/swarm-1 \(crud\/create swarms\/swarm-1\)/, 'a swarm\'s node: its swarm\'s node is there first')
+    t.absent(existsSync(join(work, 'mrepos', 'swarm-1')), 'nothing built')
+    exec.put('/main/swarms/.node.json', Buffer.from('{}\n'))
+    exec.put('/main/swarms/swarm-1/.node.json', Buffer.from('{}\n'))
+    await commit()
+    const n = await deploy(exec, { uri: ['main', 'swarms/swarm-1/node-1'], args: ['haiccing/target'] })
+    await commit()
+    t.alike([n.deployed, n.mrepo], ['swarms/swarm-1/node-1', 'swarm-1/node-1'], 'deployed at swarms/<swarm>/<name>: its unique URI <swarm>/<name>, the swarm its position names')
+    t.ok(existsSync(join(work, 'mrepos', 'swarm-1', 'node-1', '.git')), 'placed by it: <work>/mrepos/swarm-1/node-1')
+    t.alike(json(await openRepo(p2pgitBackend(join(work, 'mrepos', 'swarm-1', 'node-1', '.git'), { fs })).read('/runtime/mrepo.json')), { uri: 'swarm-1/node-1' }, 'its identity')
+    const [ns] = json(await repo.read('/main/swarms/swarm-1/node-1/.shortcuts.json'))
+    const nl = json(await repo.read(`/links/${ns.link}.json`))
+    t.alike([ns.mrepo, nl.uri, nl.at, nl.folder], ['swarm-1/node-1', 'swarm-1/node-1', 'swarms/swarm-1/node-1', '../swarm-1/node-1'], 'its shortcut at that position, its link\'s record: the position, where it is')
+    t.alike(json(await repo.read('/main/registry/swarm-1/node-1/.node.json')).at, 'swarms/swarm-1/node-1', 'in the mrepo registry by its unique URI, its swarm a node there')
+    await t.exception(deploy(exec, { uri: ['main', 'swarms/swarm-1/node-1'], args: ['haiccing/target'] }), /deployed already: swarms\/swarm-1\/node-1/)
+    t.alike(await teardown(exec, { uri: ['main', 'registry/swarm-1/*'] }), [{ tornDown: 'swarms/swarm-1/node-1' }], 'torn down through the registry, at its position')
+    await commit()
+    t.alike([existsSync(join(work, 'mrepos', 'swarm-1', 'node-1')), await repo.find('/main/swarms/swarm-1/node-1/.node.json'), json(await repo.read('/main/swarms/swarm-1/.node.json'))], [false, null, {}], 'gone, its swarm\'s node left')
     await t.exception(deploy(exec, { uri: 'main/host', args: ['haiccing/target'] }), /not a URI: its segments, an array/, 'a URI as one string: not a form\'s')
   } finally {
     rmSync(work, { recursive: true, force: true })

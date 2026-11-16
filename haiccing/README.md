@@ -7,7 +7,9 @@ each at `haiccing/<repo>`, in the package structure
 - Packages, each one protocol: `base-package-runtime/`, the runtime;
   `base-package-protocol/`, the activation of protocols;
   `base-package-help/`, help; `base-package-boot/`, the boot protocol;
-  `base-package-service/`, the service; `base-package-haicc/`, haicc.
+  `base-package-service/`, the service; `base-package-haicc/`, haicc;
+  `base-package-crud/`, structure in `main`; `base-package-container/`,
+  an mrepo's replica in a container.
 - Components, several packages deployed together: `base-component-boot/`,
   the initial boot mrepo and the program that puts it in place;
   `base-component-haicc/`, the haicc mrepo.

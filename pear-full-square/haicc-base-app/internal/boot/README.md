@@ -18,14 +18,15 @@ component's organisation and name.
 
 - `deploy`: the boot's exit code. What the boot prints goes straight
   through: its request, completed, then its runtime's status.
-- `teardown`: `{ tornDown: '/', runtimes, work }`, with the number of
-  runtimes stopped.
+- `teardown`: `{ tornDown: '.', runtimes, containers, work }`, with the
+  number of runtimes stopped and of containers removed.
 
 ## Errors
 
 - `deploy`: no source holds the boot component's bundle: a `Failure`,
   exit code 3.
-- `teardown`: no boot mrepo there: exit code 3. A runtime did not stop:
+- `teardown`: no boot mrepo there: exit code 3. A runtime did not stop,
+  or a replica's container was not removed (Docker does not answer):
   exit code 1.
 
 ## Design
@@ -36,6 +37,10 @@ component's organisation and name.
   its runtime; there already, it is kept.
 - **teardown** stops every runtime from the root down, those deployed
   below an mrepo before the mrepo itself, each asked over its socket and
-  waited for until its process has ended. Then it removes what the deploy
-  put in place, by name: the mrepos, the package store, the work folder's
-  setting. Nothing else in the work folder is touched.
+  waited for until its process has ended. Then the replicas' containers: every mrepo
+  under the work folder's `containers/` is one, made by the container
+  protocol, its container found by its label, `haicc.folder`, and
+  removed, running or not. Docker is asked only when there is a
+  replica. Then it removes what the deploy put in place and what was
+  made below it, by name: the mrepos, the replicas, the package store,
+  the work folder's setting. Nothing else in the work folder is touched.

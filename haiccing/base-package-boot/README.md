@@ -4,7 +4,8 @@ The boot protocol: it deploys, tears down and redeploys the mrepos linked in an 
 
 An mrepo that links it can deploy others. A deployed mrepo is built from
 a target package's list, placed by its unique URI beside the others
-(`<work>/mrepos/local/host`), gets its own runtime, is linked at its
+(`<work>/mrepos/local/host`; a swarm's node, deployed at
+`swarms/<swarm>/<name>`: `<work>/mrepos/<swarm>/<name>`), gets its own runtime, is linked at its
 position by a shortcut, and its link is recorded in this mrepo's `links`
 layer, which the package brings. The first mrepo of a host, the boot mrepo,
 is put in place by `haiccing/base-component-boot`, which links this
@@ -24,12 +25,17 @@ haicc . boot/deploy host base-component-haicc
 haicc host boot/deploy node-1 base-package-runtime
 haicc host boot/redeploy node-1
 haicc host boot/teardown node-1
+haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc
 haicc . boot/teardown host
 ```
 
 - `boot/deploy <name> <package>`: the mrepo built at that position from
   the package's list, its runtime started, its shortcut placed. The
-  package alone means `haiccing/<package>`.
+  package alone means `haiccing/<package>`. One name below `main`, the
+  mrepo is in this mrepo's swarm (`local/host`); at
+  `swarms/<swarm>/<name>`, below a swarm's node made first
+  (`crud/create swarms/<swarm>`), it is that swarm's node:
+  `<swarm>/<name>`.
 - `boot/teardown <name>`: its runtime stopped, the mrepo and its shortcut
   removed.
 - `boot/redeploy <name> [<package>]`: both in turn.

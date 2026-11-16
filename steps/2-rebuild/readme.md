@@ -3846,3 +3846,130 @@ deployed by it, the host read at its end, a node answering through the
 host, each at its place; then `haicc boot/teardown` stopping four
 runtimes, the nodes the host deployed among them). Nothing left
 running.
+
+## 79. A swarm's nodes and their containers: a node deployed at `swarms/<swarm>/<name>`; the `container` protocol; the cluster script with both (2026-11-16)
+
+The next step of `swarm-cluster`, as said before the context reset:
+"The next step will be the creation of container mrepos. [...] What
+about creating a container protocol with the methods to achieve this?
+Don't be too picky as to what methods, create those that achieve our
+goal. That is sufficient for the moment." Our reading was put back and
+settled in three answers (`tasks.md`, `swarm-cluster`, in full):
+
+- "how do you do the docker test in your sandbox?": checked, and the
+  handover was wrong: Docker's daemon is installed in the cloud session
+  and can be started by hand. So the tests make real containers.
+- "yes please. Can you also look into the SPLectral stuff now, so you
+  can implement it together?"
+- On a component of its own for the node, which the default
+  continuation would have needed: "ok, skip default continuation for
+  now - needs a better design. Just do the standard script and
+  explicitly use the container protocol to set up the container node.
+  KISS".
+
+What is built:
+
+- **A swarm's node has its position and its name** (`mrepo-base-boot`,
+  `child.js`; `base-package-boot`'s config): `boot/deploy
+  swarms/<swarm>/<name> <package>`, below its swarm's node, which is
+  there first (`crud/create swarms/<swarm>`). Its unique URI is
+  `<swarm>/<name>`, the swarm its position names; it is placed by it,
+  `<work>/mrepos/swarm-1/node-1`. One name below `main` stays what it
+  was: in the parent's swarm (`local/host`). Nothing else is a position
+  for an mrepo; `local` is no swarm's name.
+- **The install routine is one** (`mrepo-base-boot`, `internal/install`):
+  a target package's list laid in, the identity written, built, the
+  packages placed: what `deploy` did in line, now shared with the
+  container protocol. `origin` reads the store and the sources from the
+  mrepo's own packages manifest.
+- **The `container` protocol** (`pear-full-square/mrepo-base-container`,
+  `haiccing/base-package-container`): an mrepo's replica in a Docker
+  container. Five actions, each at the mrepo itself:
+  - `create`: the replica built from the mrepo's own package (the last
+    of its list), under `<work>/containers/<swarm>/<name>`, and its
+    container made, not started; linked at the position `container`
+    (its node and its shortcut in `main`, its link's record in the
+    links layer: `how: container`, its container's name and image);
+  - `start`: the container started; answered when the replica's runtime
+    listens (its socket in the mapped folder);
+  - `stop`: the container stopped (SIGTERM: the runtime closes);
+  - `remove`: the container, the replica's folder and its link removed;
+  - `status`: `none`, `created`, `running`, `exited`, `gone`.
+- **The container**: the image is Bare on a plain base
+  (`haicc-node:<hash of the binary>`, built when it is not there, as
+  the earlier code did); the container runs the replica's runtime from
+  the replica's own packages, as the user who owns the folder, its root
+  read only, its capabilities dropped; the replica's folder is its one
+  writable place, seen inside as `/mrepo`. Its name is
+  `haicc-<swarm>-<name>-<hash of the folder>`.
+- **The bridgehead reaches its replica as any linked mrepo**: `haicc
+  swarms/swarm-1/node-1 haicc container service/initialise`; one URI
+  through all three: `haicc host/swarms/swarm-1/node-1/container
+  crud/read .`. Nothing new was needed for it: the inbox and outbox
+  folders are in the mapped folder.
+- **In the component** (`base-component-haicc`): `base-package-container`
+  in its list; `container` opened by a hook on `start` and closed on
+  `stop`, behind the service's door with `boot` and `crud`.
+- **The cluster script** (`scripts/cluster.json`): the host in service,
+  `swarms/swarm-1`, then for `node-1` and `node-2`: deployed at
+  `swarms/swarm-1/<name>`, brought into service, `container/create`,
+  `container/start`, the replica brought into service through its
+  node; the swarm's nodes read last. Eighteen commands; it needs
+  Docker.
+- **The machine-level teardown** (`haicc-base-app`, `haicc
+  boot/teardown`): the replicas' containers removed (each found by its
+  label, `haicc.folder`), `containers/` removed with the rest; it says
+  how many.
+- **`tools/docker.sh`**: Docker's daemon made sure to answer: started
+  in a cloud session, where none runs when the session starts.
+
+**Decided while building** (ours, said here)
+
+- **The replica has a unique URI of its own**: the node's with
+  `container` behind it, `swarm-1/node-1/container`. Our reading had
+  been one mrepo in two places, the same URI; built so, the replica's
+  answers never came back: an answer is addressed by the URI of who
+  asked, and a runtime takes an address that starts with its own URI
+  as its own. Two mrepos, two addresses.
+- **The replica is made of the node's own package**, so it carries the
+  container protocol too: it refuses to make a replica of its own (its
+  unique URI is not a node's).
+- **Not in the mrepo registry**: the registry is for the mrepos on the
+  host, as said.
+- **Docker is asked through its command line**, in one place
+  (`internal/docker`), and its state is never recorded: `status` asks.
+- **The tests fail without Docker**, they do not skip: the module's
+  own test makes a real container; the package's own test, `mounted`,
+  needs none (each action up to where it would ask Docker).
+
+**Known as it stands**: `boot/teardown` of a node leaves its replica
+(`container/remove` first; the machine-level teardown clears both).
+The replica follows nothing and replicates nothing yet; it is on
+Docker's default bridge. Linux only (the socket in the mapped folder).
+The image's base is pulled the first time.
+
+**Splectral, looked into**: what it was, what of it still stands and
+what its adapters rested on that is gone, with our reading of how it
+comes back on `haicc`: `tasks.md`, "`splectral`". Nothing built.
+
+**Validated**: the pre-release of the nine packages whose content
+changed, each passing, its report committed: `base-package-container`
+(new: 24 units, 321 tests; its module's own test makes a real container),
+`base-package-boot`, `base-package-runtime`, `base-package-crud`,
+`base-package-haicc`, `base-component-boot`, `base-component-haicc`,
+`base-app-haicc`, `package-docs-mrepo`; the other four current.
+`tools/bare tools/release.js --strict`: exit 0, thirteen packages.
+`tools/bare tools/code-check.js` (21 modules, 14 packages) and the
+READMEs (268): no problems. The boot's `validate` three times, passing.
+The `haicc` test, 229 of 229, three times (22 more checks: Docker
+answering; the cluster script done, the nodes at
+`swarms/swarm-1/<name>` with their unique URIs, each replica made and
+started, at its place; two containers; a node read through the host;
+`container/status`; the replica in service; a node created inside the
+container and read back with one URI through three shortcuts; a
+replica making none of its own; stop, start, its data kept; remove;
+then `haicc boot/teardown`: four runtimes stopped, the container left
+removed). Found by the tests on the way, each a test in the old form:
+`base-package-boot`'s `mounted` (the refusals' words),
+`base-component-boot`'s `boot` (the protocols open after a start).
+Nothing left running, no container left.

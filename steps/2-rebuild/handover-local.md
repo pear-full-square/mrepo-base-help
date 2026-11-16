@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-16 by the cloud session (parts 60 to 78), for the local agent (a Linux
+Updated 2026-11-16 by the cloud session (parts 60 to 79), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -19,6 +19,32 @@ setup file, three signed bundles, an executable) are in `local-run.md`,
   (`haiccing/base-linux-haicc`, installed by one file,
   `haicc-install.sh`) are the first step only: a folder linked, Bare put
   in place, the app started.
+
+## Containers (part 79)
+
+A swarm's node can have a replica in a Docker container, made by the
+`container` protocol (`haiccing/base-package-container`, in
+`base-component-haicc`'s list): `haicc host haicc swarms/swarm-1/node-1
+container/create`, then `container/start`, `status`, `stop`, `remove`.
+So Docker is a prerequisite of the `haicc` test and of
+`base-package-container`'s own: a daemon running, the user allowed to
+use it (`docker version` shows a server).
+
+- The image, `haicc-node:<hash>`, is built on the first
+  `container/create`: Bare on `debian:bookworm-slim`, which Docker pulls
+  once.
+- A container is named `haicc-<swarm>-<name>-<hash>` and labelled
+  `haicc.folder` with its replica's folder,
+  `~/.haicc/work/containers/<swarm>/<name>`: its one writable place.
+  It runs as the user who ran `haicc`.
+- `haicc boot/teardown` removes the containers of the install with the
+  rest. One left by a run that broke off: `docker ps -a --filter
+  label=haicc.folder`, `docker rm -f <id>`.
+- What we would like to hear from the laptop: whether the test's
+  container checks pass as a user who is not root (the cloud session
+  runs as root); how long the first `container/create` takes with the
+  pull; anything about the socket in the mapped folder (the replica's
+  `runtime.sock`: how the node knows its replica is up).
 
 ## What a run is
 

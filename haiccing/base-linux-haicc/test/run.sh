@@ -9,6 +9,8 @@
 #               app's among them) and Bare's tarball (the development repository's sources/, built
 #               by tools/release.js); else ../../../sources from here;
 #               without one: skipped
+#   Docker      its daemon answering: the cluster's nodes get their
+#               containers (section 12); without it those checks fail
 # One line a check (ok, not ok), the count last; exit 0 passed, 1 failed.
 set -u
 here=$(cd "$(dirname "$0")" && pwd)
@@ -31,8 +33,11 @@ hasnt () { case "$1" in *"$2"*) no "$3" "got: $1; not expected in it: $2" ;; *) 
 
 T=$(mktemp -d "${TMPDIR:-/tmp}/haicc-test.XXXXXX")
 running () { pgrep -f -- "[/]bin/bare $T/" 2>/dev/null; }
+# the containers of this install: the replicas', labelled with their folder
+containers () { docker ps -aq --filter label=haicc.folder 2>/dev/null | while read -r id; do case "$(docker inspect --format '{{index .Config.Labels "haicc.folder"}}' "$id" 2>/dev/null)" in "$T"/*) echo "$id" ;; esac; done; }
 cleanup () {
   if [ "$keep" = yes ]; then echo "kept: $T"; return; fi
+  for id in $(containers); do docker rm -f "$id" >/dev/null 2>&1; done
   for pid in $(running); do kill "$pid" 2>/dev/null; done
   i=0; while [ -n "$(running)" ] && [ "$i" -lt 100 ]; do sleep 0.1 2>/dev/null || sleep 1; i=$((i + 1)); done
   for pid in $(running); do kill -9 "$pid" 2>/dev/null; done
@@ -303,21 +308,48 @@ out=$(haicc boot/deploy 2>&1); is $? 0 "haicc boot/deploy again"
 has "$out" '"already":true' "already built: kept"
 is "$(running | wc -l | tr -d ' ')" 1 "still one runtime"
 
-# 12. the machine level torn down: every runtime stopped, what boot/deploy
-# put in place removed; Bare, the sources and the scripts stay
-# (the host deployed with the cluster script: itself in service, a swarm's
-# place in its main, two nodes deployed and in service)
+# 12. the cluster: the host deployed with the cluster script: itself in
+# service, a swarm in its main, two nodes deployed below it and in service,
+# each with its replica in a container, in service too
+docker version --format '{{.Server.Version}}' >/dev/null 2>&1 && ok "Docker answers: the nodes can have their containers" || no "Docker answers: the nodes can have their containers" "no Docker daemon answers: the container checks below fail"
 out=$(haicc --output . boot/deploy host base-component-haicc --flags continuation=cluster 2>&1); is $? 0 "haicc . boot/deploy host base-component-haicc --flags continuation=cluster: the host and its cluster, every command of the script done"
-has "$out" '"deployed":"node-1","mrepo":"local/node-1"' "node-1 deployed by the host"
-has "$out" '"deployed":"node-2","mrepo":"local/node-2"' "node-2 too"
-has "$out" '[{"uri":["main","."],"value":{},"children":["node-1","node-2","swarms"]}]' "its last command: the host read: its nodes and the swarm's place"
-is "$(haicc --output host/node-2 crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "a node in service: answering through the host"
-[ -d "$T/home/work/mrepos/local/node-1/inbox" ] && [ -d "$T/home/work/mrepos/local/node-2/inbox" ] && ok "each node at its place, by its unique URI" || no "each node at its place"
-is "$(running | wc -l | tr -d ' ')" 4 "four runtimes running: the boot mrepo's, the host's, the two nodes'"
+has "$out" '"deployed":"swarms/swarm-1/node-1","mrepo":"swarm-1/node-1"' "node-1 deployed by the host at swarms/swarm-1/node-1: a swarm's node, its unique URI swarm-1/node-1"
+has "$out" '"deployed":"swarms/swarm-1/node-2","mrepo":"swarm-1/node-2"' "node-2 too"
+has "$out" '"created":"container","mrepo":"swarm-1/node-1/container"' "node-1's replica made: linked at container, its unique URI the node's with container behind it"
+has "$out" '"created":"container","mrepo":"swarm-1/node-2/container"' "node-2's too"
+has "$out" '"started":"container","container":"haicc-swarm-1-node-2-' "its container started"
+has "$out" '[{"uri":["main","swarms/swarm-1/node-1"],"value":{},"children":[],"shortcuts":[{"mrepo":"swarm-1/node-1","link":"' "its last command: the swarm's nodes read: each a shortcut"
+[ -d "$T/home/work/mrepos/swarm-1/node-1/inbox" ] && [ -d "$T/home/work/mrepos/swarm-1/node-2/inbox" ] && ok "each node at its place, by its unique URI: mrepos/swarm-1/<name>" || no "each node at its place"
+[ -d "$T/home/work/containers/swarm-1/node-1/inbox" ] && [ -d "$T/home/work/containers/swarm-1/node-2/inbox" ] && ok "each replica at its place, beside the mrepos: containers/swarm-1/<name>" || no "each replica at its place"
+is "$(running | wc -l | tr -d ' ')" 4 "four runtimes running on the host: the boot mrepo's, the host's, the two nodes'"
+is "$(containers | wc -l | tr -d ' ')" 2 "two containers: a replica's runtime in each"
+is "$(haicc --output host/swarms/swarm-1/node-2 crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":["container"]}]' "a node in service, answering through the host: its replica linked at container"
+N="host haicc swarms/swarm-1/node-1"
+out=$(haicc --output $N container/status 2>&1)
+has "$out" '{"replica":"container","mrepo":"swarm-1/node-1/container","container":"haicc-swarm-1-node-1-' "haicc host haicc swarms/swarm-1/node-1 container/status: its replica, its container"
+has "$out" '"state":"running"}' "running"
+is "$(haicc --output $N haicc container service/start 2>&1 >/dev/null)" "haicc: not now: service start (the service is started)" "the replica in service already: the script brought it there, through its node"
+has "$(haicc --output $N haicc container crud/create notes/a '{"x":1}' 2>&1)" '{"uri":["main","notes/a"],"value":{"x":1},"children":[],"outcome":"created"}' "a command sent on into the container: a node created in the replica's main"
+is "$(haicc --output host/swarms/swarm-1/node-1/container crud/read notes/a 2>&1)" '[{"uri":["main","notes/a"],"value":{"x":1},"children":[]}]' "read back with one URI through three shortcuts: the host, the node, its container"
+out=$(haicc $N haicc container container/create 2>&1 >/dev/null); is "$out" "haicc: no unique URI to make a replica by: swarm-1/node-1/container (<swarm>/<name>)" "a replica makes no replica of its own"
+has "$(haicc --output $N container/stop 2>&1)" '"stopped":"container"' "container/stop"
+has "$(haicc --output $N container/status 2>&1)" '"state":"exited"}' "stopped: exited"
+has "$(haicc --output $N container/start 2>&1)" '"state":"running"}' "container/start: running again"
+is "$(haicc --output $N haicc container crud/read notes/a 2>&1)" '[{"uri":["main","notes/a"],"value":{"x":1},"children":[]}]' "its data kept over a stop and a start: the replica's folder is on the host"
+has "$(haicc --output $N container/remove 2>&1)" '{"removed":"container","container":"haicc-swarm-1-node-1-' "container/remove: while it runs"
+is "$(haicc --output $N container/status 2>&1)" '{"replica":null,"state":"none"}' "removed: no replica"
+[ ! -e "$T/home/work/containers/swarm-1/node-1" ] && ok "its folder removed" || no "its folder removed"
+is "$(containers | wc -l | tr -d ' ')" 1 "one container left: node-2's"
+is "$(haicc --output $N crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "its link out of the node's main"
+
+# 13. the machine level torn down: every runtime stopped, the replicas'
+# containers removed, what boot/deploy put in place removed; Bare, the
+# sources and the scripts stay
 out=$(haicc boot/teardown 2>&1); is $? 0 "haicc boot/teardown"
-has "$out" '"tornDown":".","runtimes":4' "said: the root torn down, four runtimes stopped: the nodes the host deployed among them"
+has "$out" '"tornDown":".","runtimes":4,"containers":1' "said: the root torn down, four runtimes stopped, the nodes the host deployed among them, and the container left removed"
 is "$(running | wc -l | tr -d ' ')" 0 "no runtime left: every runtime of the install stopped"
-[ ! -e "$T/home/work/mrepos" ] && [ ! -e "$T/home/work/packages" ] && [ ! -e "$T/home/work/mrepo.json" ] && ok "the mrepos, the package store and the setting removed" || no "what boot/deploy put in place removed" "$(ls "$T/home/work")"
+is "$(containers | wc -l | tr -d ' ')" 0 "no container left"
+[ ! -e "$T/home/work/mrepos" ] && [ ! -e "$T/home/work/containers" ] && [ ! -e "$T/home/work/packages" ] && [ ! -e "$T/home/work/mrepo.json" ] && ok "the mrepos, the replicas, the package store and the setting removed" || no "what boot/deploy put in place removed" "$(ls "$T/home/work")"
 [ -x "$T/home/bare/bin/bare" ] && [ -f "$T/home/sources.list" ] && [ -x "$T/home/bin/haicc" ] && ok "Bare, the sources list and the scripts kept" || no "Bare, the sources list and the scripts kept"
 haicc boot/teardown >/dev/null 2>&1; is $? 3 "torn down twice: nothing there, exit 3"
 out=$(haicc boot/deploy 2>&1); is $? 0 "haicc boot/deploy after it: the boot mrepo back"
@@ -325,7 +357,7 @@ has "$out" '"repository":"boot"' "its runtime started"
 
 if [ "$keep" != yes ]; then
   cleanup; trap - EXIT
-  [ -z "$(running)" ] && ok "nothing left running" || no "nothing left running"
+  [ -z "$(running)" ] && [ -z "$(containers)" ] && ok "nothing left running" || no "nothing left running"
   [ ! -e "$T" ] && ok "its folder removed" || no "its folder removed"
 fi
 echo "# checks = $((n - failed))/$n pass"

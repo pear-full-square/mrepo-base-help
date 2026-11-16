@@ -189,7 +189,7 @@ test('boot/teardown: what boot/deploy put in place removed by name, the rest kep
   for (const d of ['mrepos/boot/.git', 'mrepos/local/host/.git', 'packages/haiccing', 'kept']) mkdirSync(join(work, d), { recursive: true })
   writeFileSync(join(work, 'mrepo.json'), '{}')
   let r = asked('boot/teardown', await haicc(['boot/teardown']))
-  t.alike([r.code, r.out, r.err], [0, JSON.stringify({ tornDown: '.', runtimes: 0, work }) + '\n', ''], 'said: the root torn down, no runtime was running')
+  t.alike([r.code, r.out, r.err], [0, JSON.stringify({ tornDown: '.', runtimes: 0, containers: 0, work }) + '\n', ''], 'said: the root torn down, no runtime was running')
   t.alike(readdirSync(work), ['kept'], 'the mrepos, the package store and the setting removed; nothing else')
   t.ok(existsSync(join(home, 'sources.list')), 'the sources list kept')
   r = await haicc(['boot/teardown'])

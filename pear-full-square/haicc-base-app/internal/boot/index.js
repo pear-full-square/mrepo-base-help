@@ -2,7 +2,7 @@
 // beside it).
 import { existsSync, readdirSync, statSync, rmSync } from 'bare-fs'
 import { join } from 'bare-path'
-import { spawn } from 'bare-subprocess'
+import { spawn, spawnSync } from 'bare-subprocess'
 import { sources } from '../sources/index.js'
 import { Failure } from '../failure.js'
 
@@ -20,7 +20,11 @@ export async function deploy ({ home, work, bare, org, boot, stdio = 'inherit' }
 // folder's mrepos/ (each placed by its unique URI, side by side), the root
 // last.
 function mrepos (work, root) {
-  const others = []
+  return [...holding(join(work, 'mrepos')).filter(p => p !== root), root]
+}
+// Every folder holding a .git below one, in name order.
+function holding (top) {
+  const found = []
   const walk = d => {
     for (const n of readdirSync(d).sort()) {
       const p = join(d, n)
@@ -28,15 +32,34 @@ function mrepos (work, root) {
       // catch: not there: not a folder
       try { folder = statSync(p).isDirectory() } catch {}
       if (!folder) continue
-      if (existsSync(join(p, '.git'))) { if (p !== root) others.push(p) } else walk(p)
+      if (existsSync(join(p, '.git'))) found.push(p); else walk(p)
     }
   }
-  if (existsSync(join(work, 'mrepos'))) walk(join(work, 'mrepos'))
-  return [...others, root]
+  if (existsSync(top)) walk(top)
+  return found
 }
 
-// haicc boot/teardown: every runtime of the install stopped, then what
-// boot/deploy put in place removed; what was done.
+// The replicas of the install: each mrepo under the work folder's
+// containers/ is one, run in a Docker container labelled with its folder
+// (haicc.folder: the container protocol's, mrepo-base-container): each
+// container removed, running or not. -> how many
+function containers (work) {
+  const docker = (...args) => { const r = spawnSync('docker', args, { stdio: ['ignore', 'pipe', 'pipe'] }); return { ok: r.status === 0, out: (r.stdout ?? '').toString().trim() } }
+  let removed = 0
+  for (const dir of holding(join(work, 'containers'))) {
+    const found = docker('ps', '-aq', '--filter', `label=haicc.folder=${dir}`)
+    if (!found.ok) throw new Failure(`Docker does not answer: the container of ${dir} is not removed`, 1)
+    for (const id of found.out.split('\n').filter(Boolean)) {
+      if (!docker('rm', '-f', id).ok) throw new Failure(`a container under ${work} was not removed: ${id}`, 1)
+      removed++
+    }
+  }
+  return removed
+}
+
+// haicc boot/teardown: every runtime of the install stopped, the
+// replicas' containers removed, then what boot/deploy put in place
+// removed; what was done.
 export async function teardown ({ work, root }) {
   if (!existsSync(root)) throw new Failure(`no boot mrepo at ${work} (nothing to tear down)`, 3)
   // the runtime's library only here: nothing else of the app needs it
@@ -45,9 +68,11 @@ export async function teardown ({ work, root }) {
   for (const dir of mrepos(work, root)) {
     try { if (await stop({ repo: dir })) runtimes++ } catch (err) { throw new Failure(`a runtime under ${work} did not stop`, 1, { cause: err }) }
   }
-  // what boot/deploy put in place, by name: nothing else in the work folder
-  for (const n of ['mrepos', 'packages', 'mrepo.json']) rmSync(join(work, n), { recursive: true, force: true })
-  return { tornDown: '.', runtimes, work }
+  const replicas = containers(work)
+  // what boot/deploy put in place, and what was made below it, by name:
+  // nothing else in the work folder
+  for (const n of ['mrepos', 'containers', 'packages', 'mrepo.json']) rmSync(join(work, n), { recursive: true, force: true })
+  return { tornDown: '.', runtimes, containers: replicas, work }
 }
 
 // The machine level's protocols, their actions.
