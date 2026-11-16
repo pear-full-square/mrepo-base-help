@@ -4063,3 +4063,57 @@ the host and the node, one into a container, one that failed, a line's
 record whole; its service stopped, the page gone, started again; then
 `haicc boot/teardown`: five runtimes stopped, the server ended with its
 own). Nothing left running, no container left.
+
+## 81. Splectral: the install as a tree, above its commands; a swarm node one node (2026-11-16)
+
+What came next for Splectral, as we recommended: the structure of the
+install beside the log. The one thing asked first, whether a swarm node
+is shown as one node or as its bridgehead and its container: "swarm
+node as a node. keep it simple, this is just POC."
+
+What is built (`splectral-server`, `internal/structure`; the page):
+
+- **The install folded from its completed commands**: nothing is asked
+  of the mrepos. What a command answered says what it changed: a deploy
+  adds a node below the mrepo that executed it (its unique URI, its
+  position, its package); a teardown takes one away, with what was
+  below it; a service command moves a node's state; the container
+  protocol's answers say its container's. Where a command was executed
+  is the last mrepo it was sent on to, from its log; the root when it
+  was sent on nowhere.
+- **A swarm node is one node**: its replica is no node of its own. Its
+  container's state is beside its own (`created`, `running`, `exited`),
+  and what is executed inside the replica is the container's: the
+  replica's service state.
+- **Served and streamed**: `GET /structure`; and on the stream, when a
+  record changed it, the structure whole as an event of its own, with
+  the node that changed.
+- **On the page**: the install above its commands: a tree, each mrepo
+  with its name, its unique URI and its state in words; a swarm's nodes
+  under their swarm; the node that changed marked for a moment.
+
+**Decided while building** (ours, said here)
+
+- **Folded, not asked**: the easiest way, and the server stays a
+  reader. It shows the install as its commands made it: a runtime or a
+  container that ended without a command is not seen. Asking the mrepos
+  comes when that matters (`tasks.md`, "`splectral`").
+- **The root is told to the server** (`--root`): the unique URI of the
+  mrepo whose outbox it follows, `local/boot`.
+
+**Found on the way**: the page's script did not read: a regular
+expression lost its escapes inside the page's text. The module's test
+now makes the script a function, without running it: one that does not
+read fails.
+
+**Validated**: `splectral-server`'s own tests (7 tests, 94 asserts: the
+structure folded, asked for and streamed among them);
+`base-package-splectral`'s pre-release, passing; every other package's
+report current; `tools/bare tools/release.js --strict`: exit 0.
+`tools/bare tools/code-check.js` and the READMEs (292): no problems.
+The `haicc` test, 249 of 249, twice (6 more checks: the structure after
+the cluster: the root and the host; a swarm's node with its container
+removed; the other with its container running and the replica in
+service; no node for a replica; Splectral itself beside the host).
+Looked at in the cloud session's browser, light, dark and narrow; a
+screenshot sent to the human. Nothing left running, no container left.

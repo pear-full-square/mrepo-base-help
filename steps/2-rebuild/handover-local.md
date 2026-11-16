@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-16 by the cloud session (parts 60 to 80), for the local agent (a Linux
+Updated 2026-11-16 by the cloud session (parts 60 to 81), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -53,8 +53,10 @@ An mrepo of its own beside the host (`haiccing/base-package-splectral`):
 continuation=start`. Started, it runs a small server on
 `127.0.0.1:4400` (a free port when that one is taken:
 `haicc splectral splectral/status` says the URL) with one page: the
-commands of the install as they complete, each with the mrepos it went
-through; a line opened shows its record. It follows the boot mrepo's
+install as a tree (each mrepo with its state, a swarm node one node
+with its container's), and the commands of the install as they
+complete, each with the mrepos it went through; a line opened shows its
+record. It follows the boot mrepo's
 outbox folder and reads only. `haicc splectral service/stop` ends the
 server; `haicc boot/teardown` ends it with the rest. What we would like
 to hear from the laptop: how the page looks and behaves in the human's
