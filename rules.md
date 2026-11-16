@@ -106,6 +106,11 @@ it.
   told to use `execute/<target>`.
 - How branches beyond `main`, `pending/default` and `execute/main` are
   pushed is settled once development is done.
+- **Deploy and teardown, no upgrade in place** (2026-11-16): a running
+  install is not upgraded. What changes how things are placed or stored
+  comes with a new deploy, after a teardown; nothing is migrated in
+  place. An update is a new install in passive mode, reading the data
+  of the one before it, then a switchover.
 
 ## Commit messages
 

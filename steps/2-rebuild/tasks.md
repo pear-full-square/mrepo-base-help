@@ -1041,6 +1041,16 @@ way for the swarm demos)
   an mrepo that was not deployed here (linked); the reverse index; the
   visible state in `main`; the `swarm` protocol and the containers.
 
+**On the proposed first build** (2026-11-16; no go yet)
+
+- "for fancy new functionality we need help and howto properly in
+  place so it is easy to check what can be done where."
+- On our not migrating an install that is there: "We do a deploy
+  teardown philosophy and don't do upgrades on running installs, that
+  will be a rule. An update will be a new install in passive mode
+  (reading data from previous) with switchover." Written into
+  `rules.md`, "Development and deployment".
+
 **Our reading so far, to confirm** (ours, put back in the discussion)
 
 - The registry is a record of shortcuts, not of deployments: a layer,

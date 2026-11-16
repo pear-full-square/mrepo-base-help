@@ -206,7 +206,10 @@ with xpath"). **Next in the order of work: `mrepo-registry`, the
 registry's design first**, in discussion since 2026-11-16 (`tasks.md`,
 "P1 · `mrepo-registry`": what was said so far, in the words used; the
 registry is for the host-local mrepos only, not those in containers;
-the open question "Do we create a swarm protocol?"). Nothing built.
+the open question "Do we create a swarm protocol?": yes, on top of
+`boot` and `service`; KISS: enough for the swarm demos; our proposed
+first build is there, waiting for the go; a new rule in `rules.md`:
+deploy and teardown, no upgrade in place). Nothing built.
 
 **Then, the human's priority: swarm nodes up and running** ("The
 roadmap", item 2): a command at a deeper position (the execution's
