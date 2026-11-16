@@ -7,6 +7,56 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-17: the organisation profiles (`prompt-local-profiles.md`)
+
+Done as the prompt says: the five `.github` repositories read, the
+platform read at `8cd471c` (no code changed since `61acff6`, the commit
+tested and released on 2026-11-16), the texts shown to the human, pushed
+on the human's word ("please go ahead"), one commit a repository on its
+`main`.
+
+| organisation | commit | what changed, and why |
+|---|---|---|
+| `haiccing` | `994b015` | Rewritten. Its "Start here" failed: `releases/latest/download/haicc-setup.sh` of `base-package-haicc` now resolves to `r-61acff6`, which has no such file (404). Now: what an install is (a boot mrepo, mrepos beside and below it, nodes' replicas in Docker, SPLectral), and the path that works today, from a clone of this repository: `tools/install.sh`, `tools/release.js`, the installer, `haicc sources link`, `haicc prereq`; then `boot/deploy`, Splectral with `continuation=start`, the host with `continuation=cluster`, `host howto`, `boot/teardown`. It says installing from the releases is not built yet, and names the earlier platform's repositories as not running here. |
+| `pear-full-square` | `36f4389` | The families corrected: `mrepo-` added, the largest (12 of the 24 modules in use); `p2p-` the store, its replication and the git engine; `splectral-` the server; `haicc-` the command's app; what rests named (the node and its manager, the DHT, the name service, most of SPLectral). "Packages and projects" became "Packages". |
+| `splectral` | `8d0b2ae` | What runs now (one page, an install as a tree, `base-package-splectral` on `splectral-server`) and what rests (the map view, the two demos' scenarios). |
+| `splectrum` | none | Checked: the three pillars and where things live are right. |
+| `bare-for-pear` | none | Checked: right (`p2p-git` began there and is in use from `pear-full-square`, through `mycelium-git` and `p2p-mrepo`). |
+
+`pear-full-square/.github`'s root `README.md` (one line, "On a journey of
+building applications of all kind peer to peer.") is not the profile page
+and was left as it is.
+
+**Every command on the haiccing page was run as written on this machine**,
+from a fresh clone of `splectrum/splectrum-dev-env-3-mycelium` (`8cd471c`)
+in a scratch folder: install and build passed (177 fetched, 30 kept, 24
+linked, 324 s; fifteen packages, every report `current`); `boot/deploy`,
+Splectral (its page answered 200 on `http://127.0.0.1:4400`), the cluster
+(85 s, two containers, `swarms/swarm-1` holding `node-1` and `node-2`),
+`host howto`, `boot/teardown` (`"runtimes":5,"containers":2`; nothing
+left running, no container). The `haicc` steps ran on the human's clone's
+sources (listed first in `sources.list`), the same code.
+
+The cloud session's reading was right on every point. Two findings it
+did not have:
+
+1. **`tools/install.sh` stops at the first failed download.** The first
+   run from the fresh clone failed after 182 s: `could not fetch
+   node_modules/bare-http1: https://registry.npmjs.org/bare-http1/-/bare-http1-4.6.3.tgz`
+   (fetchable a minute later: a passing network failure); `release.js`
+   then aborted (core dumped) for the missing dependencies. A second run
+   went through. It is what a visitor on a poor connection meets first.
+   Proposed (ours): a few retries a download (`curl --retry`), and on
+   failure a line saying to run it again, since what was fetched is kept.
+2. **An install from the web does not exist** (as the prompt says): the
+   page builds from the development repository. With the releases now
+   published (`r-61acff6`), `haicc sources download` fetching the
+   packages would make "Start here" a few lines.
+
+Also seen: after the human's manual test this morning, `~/.haicc/work`
+was left as an empty folder, nothing running. `boot/deploy` worked over
+it.
+
 ## 2026-11-16: `61acff6`, built, tested, released
 
 The prompt ran as written, every step passed; then, on the human's word,
