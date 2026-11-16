@@ -201,9 +201,12 @@ three findings from the manual test. `inbox-watcher` (task 7) is built
 too (part 73), and the decisions made while building `xpath-first` are
 gone through together (part 74). **The cleanup is done.**
 `teardown-cascade` is not cleanup: it goes with `mrepo-registry` ("that
-is a better place to do 'bulk teardown'"). **Next in the order of work:
-`mrepo-registry`, the registry's design first**, in discussion, before
-anything is built.
+is a better place to do 'bulk teardown'"), then dropped ("it can be done
+with xpath"). **Next in the order of work: `mrepo-registry`, the
+registry's design first**, in discussion since 2026-11-16 (`tasks.md`,
+"P1 · `mrepo-registry`": what was said so far, in the words used; the
+registry is for the host-local mrepos only, not those in containers;
+the open question "Do we create a swarm protocol?"). Nothing built.
 
 **Then, the human's priority: swarm nodes up and running** ("The
 roadmap", item 2): a command at a deeper position (the execution's
