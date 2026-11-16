@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-15, part 71). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 72). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -15,7 +15,8 @@ query engine in `mycelium-xpath`; 68 the repository, `crud` and `haicc`
 on it: task 6 built; 69 a document's key in a query in its URI form; 70
 `command-line-findings`: flags after the URI, a record packed on its
 lines, `haicc output`; 71 a flag list closed by `--` or the end of the
-command, nothing else).
+command, nothing else; 72 `request-layer-access`: `main` the default
+layer, `layer=<name>`, a record read as its document).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -143,8 +144,9 @@ point by point (short answers, one question at a time):
 - what was found open (part 68): a document's key in camelCase as a
   step of a URI: answered and built (part 69: its URI form, `publicKey`
   as `public-key`, the rules' own translation); the outside reaching
-  `main` only, so the request records cannot be queried from the
-  command line; what a query costs (about 1 ms a node read here: one
+  `main` only, so the request records could not be queried from the
+  command line: answered and built (part 72: `layer=request`); what a
+  query costs (about 1 ms a node read here: one
   request is right up to some hundreds of nodes; beyond, a cache of
   reads by id and reads in parallel before a query over several
   requests);
@@ -181,21 +183,19 @@ is the milestone: ready for headless Claude and for the D&I process on
 `haicc` (D&I: design and development; afterwards HDLC, the haicc
 (software) development lifecycle: our terms).
 
-**Task 9 is in discussion** (`tasks.md`): the request records made
-reachable by switching the layer in the request, a flag, `layer=request`
-(the human's direction, 2026-11-15); our proposal there: the command's
-own URI read at that layer, read only outside `main`, a record answered
-as its document. The local agent's latest notes (an agent on `haicc`,
-Claude Code headless; `vision.md`, "Agents"; its proposal: the addon
-hashes left out of the printed log of `boot/deploy`) are read, not
-acted on.
+**`request-layer-access` (task 9) is built** (part 72): `main` is the
+default layer of a request from outside, `layer=<name>` changes it for
+the command's own URI (the routing stays in `main`); a record is read
+as its document. What the outside may ask is a design to make,
+`external-request-api` (`tasks.md`): "done properly, not with
+hard-coded rules". The local agent's notes of 2026-11-15 (an agent on
+`haicc`, Claude Code headless; `vision.md`, "Agents"; its proposal: the
+addon hashes left out of the printed log of `boot/deploy`) are read,
+not acted on.
 
 **`command-line-findings` (task 8) is built** (parts 70 and 71): the human's
 three findings from the manual test. Next in the cleanup, each to
-discuss first: `request-layer-access` (task 9: answered, no door closed
-with it: the flag opens the layer to what the protocols offer there;
-what the outside may ask is a design of its own, `external-request-api`
-in `tasks.md`, "done properly, not with hard-coded rules"),
+discuss first (`request-layer-access`, task 9, is built too: part 72):
 `inbox-watcher` (task 7), `teardown-cascade` (the local agent's
 finding), and `xpath-first`'s decisions to confirm (parts 67 to 69).
 
@@ -237,7 +237,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 71. Its notes come
+  `handover-local.md`, are current for parts 60 to 72. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent

@@ -24,12 +24,13 @@ it keeps the folder in git. `main/swarms/swarm-1` is
   is a link; `null` when there is none. The layer itself is a node.
 - `select`: `[{ names, node }]`, empty when nothing is there: each node
   as `nodeAt` gives it; a value inside a document as `{ uri, value }`,
-  marked `value: true` beside it. What is no node is not among them.
+  marked `value: true` beside it; a file as `{ uri, value }`, its value
+  the file's document, marked `file: true`. A folder without a document
+  is not among them.
 
 ## Errors
 
 - The URI is the mrepo itself, above its layers.
-- A name that is not a plain name.
 - In `main`, a URI that runs through a shortcut, or filters one.
 
 ## Design

@@ -312,7 +312,9 @@ export async function execute (ctx, { actions = {} } = {}) {
       // prefix its URI is read behind (none for the mrepo's own, main for
       // one from outside, by default).
       run: async (command, { own = false, at = internal || own ? OWN : OUTSIDE } = {}) => {
-        const inner = formOf(Array.isArray(command) || typeof command === 'string' ? { command } : command, ctx.protocols ?? {}, at)
+        // (the flags in force come with it, as with a command sent on)
+        const given = Array.isArray(command) || typeof command === 'string' ? { command } : command
+        const inner = formOf({ ...given, flags: { ...flags, ...(given.flags ?? {}) } }, ctx.protocols ?? {}, at)
         const why = check(inner, await runtimeData(ctx), { internal: internal || own })
         if (why) throw new Error(why)
         const fn = actions[inner.protocol]?.[inner.action]

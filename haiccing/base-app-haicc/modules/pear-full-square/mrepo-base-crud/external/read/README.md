@@ -34,12 +34,14 @@ A URI that goes on inside a node's document selects the value there:
 `crud/read swarms/swarm-1/owner/name` gives `[{ "uri": [...], "value":
 "ann" }]`.
 
-What is no node, a file or a folder without a document, is not among
-them.
+A file is its own document, JSON or its text: `{ "uri": [...],
+"value": ... }`. So the records of another layer are read:
+`crud/read done/* --flags layer=request`. A folder without a document
+is not among them, nor a layer's own config (`layer.json` at its root).
 
 ## Errors
 
-- A name that is not a plain name; a query that does not read.
+- A query that does not read.
 - A URI that runs through a shortcut, a filter on one too: what is below
   one, and its document, is read in the mrepo it leads to, with a `haicc`
   at it.

@@ -35,7 +35,25 @@ haicc host crud/read swarms --flags log=verbose
   command's URI is that command's.
 - **A flag that is none**, or a value its flag does not take: ignored,
   with a warning in the request's log.
-- The flags there are: `log`, below.
+- The flags there are: `log`, below, and `layer`.
+
+### The layer
+
+A request from outside stands at `main`: its URI is read there. That is
+a default, and a flag changes it: `layer=<name>` reads the command's own
+URI at another layer.
+
+```
+haicc . crud/read "done/*[value/value/protocol='boot']" --flags layer=request
+haicc host crud/read done/* --flags layer=request
+```
+
+- **The routing stays in `main`**: the URI of `haicc <URI>` is a
+  position, and positions and shortcuts are `main`'s. The flag goes on
+  with the command, down the chain, as any flag.
+- **What is offered there** is what each protocol's config says, as at
+  `main`: no door is closed with the layer.
+- **A record is a file**: `crud/read` answers with its document.
 
 ## The log
 

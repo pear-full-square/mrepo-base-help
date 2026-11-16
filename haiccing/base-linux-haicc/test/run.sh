@@ -249,6 +249,16 @@ has "$out" '"event":"request.flag"' "ignored, with a warning in the log"
 has "$out" '"event":"crud.read.query"' "the others in force"
 out=$(haicc host --flags log=debug crud/read . 2>&1 >/dev/null); is "$?" "1" "a list not closed where a command follows: exit 1"
 has "$out" "no command after the flags of haicc (-- closes a flag list, the command follows it)" "said: only -- or the end of the command closes a list"
+# main is the default layer; layer=<name> changes it: the request records read
+out=$(haicc --output . crud/read "done/*[value/value/protocol='boot']" --flags layer=request 2>&1); is "$?" "0" "haicc . crud/read \"done/*[...]\" --flags layer=request: the request layer read"
+has "$out" '"uri":["request","done/' "records, each a file answered with its document, its URI at that layer"
+has "$out" '"protocol":"boot"' "those the filter holds for"
+hasnt "$out" '"protocol":"service"' "and no others"
+out=$(haicc --output . --flags layer=request -- crud/read "done/*[value/value/protocol='boot']" 2>&1)
+has "$out" '"uri":["request","done/' "the flag at the step: held for the command that follows"
+is "$(haicc --output . crud/read 'done/*' 2>&1)" '[]' "without the flag: main, where there is no done"
+out=$(haicc --output host crud/read 'done/*' --flags layer=request 2>&1)
+has "$out" '"uri":["request","done/' "through a shortcut: the host's records, the routing still in main"
 out=$(haicc --flags log=debug -- host crud/read . 2>&1 >/dev/null); is "$?" "2" "flags in front of the URI: refused, exit 2"
 has "$out" "flags follow a URI: they are that step's" "said"
 

@@ -55,8 +55,7 @@ test('where a URI points: its layer, its names, the URI of a node in the same fo
   t.alike(place(out("swarms/*[owner/name='ann']")).uriOf(['swarms', 'swarm-1']), ['main', 'swarms/swarm-1'], 'a node selected: its URI the same way')
   t.alike(place(['main', 'swarms/swarm-1', '.']).uriOf(['swarms', 'swarm-1', 'nodes']), ['main', 'swarms/swarm-1', 'nodes'], 'written at a position: the prefix kept, the rest behind it')
   t.exception(() => place(own('.')), /not a node: \. \(the mrepo itself; a layer first: main\)/)
-  t.exception(() => place(out('a/b.json')), /not a name for a node: b\.json/, 'a name, no extension')
-  t.exception(() => place(out("a/b.json[x='1']")), /not a name for a node: b\.json/, 'with a filter too')
+  t.alike(place(out('a/b.json')).names, ['a', 'b.json'], 'a name with an extension: a file, read as its document (create refuses it)')
   t.exception(() => place('main/swarms'), /not a URI: its segments, an array/)
 })
 
@@ -109,6 +108,16 @@ test('read: a query: a * anywhere, filters on the nodes\' documents, a value ins
   t.alike(exec.entries.filter(e => e.level === 'verbose').map(e => e.event).slice(0, 3), ['segment', 'filter', 'query'], 'measured: its rounds, steps of the action')
   await t.exception(read(exec, { uri: out('swarms/*[1]') }), /a position: not in this phase/)
   await t.exception(read(exec, { uri: out('swarms//node-1') }), /not canonical/)
+})
+
+test('read: a file is its own document: the records of another layer', async (t) => {
+  const { exec } = execution({ '/request/done/layer.json': B({ kind: 'topic' }), '/request/done/r1.json': B({ key: 'r1', value: { protocol: 'crud', uri: ['main', 'host'] } }), '/request/done/r2.json': B({ key: 'r2', value: { protocol: 'boot', uri: ['main', '.'] } }), '/request/done/note': Buffer.from('a text') })
+  const at = u => ['request', u]
+  t.alike(await read(exec, { uri: at('done/r1.json') }), [{ uri: ['request', 'done/r1.json'], value: { key: 'r1', value: { protocol: 'crud', uri: ['main', 'host'] } } }], 'a file named: its document, its URI in the request\'s format')
+  t.alike((await read(exec, { uri: at("done/*[value/protocol='crud']") })).map(n => n.uri[1]), ['done/r1.json'], 'a filter on the records\' documents')
+  t.alike((await read(exec, { uri: at('done/*/value/uri/1') })).map(n => n.value), ['host', '.'], 'a value inside each')
+  t.alike((await read(exec, { uri: at('done/note') }))[0].value, 'a text', 'not JSON: its text')
+  await t.exception(remove(exec, { uri: at('done/r1.json') }), /not a node: done\/r1\.json \(a file; crud\/delete removes nodes\)/, 'delete removes nodes, not files')
 })
 
 test('delete: the nodes selected made sure to be gone; children only with recurse; idempotent', async (t) => {

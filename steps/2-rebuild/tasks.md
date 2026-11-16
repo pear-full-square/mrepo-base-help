@@ -42,8 +42,9 @@ registry design + mrepo as shortcut, then swarm node creation (container
 mrepo). What else on that list?"):
 
 1. **Cleanup**: the open tasks: `xpath-first`'s decisions confirmed,
-   `command-line-findings` (built, part 70), `request-layer-access`,
-   `inbox-watcher`, `teardown-cascade`. (Which of them are cleanup is our reading, to
+   `command-line-findings` (built, parts 70, 71),
+   `request-layer-access` (built, part 72), `inbox-watcher`,
+   `teardown-cascade`. (Which of them are cleanup is our reading, to
    confirm.)
 2. `mrepo-registry`: the registry's design, an mrepo as a shortcut.
 3. `node-mrepos`: swarm node creation, the container mrepo.
@@ -103,7 +104,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | | `data-names-in-queries` | a document's key in its URI form in a query | built, part 69 |
 | 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | noted, to discuss |
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
-| 9 | `request-layer-access` | the request records reachable, `layer=request` | in discussion: no door closed with it |
+| 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
 | P1 to P8 | above | the priorities | not discussed yet |
 
@@ -922,10 +923,13 @@ Found open in part 68: the outside reaches `main` only, so the request
 records cannot be queried from the command line. The human, 2026-11-15:
 "we will have to make the request log records reachable, probably the
 easiest at this stage is to switch layer in the request. Maybe use a
-flag for that? layer=request". In discussion; not built.
+flag for that? layer=request". **Built**: part 72 of `readme.md`.
 
 **Proposed** (ours, to confirm)
 
+- **`main` is the default layer** (2026-11-16, on our calling the
+  prefix `main` a hard-coded rule: "layer=main is not hardcoded rule,
+  but a default that can be changed by flag").
 - **A flag, `layer=<name>`**: the command's own URI is read at that
   layer instead of `main`: `haicc . crud/read "done/*[value/uri='main/host']"
   --flags layer=request`. The routing URI (`haicc <URI>`) stays in
