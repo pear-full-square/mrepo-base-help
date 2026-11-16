@@ -1,6 +1,6 @@
 # teardown
 
-Stops a child mrepo's runtime and removes the child, its node and its shortcut.
+Stops a child mrepo's runtime and removes the child, its node, its shortcut and its entry in the registry.
 
 The runtime is asked to stop over its socket; still running, it gets
 SIGTERM, then SIGKILL, each waited for until the process has ended. How
@@ -11,9 +11,18 @@ it stopped is logged.
 `teardown(exec, { uri })`: requested as `boot/teardown <name>`. `uri`
 is `["main", "<name>"]`.
 
+Several at once: read at the registry, the URI selects entries there by
+unique URI, and each is torn down at the position that links to it:
+
+```
+haicc . boot/teardown "local/*" --flags layer=registry
+haicc . boot/teardown "local/*[package='haiccing/base-package-runtime']" --flags layer=registry
+```
+
 ## Returns
 
-`{ tornDown }`: the position as written at `main`, `<name>`.
+`{ tornDown }`: the position as written at `main`, `<name>`. Read at the
+registry: a list of them, empty when nothing is selected.
 
 ## Errors
 

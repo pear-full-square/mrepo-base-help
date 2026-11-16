@@ -33,11 +33,11 @@ function source (dir, packages) {
   writeFileSync(join(dir, 'haiccing', 'manifest.json'), JSON.stringify(manifest))
 }
 
-// A parent: main, runtime, packages; its packages manifest (the store, the sources).
+// A parent: main, runtime, packages, registry; its packages manifest (the store, the sources).
 async function parent (work, sources) {
   const src = mkdtempSync(join(tmpdir(), 'deploy-parent-'))
   try {
-    for (const l of ['main', 'runtime', 'packages']) lj(join(src, l), 'atomic')
+    for (const l of ['main', 'runtime', 'packages', 'registry']) lj(join(src, l), 'atomic')
     const { dir } = await build({ from: src, work, name: 'boot' })
     await place({ dir, store: join(work, 'packages'), sources, list: [] })
     return dir
@@ -46,12 +46,16 @@ async function parent (work, sources) {
 
 // An execution's context: reads the repository, writes collected and
 // committed to their layers after the action (exec.commit(): a local commit).
-function context (dir, backend) {
+function context (dir, backend, work) {
   const repo = openRepo(backend)
   const abs = p => (p.startsWith('/') ? p : `/${p}`)
   const edits = []
   const exec = {
-    runtime: { name: 'boot', uri: 'local/boot', dir },
+    runtime: { name: 'boot', uri: 'local/boot', dir, work },
+    // the tree itself, for a query
+    node: uri => repo.node(abs(uri)),
+    children: node => repo.children(node),
+    bytes: node => repo.bytes(node),
     // (paths given relative from the root or slash-led, the same)
     select: uri => repo.select(abs(uri)),
     read: uri => repo.read(abs(uri)),
@@ -76,7 +80,7 @@ function context (dir, backend) {
   return { exec, commit, repo }
 }
 
-test('deploy from a target package\'s list, inside the parent; redeploy; teardown', async (t) => {
+test('deploy from a target package\'s list, placed by its unique URI, recorded in the registry; redeploy; teardown, one and several', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'deploy-'))
   const pkgs = mkdtempSync(join(tmpdir(), 'deploy-src-'))
   try {
@@ -86,7 +90,7 @@ test('deploy from a target package\'s list, inside the parent; redeploy; teardow
     })
     const dir = await parent(work, [parseSource(`folder:${pkgs}`)])
     const backend = p2pgitBackend(join(dir, '.git'), { fs })
-    const { exec, commit, repo } = context(dir, backend)
+    const { exec, commit, repo } = context(dir, backend, work)
 
     await t.exception(deploy(exec, { uri: ['main', 'host'] }), /missing argument: package/, 'the package: its first argument, missing said')
     await t.exception(deploy(exec, { uri: ['main', '.'], args: ['haiccing/target'] }), /missing argument: target/, 'a target of main itself: the mrepo, which one cannot deploy; missing')
@@ -101,9 +105,10 @@ test('deploy from a target package\'s list, inside the parent; redeploy; teardow
     await t.exception(teardown(exec, { uri: ['main', 'nothing'] }), /not deployed: nothing/, 'nothing there at all: not deployed')
     const d = await deploy(exec, { uri: ['main', 'host'], args: ['haiccing/target'] })
     await commit()
-    const host = join(dir, 'main', 'host')
+    const host = join(work, 'mrepos', 'local', 'host')
     t.is(d.deployed, 'host', 'said as it is written at main')
-    t.ok(existsSync(join(host, '.git')), 'built inside the parent: main/host/')
+    t.ok(existsSync(join(host, '.git')), 'placed by its unique URI, side by side with its parent: <work>/mrepos/local/host')
+    t.absent(existsSync(join(dir, 'main')), 'nothing of it inside the parent\'s folder')
     t.alike(Object.keys(d.layers).sort(), ['inbox', 'main', 'packages', 'runtime'], 'the layers of every listed package')
     const child = openRepo(p2pgitBackend(join(host, '.git'), { fs }))
     t.alike(json(await child.read('/runtime/kind.json')), { kind: 'target' }, 'its runtime config: the last package\'s, the one that defines the mrepo')
@@ -113,7 +118,7 @@ test('deploy from a target package\'s list, inside the parent; redeploy; teardow
     t.is(statSync(join(work, 'packages', 'haiccing', 'base.bundle')).ino, statSync(join(host, 'packages', 'haiccing', 'base.bundle')).ino, 'each linked from the store')
     t.alike(json(await repo.read('/main/host/.shortcuts.json')), [{ mrepo: 'local/host' }], 'its shortcut, in main beside its node: a list, the mrepo linked there by its unique URI (in its parent\'s swarm); only the link')
     t.alike(json(await repo.read('/main/host/.node.json')), {}, 'its node, in main: an empty document')
-    t.alike(json(await repo.read('/runtime/deployed/host.json')), { package: 'haiccing/target', packages: d.packages, layers: d.layers }, 'what is local to this machine about it, in the runtime layer: main replicates, this does not')
+    t.alike(json(await repo.read('/registry/local/host/.node.json')), { uri: 'local/host', at: 'host', folder: '../local/host', package: 'haiccing/target', packages: d.packages, layers: d.layers }, 'what is local to this machine about it, its entry in the registry, a node by its unique URI: where it is (from this mrepo\'s folder), the position that links to it, what it came from; main replicates, this does not')
     t.alike([d.mrepo, d.package], ['local/host', 'haiccing/target'], 'both said in what deploy returns')
     t.alike(json(await child.read('/runtime/mrepo.json')), { uri: 'local/host' }, 'its identity, in its own runtime layer')
     await t.exception(deploy(exec, { uri: ['main', 'host'], args: ['haiccing/target'] }), /deployed already/)
@@ -126,8 +131,8 @@ test('deploy from a target package\'s list, inside the parent; redeploy; teardow
 
     // a runtime that does not stop (no socket, SIGTERM ignored): teardown ends it all the same
     const stubborn = spawn('sh', ['-c', 'trap "" TERM; while true; do sleep 1; done'], { stdio: 'ignore', detached: true })
-    const rec = json(await repo.read('/runtime/deployed/host.json'))
-    exec.put('/runtime/deployed/host.json', Buffer.from(JSON.stringify({ ...rec, runtime: { pid: stubborn.pid } })))
+    const rec = json(await repo.read('/registry/local/host/.node.json'))
+    exec.put('/registry/local/host/.node.json', Buffer.from(JSON.stringify({ ...rec, runtime: { pid: stubborn.pid } })))
     await commit()
     exec.entries = []
     t.alike(await teardown(exec, { uri: ['main', 'host'] }), { tornDown: 'host' })
@@ -136,8 +141,17 @@ test('deploy from a target package\'s list, inside the parent; redeploy; teardow
     t.alike(exec.entries.filter(e => e.level === 'info').map(e => e.event), ['torn down'], 'what it did, at info')
     await commit()
     t.absent(existsSync(host), 'removed')
-    t.alike([await repo.read('/main/host/.shortcuts.json').catch(() => null), await repo.read('/main/host/.node.json').catch(() => null), await repo.read('/runtime/deployed/host.json').catch(() => null)], [null, null, null], 'its shortcut and its node out of main, what was local out of the runtime layer')
+    t.alike([await repo.read('/main/host/.shortcuts.json').catch(() => null), await repo.read('/main/host/.node.json').catch(() => null), await repo.read('/registry/local/host/.node.json').catch(() => null)], [null, null, null], 'its shortcut and its node out of main, what was local out of the runtime layer')
     await t.exception(teardown(exec, { uri: ['main', 'host'] }), /not deployed/)
+    // several at once: a query over the registry, by unique URI
+    for (const n of ['one', 'two', 'three']) { await deploy(exec, { uri: ['main', n], args: ['haiccing/target'] }); await commit() }
+    t.alike((await repo.select('/registry/local/*')).map(([p]) => p), ['/registry/local/one', '/registry/local/three', '/registry/local/two'], 'three deployed: three entries in the registry')
+    t.alike(await teardown(exec, { uri: ['registry', "local/*[at='one' or at='two']"] }), [{ tornDown: 'one' }, { tornDown: 'two' }], 'teardown read at the registry: the entries a query selects, each torn down at its position')
+    await commit()
+    t.alike([existsSync(join(work, 'mrepos', 'local', 'one')), existsSync(join(work, 'mrepos', 'local', 'two')), existsSync(join(work, 'mrepos', 'local', 'three'))], [false, false, true], 'their folders gone, the third left')
+    t.alike(await teardown(exec, { uri: ['registry', 'local/*'] }), [{ tornDown: 'three' }], 'all that is left')
+    await commit()
+    t.alike(await teardown(exec, { uri: ['registry', 'local/*'] }), [], 'nothing registered: nothing torn down, no error')
     await t.exception(deploy(exec, { uri: ['main', 'x'], args: ['haiccing/none'] }), /not in the store nor the sources/)
     await t.exception(deploy(exec, { uri: ['main', '../x'], args: ['haiccing/target'] }), /bad segment/, 'no way up')
     await t.exception(deploy(exec, { uri: ['main', 'a/b'], args: ['haiccing/target'] }), /not a name for an mrepo: a\/b/, 'one name below main')
@@ -159,10 +173,10 @@ test('deploy the runtime: the child\'s runtime started from its own packages, it
   try {
     const dir = await parent(work, [parseSource(`folder:${SOURCES}`)])
     const backend = p2pgitBackend(join(dir, '.git'), { fs })
-    const { exec, commit } = context(dir, backend)
+    const { exec, commit } = context(dir, backend, work)
     const d = await deploy(exec, { uri: ['main', 'host'], args: ['haiccing/base-package-runtime'] })
     await commit()
-    const host = join(dir, 'main', 'host')
+    const host = join(work, 'mrepos', 'local', 'host')
     t.ok(d.runtime?.pid, 'its runtime started')
     t.alike([(await ask({ repo: host, op: 'status' }))?.repository.name, (await ask({ repo: host, op: 'status' }))?.repository.uri], ['host', 'local/host'], 'running the child, by its directory; its unique URI its own')
     // a request into its inbox folder (the parent reaches it, forward): answered

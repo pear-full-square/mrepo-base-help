@@ -58,11 +58,11 @@ position is a shortcut when its node has sources.
   What of XPath is read: `mycelium-xpath`'s README. Quoted at a command
   line, its stars and brackets being the shell's too.
 
-- **Local linking only.** The linked mrepo's folder is found by logic: the
-  `main/` folder on disk is a shadow structure of `main`, and what is
-  linked at a position sits there at the same path, with its inbox and
-  outbox folders inside. The shortcut at `host` leads to
-  `<dir>/main/host/`.
+- **Where a shortcut leads on this machine** is read from the
+  [registry](../registry/): the linked mrepo's entry there, by its unique
+  URI, names its folder, with its inbox and outbox folders inside. The
+  shortcut at `host` leads to `<work>/mrepos/local/host/`. `main` itself
+  holds nothing that is local to a machine.
 - **A shortcut stops it.** What is below a shortcut, and its document,
   is in the mrepo it leads to. A command's own URI does not run through
   one: `crud/read host/swarms` is refused, with the way across. The way

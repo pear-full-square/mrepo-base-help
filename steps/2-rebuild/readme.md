@@ -3577,3 +3577,75 @@ package's pre-release, each passing (all twelve carry `mycelium-uri`).
 `base-component-boot`'s `validate` twice. The `haicc` test, 186 of 186
 (2 more checks: a position in the tree, a name in a filter that is no
 URI's refused as a URI). Nothing left running.
+
+## 75. `mrepo-registry`, the first build: an mrepo placed by its unique URI; the registry layer; several torn down by a query (2026-11-16)
+
+P1 of our order of work (`tasks.md`). Designed together, KISS: "our aim
+is to achieve simple swarm demos and that is it. We just need enough
+functionality to achieve that and will do a further design round with
+the next step". The go: "do help documentation, and required howtos
+info but focus on the build."
+
+- **Placed by its unique URI** (`mrepo-base-boot`): a deployed mrepo is
+  built side by side with the others under the work folder's `mrepos/`,
+  `<work>/mrepos/<swarm>/<name>` (`mrepos/local/host`), not inside the
+  folder of the mrepo that deployed it. That one's `main/<name>/` holds
+  the shortcut only (settled before). The boot mrepo itself stays at
+  `mrepos/boot`. A runtime started by its folder finds its work folder
+  from the new place too.
+- **A `registry` layer**, brought by `base-package-boot` (its `mrepo/`
+  part), so there where the boot protocol is: an entry an mrepo this
+  one deployed, a node by its unique URI
+  (`registry/local/host/.node.json`): its URI, the position that links
+  to it, where it is (its folder, from this mrepo's own), the package
+  it came from, the packages placed, its layers, its runtime's process.
+  It replaces `runtime/deployed/<name>.json`. Written by `boot/deploy`,
+  `redeploy` and `teardown` only; an action may write the layer
+  (`registry` among the execution's targets; a layer's name the git
+  writer knows).
+- **Where a shortcut leads** is read from the registry
+  (`mrepo-base-xpath`, `linkOf`), not worked out from the folders. No
+  entry: not reachable from here.
+- **Several torn down by a query**: `boot/teardown` read at the
+  registry (`layer=registry`) takes the entries its URI selects, by
+  unique URI and by what an entry says, and tears each down at its
+  position: `haicc . boot/teardown "local/*" --flags layer=registry`.
+  No cascade of its own ("it can be done with xpath").
+- **The machine level** (`haicc boot/teardown`): every runtime of the
+  install is stopped, each mrepo found by its folder under `mrepos/`:
+  a node deployed by the host is among them (the local agent's finding
+  of 2026-11-15, a grandchild left running, is gone with it).
+- **Its help and its howto** with it: the `registry` layer documented
+  in `package-docs-mrepo` (its page, linked from the mrepo's), the
+  changed `deploy` and `teardown`, and in `base-package-boot`'s README
+  a "How to": see what is deployed, tear several down at once.
+
+By our rule (`rules.md`): no install is migrated; a teardown and a new
+`haicc boot/deploy` put everything in the new place.
+
+**Not in it** (the next design round): who may deploy; a shortcut to an
+mrepo that was not deployed here; the reverse index; the visible state
+in `main`; the `swarm` protocol and the containers.
+
+**Validated**: the modules' tests (`mrepo-base-boot` 5 tests, 68
+asserts: a deploy at its place, its entry, a redeploy, one and several
+torn down, a runtime started from the new place; `mrepo-base-xpath` 5,
+50; `mrepo-base-haicc` 5, 38; `haicc-base-app` 16, 163; `mycelium-git`
+144, 777). Every
+package's pre-release, each passing; those the build changed:
+`package-docs-mrepo` 8 units, 47 tests, 274 asserts;
+`base-package-haicc` 11, 85, 538; `base-package-crud` 11, 87, 596;
+`base-package-service` 14, 242, 1438; `base-package-runtime` 22, 307,
+1960; `base-package-boot` 23, 318, 2074 (its own test: the config with
+the registry's form of a teardown, a folder in the way at the new
+place); `base-component-boot` 23, 313, 2142 (its `boot` test: the host,
+a service mrepo, the haicc mrepo and a node it deployed, each at its
+place, a command through two shortcuts by the registry).
+`tools/bare tools/release.js --strict`: exit 0, twelve packages, every
+report current. `tools/bare tools/code-check.js`: no problems. The
+READMEs: 245 in the sources, no problems. `base-component-boot`'s
+`validate` three times. The `haicc` test, 194 of 194, twice (8 more
+checks: an mrepo at its place and nothing of it inside the one that
+deployed it, the registry read at the root and in the host, two more
+deployed and torn down by one query, the host left). Nothing left
+running.

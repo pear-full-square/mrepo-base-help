@@ -144,7 +144,7 @@ test('boot/teardown: what boot/deploy put in place removed, nothing else; no run
   const s = setup()
   try {
     const work = join(s.home, 'work')
-    for (const d of ['mrepos/boot/.git', 'mrepos/boot/inbox', 'mrepos/boot/main/host/.git', 'mrepos/boot/main/host/main/swarms/node-1/.git', 'packages/haiccing', 'kept']) mkdirSync(join(work, d), { recursive: true })
+    for (const d of ['mrepos/boot/.git', 'mrepos/boot/inbox', 'mrepos/local/host/.git', 'mrepos/swarm-1/node-1/.git', 'packages/haiccing', 'kept']) mkdirSync(join(work, d), { recursive: true })
     writeFileSync(join(work, 'mrepo.json'), '{}')
     t.is(await s.run(['boot/teardown']), 0)
     t.alike(s.out, [JSON.stringify({ tornDown: '.', runtimes: 0, work })], 'said: the root torn down, the runtimes stopped, the work folder')

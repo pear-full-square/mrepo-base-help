@@ -82,18 +82,18 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
       return v
     }
     // nothing deployed by the boot: no host, nothing pending
-    const host = join(viewOf(work, 'boot'), 'main', 'host')
+    const host = viewOf(work, 'local/host')
     t.absent(existsSync(host), 'nothing deployed by the boot: no host yet')
     // the host deployed by a command at the root, the name joined to the
     // position: boot/deploy /host (the runtime the target)
     const first = await typed(['boot/deploy', 'host', 'haiccing/base-package-runtime'])
     t.alike([first?.error, first?.uri, first?.output?.deployed, first?.output?.mrepo], [undefined, ['main', 'host'], 'host', 'local/host'], `boot/deploy host: in the form its URI the prefix main and what was written, in its output as written: done ${first?.error ?? ''}`)
     const h = await ask({ repo: host, op: 'status' })
-    t.is(h?.repository.name, 'host', 'the host deployed inside the boot mrepo (main/host), its runtime running')
+    t.is(h?.repository.name, 'host', 'the host deployed, placed by its unique URI beside the boot mrepo (mrepos/local/host), its runtime running')
     t.is(statSync(join(host, 'packages', 'haiccing', 'base-package-runtime.bundle')).ino, statSync(store).ino, 'its runtime linked from the store')
     // (its shortcut merged into main when the action ends, after the host is up)
     let node = null
-    for (let i = 0; i < 100 && !node; i++) { node = await repo.read('/runtime/deployed/host.json').then(b => JSON.parse(b.toString()), () => null); if (!node) await wait(100) }
+    for (let i = 0; i < 100 && !node; i++) { node = await repo.read('/registry/local/host/.node.json').then(b => JSON.parse(b.toString()), () => null); if (!node) await wait(100) }
     t.alike([node.package, node.packages], ['haiccing/base-package-runtime', ['haiccing/base-package-help', 'haiccing/base-package-protocol', 'haiccing/package-docs-mrepo', 'haiccing/package-docs-template', 'haiccing/base-package-runtime']], 'what is local to this machine about it, in the runtime layer: the package it was deployed from, the packages placed')
     t.alike(JSON.parse((await repo.read('/main/host/.shortcuts.json')).toString()), [{ mrepo: 'local/host' }], 'its shortcut, in main: the mrepo linked there by its unique URI, only the link')
     t.alike(JSON.parse((await repo.read('/main/host/.node.json')).toString()), {}, 'its node, in main beside it')
@@ -133,12 +133,12 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     const tornDown = redone?.log?.find(e => e.event === 'boot.redeploy.torn down')
     t.is(tornDown?.runtime?.pid, h.pid, `the old runtime stopped, how logged: ${tornDown?.runtime?.how}`)
     t.alike(redone?.log?.filter(e => e.level === 'info' && e.event !== 'request.changed').map(e => e.event), ['boot.redeploy.torn down', 'boot.redeploy.deployed', 'request.metrics'], 'its log at info: what it did, and its metrics')
-    t.alike(redone?.log?.filter(e => e.event === 'request.changed').map(e => [e.target, e.changed]), [['runtime', ['deployed/host.json']]], 'its audit: what is local about the child changed (its runtime\'s process); main as it was, its link and its node the same again: nothing said of it')
+    t.alike(redone?.log?.filter(e => e.event === 'request.changed').map(e => [e.target, e.changed]), [['registry', ['local/host/.node.json']]], 'its audit: what is local about the child changed (its runtime\'s process); main as it was, its link and its node the same again: nothing said of it')
     t.absent(alive(h.pid), 'the old host runtime\'s process ended')
     const h2 = await ask({ repo: host, op: 'status' })
     t.ok(h2 && h2.pid !== h.pid, 'a new host runtime running')
     let node2 = null
-    for (let i = 0; i < 100 && node2?.runtime?.pid !== h2?.pid; i++) { node2 = await repo.read('/runtime/deployed/host.json').then(b => JSON.parse(b.toString()), () => null); if (node2?.runtime?.pid !== h2?.pid) await wait(100) }
+    for (let i = 0; i < 100 && node2?.runtime?.pid !== h2?.pid; i++) { node2 = await repo.read('/registry/local/host/.node.json').then(b => JSON.parse(b.toString()), () => null); if (node2?.runtime?.pid !== h2?.pid) await wait(100) }
     t.is(node2?.runtime?.pid, h2?.pid, 'what is local about it updated: its runtime\'s new process')
 
     // teardown, then deploy again, each a request to the running boot mrepo
@@ -153,7 +153,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     const down = await sent({ action: 'teardown', uri: 'host' })
     t.alike([down?.error, down?.output], [undefined, { tornDown: 'host' }], 'boot teardown host: done')
     t.absent(alive(h2.pid), 'the host\'s runtime ended')
-    t.absent(existsSync(host), 'main/host removed')
+    t.absent(existsSync(host), 'its folder removed')
     let gone = false
     for (let i = 0; i < 100 && !gone; i++) { gone = (await repo.read('/main/host/.shortcuts.json').catch(() => null)) === null; if (!gone) await wait(100) }
     t.ok(gone, 'its shortcut out of main')
@@ -167,7 +167,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     // linked there, unchanged; the request waits, the response its result
     const far = await typed(['haicc', 'host', 'help/get', '.', 'packages', 'oneliner'])
     t.alike([far?.error, far?.protocol, far?.action, far?.uri, far?.args], [undefined, 'haicc', 'goto', ['main', 'host'], ['help/get', '.', 'packages', 'oneliner']], `haicc host help/get . packages oneliner: haicc alone is haicc/goto, what follows its arguments ${far?.error ?? ''}`)
-    t.alike([far?.output?.uri, far?.remote?.at, far?.remote?.folder, typeof far?.remote?.key], ['packages', 'host', 'main/host', 'string'], 'answered by the host: host is a shortcut, the command sent on')
+    t.alike([far?.output?.uri, far?.remote?.at, far?.remote?.folder, typeof far?.remote?.key], ['packages', 'host', '../local/host', 'string'], 'answered by the host: host is a shortcut, the command sent on')
     const hostRepo = openRepo(p2pgitBackend(join(host, '.git'), { fs }))
     const passed = await hostRepo.read(`/request/done/${far?.remote?.key}.json`).then(b => JSON.parse(b.toString()).value, () => null)
     t.alike([/^\/local\/boot\/execute\/[0-9a-f-]{36}$/.test(passed?.topic ?? ''), passed?.value?.command, passed?.value?.protocol, passed?.value?.uri], [true, ['help/get', '.', 'packages', 'oneliner'], 'help', ['main', '.']], 'in the host: the command that followed, unchanged (the hop taken off, nothing rewritten), addressed back to the waiting request\'s branch')
@@ -211,7 +211,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     // external API gated by its state, its protocols recorded
     const svcUp = await sent({ action: 'deploy', uri: 'svc', args: ['haiccing/base-package-service'] }, 600)
     t.absent(svcUp?.error, `boot deploy svc from the service package ${svcUp?.error ?? ''}`)
-    const svc = join(viewOf(work, 'boot'), 'main', 'svc')
+    const svc = viewOf(work, 'local/svc')
     const svcRepo = openRepo(p2pgitBackend(join(svc, '.git'), { fs }))
     const toSvc = async (form, tries = 600) => {
       const c = record('/test', form, guid())
@@ -242,7 +242,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     // commands chained through both shortcuts
     const comp = await typed(['boot/deploy', 'haicc', 'base-component-haicc'], 900)
     t.alike([comp?.error, comp?.output?.package, comp?.output?.mrepo], [undefined, 'haiccing/base-component-haicc', 'local/haicc'], `boot/deploy haicc base-component-haicc ${comp?.error ?? ''}`)
-    const hc = join(viewOf(work, 'boot'), 'main', 'haicc')
+    const hc = viewOf(work, 'local/haicc')
     const hcRepo = openRepo(p2pgitBackend(join(hc, '.git'), { fs }))
     t.alike(JSON.parse((await hcRepo.read('/packages/layer.json')).toString()).packages, comp?.output?.packages, 'its packages layer: the component\'s own list (laid in last)')
     t.alike((await hcRepo.select('/main/*')).map(([p]) => p), ['/main/layer.json'], 'its main empty')
@@ -253,8 +253,8 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     t.alike((await hcRepo.select('/protocols/*')).map(([p]) => p.slice(p.lastIndexOf('/') + 1)).filter(n => n !== 'layer.json').sort(), ['boot.json', 'crud.json', 'haicc.json', 'help.json', 'runtime.json', 'service.json'], 'started: boot and crud activated by the start hooks, beside those active from boot')
     const nodeUp = await typed(['haicc', 'haicc', 'boot/deploy', 'node-1', 'base-package-runtime'], 900)
     t.alike([nodeUp?.error, nodeUp?.output?.deployed, nodeUp?.output?.mrepo], [undefined, 'node-1', 'local/node-1'], `started: haicc haicc boot/deploy node-1, executed by the haicc mrepo ${nodeUp?.error ?? ''}`)
-    const n1 = join(hc, 'main', 'node-1')
-    t.ok((await ask({ repo: n1, op: 'status' }))?.pid, 'the node inside the haicc mrepo (main/node-1), its runtime running')
+    const n1 = viewOf(work, 'local/node-1')
+    t.ok((await ask({ repo: n1, op: 'status' }))?.pid, 'the node the haicc mrepo deployed, placed by its unique URI (mrepos/local/node-1), its runtime running')
     t.ok(await hcRepo.read('/main/node-1/.shortcuts.json').then(() => true, () => false), 'its shortcut in the haicc mrepo\'s main')
     t.is(await repo.read('/main/node-1/.shortcuts.json').catch(() => null), null, 'not in the boot mrepo\'s: each mrepo knows only its own shortcuts')
     const two = await typed(['haicc', 'haicc', 'haicc', 'node-1', 'help/get', '.', 'packages', 'oneliner'])
@@ -301,7 +301,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     t.absent(alive(s2.pid))
   } finally {
     // whatever happened: its runtimes stopped (the host's, the boot's), then its folder removed
-    for (const r of [join(viewOf(work, 'boot'), 'main', 'haicc', 'main', 'node-1'), join(viewOf(work, 'boot'), 'main', 'haicc'), join(viewOf(work, 'boot'), 'main', 'host'), viewOf(work, 'boot')]) {
+    for (const r of [viewOf(work, 'local/node-1'), viewOf(work, 'local/haicc'), viewOf(work, 'local/host'), viewOf(work, 'boot')]) {
       const s = await ask({ repo: r, op: 'status' }).catch(() => null)
       if (s?.pid) { try { os.kill(s.pid, 'SIGTERM') } catch {} for (let i = 0; i < 50 && alive(s.pid); i++) await wait(100) }
     }

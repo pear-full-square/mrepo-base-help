@@ -29,7 +29,8 @@ export async function deploy (exec, { uri, args = [] }) {
   const store = mine.store
   const sources = (mine.sources || []).map(parseSource)
   // The target's list laid in: each package's mrepo/ part, in that order,
-  // runtime config from the last only; built inside the parent.
+  // runtime config from the last only; built at its own place, by its
+  // unique URI.
   const tmp = mkdtempSync(join(tmpdir(), `deploy-${c.name}-`))
   try {
     const { list } = await exec.step('lay', r => ({ package: target, packages: r.list.length }), async () => lay({ store, sources, target, into: tmp }))
@@ -40,6 +41,8 @@ export async function deploy (exec, { uri, args = [] }) {
     const { packages } = await exec.step('place', r => ({ packages: Object.keys(r.packages).length }), () => place({ dir: c.dir, store, sources, list }))
     // What is local to this machine about it: not in main, which replicates.
     const record = { package: target, packages: Object.keys(packages), layers }
+    // (its entry in the registry says besides: which mrepo, where, linked at which position)
+    const entry = () => ({ uri: c.mrepo, at: c.at, folder: c.folder, ...record })
     // Its runtime started, from its own packages/ (its pinned runtime), by
     // its directory: its inbox operational. Not when it has no runtime.
     const runtime = join(c.dir, 'packages', 'haiccing', 'base-package-runtime.bundle')
@@ -51,7 +54,7 @@ export async function deploy (exec, { uri, args = [] }) {
     // Its node, in main, and beside it its shortcuts: the link, only that.
     exec.put(c.node, Buffer.from('{}\n'))
     exec.put(c.links, Buffer.from(JSON.stringify([{ mrepo: c.mrepo }], null, 2) + '\n'))
-    exec.put(c.local, Buffer.from(JSON.stringify(record, null, 2) + '\n'))
+    exec.put(c.local, Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
     exec.log('info', 'deployed', { at: c.at, mrepo: c.mrepo, package: target })
     return { deployed: c.at, mrepo: c.mrepo, ...record }
   } finally { rmSync(tmp, { recursive: true, force: true }) }

@@ -29,9 +29,15 @@ What it writes in the parent:
 - `main/<name>/.node.json`: the child's node, an empty document.
 - `main/<name>/.shortcuts.json`: its shortcut, `[{ "mrepo" }]`: only the
   link, since `main` replicates.
-- `runtime/deployed/<name>.json`: what is local to this machine about
-  it: the package it was deployed from, the packages placed, its layers,
-  its runtime's process.
+- `registry/<swarm>/<name>/.node.json`: its entry in the registry, a
+  node by its unique URI: what is local to this machine about it: its
+  URI, the position that links to it (`at`), where it is (`folder`,
+  from this mrepo's own folder), the package it was deployed from, the
+  packages placed, its layers, its runtime's process.
+
+Where the child is built: by its unique URI under the work folder's
+`mrepos/`, `<work>/mrepos/<swarm>/<name>`, side by side with the others;
+nothing of it inside this mrepo's folder.
 
 ## Errors
 

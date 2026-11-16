@@ -110,7 +110,7 @@ out=$(haicc boot/deploy 2>&1); is $? 0 "haicc boot/deploy"
 has "$out" '"protocol":"boot","action":"deploy","uri":["boot"]' "its request printed, completed: boot deploy boot"
 has "$out" '"repository":"boot"' "its runtime started"
 [ -d "$T/home/work/mrepos/boot/inbox" ] && ok "the boot mrepo in the work folder" || no "the boot mrepo in the work folder"
-[ ! -e "$T/home/work/mrepos/boot/main/host" ] && ok "nothing deployed by the boot" || no "nothing deployed by the boot"
+[ ! -e "$T/home/work/mrepos/local" ] && ok "nothing deployed by the boot" || no "nothing deployed by the boot"
 is "$(running | wc -l | tr -d ' ')" 1 "one runtime running: the boot mrepo's"
 
 # 7. commands: the host deployed at the root; passed through to it. The
@@ -167,7 +167,8 @@ out=$(haicc . boot/remove host 2>&1 >/dev/null); is "$out" "haicc: no action: bo
 # 9. a node inside the host; commands chained through both
 out=$(haicc --raw host boot/deploy node-1 base-package-runtime 2>&1); is $? 0 "haicc host boot/deploy node-1: executed by the haicc mrepo"
 has "$out" '"deployed":"node-1","mrepo":"local/node-1"' "the node deployed inside it"
-[ -d "$T/home/work/mrepos/boot/main/host/main/node-1/inbox" ] && ok "in the shadow of its main: main/host/main/node-1" || no "in the shadow of its main"
+[ -d "$T/home/work/mrepos/local/node-1/inbox" ] && ok "placed by its unique URI, side by side with the others: mrepos/local/node-1" || no "placed by its unique URI"
+[ ! -e "$T/home/work/mrepos/local/host/main" ] && [ ! -e "$T/home/work/mrepos/boot/main" ] && ok "nothing of an mrepo inside the one that deployed it" || no "nothing of an mrepo inside the one that deployed it"
 is "$(running | wc -l | tr -d ' ')" 3 "three runtimes running: the boot mrepo's, the host's, the node's"
 out=$(haicc --raw host haicc node-1 help/get . packages oneliner 2>&1); is $? 0 "haicc host haicc node-1 help/get . packages: chained through two shortcuts"
 has "$out" '"uri":"packages"' "answered by the node"
@@ -251,6 +252,18 @@ has "$out" '"event":"request.flag"' "ignored, with a warning in the log"
 has "$out" '"event":"crud.read.query"' "the others in force"
 out=$(haicc host --flags log=debug crud/read . 2>&1 >/dev/null); is "$?" "1" "a list not closed where a command follows: exit 1"
 has "$out" "no command after the flags of haicc (-- closes a flag list, the command follows it)" "said: only -- or the end of the command closes a list"
+# the registry: what this mrepo deployed, an entry each by its unique URI;
+# several torn down at once by a query over it
+out=$(haicc --output . crud/read 'local/*' --flags layer=registry 2>&1)
+has "$out" '"uri":["registry","local/host"]' "haicc . crud/read 'local/*' --flags layer=registry: the host's entry, by its unique URI"
+has "$out" '"at":"host","folder":"../local/host","package":"haiccing/base-component-haicc"' "what this machine knows of it: the position that links to it, where it is, what it came from"
+out=$(haicc --output host crud/read 'local/*' --flags layer=registry 2>&1)
+has "$out" '"uri":["registry","local/node-1"]' "the host's own registry: the node it deployed"
+haicc . boot/deploy extra-1 base-package-runtime >/dev/null 2>&1; haicc . boot/deploy extra-2 base-package-runtime >/dev/null 2>&1
+[ -d "$T/home/work/mrepos/local/extra-1/inbox" ] && [ -d "$T/home/work/mrepos/local/extra-2/inbox" ] && ok "two more deployed, each at its place" || no "two more deployed"
+is "$(haicc --output . boot/teardown "local/*[starts-with(at,'extra')]" --flags layer=registry 2>&1)" '[{"tornDown":"extra-1"},{"tornDown":"extra-2"}]' "haicc . boot/teardown \"local/*[starts-with(at,'extra')]\" --flags layer=registry: those the query selects torn down"
+[ ! -e "$T/home/work/mrepos/local/extra-1" ] && [ ! -e "$T/home/work/mrepos/local/extra-2" ] && [ -d "$T/home/work/mrepos/local/host" ] && ok "their folders removed, the host left" || no "their folders removed, the host left"
+is "$(running | wc -l | tr -d ' ')" 3 "three runtimes running again"
 # main is the default layer; layer=<name> changes it: the request records read
 out=$(haicc --output . crud/read "done/*[value/value/protocol='boot']" --flags layer=request 2>&1); is "$?" "0" "haicc . crud/read \"done/*[...]\" --flags layer=request: the request layer read"
 has "$out" '"uri":["request","done/' "records, each a file answered with its document, its URI at that layer"
@@ -271,7 +284,7 @@ out=$(haicc host boot/deploy node-2 base-package-runtime 2>&1 >/dev/null); is "$
 out=$(haicc host crud/read . 2>&1 >/dev/null); is "$out" "haicc: not now: crud read (crud is not active; the service is initialised)" "and its crud protocol with it: behind the same door"
 is "$(haicc --output host service/shutdown 2>&1)" '{"service":"shut down","state":"booted"}' "haicc host service/shutdown: shut down, the state booted again"
 is "$(haicc --output . boot/teardown host 2>&1)" '{"tornDown":"host"}' "haicc . boot/teardown host: at the root, about the shortcut as an item"
-[ ! -e "$T/home/work/mrepos/boot/main/host" ] && ok "the host's folder removed" || no "the host's folder removed"
+[ ! -e "$T/home/work/mrepos/local/host" ] && ok "the host's folder removed" || no "the host's folder removed"
 is "$(running | wc -l | tr -d ' ')" 1 "one runtime left: the boot mrepo's"
 
 # 11. the boot again: there already, kept
