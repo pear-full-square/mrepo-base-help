@@ -1570,6 +1570,39 @@ think the initial MVP is fully specified"). Not built yet.
   with `layer=request`, an unknown flag not run (exit 1, the warning),
   through a chain (`haicc host haicc node-1 ... --flags help`).
 
+**Amended** (the human, 2026-11-16, in the session that built parts 79
+to 81, asked what actions the MVP proposes; not built yet)
+
+- "can I propose amendments: instead of help/command, help/annotate as
+  it explains with help information; howto/run --> howto/explore and
+  howto/plan. However these methods are not mvp, we may scope them and
+  put headless claude in as placeholder implementation."
+- Then: "there could be a howto/run as well but I don't know if that is
+  that useful for an AI agent. In SPLectral with UI the guided step run
+  is definitely very useful."
+- Our reading, put back: `help/annotate` replaces `help/command`,
+  otherwise as specified above, in the MVP as code, `--flags help`
+  rewriting into it. `howto/run` is dropped from the MVP;
+  `howto/explore` (asked about an activity or a goal in words: what can
+  be done from here) and `howto/plan` (a goal: the steps to reach it,
+  as commands, a continuation script) take its place, not as code:
+  scoped, each documented as an action, its README the contract,
+  headless Claude the placeholder implementation. The MVP in code: the
+  flag unit, the `help` and `feedback` flags, `help/annotate`,
+  `howto/extract`, `howto/get`, `haici/feedback`.
+- Ours, on `howto/run`: an agent reads a how-to's steps with
+  `howto/get` and runs them itself, or asks `howto/plan`; a guided run,
+  step by step, each step's help before it, is a client's: the terminal
+  runs a continuation, Splectral would run a how-to with its page. So
+  no `run` action now; the guided run comes as a Splectral component.
+- What follows from no `run`: the first how-tos are not run by the
+  `haicc` test; each step is checked as a command the mrepo accepts
+  (`help/annotate` on it) until `plan` or Splectral runs them.
+- **Open**: for `explore` and `plan`, the call to headless Claude built
+  now, or the two scoped only (ours: scoped only; the call, the runtime
+  starting `claude -p` with `haicc` its only tool, a piece of its own;
+  `claude` is in the cloud session, 2.1.325).
+
 **Not in it** (later, each when the work reaches it): guided runs (each
 step's help before it, a run resumed); `haicc howto boot` as a short form
 at the machine level; an action not implemented in code calling hc
