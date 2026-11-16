@@ -375,10 +375,15 @@ Settled, each above in the words used:
   keyword to page (ours, not objected to).
 - **Rules and vision are the HDLC's**, not an mrepo's help.
 
+- **The top page** (`info/get` with nothing asked) **is the top page of
+  the package** that defines the mrepo (the human, on our proposal: "the
+  top page of the package."): in a host `base-component-haicc`'s README,
+  then its keywords, the protocols here. A component needs no keyword of
+  its own: it is the top. (Ours, not answered: the two documentation
+  packages as keywords beside the protocols, `mrepo` and `package`.)
+
 Open, to settle one at a time:
 
-- What the top page is, and where a package without a protocol is
-  found (the components, the documentation packages).
 - Whether a how-to is filed by what it declares, wherever it lives
   (ours), or only by the package of its protocol.
 - How a page is shown at the terminal and handed to an agent.

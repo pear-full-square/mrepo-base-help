@@ -62,6 +62,13 @@ server; `haicc boot/teardown` ends it with the rest. What we would like
 to hear from the laptop: how the page looks and behaves in the human's
 browser while the cluster script runs.
 
+## The organisation profiles (2026-11-16)
+
+A task of its own, in `prompt-local-profiles.md`: the five
+organisations' profile pages (`<org>/.github`, `profile/README.md`),
+last written before the rebuild, brought in line with the platform as
+it is. The cloud session cannot push to those repositories; you can.
+
 ## How-tos (part 82)
 
 `haicc . howto` and `haicc host howto` answer what can be done there,
