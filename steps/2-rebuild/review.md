@@ -323,3 +323,63 @@ package's own that deploys it in a real, running mrepo.
     top, `uri` and `xpath`, each once, named from every action that
     takes a URI. No package is split for it: the runtime's package
     carries them all as today; only where they are found changes.
+
+- On the configs and the other code, the human: "I want the config in
+  the package not the module. Module is code. I was talking about the
+  code modules for the integrated internal code - request execute xpath
+  - for base we'll leave them all in runtime. Although XPath on its own
+  could carry quite a bit of info and help and howto. Request will
+  become more evolved, and there is quite a bit on execute as well"
+- **Settled by it**:
+  - **A protocol's config is in its package, not in its module**: a
+    module is code. Seven modules hold one today (`internal/config.js`:
+    `crud`, `container`, `haicc`, `howto`, `protocol`, `service`,
+    `splectral`), with a "Config" section in their README and a test of
+    it: each moves to its package (`protocol.js`, its README, its own
+    test), as `boot`, `help` and `runtime` have it.
+  - **The integrated internal code stays in the runtime, for base**:
+    request, execute, xpath (and with them the URI and XPath specs: not
+    split out, against what we put). Each may grow into more of its
+    own: XPath "could carry quite a bit of info and help and howto",
+    request "will become more evolved", "there is quite a bit on
+    execute as well".
+- Ours, following from it: within the runtime each keeps a keyword of
+  its own (`runtime/request`, `runtime/execute`, `runtime/xpath`,
+  `runtime/uri`), so one that grows is lifted out without what is below
+  it changing.
+
+## Where the design stands (2026-11-16; nothing of it built, to wait)
+
+Settled, each above in the words used:
+
+- **`info`**: the static side, a protocol of its own (`extract`,
+  `get`); `help` keeps what depends on the context (`annotate`),
+  `howto` keeps `explore` and `plan`. `info/get` replaces `help/get`,
+  `help/extract` and `howto/get`.
+- **Pages in natural language, addressed by cascading keywords from the
+  top down**, no dot: `haicc host info/get boot/deploy`. Every `get`
+  answers a page and the keywords below it, each with its one-liner.
+  Static: the same wherever in the mrepo the command stands.
+- **To start with, by protocol and protocol action.** A protocol's page
+  is its package's README (the package does the top level); an action's
+  is its module's (`external/<action>/`). The other folders are
+  keywords too (`test`, `internal`, `mrepo`, `scripts`).
+- **A how-to is a keyword** under the protocol or the action it is
+  about; its steps name actions, keywords back into the pages.
+- **A protocol's config is in its package.**
+- **The engine's code within the runtime**, for base.
+- **A missing page is `haici`'s**: `get` says it is missing; no page is
+  made up by `info`. An agent's page, where one is wanted, is generated
+  on first request and cached.
+- **The pages are the READMEs as they are**; `extract` adds a map from
+  keyword to page (ours, not objected to).
+- **Rules and vision are the HDLC's**, not an mrepo's help.
+
+Open, to settle one at a time:
+
+- What the top page is, and where a package without a protocol is
+  found (the components, the documentation packages).
+- Whether a how-to is filed by what it declares, wherever it lives
+  (ours), or only by the package of its protocol.
+- How a page is shown at the terminal and handed to an agent.
+- `help/annotate`'s and `howto`'s default: "what can be done here".
