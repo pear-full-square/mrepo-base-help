@@ -29,7 +29,7 @@ yet, none has a go.
 |---|---|---|---|
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
 | | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | built, part 77: a simple script, no nesting, ceiling 100 |
-| | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | the work now: `cluster.json` begun, part 78; a swarm's nodes with their containers, part 79; next: the nodes finding each other, and Splectral on it |
+| | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | done for this phase (2026-11-16): `cluster.json`, part 78; a swarm's nodes with their containers, part 79; Splectral showing it, parts 80 and 81. The nodes finding each other: the next phase |
 | | `splectral` | the view of the swarm in a browser, for the demos ("like we had before") | the MVP built, part 80: an mrepo of its own beside the host, one page: the commands of the install as they complete; part 81: the install as a tree above them; what comes next to settle |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
@@ -1267,6 +1267,38 @@ removing the containers.
 - **The image's base is pulled** by Docker the first time
   (`debian:bookworm-slim`): the one download; `docker load` from the
   sources was the alternative agreed in the earlier review, not built.
+
+**Closed for this phase** (the human, 2026-11-16, on our five questions
+about the nodes finding each other): "I prefer to leave this until the
+next phase so we can run through a meaningful program. If we can show a
+cluster with nodes, and a splectrum showing some information then that
+is good enough for me. I want to have the packages review for help and
+howto done as quickly as possible so we can start developing
+functionality in earnest." So `swarm-cluster` ends here: a cluster with
+nodes, each with its container, and Splectral showing the install and
+its commands. What follows in our order: help and howto (`help-mvp`,
+`help.md`), then `package-review`.
+
+**For the next phase: the nodes finding each other.** Our five
+questions, each with what we recommended, not answered (kept for then):
+
+1. What "found each other" means first: every node holds an open
+   connection to every other node of its swarm, a node can say who its
+   peers are, the cluster script ends by checking it; no data
+   replicated yet.
+2. Who is on the network: the replica in the container only; the
+   bridgehead stays local, through folders.
+3. Discovery: a private DHT a swarm, as before; the swarm's first node
+   its bootstrap; nothing on the public DHT.
+4. Where the bootstrap's address is kept: in the swarm's own node in the
+   host's `main` (`swarms/swarm-1`), written when the first node joins.
+5. How it is commanded: a `swarm` protocol, `join`, `leave`, `status`,
+   requested at the node; the bridgehead writes the config and sends
+   the join on to its container.
+
+It brings `hyperswarm` and `hyperdht` back into the lockfile, the old
+`p2p-dht` and `p2p-connect` back from their repositories, and two new
+repositories for the `swarm` protocol.
 
 **To design together, each a line of the script once built**
 
