@@ -1,10 +1,12 @@
 // create: crud/create <URI> <value>, a node made sure to exist (README.md beside it).
+import { isName } from 'mycelium-uri'
 import { place, nodeAt, inside, folderOf, NODE } from '../../internal/node/index.js'
 
 export async function create (exec, { uri, args = [] }) {
   const p = place(uri)
   if (!p.names) throw new Error('crud create: one node, not a selection (a * or a filter)')
   if (!p.names.length) throw new Error('missing argument: target')
+  for (const n of p.names) if (!isName(n)) throw new Error(`not a name for a node: ${n} (in ${[p.layer, ...p.names].join('/')}: lowercase words joined by hyphens, no extension)`)
   let value = {}
   if (args[0] !== undefined) { try { value = JSON.parse(args[0]) } catch (err) { throw new Error(`not a document: ${args[0]} (JSON)`, { cause: err }) } }
   await exec.step('path', { uri: [p.layer, ...p.names].join('/') }, () => inside(exec, p, p.names))

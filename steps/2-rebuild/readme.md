@@ -3431,3 +3431,59 @@ tools/release.js --strict`: twelve packages, every report current.
 the `--`, ignored with its warning, the others in force; a list not
 closed where a command follows, refused and said). One run at a time on
 the sources. Nothing left running.
+
+## 72. `request-layer-access`: `main` the default layer, changed by a flag; a record read as its document (2026-11-16)
+
+Task 9 of `tasks.md`. Found open in part 68: the request records could
+not be queried from the command line. Discussed and decided together:
+"we will have to make the request log records reachable, probably the
+easiest at this stage is to switch layer in the request. Maybe use a
+flag for that? layer=request"; no door closed with it ("we don't need
+to 'close functionality doors' at this moment"); and "layer=main is not
+hardcoded rule, but a default that can be changed by flag".
+
+- **The flag** (`mrepo-base-request`): `layer=<name>`, a layer's name,
+  its parts joined by `/` (`request`, `request/done`). A request from
+  outside stands at `main` by default (`LAYER`); with the flag its
+  command's own URI is read at that layer: in the form the layer stands
+  where `main` did. The gate (`check`) asks whether the request is at
+  its layer, and then what the action's config offers there, as at
+  `main`.
+- **The routing stays in `main`**: the URI of a command that passes its
+  words on (`haicc`'s `goto`) is a position, and positions and
+  shortcuts are `main`'s. The flag goes on with the command that
+  follows: down a chain, and to a command run in the same execution
+  (the flags in force now come with it, as with one sent on).
+- **A record is a file, read as its document**: `crud/read` answers a
+  file with `{ uri, value }`, JSON or its text. A name with an
+  extension can be read (`done/<key>.json`); `create` still refuses
+  one; `delete` removes nodes, not files.
+- **A layer's own config is not its data**: `layer.json` at a layer's
+  root is no child of it in a query.
+
+```
+haicc . crud/read "done/*[value/value/protocol='boot']" --flags layer=request
+haicc host crud/read done/* --flags layer=request
+```
+
+**Not in it**: what the outside may ask, as a design
+(`external-request-api`, `tasks.md`): today each protocol's config says
+it, at any layer. The records' folder by date and keys that sort by
+time (`xpath.md`).
+
+**Validated**: the modules' tests (`mrepo-base-request` 16 tests, 177
+asserts; `mrepo-base-crud` 9, 79; `mrepo-base-xpath` 5, 48;
+`mrepo-base-haicc` 5, 38; `mrepo-base-execute` 10, 89). The
+pre-release of the eight packages that changed, each passing:
+`package-docs-mrepo` 8 units, 47 tests, 269 asserts;
+`base-package-haicc` 11, 84, 511; `base-package-crud` 11, 86, 565;
+`base-package-service` 14, 241, 1413; `base-package-runtime` 22, 306,
+1930; `base-package-boot` 23, 317, 2038; `base-component-boot` 23, 312,
+2106; `base-app-haicc` 23, 328, 2154. `tools/bare tools/release.js
+--strict`: exit 0, twelve packages, every report current. `tools/bare
+tools/code-check.js`: 20 modules, 13 packages, no problems. The READMEs:
+243 in the sources, 501 in the help tree, no problems. The `haicc`
+test, 184 of 184 (7 more checks: the request records read with the
+flag and a filter, the flag at a step held for the command that
+follows, nothing without it, the host's records through a shortcut).
+`base-component-boot`'s `validate` three times. Nothing left running.

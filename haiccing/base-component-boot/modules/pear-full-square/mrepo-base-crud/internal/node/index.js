@@ -1,6 +1,6 @@
 // node: a node as it is stored, and the nodes a URI selects (README.md
 // beside it). Paths are written relative, from the mrepo's root.
-import { segmented, joined, stepsOf, selects, isName, ROOT } from 'mycelium-uri'
+import { segmented, joined, stepsOf, selects, ROOT } from 'mycelium-uri'
 import { query, shortcutsAt, NODE } from 'mrepo-base-xpath'
 
 // A node is a folder holding its document under this name (NODE, the
@@ -15,10 +15,6 @@ export function place (segments) {
   const whole = joined(segmented(segments))
   if (whole === ROOT) throw new Error('not a node: . (the mrepo itself; a layer first: main)')
   const [layer, ...steps] = stepsOf(whole)
-  for (const step of steps) {
-    const n = step.includes('[') ? step.slice(0, step.indexOf('[')) : step
-    if (!isName(n) && n !== '*' && n !== '') throw new Error(`not a name for a node: ${n} (in ${whole}: lowercase words joined by hyphens, no extension)`)
-  }
   const prefix = segments.slice(0, -1)
   const skip = joined(prefix) === ROOT ? 0 : joined(prefix).split('/').length
   const uriOf = of => [...prefix, [layer, ...of].slice(skip).join('/') || ROOT]
@@ -73,10 +69,19 @@ export async function nodeAt (exec, p, names) {
   return links.length ? { ...node, shortcuts: links } : node
 }
 
+// A file's document: JSON, or its text when it is not that.
+// log: none (one read; select's caller logs the query)
+async function documentOf (exec, node, at) {
+  const text = (await exec.bytes(node)).toString()
+  // catch: not JSON: the file's text is its value
+  try { return JSON.parse(text) } catch { return text }
+}
+
 // select(exec, p): what the URI selects, an array (nothing there: empty,
 // not an error): the nodes, each as nodeAt gives it; a value inside a
-// node's document, { uri, value }. What is no node (a file, a folder
-// without a document) is not among them. A URI does not run through a
+// document, { uri, value }; a file, { uri, value }, its value the file's
+// document (a record in a layer). A folder without a document is not
+// among them. A URI does not run through a
 // shortcut: refused, said with the way across. -> [{ names, node, value? }]
 export async function select (exec, p) {
   const { found, stopped } = await query(exec, p.segments)
@@ -88,6 +93,8 @@ export async function select (exec, p) {
   for (const f of found) {
     const names = f.at === ROOT ? [] : f.at.split('/')
     if (f.kind === 'value') { out.push({ names, node: { uri: p.uriOf(names), value: f.value }, value: true }); continue }
+    // a file is its own document (a record in a layer)
+    if (f.kind === 'file') { out.push({ names, node: { uri: p.uriOf(names), value: await documentOf(exec, f.node, p.at(names)) }, file: true }); continue }
     const node = f.kind === 'node' ? await nodeAt(exec, p, names) : null
     exec.log('debug', 'node', { at: p.at(names), there: Boolean(node), children: node?.children.length ?? 0, shortcut: Boolean(node?.shortcuts) })
     if (node) out.push({ names, node })

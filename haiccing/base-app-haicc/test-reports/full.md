@@ -1,6 +1,6 @@
 # Test report: haiccing/base-app-haicc
 
-The package passed its `full` set: all 23 units, 327 of 327 tests and 2136 of 2136 asserts.
+The package passed its `full` set: all 23 units, 328 of 328 tests and 2154 of 2154 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 23 units, 327 of 327 tests and 2136 of 21
 | Set | `full` |
 | Result | passed |
 | Units | 23 of 23 passed |
-| Tests | 327 of 327 passed |
-| Asserts | 2136 of 2136 passed |
-| Run | 2026-11-16 00:07 UTC |
+| Tests | 328 of 328 passed |
+| Asserts | 2154 of 2154 passed |
+| Run | 2026-11-16 00:28 UTC |
 | Bare | v1.36.0 |
-| Content | `dee0b27f9ff630c316a554f01ee74cb37c49d7ef81ec103302877a2da0c85ec6` |
+| Content | `718ca7a5597ab86030702505cbd8c0cb3a31adcad66741d4b1933e13d782d0dd` |
 
 ## Units
 
@@ -24,14 +24,14 @@ The package passed its `full` set: all 23 units, 327 of 327 tests and 2136 of 21
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
 | `/test/modules/pear-full-square/haicc-base-app` | passed | 15 of 15 | 161 of 161 |
-| `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 75 of 75 |
+| `/test/modules/pear-full-square/mrepo-base-crud` | passed | 9 of 9 | 79 of 79 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 89 of 89 |
 | `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
 | `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 13 of 13 |
-| `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 164 of 164 |
+| `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 177 of 177 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 122 of 122 |
 | `/test/modules/pear-full-square/mrepo-base-service` | passed | 3 of 3 | 15 of 15 |
-| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 47 of 47 |
+| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 48 of 48 |
 | `/test/modules/pear-full-square/mycelium-container-document` | passed | 1 of 1 | 8 of 8 |
 | `/test/modules/pear-full-square/mycelium-git` | passed | 144 of 144 | 777 of 777 |
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 190 of 190 |

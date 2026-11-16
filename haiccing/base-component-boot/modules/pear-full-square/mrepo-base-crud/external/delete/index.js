@@ -21,8 +21,8 @@ export async function remove (exec, { uri, args = [] }) {
   const p = place(uri)
   if (p.names && !p.names.length) throw new Error('missing argument: target')
   const found = await select(exec, p)
-  const value = found.find(f => f.value)
-  if (value) throw new Error(`not a node: ${p.at(value.names)} (a value inside a document; crud/delete removes nodes)`)
+  const value = found.find(f => f.value || f.file)
+  if (value) throw new Error(`not a node: ${p.at(value.names)} (a ${value.file ? 'file' : 'value inside a document'}; crud/delete removes nodes)`)
   if (found.some(f => !f.names.length)) throw new Error('not deleted: the layer itself (a node below it)')
   // (all of them looked at before any is removed: one refused, none removed)
   for (const { names, node } of found) {
