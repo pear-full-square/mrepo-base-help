@@ -30,7 +30,7 @@ yet, none has a go.
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
 | | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | built, part 77: a simple script, no nesting, ceiling 100 |
 | | `swarm-cluster` | a working swarm cluster, written as scripts of the component (takes P2 and P3 together) | the work now: `cluster.json` begun, part 78; a swarm's nodes with their containers, part 79; next: the nodes finding each other, and Splectral on it |
-| | `splectral` | the view of the swarm in a browser, for the demos ("like we had before") | looked into, part 79: what was found and our reading, below; to settle before it is built |
+| | `splectral` | the view of the swarm in a browser, for the demos ("like we had before") | the MVP built, part 80: an mrepo of its own beside the host, one page: the commands of the install as they complete; what comes next to settle |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1334,29 +1334,65 @@ Bare.
   test of the browser side. Its decision: "Splectral wrapped in HAICC:
   the server and its `act` through HAICC".
 
-**Our reading, to settle** (ours, put to the human, 2026-11-16)
+**Our reading, put to the human** (2026-11-16): the core comes back as
+it is; its adapters are written new, on `haicc`; it is an application
+on the component; a first demo is then possible without p2p. And the
+picture: Splectral is a second terminal, with a browser: it sees by
+watching the boot mrepo's outbox folder, learns the structure by asking
+with `haicc` commands, acts by sending them. Then the first question,
+what Splectral is here: an mrepo of its own (ours), a protocol in the
+host, or an app beside `haicc`.
 
-- **The core comes back as it is**, brought to the rules (READMEs, the
-  code rules, tests): contract, model, transport, server, shell, the
-  map and the timeline. The contract's p2p leaks are corrected on the
-  way.
-- **The adapters are written new, on `haicc`**: a source that asks the
-  mrepos what is there (the host's `swarms/*`, each node's links, each
-  node's `container/status`) and follows what happens (the request
-  records, `layer=request`); the actions are `haicc` commands
-  (`container/stop`, `container/start`, a request sent on). Nothing of
-  the old adapters is kept: what they knew is gone.
-- **It is an application on the component**, deployed as one
-  (`boot/deploy`), its server started and stopped by the service's
-  hooks: not wired into the boot.
-- **A first demo is then possible without p2p**: the cluster seen, a
-  node's container stopped and started, a request seen going through.
-  Connections, presence and replication show once the nodes find each
-  other: the p2p modules' observers are the source then.
-- To settle first: what Splectral is in our terms (a package and its
-  protocol? an app, as `base-app-haicc`?); what it reads (requests
-  only, or the mrepos' layers); whether the nodes finding each other
-  comes before it.
+**Settled** (the human, 2026-11-16)
+
+- "Yes, figure out how we bring SPLectral into the new design, fire
+  away with your questions"
+- On what it is: "I think SPLectral will end up as an app within haicc
+  but alongside host, what do you think? SPLectral will subscribe to
+  all sorts of data depending on the components that are installed on
+  it. There will be user interaction that sends commands to all the
+  parts. However, the MVP is just showing some logs or info in the
+  browser. So design the MVP such that the goal is achieved in the
+  easiest way."
+- Our MVP, put back and confirmed ("yes please"): an mrepo of its own,
+  deployed by the boot mrepo beside the host; one page with the
+  commands of the install as they complete, newest first, a line opened
+  showing its record; its one subscription the boot mrepo's outbox
+  folder; a small server on `127.0.0.1:4400`, Server-Sent Events, plain
+  JavaScript, no React; the protocol `splectral/start`, `stop`,
+  `status`, the server started and ended by the service's hooks; one
+  module and one package, in repositories that exist
+  (`splectral-server`, `base-package-splectral`); the old core left out
+  on purpose, to come back when the first component needs it.
+
+**Built**: part 80 of `readme.md`.
+
+**Where it is to go** (the human, above; nothing of it designed)
+
+- **An app within haicc, alongside host**: where it sits now.
+- **Subscriptions that depend on the components installed on it**: the
+  MVP has one, fixed: the root's outbox folder. A component is to bring
+  its own (the old extension kinds were source, mapper, page, scenario,
+  action).
+- **User interaction that sends commands to all the parts**: the MVP
+  reads only. A command from the browser is a `haicc` command, put in
+  the boot mrepo's inbox as a terminal does (ours).
+
+**To settle next, one at a time** (ours, not put yet)
+
+- The world: what a node is now (each mrepo? the swarm node, bridgehead
+  and container as one?), what a link is (a shortcut now; a p2p
+  connection later), what a resource is. The old contract's world:
+  hosts, nodes, resources, links.
+- Components as packages in its list: how a package brings a page, a
+  subscription, an action (the old manifest, `splectral.json`).
+- Scenarios and continuation scripts: a scenario was a list of steps
+  (say, do, await an event); a script is a list of commands. One thing?
+- The map and the model back (React and htm, or plain JavaScript as the
+  MVP's page).
+- The structure shown: asked with `haicc` commands (each mrepo's links,
+  its service state, `container/status`).
+- The first demo beyond the log.
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded
 

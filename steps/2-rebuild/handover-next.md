@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 79). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 80). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -27,7 +27,9 @@ boot mrepo's; 77 `continuation`: a command answers with a script to go
 on with, the terminal runs it; 78 the cluster script: the swarm
 cluster we work towards, written as a script of the component; 79 a
 swarm's nodes and their containers: a node at `swarms/<swarm>/<name>`,
-the `container` protocol, the cluster script with both).
+the `container` protocol, the cluster script with both; 80 Splectral's
+MVP: an mrepo of its own beside the host, the commands of the install
+shown in a browser).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -66,7 +68,7 @@ container. Without a daemon those tests fail, they do not skip.
 
 ## Right now
 
-**Pick up here** (2026-11-16, after part 79; everything in `main`,
+**Pick up here** (2026-11-16, after part 80; everything in `main`,
 `execute/main` level with it, every repository pushed, the two new ones
 among them: `pear-full-square/mrepo-base-container`,
 `haiccing/base-package-container`)
@@ -81,19 +83,36 @@ among them: `pear-full-square/mrepo-base-container`,
 - **What the human said on the way** (`tasks.md`, `swarm-cluster`): the
   default continuation is skipped, "needs a better design"; the script
   calls the container protocol explicitly; KISS.
+- **Splectral's MVP is built** (part 80): `haicc . boot/deploy splectral
+  base-package-splectral --flags continuation=start`, then
+  `http://127.0.0.1:4400`: one page, the commands of the install as
+  they complete (it follows the boot mrepo's outbox folder), each with
+  the mrepos it went through; a line opened shows its record. It reads
+  only. The human, on where it goes: "an app within haicc but alongside
+  host"; "will subscribe to all sorts of data depending on the
+  components that are installed on it"; "user interaction that sends
+  commands to all the parts".
 - **Next, to settle together before building** (one question at a
   time):
-  1. **Splectral** (`tasks.md`, "`splectral`": what was found, and our
-     reading): the core comes back as it is; its adapters are written
-     new, on `haicc`; it is an application on the component. Put to the
-     human at the end of part 79; not answered. Do not build on it
-     alone.
+  1. **Splectral beyond the MVP** (`tasks.md`, "`splectral`", "To
+     settle next"): the world (what a node, a link, a resource is now);
+     components as packages in its list; scenarios and continuation
+     scripts; the map and the model back; the first demo beyond the log.
+     The old core is in the history (`42a5a66^`) and in its
+     repositories (`pear-full-square/splectral-model`, `-transport`,
+     `-contract`, `-shell`, `-timeline`, `-scenario`, `-replay`;
+     `splectral/base-view-map`); `splectral-server`'s old code was
+     written over (its repository's history has it).
   2. **The nodes finding each other**: what a working cluster does, and
      how the script checks it; a node made a swarm node (the `swarm`
      protocol; master and slave); what flows between a bridgehead and
      its replica. Earlier code to read, in the history (`42a5a66^`):
      `p2p-connect`, `p2p-dht` (a private DHT a swarm, the master its
      bootstrap, `firewalled: false`), `p2p-rns`, `p2p-node`.
+- **A page is looked at here**: Chromium and Playwright are in the cloud
+  session (`require('playwright')` from a `.cjs` script in the
+  scratchpad): the page opened, a screenshot taken and sent to the
+  human.
 - **Docker runs in the cloud session** (the earlier note here was
   wrong): `sh tools/docker.sh`. The real thing is still tried on the
   human's laptop by the local agent (`prompt-local.md`, current for
@@ -113,7 +132,9 @@ among them: `pear-full-square/mrepo-base-container`,
   (`tools/bare tools/package-test.js haiccing/<package>`, in a loop),
   `tools/bare tools/release.js --strict` (its exit code), the boot's
   `validate` a few times, `sh haiccing/base-linux-haicc/test/run.sh`
-  (229 checks, four and a half minutes with the containers). A
+  (243 checks, about five minutes with the containers). Running
+  mrepos die when `tools/release.js` rewrites the bundles under them:
+  tear a trial install down before a rebuild. A
   container left by a run that broke off: `docker ps -a --filter
   label=haicc.folder`, then `docker rm -f` it. Two mrepos never share a
   unique URI: an answer is addressed by it (part 79). Long runs go to the background, their output to a file
@@ -134,20 +155,22 @@ in the boot mrepo's `main`, `haicc registry/local crud/read "*"`); 77
 `haicc` command runs it; `--flags continuation=<script>` on a deploy);
 78 the cluster script; 79 a swarm's node at `swarms/<swarm>/<name>`
 and the `container` protocol (`haicc swarms/swarm-1/node-1
-container/create`, `start`, `stop`, `remove`, `status`).
+container/create`, `start`, `stop`, `remove`, `status`); 80
+Splectral's MVP (`splectral-server`, `base-package-splectral`:
+`haicc splectral splectral/status`).
 
 
-**The state** (as of 2026-11-16, part 79: everything in `main`; the paragraphs below are older, kept for what they say)
+**The state** (as of 2026-11-16, part 80: everything in `main`; the paragraphs below are older, kept for what they say)
 
 - The `haicc` command installs, boots, deploys a host from
   `base-component-haicc`, starts its service, deploys a node inside it
   and chains commands through both (parts 30 to 45).
-- All thirteen bundle packages (`base-package-container` the newest,
-  part 79) are brought to the package template and
+- All fourteen bundle packages (`base-package-container`, part 79, and
+  `base-package-splectral`, part 80, the newest) are brought to the package template and
   pinned, each with a test of its own and a current, passing report
   (parts 47 to 64). `tools/bare tools/release.js --strict` passes;
   `tools/bare tools/code-check.js` and the README checks have no
-  problems; the `haicc` test 229 of 229 (part 79); `base-component-boot`'s
+  problems; the `haicc` test 243 of 243 (part 80); `base-component-boot`'s
   `boot` test passing.
 - The `haicc` command is a Bare app, `base-app-haicc` (part 60); the
   shell, `base-linux-haicc`, is the first step only. The command's form
