@@ -388,3 +388,149 @@ Open, to settle one at a time:
   (ours), or only by the package of its protocol.
 - How a page is shown at the terminal and handed to an agent.
 - `help/annotate`'s and `howto`'s default: "what can be done here".
+
+## The structure of `info`, settled (2026-11-16, a new session)
+
+The three open points above have "nothing to do with the info protocol
+nor the review" (the human): left for later. The question put: the
+review first, or `info` first. Ours: `info` first, small, then the
+review through it.
+
+- **Generic, for additional sources** (the human): "set up info
+  generically so it finds additional sources (e.g. examples next to
+  test). For the review we focus mainly on the completeness of the
+  documentation and build on the keywords."
+- **The keywords are made by the links, not by the folders.** Ours was
+  folders as keywords with three rewrites in `info`; the human: "The
+  other way is that the cascading links creates the hierarchical
+  structure with keywords and sections so 'system folders' can be
+  jumped over if needed." So `info` knows no package, module or
+  `external/`: it follows the links tables. "that allows us to put
+  other category structures in if we require them (e.g. to structure
+  howto at package level rather than post extract)."; "that allows us
+  to do this in phases. Because we can set / amend the categorisations
+  in the template and then cascade the changes down the packages."
+- What follows from it (ours, agreed with it):
+  1. Only a README's links table makes keywords; a link in a section's
+     prose is a reference.
+  2. The keyword is the link's text in URI form (today the folder,
+     `[deploy/](deploy/)`: nothing changes by default); where a jump
+     makes a long name, the author names it.
+  3. A `##` section is a keyword below its page.
+  4. A page reached by two paths: two addresses, one page.
+  5. The check: every README reached from the top, every link resolves,
+     two keywords never one name at one place. A jumped folder keeps its
+     README and is reached by some path.
+  6. A category is a page: a README whose table groups what is below
+     it (how-tos by category in the package's `howto/`). The activity
+     index `howto/extract` makes today goes.
+- **Every structure is decided in the packages**: the review writes it.
+- **Examples**: the human: "don't you need a cascading link example for
+  the implementation of info/extract?" Yes: the template shows each
+  rule.
+
+### The template
+
+- The human: "This template should be cloned for implementation of
+  packages. That means it should have all those structures in there,
+  and examples for continuation. (Info also covers package
+  generation)." Asked what we want to start from (ours: in practice the
+  nearest working package, renamed by hand): "so it should be identify
+  the best clone candidate. That should be described in the template
+  docs then."
+- So a new package is a clone of the best candidate among the packages
+  there are; the template documents how to choose it and the steps, as
+  a how-to. Ours, to put when the template is written: the same kind
+  (protocol, component, documentation, app), the same parts, then the
+  most recently pinned with a current report; the clone brought to the
+  current template first (`tools/package-template.sh`), then renamed.
+- Where it is included today: deployed in the five packages that
+  define an mrepo (`base-component-boot`, `base-component-haicc`,
+  `base-package-runtime`, `-service`, `-splectral`); pinned by thirteen
+  packages, at five commits.
+- **Renamed `package-docs-package`** (the human: "The docs mrepo is
+  about the mrepo, should docs template not be called docs package
+  then?"; "I'll rename template to package").
+- **Documentation packages independent of an implementation** (the
+  human): "With this patter we pull in general purpose information
+  through docs repos - that allows us to include vision, rules and
+  other stuff and keep the implementation packages simpler. This points
+  to implementation independent docs packages." So the HDLC's rules and
+  vision have a place: a documentation package in an mrepo's list
+  (ours: `package-docs-hdlc`, when its content is settled).
+- **Each package governs its own section** (the human): "each
+  implementation package has a top level readme, the entry point. Then
+  there is the generic structure of all the included packages with
+  their own top level readme, now sitting at a lower level in the new
+  implementation package. These can set the keywords and
+  categorisation for their own section." A parent links to a child's
+  top only.
+- **An included package's keyword is its name without the prefix**
+  (ours; the human: "yes, keyword from the name without prefix"):
+  `base-package-boot` `boot`, `package-docs-mrepo` `mrepo`,
+  `package-docs-package` `package`. The top package needs none.
+
+### Modules and third-party code
+
+- The human: "how do we deal with modules? They have their own internal
+  documentation but are heavily duplicated across the packages that are
+  included." Then: "so we create a modules structure at top level. This
+  is an extraction job. However each protocol package keeps it own
+  module category and lists only those of the package pointing to top
+  level repo. Yes?" Yes.
+- So: a module's pages once an mrepo, by its name (464 module pages in
+  a host today, 103 distinct); its README governs its section; a
+  package's link into its own copy resolves to that page; a top keyword
+  `modules`, every module once, **a flat list by full name** (ours,
+  "yes": the families by prefix as headings on its page, not
+  keywords); a package's `modules` lists only what it carries. Copies
+  that differ: the page from the package that offers its actions, else
+  the first in deploy order; the difference a problem.
+- **Third-party code** (the human: "And do we do something similar for
+  the node_modules and addons stuff?"; ours, "yes"): one generated page,
+  `third-party`, from the packages' `third-party.json`: each module once,
+  its version, licence, which of ours use it, its addon and platform,
+  where from. Their READMEs are not extracted.
+
+### The structure
+
+```
+(top)                the mrepo's own package: its README, its links table
+  <package>          each included package, its name without the prefix
+    <its keywords>   its README's links table: jumps, link text, categories
+    <section>        a README's ## section
+    modules          the modules it carries, each pointing to the top
+  modules            every module once, flat, by full name (generated)
+    <module>         its README governs its section
+  third-party        one generated page
+```
+
+Generated pages are code's, from data, marked so. `info/get`: a page
+and the keywords below it, each with its one-liner. Anything that does
+not fit is a problem, never resolved silently; a missing page `haici`'s.
+
+On our three small points (the human):
+
+1. A package keyword the same as a reserved one: "I don't think there is
+   a clash, but the top level package name would be the same as one of
+   the level 1. Only becomes a clash when package itself is included
+   elsewhere. Wouldn't worry, unlikely and minor."
+2. The tools outside an mrepo: "the tools scripts we have will be
+   integrated into the package structure soon when we implement HDLC,
+   the haicc delivery lifecycle".
+3. Linked mrepos: "documentation is per mrepo, independenly, currently
+   only concerned with what is within, not the linking".
+
+### The phases (ours, written up on the human's word)
+
+1. `package-docs-package`: the template renamed (the human renames the
+   repository; here the pins, the lists, the tools, the records).
+2. The template's rules: "READMEs" for `info` (the links table, the
+   link text the keyword, jumps, categories), its example showing each
+   rule, "a new package": the clone candidate and its how-to.
+3. `info`: `extract` (the keyword map, the modules once, the
+   third-party page, the check), `get`, the `info` layer (named in
+   `mycelium-git` and `mrepo-base-execute`); `help/get`, `help/extract`,
+   `howto/get` removed. `base-package-info` written the new way.
+4. The review, package by package: the documentation complete, in the
+   keyword structure; the config moved into the package.
