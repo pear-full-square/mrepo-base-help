@@ -149,6 +149,12 @@ extracted like help (`tasks.md`).
   (`haicc host crud/read swarms --flags log=verbose feedback the answer
   does not say which layer it read`: the text as it is, `--` and `=`
   included; the shell's own quoting still applies.)
+- **The feedback flag is a rewrite** (the human, correcting our reading
+  of it as a value in the record): "it should trigger a feedback
+  processing command. Note that feedback can be supplied on anything
+  that exists as command. By suffixing feedback whatever it is attached
+  to is not executed but feedback submission is (like help flag trigger
+  help protocol)."
 
 **Proposed** (ours)
 
@@ -176,16 +182,25 @@ extracted like help (`tasks.md`).
   its answer is the action's answer. The commands hc sends on the way
   are ordinary requests to the platform. A code implementation replaces
   it, the README unchanged; reports and assessments stay hc's.
-- **Feedback with the command**: the `feedback` flag (its rule above),
-  recorded in the record of the request as typed, the first, which
-  holds the whole command and its answer, so `haici` reads it with its
-  context and its result.
+- **Feedback on a command**: the `feedback` flag (its rule above)
+  rewrites the command into `haici`'s feedback command, run where the
+  command would have run (its last part), its input the original
+  command and the text; the command itself is not run. Feedback after
+  the fact: the command typed again with the flag; `haici` finds its
+  earlier run in the request log.
+
+  ```
+  haicc host crud/read swarms --flags feedback the answer does not say which layer it read
+      runs haici/feedback: the command crud/read swarms at host, the text; crud/read not run
+  ```
+- **The help flag written the same way**: `--flags help` at the end of
+  the last part, a rewrite into the `help` protocol; `help` and
+  `feedback` one kind, a flag that turns a command into another
+  protocol's, nothing executed.
 
 **To settle**
 
 - One structured form for every help and howto answer, a record (JSON)
   the agent reads as it is and the terminal shows to a person.
-- Feedback on a response already seen (the experience comes after the
-  result): attached to that earlier request.
 - How a finding travels from an install back to where its package is
   developed.
