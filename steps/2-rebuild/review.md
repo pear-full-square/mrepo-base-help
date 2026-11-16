@@ -289,3 +289,37 @@ package's own that deploys it in a real, running mrepo.
   documentation packages, the app) has no keyword under a protocol.
   Ours: a second keyword at the top, `packages`, the tree as it is
   today with a module's pages once.
+
+- On the three things and which README is the protocol's page (ours:
+  the module's), the human: "ok, there is the external facing info
+  which we have only dealt with upto now. The config in two places, are
+  these diffrent configs or should they both be in structure (I would
+  say yes)? There is a module for the protocol action code, that is
+  where I think the actions should be documented. The package does the
+  top level. There will be additional code, like the xpath encapsulated
+  module, the URI and XPath specs, there are also the request and
+  execute modules. We could have those all within the runtime or split
+  them out. What do you think?"
+- **Settled by it**: the package does the top level: a protocol's page
+  is its package's README; the actions are documented in the module
+  that holds their code (`external/<action>/`, as they are). So `boot`
+  is the package's page, `boot/deploy` the module's.
+- Ours, put back (not answered):
+  - The config in two places is one config, the protocol's (its
+    actions, where each is offered, what it takes), written in the
+    module by seven and in the package by three: to be one place. A
+    different config there is too: what a package lays into an mrepo's
+    runtime layer (`mrepo/runtime/`: its hooks, its service state).
+    Both belong in the structure `get` runs from: `boot/config`, and
+    the hooks and state under the package's `mrepo` keyword.
+  - The other code: by what it is. **The engine within the runtime**:
+    request, execute, and the module that puts XPath to work in an
+    mrepo (`mrepo-base-xpath`: shortcuts, links, the mrepo's query):
+    they are what the runtime does, no one asks for them by name:
+    `runtime/request`, `runtime/execute`, `runtime/xpath`. **The specs
+    split out**: how a URI is written and what a query is
+    (`mycelium-uri`, `mycelium-xpath`): everyone who types a command
+    needs them, whatever the protocol: keywords of their own at the
+    top, `uri` and `xpath`, each once, named from every action that
+    takes a URI. No package is split for it: the runtime's package
+    carries them all as today; only where they are found changes.
