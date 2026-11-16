@@ -204,3 +204,34 @@ package's own that deploys it in a real, running mrepo.
   the runtime's memory for every loaded protocol), the module's README,
   each action's README (`external/<action>/`), the packages' how-tos.
   Missing: the module's name in the config.
+
+- On that structure, the human: "with each get we could also include a
+  list of cascading keyword, drilling from the top down. The howto's
+  are keywords to those sections? Shouldn't we create a normal natural
+  language page for the gets? And we shouldn't forget other folders,
+  like test. In a way the help protocol could be name info protocol,
+  specially on the static side."
+- Our reading, put back (not answered): not a document of fields but
+  **pages in natural language, addressed by cascading keywords, from
+  the top down**; every `get` answers a page and the keywords below it,
+  each with its one-liner:
+
+  ```
+  (nothing)            the protocols here
+  boot                 the protocol's page: its aim, its rules, its config options
+  boot/deploy          an action's page
+  boot/deploy/errors   a section of it
+  boot/howto/host      a how-to filed under it
+  boot/test            its tests; boot/test/mounted one of them
+  boot/internal        what its actions share
+  boot/mrepo           the structure it brings
+  ```
+
+  The pages are the READMEs there are (a module's, an action's, a
+  test's, a how-to's): what changes is the address (by protocol, not by
+  where a README sits in a package; a module's pages once) and that a
+  section and a how-to are keywords too. A how-to is a keyword under
+  the protocol or the action it is filed at, and each of its steps
+  names an action: a keyword back into those pages. Static: one
+  protocol, `info` (`extract`, `get`); `help` keeps what depends on the
+  context (`annotate`); `howto` keeps `explore` and `plan`.
