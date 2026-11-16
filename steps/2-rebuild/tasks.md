@@ -1205,6 +1205,35 @@ container then bridgehead) but the master acts on it. Plus the
 bridgehead master can take input from host." Docker for the first
 container node ("that is fine"). Splectral in the demos, if we can.
 
+**The next step** (2026-11-16, before a context reset): "The next step
+will be the creation of container mrepos. You could do this we a
+continuation on the node commands - we can set a default for
+continuation then one can use a standard command (i.e. haicc
+swarms/swarm-1/node-1 service/initialise and there is a continuation to
+deploy the container mrepo. What about creating a container protocol
+with the methods to achieve this? Don't be too picky as to what
+methods, create those that achieve our goal. That is sufficient for the
+moment."
+
+Our view, put back, not yet answered (ours):
+
+- **A `container` protocol**, yes: a module and a package of its own,
+  as every protocol; its first methods only what the goal needs: a
+  node's replica made in a container from its bridgehead, started,
+  stopped, removed; its state said. Named as we build, not designed
+  ahead.
+- **A default continuation**: an mrepo's own config names the script
+  that follows an action (`service/initialise`: the script that makes
+  its container replica), so a standard command answers with it, no
+  flag written; the flag still picks another, or none.
+- **Docker behind one small part**, so the tests stand in for it here
+  (no daemon in the cloud session) and the laptop runs the real thing.
+- **The script grows by it**: `cluster.json` gets the lines once they
+  run.
+- To settle first: what a replica is when it is made (a copy of the
+  bridgehead's layers; its runtime inside the container; what the two
+  exchange, and how: folders mapped, as inbox and outbox are today?).
+
 **To design together, each a line of the script once built**
 
 - Where a swarm's node sits and what it is called: today one name below
