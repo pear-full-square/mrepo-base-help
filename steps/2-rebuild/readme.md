@@ -3973,3 +3973,93 @@ removed). Found by the tests on the way, each a test in the old form:
 `base-package-boot`'s `mounted` (the refusals' words),
 `base-component-boot`'s `boot` (the protocols open after a start).
 Nothing left running, no container left.
+
+## 80. Splectral's MVP: an mrepo of its own beside the host; the commands of the install shown in a browser as they complete (2026-11-16)
+
+Splectral brought into the new design, its first step. What was said
+(`tasks.md`, "`splectral`", in full): "Yes, figure out how we bring
+SPLectral into the new design"; then, on our asking what it is here:
+"I think SPLectral will end up as an app within haicc but alongside
+host [...] SPLectral will subscribe to all sorts of data depending on
+the components that are installed on it. There will be user interaction
+that sends commands to all the parts. However, the MVP is just showing
+some logs or info in the browser. So design the MVP such that the goal
+is achieved in the easiest way." Our MVP was put back and confirmed
+("yes please").
+
+What is built:
+
+- **An mrepo of its own, beside the host**: `haicc . boot/deploy
+  splectral base-package-splectral --flags continuation=start`. The
+  package defines the mrepo as the runtime package does its own: its
+  list (the runtime, help, the protocol protocol, the service, the
+  documentation, itself last) and its runtime config. It is
+  `local/splectral`, in the mrepo registry as the host is.
+- **The `splectral` protocol** (`pear-full-square/splectral-server`,
+  `haiccing/base-package-splectral`): `start [<port>]`, `stop`,
+  `status`, each at the mrepo itself. The service's hooks do the first
+  two: on `start` the protocol is activated and the server started, on
+  `stop` the server ended and the protocol deactivated.
+- **The server**: its own process, started from the package's bundle in
+  the mrepo's packages (`run.js`, the bundle's `/run` entry). It
+  listens on `127.0.0.1`, port 4400, a free one when that is taken, and
+  writes its state (`splectral.json`: pid, URL, what it follows) into
+  the mrepo's folder, beside the runtime's socket. It ends on `stop`,
+  and by itself when its mrepo's runtime ends or its folder is gone: a
+  teardown leaves no server.
+- **Its one subscription**: the root mrepo's outbox folder, the one the
+  work folder's setting names. Every command of the install ends there
+  as a completed record, whichever terminal sent it. The folder is
+  watched, and looked at every two seconds besides.
+- **A record summed up in a line**: when it was sent and completed, the
+  command as typed, its result, and the mrepos it was sent on to, in
+  order, from its log's `request.sent` entries: `local/host`,
+  `swarm-1/node-1`, `swarm-1/node-1/container`.
+- **One page**, plain HTML, CSS and JavaScript, nothing loaded from
+  elsewhere: the lines, the newest first; new ones arrive as they
+  complete (Server-Sent Events, `/stream`); a line opened shows its
+  record whole (`/record/<key>`). Light and dark follow the browser.
+  `GET` only: it reads, it sends no command.
+
+**Decided while building** (ours, said here)
+
+- **One module, one package, both in repositories that exist**: the
+  old `splectral-server` (the extension platform's shell, on
+  `mycelium-topic`, which is gone) is written over; its history has it.
+  Nothing of the old core is brought back yet: no model, no contract,
+  no shell, no React. Each returns when the first component needs it.
+- **The package defines an mrepo**, with a `base-package-` name: the
+  easiest way now. With components in its list it becomes an
+  application's package (`base-application-`: part 32's naming).
+- **Its state is a file, not a layer**: this machine's, as the
+  runtime's socket is.
+- **The port falls back**: a test, and a second install, run beside an
+  install that has 4400.
+- **The server is given its runtime's process to end with**: a hook
+  for a runtime that ends does not exist.
+
+**Seen on the way**: a trial install's runtimes die when
+`tools/release.js` rewrites the bundles under them (their packages are
+hard links into the sources): tear a trial down before a rebuild. The
+package check found an action's README without its errors
+(`splectral/status`): stated.
+
+**Looked at in a browser here**: the cloud session has Chromium and
+Playwright: the page opened against a trial install after the cluster
+script, 25 lines, each command with its path through the host, the
+node and its container; light, dark, a narrow screen, a record opened;
+no error in the page. A screenshot was sent to the human.
+
+**Validated**: `base-package-splectral`'s pre-release, passing (14
+units, 241 tests: its own test starts the server from the package's own
+program; its module's own test, 64 asserts, the server as a process
+among them); the other thirteen packages' reports current. `tools/bare
+tools/release.js --strict`: exit 0, fourteen packages. `tools/bare
+tools/code-check.js` (22 modules, 15 packages) and the READMEs (291):
+no problems. The `haicc` test, 243 of 243, three times (14 more checks:
+Splectral deployed and brought into service, its status, its page and
+its lines asked with curl; after the cluster, a command's path through
+the host and the node, one into a container, one that failed, a line's
+record whole; its service stopped, the page gone, started again; then
+`haicc boot/teardown`: five runtimes stopped, the server ended with its
+own). Nothing left running, no container left.
