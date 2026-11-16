@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-crud
 
-The package passed its `full` set: all 11 units, 86 of 86 tests and 565 of 565 asserts.
+The package passed its `full` set: all 11 units, 87 of 87 tests and 595 of 595 asserts.
 
 | | |
 |---|---|
@@ -8,26 +8,26 @@ The package passed its `full` set: all 11 units, 86 of 86 tests and 565 of 565 a
 | Set | `full` |
 | Result | passed |
 | Units | 11 of 11 passed |
-| Tests | 86 of 86 passed |
-| Asserts | 565 of 565 passed |
-| Run | 2026-11-16 00:18 UTC |
+| Tests | 87 of 87 passed |
+| Asserts | 595 of 595 passed |
+| Run | 2026-11-16 01:36 UTC |
 | Bare | v1.36.0 |
-| Content | `d10f51cf19c77d10353b17e3cc9781ff827f4900df9c12abb1aa5268257c4013` |
+| Content | `7e228879be1f7e02206b19450af6e5ea20b925e848891adbbf25f8b0406cf84d` |
 
 ## Units
 
 | Unit | Result | Tests | Asserts |
 |---|---|---|---|
-| `/test/mounted` | passed | 5 of 5 | 48 of 48 |
+| `/test/mounted` | passed | 5 of 5 | 49 of 49 |
 | `/test/help` | passed | 1 of 1 | 2 of 2 |
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-crud` | passed | 9 of 9 | 79 of 79 |
+| `/test/modules/pear-full-square/mrepo-base-crud` | passed | 9 of 9 | 82 of 82 |
 | `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
-| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 48 of 48 |
-| `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 190 of 190 |
-| `/test/modules/pear-full-square/mycelium-xpath` | passed | 20 of 20 | 121 of 121 |
+| `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 49 of 49 |
+| `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 195 of 195 |
+| `/test/modules/pear-full-square/mycelium-xpath` | passed | 21 of 21 | 141 of 141 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 17 of 17 | 46 of 46 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

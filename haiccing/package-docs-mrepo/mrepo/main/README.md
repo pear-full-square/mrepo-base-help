@@ -52,7 +52,9 @@ position is a shortcut when its node has sources.
   `swarms/*[state='started']`. A leaf in a filter is a key of the
   node's document; a URI can go on inside a document, to a value there.
   A key is written in its URI form, in a filter too: `publicKey` is
-  `public-key`.
+  `public-key`; a capital there is no valid URI. A list in a document
+  is a child that repeats: `tags` is every item, `tags[2]` the second;
+  a position counts from 1, in the tree as well (`swarms/*[1]`).
   What of XPath is read: `mycelium-xpath`'s README. Quoted at a command
   line, its stars and brackets being the shell's too.
 
