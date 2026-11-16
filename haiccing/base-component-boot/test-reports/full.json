@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-component-boot",
-  "content": "530c9bb8732c07fe6031cc21a511a3bc71da78803453b9487924e6df8584d552",
+  "content": "f90e745ec3bcf2bd4c79a9480e09ba52819c8b2f876847926c358745de4444d8",
   "bare": "v1.36.0",
-  "date": "2026-11-16T05:18:33.017Z",
+  "date": "2026-11-16T06:02:21.005Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -79,8 +79,8 @@
         "total": 5
       },
       "asserts": {
-        "passed": 74,
-        "total": 74
+        "passed": 79,
+        "total": 79
       },
       "failures": []
     },
@@ -105,8 +105,8 @@
         "total": 10
       },
       "asserts": {
-        "passed": 89,
-        "total": 89
+        "passed": 93,
+        "total": 93
       },
       "failures": []
     },
@@ -144,8 +144,8 @@
         "total": 16
       },
       "asserts": {
-        "passed": 177,
-        "total": 177
+        "passed": 187,
+        "total": 187
       },
       "failures": []
     },

@@ -19,7 +19,13 @@ haicc <URI> --flags <flag>... -- <command>      flags after a URI: that
                                                 (info without it);
                                                 layer=<name>, the layer the
                                                 command's URI is read at
-                                                (main without it)
+                                                (main without it);
+                                                continuation=<script>, a
+                                                script to go on with, where
+                                                a command has some (a deploy:
+                                                its package's): run here, a
+                                                command after the response of
+                                                the one before
 haicc <URI> <command> <URI> --flags <flag>...   after the last command's URI:
                                                 that command's, closed by the
                                                 end of the line
@@ -47,6 +53,7 @@ haicc sources https | no-https                  https as the backup, or not
   haicc host crud/read . --flags log=verbose
   haicc host --flags log=debug -- haicc node-1 crud/read .
   haicc . crud/read "done/*[value/value/protocol='boot']" --flags layer=request
+  haicc . boot/deploy host base-component-haicc --flags continuation=start
   haicc host boot/teardown node-1
   haicc . boot/teardown host
   haicc boot/teardown

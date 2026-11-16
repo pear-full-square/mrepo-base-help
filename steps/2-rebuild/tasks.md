@@ -28,7 +28,7 @@ yet, none has a go.
 | | label | the human | aim (our reading) |
 |---|---|---|---|
 | P1 | `mrepo-registry` | "Implementation of mrepos as shortcuts with a 'registry' of mrepos." | use mycelium |
-| | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | in discussion |
+| | `continuation` | a command may answer with a script to continue with, run by the terminal, paced by each response (a JIT pipeline): demos that run on their own, howtos that run | built, part 77: a simple script, no nesting, ceiling 100 |
 | P2 | `node-mrepos` | "Then creating node mrepos, how to create the container version." | p2p swarm |
 | P3 | `swarm-demos` | "Then we can do simple demos with a p2p swarm." | p2p swarm |
 | P4 | `install-tests-review` | "We need to do a review of the package repos for 'full install tests'." | self-containment |
@@ -1131,8 +1131,10 @@ shortcut leads on disk).
 ## `continuation` (was `demo-scripts`): a command answers with a script to continue with; the terminal runs it
 
 Raised 2026-11-16, once `mrepo-registry` was built ("now we can use
-this to deploy host and a swarm with some (bare) nodes"). In
-discussion; nothing built.
+this to deploy host and a swarm with some (bare) nodes"). **Built**:
+part 77 of `readme.md`, as settled at the end of what follows ("forget
+nesting of continuations for now. We just do a simple script. terminal
+executes. ceiling 100").
 
 **Said**: "What we will need for the demos (that run on their own) is a
 script of commands that gets executed on boot. So haicc . boot/deploy

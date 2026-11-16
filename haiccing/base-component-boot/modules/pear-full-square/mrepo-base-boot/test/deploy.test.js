@@ -19,13 +19,15 @@ const lj = (dir, mode) => { mkdirSync(dir, { recursive: true }); writeFileSync(j
 const sha256 = b => crypto.createHash('sha256').update(b).digest('hex')
 const json = b => JSON.parse(b.toString())
 
-// A source by organisation holding bundles whose mrepo/ parts are given.
+// A source by organisation holding bundles whose mrepo/ parts are given
+// (and, by a slash-led path, its other files: its scripts).
 function source (dir, packages) {
   mkdirSync(join(dir, 'haiccing'), { recursive: true })
   const manifest = { packages: {} }
   for (const [pkg, files] of Object.entries(packages)) {
     const b = new Bundle()
-    for (const [p, v] of Object.entries(files)) b.write(`/mrepo/${p}`, Buffer.from(typeof v === 'string' ? v : JSON.stringify(v)))
+    // (a path with a leading slash: a file of the package beside its mrepo/, a script)
+    for (const [p, v] of Object.entries(files)) b.write(p.startsWith('/') ? p : `/mrepo/${p}`, Buffer.from(typeof v === 'string' ? v : JSON.stringify(v)))
     const bytes = b.toBuffer()
     writeFileSync(join(dir, `${pkg}.bundle`), bytes)
     manifest.packages[pkg] = { file: `${pkg}.bundle`, id: pkg, sha256: sha256(bytes), entries: [], addons: [] }
@@ -64,6 +66,8 @@ function context (dir, backend, work) {
     find: async function (p) { try { return await this.read(p) } catch { return null } },
     log: function (level, event, data = {}) { (this.entries ??= []).push({ level, event, ...data }) },
     step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
+    // (a continuation answered with: kept)
+    continuation: function (commands, at) { this.continued = { at, commands } },
     put: (uri, bytes) => edits.push(['put', abs(uri), bytes]),
     remove: uri => edits.push(['remove', abs(uri)]),
     commit: () => commit()
@@ -80,13 +84,13 @@ function context (dir, backend, work) {
   return { exec, commit, repo }
 }
 
-test('deploy from a target package\'s list, placed by its unique URI, its link recorded; redeploy; teardown; the mrepo registry, several torn down', async (t) => {
+test('deploy from a target package\'s list, placed by its unique URI, its link recorded; redeploy; teardown; a script answered as a continuation; the mrepo registry, several torn down', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'deploy-'))
   const pkgs = mkdtempSync(join(tmpdir(), 'deploy-src-'))
   try {
     source(pkgs, {
       'haiccing/base': { 'runtime/layer.json': { mode: 'atomic' }, 'runtime/kind.json': { kind: 'base' }, 'runtime/hooks/boot/base.json': ['x/y'], 'inbox/layer.json': { mode: 'non-atomic' } },
-      'haiccing/target': { 'main/layer.json': { mode: 'atomic' }, 'runtime/kind.json': { kind: 'target' }, 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/base', 'haiccing/target'] } }
+      'haiccing/target': { '/scripts/start.json': [['service/initialise'], ['service/start']], '/scripts/broken.json': '{not json', 'main/layer.json': { mode: 'atomic' }, 'runtime/kind.json': { kind: 'target' }, 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/base', 'haiccing/target'] } }
     })
     const dir = await parent(work, [parseSource(`folder:${pkgs}`)])
     const backend = p2pgitBackend(join(dir, '.git'), { fs })
@@ -147,6 +151,20 @@ test('deploy from a target package\'s list, placed by its unique URI, its link r
     t.absent(existsSync(host), 'removed')
     t.alike([await repo.read('/main/host/.shortcuts.json').catch(() => null), await repo.read('/main/host/.node.json').catch(() => null), (await repo.select('/links/*')).filter(([p]) => !p.endsWith('layer.json')).length], [null, null, 0], 'its shortcut and its node out of main, what was local out of the runtime layer')
     await t.exception(teardown(exec, { uri: ['main', 'host'] }), /not deployed/)
+    // a continuation asked for: a script of the package deployed, answered with the deploy
+    await t.exception(deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'nope' } }), /no script: nope \(haiccing\/target has broken, start\)/, 'a script the package has not: refused, with those it has')
+    t.absent(existsSync(join(work, 'mrepos', 'local', 'scripted')), 'before anything is built')
+    await t.exception(deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'broken' } }), /not a script: haiccing\/target broken/)
+    exec.continued = null
+    await deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'start' } })
+    await commit()
+    t.alike(exec.continued, { at: 'scripted', commands: [['service/initialise'], ['service/start']] }, 'deploy with continuation=start: the package\'s script of that name answered as its continuation, written from the deployed mrepo\'s place')
+    exec.continued = null
+    await redeploy(exec, { uri: ['main', 'scripted'] })
+    await commit()
+    t.is(exec.continued, null, 'not asked for: none')
+    await teardown(exec, { uri: ['main', 'scripted'] })
+    await commit()
     // the mrepo registry, where main has the node `registry` (the boot mrepo): an mrepo's node by its unique URI
     exec.put('/main/registry/.node.json', Buffer.from('{}\n'))
     await commit()

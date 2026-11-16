@@ -5,7 +5,7 @@ import { tmpdir } from 'bare-os'
 import { start } from 'mrepo-base-runtime'
 import { guid } from 'mrepo-base-request'
 import { build } from '../../internal/build/index.js'
-import { parseSource } from '../../internal/fetch/index.js'
+import { parseSource, scriptOf, scriptsOf } from '../../internal/fetch/index.js'
 import { lay } from '../../internal/lay/index.js'
 import { place } from '../../internal/place/index.js'
 import { child } from '../../internal/child.js'
@@ -14,7 +14,7 @@ import { child } from '../../internal/child.js'
 const ORG = 'haiccing'
 
 // (link: the key of the link, when it has one already: a redeploy keeps it)
-export async function deploy (exec, { uri, args = [] }, { link: kept = null } = {}) {
+export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept = null } = {}) {
   const c = child(exec, uri)
   if (await c.recorded()) throw new Error(`deployed already: ${c.at}`)
   // a position that exists locally (data in main there): not a target
@@ -36,6 +36,13 @@ export async function deploy (exec, { uri, args = [] }, { link: kept = null } = 
   const tmp = mkdtempSync(join(tmpdir(), `deploy-${c.name}-`))
   try {
     const { list } = await exec.step('lay', r => ({ package: target, packages: r.list.length }), async () => lay({ store, sources, target, into: tmp }))
+    // A continuation asked for (the flag: continuation=<script>): a script
+    // of the package deployed, by its name, answered with the deploy for
+    // who asked to go on with, its commands written from the mrepo's own
+    // place. One that is not there: refused, before anything is built.
+    const script = typeof flags.continuation === 'string' ? flags.continuation : null
+    const commands = script ? scriptOf({ store, pkg: target, name: script }) : null
+    if (script && commands === null) throw new Error(`no script: ${script} (${target} has ${scriptsOf({ store, pkg: target }).join(', ') || 'none'})`)
     // Its identity, in its runtime layer (where it has one): its unique URI.
     if (existsSync(join(tmp, 'runtime', 'layer.json'))) writeFileSync(join(tmp, 'runtime', 'mrepo.json'), JSON.stringify({ uri: c.mrepo }, null, 2) + '\n')
     mkdirSync(dirname(c.dir), { recursive: true })
@@ -65,6 +72,7 @@ export async function deploy (exec, { uri, args = [] }, { link: kept = null } = 
       if (await exec.find(c.swarm) === null) exec.put(c.swarm, Buffer.from('{}\n'))
       exec.put(c.registry, Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
     }
+    if (commands) { exec.continuation(commands, c.at); exec.log('verbose', 'continuation', { script, commands: commands.length }) }
     exec.log('info', 'deployed', { at: c.at, mrepo: c.mrepo, package: target })
     return { deployed: c.at, mrepo: c.mrepo, ...record }
   } finally { rmSync(tmp, { recursive: true, force: true }) }

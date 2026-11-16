@@ -29,6 +29,66 @@ function answer (root, result) {
   })
 }
 
+// Every record arriving in the root's inbox answered in turn, each with
+// the next of the results given; -> the commands as they arrived.
+function answerAll (root, results) {
+  const seen = new Set(readdirSync(join(root, 'inbox')))
+  const commands = []
+  let done
+  const all = new Promise(resolve => { done = resolve })
+  const t = setInterval(() => {
+    for (const file of readdirSync(join(root, 'inbox')).filter(f => !seen.has(f) && f.endsWith('.json')).sort()) {
+      seen.add(file)
+      const envelope = JSON.parse(readFileSync(join(root, 'inbox', file), 'utf8'))
+      const result = results[commands.length]
+      commands.push(envelope.value.value)
+      writeFileSync(join(root, 'outbox', file), JSON.stringify({ topic: '/outbox', key: envelope.key, timestamp: '2026-11-14T00:00:00.000Z', headers: {}, value: { ...envelope.value, value: { command: envelope.value.value, ...result } } }) + '\n')
+      if (commands.length === results.length) { clearInterval(t); done(commands) }
+    }
+  }, 10)
+  return { all, commands, stop: () => clearInterval(t) }
+}
+
+test('a continuation: the response says what to go on with; each command sent after the response of the one before; the first that fails ends it', async (t) => {
+  const s = setup()
+  try {
+    mkdirSync(join(s.root, 'inbox'), { recursive: true }); mkdirSync(join(s.root, 'outbox'), { recursive: true })
+    const script = { at: 'host', commands: [['service/initialise'], ['service/start'], ['crud/create', 'swarms/swarm-1', '{"size":3}']] }
+    let a = answerAll(s.root, [{ output: { deployed: 'host' }, continuation: script }, { output: { state: 'initialised' } }, { output: { state: 'started' } }, { output: [] }])
+    t.is(await s.run(['--output', '.', 'boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start']), 0, 'exit 0: every command done')
+    t.alike(await a.all, [['boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start'], ['haicc', 'host', 'service/initialise'], ['haicc', 'host', 'service/start'], ['haicc', 'host', 'crud/create', 'swarms/swarm-1', '{"size":3}']], 'the command, then the script\'s, in order, each sent from the position it is written at')
+    t.alike(s.out, ['{"deployed":"host"}', '{"state":"initialised"}', '{"state":"started"}', '[]'], '--output: each one\'s output, a line each')
+
+    a = answerAll(s.root, [{ output: 1, continuation: { at: '.', commands: [['help/get']] } }, { output: 2 }])
+    t.is(await s.run(['.', 'x/y']), 0)
+    t.alike(await a.all, [['x/y'], ['help/get']], 'written at the root: sent plain')
+    t.ok(s.out.includes('haicc . help/get'), 'records printed for reading: each command said as it would be typed, before its response')
+
+    a = answerAll(s.root, [{ output: 1, continuation: script }, { output: 1 }, { error: 'not now: service start' }])
+    t.is(await s.run(['--output', '.', 'x/y']), 1, 'a command of the script fails: exit 1')
+    await a.all
+    t.alike([a.commands.length, s.err], [3, ['haicc: not now: service start']], 'it ends there: the rest not sent; its error said')
+
+    a = answerAll(s.root, [{ output: 1, continuation: { at: '.', commands: [['a/b']] } }, { output: 2, continuation: { at: '.', commands: [['c/d']] } }])
+    t.is(await s.run(['--output', '.', 'x/y']), 0)
+    await a.all
+    await new Promise(resolve => setTimeout(resolve, 150))
+    t.is(a.commands.length, 2, 'a simple script: a continuation answered inside one is not run')
+
+    a = answerAll(s.root, [{ output: 1, continuation: { at: '.', commands: Array.from({ length: 101 }, () => ['a/b']) } }])
+    t.is(await s.run(['--output', '.', 'x/y']), 1)
+    await a.all
+    t.alike(s.err, ['haicc: a continuation of 101 commands: not run (at most 100)'], 'the ceiling: 100 commands')
+    a.stop()
+
+    a = answerAll(s.root, [{ output: 1, continuation: { at: 'host', commands: 'not a list' } }])
+    t.is(await s.run(['--output', '.', 'x/y']), 0)
+    await a.all
+    await new Promise(resolve => setTimeout(resolve, 100))
+    t.is(a.commands.length, 1, 'what is no continuation is none')
+  } finally { s.remove() }
+})
+
 test('the usage; not a command: exit 2, said on stderr', async (t) => {
   const s = setup()
   try {

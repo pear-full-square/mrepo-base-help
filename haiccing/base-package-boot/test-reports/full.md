@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-boot
 
-The package passed its `full` set: all 23 units, 318 of 318 tests and 2082 of 2082 asserts.
+The package passed its `full` set: all 23 units, 318 of 318 tests and 2101 of 2101 asserts.
 
 | | |
 |---|---|
@@ -9,10 +9,10 @@ The package passed its `full` set: all 23 units, 318 of 318 tests and 2082 of 20
 | Result | passed |
 | Units | 23 of 23 passed |
 | Tests | 318 of 318 passed |
-| Asserts | 2082 of 2082 passed |
-| Run | 2026-11-16 05:14 UTC |
+| Asserts | 2101 of 2101 passed |
+| Run | 2026-11-16 05:58 UTC |
 | Bare | v1.36.0 |
-| Content | `3880c8a97965ec815579cf0f0344e672521e1b15d8a1efa99ba26b7895a1bb61` |
+| Content | `37974ae58523223206db7c9263fd40b0711c4b6a5951885b43afdcc39dd91cb0` |
 
 ## Units
 
@@ -23,12 +23,12 @@ The package passed its `full` set: all 23 units, 318 of 318 tests and 2082 of 20
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 5 of 5 | 74 of 74 |
+| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 5 of 5 | 79 of 79 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 9 of 9 | 82 of 82 |
-| `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 89 of 89 |
+| `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 93 of 93 |
 | `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
 | `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 13 of 13 |
-| `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 177 of 177 |
+| `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 187 of 187 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 122 of 122 |
 | `/test/modules/pear-full-square/mrepo-base-service` | passed | 3 of 3 | 15 of 15 |
 | `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 52 of 52 |

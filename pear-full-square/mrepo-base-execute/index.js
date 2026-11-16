@@ -64,7 +64,8 @@
 // here (exec.run) can set it from there on, one sent on takes the flags in
 // force with it, and the entries of the request it became come back with
 // its response, each under its jump (`jump`: the positions gone through).
-import { wrap, complete, isComplete, logger, sorted, AUTHOR, EXECUTE, check, runtimeData, isInternal, principals, formOf, joined, slashed, OUTSIDE, OWN } from 'mrepo-base-request'
+import { wrap, complete, continuationOf, isComplete, logger, sorted, AUTHOR, EXECUTE, check, runtimeData, isInternal, principals, formOf, joined, slashed, OUTSIDE, OWN } from 'mrepo-base-request'
+import { from, ROOT } from 'mycelium-uri'
 import { pass } from './lib/remote.js'
 import { changes } from './lib/changes.js'
 
@@ -183,7 +184,10 @@ export async function execute (ctx, { actions = {} } = {}) {
       // the request it became, each under its jump
       const jump = e => ({ ...e, jump: [core.value.remote.at, ...(e.jump ?? [])] })
       const both = [...(core.value.log ?? []), ...(r.log ?? []).map(jump)]
-      await executed(ctx, name, wrap(`/${EXECUTE}`, complete(core, 'error' in r ? { ok: false, error: r.error } : { ok: true, value: r.output ?? null }, both)))
+      // its continuation comes back with it, its position seen from here:
+      // behind the position the command was sent on at
+      const continuation = r.continuation ? { ...r.continuation, at: from(core.value.remote.at, r.continuation.at) } : null
+      await executed(ctx, name, wrap(`/${EXECUTE}`, complete(core, 'error' in r ? { ok: false, error: r.error } : { ok: true, value: r.output ?? null, continuation }, both)))
       continue
     }
     const present = await heads(backend)
@@ -251,6 +255,8 @@ export async function execute (ctx, { actions = {} } = {}) {
     const internal = await isInternal(ctx, name)
     // what the action sent on, if it did (exec.forward): { to, command }
     let forwarded = null
+    // the continuation the action answers with, if it does (exec.continuation)
+    let continued = null
     const flush = async (what = message) => {
       for (const [t, list] of edits) {
         await ensure(t)
@@ -331,6 +337,16 @@ export async function execute (ctx, { actions = {} } = {}) {
         forwarded = { to, command }
         return null
       },
+      // A continuation answered with the output: a script for who asked to
+      // go on with (the terminal runs it, a command after the response of
+      // the one before; an mrepo does not): continuation(commands, at):
+      // the commands, each its parts, and the position in this mrepo they
+      // are written from (`.`: this mrepo itself). One a request.
+      continuation: (commands, at = ROOT) => {
+        if (continued) throw new Error('a continuation already')
+        continued = continuationOf(commands, at)
+        return null
+      },
       // An entry in the request's log: log(level, event, data), level one of
       // error, warn (always kept), info, verbose, debug (kept as the request
       // asks); stored under the action's protocol and action.
@@ -351,6 +367,7 @@ export async function execute (ctx, { actions = {} } = {}) {
       const fn = actions[protocol]?.[action]
       if (!fn) throw new Error(unknown(actions, protocol, action))
       result = { ok: true, value: (await fn(exec, form)) ?? null }
+      if (continued) result.continuation = continued
       if (!forwarded) await flush()
     } catch (err) {
       // The one place an error ends a request: what stopped it, the chain
