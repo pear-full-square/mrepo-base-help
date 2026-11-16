@@ -43,8 +43,10 @@ mrepo). What else on that list?"):
 
 1. **Cleanup**: the open tasks: `xpath-first`'s decisions confirmed,
    `command-line-findings` (built, parts 70, 71),
-   `request-layer-access` (built, part 72), `inbox-watcher`,
-   `teardown-cascade`. (Which of them are cleanup is our reading, to
+   `request-layer-access` (built, part 72), `inbox-watcher` (built,
+   part 73: "inbox-watcher: yes"). `teardown-cascade` is not cleanup: "no: We
+   will have the mrepo registry soon and that is a better place to do
+   'bulk teardown'": it goes with `mrepo-registry`. (Which of them are cleanup is our reading, to
    confirm.)
 2. `mrepo-registry`: the registry's design, an mrepo as a shortcut.
 3. `node-mrepos`: swarm node creation, the container mrepo.
@@ -76,6 +78,8 @@ What the local agent's notes of 2026-11-15 hold for them
 
 - `mrepo-registry`: point 4, settled there: the parent's `main/<name>/`
   holds the shortcut only, the mrepo is placed elsewhere.
+  With it, `teardown-cascade` (point 5: a teardown leaves a node inside
+  the host running): the registry is the place for a bulk teardown.
 - `node-mrepos`: point 3: the nodes now are the bridgehead for the
   container nodes.
 - `help-and-howtos`: points 1 and 2: `haicc help/get` without a URI,
@@ -102,7 +106,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 5 | `logging` | flags, three levels, the request's metrics and audit | built, part 66 |
 | 6 | `xpath-first` | XPath phase 1: the engine, `crud` and `haicc` on it | built, parts 67 to 69; decisions to confirm |
 | | `data-names-in-queries` | a document's key in its URI form in a query | built, part 69 |
-| 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | noted, to discuss |
+| 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | built, part 73 |
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
@@ -840,6 +844,10 @@ went, each answer in its words. This is what of it is to be built first.
   over its branch).
 
 ## 7 · inbox-watcher: The inbox watched, not looked at
+
+**Built**: part 73 of `readme.md` (the folders watched, a pass at once
+after one that moved something, a slow look as the net; the growing
+folder left as the second matter it is).
 
 Noted 2026-11-15, to discuss. The human, on how a file in the inbox
 folder gets into git (the runtime looks every 200 ms, lists the whole
