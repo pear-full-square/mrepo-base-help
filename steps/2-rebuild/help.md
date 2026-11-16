@@ -277,3 +277,14 @@ Put as a list of seven, for a go or for discussion:
    is about): "yes".
 7. **The feedback command run where the command would have run** (its
    last part): "yes, added to the end".
+
+**After the list** (the human, 2026-11-16)
+
+- On the answer's form: "here you will be able to optimise the way you
+  want it. So we have to be clear with the instructions to hc."
+- "For a missing flag - the command runs if it can, just warning on
+  what is not recognised. If you prefer strict with warnings, then no
+  execute. You decide." Ours: strict, with warnings, nothing executed
+  (`tasks.md`, `help-mvp`, with the reason).
+- On building it now: "No, you queue this for building if you think the
+  initial MVP is fully specified." Queued: `tasks.md`, `help-mvp`.
