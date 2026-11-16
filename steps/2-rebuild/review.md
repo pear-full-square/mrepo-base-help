@@ -165,3 +165,42 @@ package's own that deploys it in a real, running mrepo.
   in two fixed lists (`mycelium-git`'s `LAYERS` and `SOLO`,
   `mrepo-base-execute`'s `TARGETS`), so a package cannot bring a layer
   of its own without both modules changing (part 82).
+
+## Devising `get`: said so far (2026-11-16)
+
+- On whether the design documentation is in the help, and whether the
+  modules are set up to extract a protocol generically (ours: the
+  generic rules are, through the two documentation packages; `rules.md`,
+  `vision.md` and the decisions in `steps/` are not; a protocol's config
+  and its actions' READMEs are uniform, but nothing names the module
+  that implements a protocol), the human: "overall rules and vision is
+  part of the hdlc - the haicc delivery lifecycle stuff. Here it
+  concerns protocol - overall aim, protocol actions, config options
+  etc. Let's work backward: what is the structure you want to run get
+  from?"
+- So the review's second criterion is narrower than we read it: what
+  the help holds here is the protocol: its aim, its actions, its config
+  options. The repository's rules, the vision and the record of
+  decisions belong to the HDLC, not to an mrepo's help.
+- Ours, put back (not answered): one document a protocol, made at
+  extraction, `get` for `help` and for `howto` two views of it:
+
+  ```
+  { protocol, package, module,
+    aim,                 one line: the config's description
+    about,               the module README's summary
+    sections: { Rules, Design, Config, ... }      the module README's sections
+    default,             its default action
+    actions: { <action>: {
+        aim,             its README's one-liner
+        about,           its README's summary
+        uris, args, target, states                 from the config: where it is offered, what it takes
+        sections: { Signature, Arguments, Returns, Errors, Design }
+        howtos: [...]    the how-tos filed under <protocol>/<action> } },
+    howtos: [...]        the how-tos filed under <protocol> }
+  ```
+
+  Each field has one source there already: the protocol's config (in
+  the runtime's memory for every loaded protocol), the module's README,
+  each action's README (`external/<action>/`), the packages' how-tos.
+  Missing: the module's name in the config.
