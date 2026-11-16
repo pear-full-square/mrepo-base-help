@@ -1000,6 +1000,20 @@ on a swarm protocol)
   (master or not), then replicate in container (default configuration
   is bridgehead is master and container is slave). What do you think?"
 
+**Said after that** (2026-11-16, on `main` and the registry, and on
+master and slave, which we had read as who writes)
+
+- "for shortcuts main keeps in-situ shortcut info, with 'visible'
+  state. Registry can 'reverse index', structure the repositories in a
+  structure geared towards admin and xpath queries for instance, and
+  contains full information (including internal management stuff)."
+- "node bridgehead master-slave: who is boss, who manages and who
+  follow. Master write config, slave follow it. Both get info from the
+  swarm (flow into container then bridgehead) but the master acts on
+  it. Plus the bridgehead master can take input from host. There will
+  be a layered approach of who can do what, but we will build it up
+  gradually."
+
 **Our reading so far, to confirm** (ours, put back in the discussion)
 
 - The registry is a record of shortcuts, not of deployments: a layer,
