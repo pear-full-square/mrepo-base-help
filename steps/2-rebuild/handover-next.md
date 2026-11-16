@@ -70,6 +70,18 @@ container. Without a daemon those tests fail, they do not skip.
 
 ## Right now
 
+**Latest (2026-11-16, a new session after part 82)**: the structure of
+`info` and the template settled with the human, nothing built:
+`review.md`, "The structure of `info`, settled". Keywords made by the
+README links tables (jumps, link text, categories, sections), each
+included package its section by its name without the prefix, a module's
+pages once (`modules`), one `third-party` page. The phases there: 1.
+`package-docs-template` renamed `package-docs-package` (the human
+renames the repository); 2. its rules for `info` and the new package
+as a clone of the best candidate; 3. `info`; 4. the review. The three
+open points at the end of "Where the design stands" are left for later.
+
+
 **READ THIS FIRST (2026-11-16, written at a full context, after part
 82)**. Everything is committed and pushed: `main` and `execute/main`
 level, every product repository updated (parts 79 to 82), nothing
