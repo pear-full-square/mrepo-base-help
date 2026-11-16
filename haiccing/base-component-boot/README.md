@@ -15,6 +15,7 @@ bare base-component-boot.bundle --work=<folder> --sources=folder:<sources>
 | | |
 |---|---|
 | [mrepo/](mrepo/) | its part of the structure: the list of its packages |
+| [howto/](howto/) | its how-tos: what is done from the boot mrepo |
 | [test/](test/) | its tests: the boot end to end, and the generic ones |
 | [test-reports/](test-reports/) | the report of its last pre-release |
 | [modules/](modules/) | its code, assembled: ours and the third-party code |
@@ -25,6 +26,7 @@ bare base-component-boot.bundle --work=<folder> --sources=folder:<sources>
 |---|---|
 | `base-package-runtime` | the runtime, its layers, the `runtime` protocol |
 | `base-package-help` | the `help` protocol and the help layer |
+| `base-package-howto` | the `howto` protocol and the howto layer |
 | `base-package-protocol` | the `protocol` protocol: activate, deactivate |
 | `base-package-boot` | the `boot` protocol: deploy, teardown, redeploy |
 | `base-package-haicc` | the `haicc` protocol: goto |

@@ -4117,3 +4117,83 @@ removed; the other with its container running and the replica in
 service; no node for a replica; Splectral itself beside the host).
 Looked at in the cloud session's browser, light, dark and narrow; a
 screenshot sent to the human. Nothing left running, no container left.
+
+## 82. The `howto` protocol: `extract` and `get`; the first how-tos (2026-11-16)
+
+The first step of `help-mvp` (the design in `help.md`, the task in
+`tasks.md`, both from the session the human held on help, howto and
+haici). The order was settled here: `howto/extract` and `howto/get`
+with the first how-tos; then the package review; then the flag unit,
+`help/annotate` and `haici/feedback`. Why this first: the review writes
+each package's how-tos, so the how-to's form and its check have to be
+there. The go: "repositories are all there already. Go ahead with
+implementation". Amended on the way (`tasks.md`, `help-mvp`,
+"Amended"): `help/annotate` for `help/command`; no `howto/run`:
+`howto/explore` and `howto/plan` in its place, scoped, in the third
+step; a guided run is a client's (Splectral).
+
+What is built:
+
+- **A how-to**: a folder in the package it is about, `howto/<name>/`,
+  its README: the title, the one-liner, a line `Activity: <word>`, and
+  one `sh` block, its steps: each command as it is typed at the mrepo
+  that holds the how-to, the `#` line above it saying why; the last
+  step the check that proves it worked, its why starting with `the
+  check`. Addressed as `<activity>/<name>`.
+- **The `howto` protocol** (`pear-full-square/mrepo-base-howto`,
+  `haiccing/base-package-howto`, which brings the `howto` layer):
+  - `howto/extract`: the layer written from the linked packages'
+    how-tos, read from their bundles: `index.json` (by activity),
+    `<activity>/<name>.json` (one how-to, its steps), `problems.json`
+    (those against their form: counted, a warning, not a failure);
+  - `howto/get`, the default action (`haicc host howto`): nothing
+    asked, the activities here with their how-tos' one-liners; an
+    activity, its how-tos; `<activity>/<name>`, one how-to with its
+    steps and where its README is in the help. What is not there is
+    answered with what there is, and a warning: no error.
+- **In both components**: `base-package-howto` in their lists;
+  `howto` activated at `boot`; `howto/extract` by a hook beside the
+  help's (at `boot` in the boot mrepo, at `initialise` in a haicc
+  mrepo).
+- **The first how-tos**: `host/deploy` (`base-component-boot`: the host
+  deployed and brought into service), `node/deploy` and
+  `container/replica` (`base-component-haicc`: a swarm's node deployed
+  and started; its replica in a container). Each is the steps the
+  cluster script runs.
+- **Documented where it is generic**: the `howto` layer in
+  `package-docs-mrepo`; a package's `howto/` folder in
+  `package-docs-template`'s table of a package's folders.
+
+**Decided while building** (ours, said here)
+
+- **The steps in a section of their own** (`## Steps`): a README's
+  summary is at most a hundred words, and the README rules apply to a
+  how-to as to any README.
+- **Written from the mrepo that holds the how-to**: `.` is that mrepo.
+  From the terminal the same command has the mrepo's position in front
+  (`haicc host ...`), as a script's commands have.
+- **A new layer is named in two fixed lists**, found when the boot
+  refused it (`not a layer: howto`): `mycelium-git`'s layers and
+  `mrepo-base-execute`'s targets. `howto` is added to both; a list that
+  has to know every layer is noted for the review.
+- **Not run by a test**: the how-tos are the cluster script's steps,
+  which the `haicc` test runs; the how-tos themselves are checked by
+  their form (`extract`: no problems) and read back. Each step checked
+  as a command comes with `help/annotate`.
+
+**Found by the tests on the way**, each a test in the old form: the
+boot component's (the help's extraction read by its place in the
+history), the `haicc` test's (a message listing the active protocols).
+
+**Validated**: `mrepo-base-howto`'s own tests (6 tests, 42 asserts);
+the pre-release of all fifteen packages, each passing
+(`mycelium-git` and `mrepo-base-execute` changed, which most carry;
+`base-package-howto` new, its own test `mounted`); `tools/bare
+tools/release.js --strict`: exit 0. `tools/bare tools/code-check.js`
+(23 modules, 16 packages) and the READMEs (316): no problems. The
+boot's `validate` three times, passing. The `haicc` test, 261 of 261,
+three times (12 more checks: `haicc . howto`; the host's activities;
+an activity's how-tos; one how-to, its steps, their why, the check,
+where its README is in the help, and read there; an activity that is
+none, answered; `howto/extract`, no how-to against its form). Nothing
+left running, no container left.

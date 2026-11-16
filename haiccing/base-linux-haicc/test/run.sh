@@ -166,7 +166,7 @@ out=$(haicc host boot/deploy 2>&1 >/dev/null); is "$out" "haicc: missing argumen
 out=$(haicc host 2>&1); is $? 2 "haicc host, no command: exit 2 at the command line"
 out=$(haicc . protocol/activate . service 2>&1 >/dev/null); is "$out" "haicc: not now: protocol activate (protocol is not active)" "activating a protocol is the hooks', not a command from outside"
 out=$(haicc . deploy/teardown host 2>&1 >/dev/null); is $? 1 "a protocol that is not there: exit 1"
-is "$out" "haicc: no protocol: deploy (boot, crud, haicc, help, runtime)" "said, with the protocols there"
+is "$out" "haicc: no protocol: deploy (boot, crud, haicc, help, howto, runtime)" "said, with the protocols there"
 out=$(haicc . boot/remove host 2>&1 >/dev/null); is "$out" "haicc: no action: boot remove (deploy, redeploy, teardown)" "an action that is not there: said, with the protocol's actions"
 
 # 9. a node inside the host; commands chained through both
@@ -292,6 +292,23 @@ out=$(haicc --output host crud/read 'done/*' --flags layer=request 2>&1)
 has "$out" '"uri":["request","done/' "through a shortcut: the host's records, the routing still in main"
 out=$(haicc --flags log=debug -- host crud/read . 2>&1 >/dev/null); is "$?" "2" "flags in front of the URI: refused, exit 2"
 has "$out" "flags follow a URI: they are that step's" "said"
+
+# 9c. how-tos: what can be done here, by activity; a how-to its steps as
+# typed commands, each with why
+is "$(haicc --output . howto 2>&1)" '{"activities":[{"activity":"host","howtos":[{"howto":"host/deploy","oneliner":"Deploys the host, the mrepo a machine is managed with, and brings it into service."}]}]}' "haicc . howto: what can be done from the boot mrepo: its activities, each with its how-tos (howto alone is howto/get)"
+out=$(haicc --output host howto 2>&1)
+has "$out" '{"activity":"container","howtos":[{"howto":"container/replica","oneliner":"' "haicc host howto: the host's own: a node's replica in a container"
+has "$out" '{"activity":"node","howtos":[{"howto":"node/deploy","oneliner":"Deploys a node of a swarm in this host and brings it into service."}]}' "and a node deployed: what its packages brought, no other"
+is "$(haicc --output host howto/get . node 2>&1)" '{"activity":"node","howtos":[{"howto":"node/deploy","oneliner":"Deploys a node of a swarm in this host and brings it into service.","package":"haiccing/base-component-haicc"}]}' "haicc host howto/get . node: an activity's how-tos, each with its package"
+out=$(haicc --output host howto/get . node/deploy 2>&1)
+has "$out" '"howto":"node/deploy","title":"deploy"' "haicc host howto/get . node/deploy: one how-to"
+has "$out" '"command":"haicc . boot/deploy swarms/swarm-1/node-1 base-component-haicc"}' "its steps: each a command as typed at the host"
+has "$out" '{"why":"the check: the node answers with its root","command":"haicc swarms/swarm-1/node-1 crud/read ."}]}' "the last the check that proves it worked, each with why"
+has "$out" '"help":"packages/haiccing/base-component-haicc/howto/deploy"' "and where its README is in the help"
+has "$(haicc --output host help/get . packages/haiccing/base-component-haicc/howto/deploy oneliner 2>&1)" '"oneliner":"Deploys a node of a swarm in this host and brings it into service."' "read there too: a how-to is in the help as every README"
+out=$(haicc --output host howto/get . pipeline 2>&1); is $? 0 "an activity that is none here: answered, no error"
+has "$out" '{"asked":"pipeline","found":false,"why":"no activity pipeline here","activities":[' "said, with the activities there are"
+is "$(haicc --output host howto/extract 2>&1)" '{"howtos":2,"activities":["container","node"],"changed":false,"problems":0}' "haicc host howto/extract: extracted already, with the help, by its hook; no how-to against its form"
 
 # 10. torn down: the node; the service stopped and shut down; the host
 is "$(haicc --output host boot/teardown node-1 2>&1)" '{"tornDown":"node-1"}' "haicc host boot/teardown node-1"

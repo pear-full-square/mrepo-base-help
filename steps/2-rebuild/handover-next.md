@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 81). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 82). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -30,7 +30,8 @@ swarm's nodes and their containers: a node at `swarms/<swarm>/<name>`,
 the `container` protocol, the cluster script with both; 80 Splectral's
 MVP: an mrepo of its own beside the host, the commands of the install
 shown in a browser; 81 the install as a tree above them, folded from
-the commands).
+the commands; 82 the `howto` protocol: `extract` and `get`, the first
+how-tos).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -80,7 +81,7 @@ the human creates `haiccing/base-package-howto`,
 `pear-full-square/mrepo-base-howto`, `haiccing/base-package-haici` and
 `pear-full-square/mrepo-base-haici` first.
 
-**Pick up here** (2026-11-16, after part 81; everything in `main`,
+**Pick up here** (2026-11-16, after part 82; everything in `main`,
 `execute/main` level with it, every repository pushed, the two new ones
 among them: `pear-full-square/mrepo-base-container`,
 `haiccing/base-package-container`)
@@ -95,6 +96,22 @@ among them: `pear-full-square/mrepo-base-container`,
 - **What the human said on the way** (`tasks.md`, `swarm-cluster`): the
   default continuation is skipped, "needs a better design"; the script
   calls the container protocol explicitly; KISS.
+- **What comes now, in this order** (the human, 2026-11-16: "Go ahead
+  with implementation"; `tasks.md`, `help-mvp`, "The order, and the
+  go"): 1. `howto/extract` and `howto/get` with the first how-tos:
+  **built**, part 82 (`haicc . howto`, `haicc host howto`, `haicc host
+  howto/get . node/deploy`). 2. **`package-review`, next**: one package
+  at a time: its install test, its rules and decisions moved into its
+  help, its how-tos; its form is to be put to the human first, in a few
+  lines, then worked through. 3. the flag unit, `help/annotate`,
+  `haici/feedback`, with `howto/explore` and `howto/plan` scoped
+  (headless Claude their placeholder; the call itself a piece of its
+  own): `tasks.md`, `help-mvp`, as amended there. The four repositories
+  exist (`mrepo-base-howto`, `base-package-howto`, pushed with part 82;
+  `mrepo-base-haici`, `base-package-haici`, empty until step 3).
+- **A new layer is named in two lists**: `mycelium-git`'s `LAYERS` and
+  `SOLO` (`lib/write.js`) and `mrepo-base-execute`'s `TARGETS`: `howto`
+  was added to both (part 82). Without it the boot fails: `not a layer`.
 - **Splectral's MVP is built** (part 80): `haicc . boot/deploy splectral
   base-package-splectral --flags continuation=start`, then
   `http://127.0.0.1:4400`: one page, the commands of the install as
@@ -161,7 +178,9 @@ among them: `pear-full-square/mrepo-base-container`,
   (`tools/bare tools/package-test.js haiccing/<package>`, in a loop),
   `tools/bare tools/release.js --strict` (its exit code), the boot's
   `validate` a few times, `sh haiccing/base-linux-haicc/test/run.sh`
-  (249 checks, about five minutes with the containers). Running
+  (261 checks, about five minutes with the containers). Docker's
+  daemon stops when the session's container is restarted: `sh
+  tools/docker.sh` again (the test's Docker check says so). Running
   mrepos die when `tools/release.js` rewrites the bundles under them:
   tear a trial install down before a rebuild. A
   container left by a run that broke off: `docker ps -a --filter
@@ -189,17 +208,18 @@ Splectral's MVP (`splectral-server`, `base-package-splectral`:
 `haicc splectral splectral/status`).
 
 
-**The state** (as of 2026-11-16, part 81: everything in `main`; the paragraphs below are older, kept for what they say)
+**The state** (as of 2026-11-16, part 82: everything in `main`; the paragraphs below are older, kept for what they say)
 
 - The `haicc` command installs, boots, deploys a host from
   `base-component-haicc`, starts its service, deploys a node inside it
   and chains commands through both (parts 30 to 45).
-- All fourteen bundle packages (`base-package-container`, part 79, and
-  `base-package-splectral`, part 80, the newest) are brought to the package template and
+- All fifteen bundle packages (`base-package-container`, part 79,
+  `base-package-splectral`, part 80, and `base-package-howto`, part 82,
+  the newest) are brought to the package template and
   pinned, each with a test of its own and a current, passing report
   (parts 47 to 64). `tools/bare tools/release.js --strict` passes;
   `tools/bare tools/code-check.js` and the README checks have no
-  problems; the `haicc` test 249 of 249 (part 81); `base-component-boot`'s
+  problems; the `haicc` test 261 of 261 (part 82); `base-component-boot`'s
   `boot` test passing.
 - The `haicc` command is a Bare app, `base-app-haicc` (part 60); the
   shell, `base-linux-haicc`, is the first step only. The command's form

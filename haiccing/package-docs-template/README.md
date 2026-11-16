@@ -18,6 +18,7 @@ is for.
 | `modules/`, `package.json` | carries its own dependencies |
 | `mrepo/` | comes with an mrepo, by layers |
 | `scripts/` | has scripts: lists of commands to go on with after it is deployed, a file each (`<name>.json`), answered as the deploy's continuation when asked for by name |
+| `howto/` | has how-tos: what can be done with it, a folder each (`<name>/`), its README the how-to: its activity and its steps as typed commands, each with why; extracted into an mrepo's `howto` layer (`base-package-howto`) |
 | `test/` | has tests and test sets |
 | `test-reports/` | holds the proof that its tests passed: the report of its last pre-release |
 | `<name>/` | holds a further unit, by its URI part name |

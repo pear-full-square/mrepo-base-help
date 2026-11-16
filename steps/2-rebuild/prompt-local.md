@@ -42,7 +42,7 @@ Only its note is committed.
 >    a container, a container stopped, started and removed), Splectral
 >    (its mrepo deployed beside the host, its page and its lines asked
 >    with curl), the teardowns. One line a
->    check (249 of them); the last
+>    check (261 of them); the last
 >    lines say
 >    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
 >    leaves nothing running: check with `pgrep -fa "bin/bare"` and
@@ -55,6 +55,7 @@ Only its note is committed.
 >    `base-package-help`, `base-package-boot`, `base-package-service`,
 >    `base-package-haicc`, `base-package-crud`, `base-package-container`
 >    (it makes a real container: Docker again), `base-package-splectral`,
+>    `base-package-howto`,
 >    `base-component-boot`,
 >    `base-component-haicc`, `base-app-haicc`, `package-docs-mrepo`,
 >    `package-docs-template`:
@@ -96,7 +97,9 @@ Only its note is committed.
 >    to try, in this order:
 >    `haicc boot/deploy`, `haicc . boot/deploy host base-component-haicc`,
 >    `haicc host service/initialise`, `haicc host service/start`,
->    `haicc host help/get`, `haicc . crud/create swarms/swarm-1`,
+>    `haicc host help/get`, `haicc . howto` and `haicc host howto` (what
+>    can be done here, by activity; `haicc host howto/get . node/deploy`
+>    for one how-to's steps), `haicc . crud/create swarms/swarm-1`,
 >    `haicc . crud/read swarms`, `haicc . crud/read .`,
 >    then a swarm's node with its container, at the host:
 >    `haicc host crud/create swarms/swarm-1`,
