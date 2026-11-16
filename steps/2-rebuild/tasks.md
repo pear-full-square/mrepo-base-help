@@ -1080,6 +1080,9 @@ with full detail, not keyed on URI so it can use it for reverse lookups
 (indexing). So mrepo internal it is a link registry, the boot contains
 a mrepo registry."
 
+And: "the deploy protocol needs to create and use the main shortcuts
+info and the links layer."
+
 So there are two, and part 75 built one thing for both:
 
 - **The link registry**, inside every mrepo that links others: a layer,
