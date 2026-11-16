@@ -984,6 +984,36 @@ is)
   (`node-mrepos`, P2.)
 - A question put to us: "Do we create a swarm protocol?"
 
+**Said next** (2026-11-16, on our asking where the registry lives, and
+on a swarm protocol)
+
+- "swarm nodes have a local bridgehead mrepo and an mrepo in the
+  container."
+- "If you like a mrepo local registry - not of deploy but shortcuts -
+  we may consider a layer for that information? The shortcut info can
+  contain information that it was deployed or just linked etc. This
+  linking / deploying is going to be very important so makes sense to
+  keep good record of it."
+- The swarm protocol: "When we create a swarm protocol it will 'sit on
+  top' of other protocols like service. Sequence would be: deploy local
+  bridgehead node as standard mrepo then initialise it as a swarm node
+  (master or not), then replicate in container (default configuration
+  is bridgehead is master and container is slave). What do you think?"
+
+**Our reading so far, to confirm** (ours, put back in the discussion)
+
+- The registry is a record of shortcuts, not of deployments: a layer,
+  an entry a shortcut: where it leads on this machine, how it came
+  about (deployed here, from which package; or linked to an mrepo that
+  was there), what runs it. `main` keeps the link only, as today (it
+  replicates; the layer is this machine's).
+- A swarm node is one mrepo in two places: the bridgehead on the host
+  (a standard mrepo, deployed as any, so in the registry) and its
+  replica in a container (not in the registry).
+- A `swarm` protocol on top of `boot` and `service`: a node is deployed
+  (`boot/deploy`), made a swarm node (its swarm, its role), then
+  replicated into a container.
+
 **From before** (`local-note.md`, 2026-11-15, point 4): the parent's
 `main/<name>/` holds the shortcut only, the mrepo is placed elsewhere;
 proposed there, not answered: every mrepo side by side under `mrepos/`,
