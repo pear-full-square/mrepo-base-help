@@ -267,7 +267,7 @@ has "$out" '"continuation": {' "the deploy's response: its continuation, the scr
 has "$out" 'haicc demo service/initialise' "each command of it said as it would be typed, written from the deployed mrepo's place"
 has "$out" 'haicc demo service/start' "in order"
 is "$(haicc --output demo crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "the mrepo brought into service by it: its crud answering"
-out=$(haicc . boot/deploy demo-2 base-component-haicc --flags continuation=nope 2>&1 >/dev/null); has "$out" "no script: nope (haiccing/base-component-haicc has start)" "a script the package has not: refused, with those it has"
+out=$(haicc . boot/deploy demo-2 base-component-haicc --flags continuation=nope 2>&1 >/dev/null); has "$out" "no script: nope (haiccing/base-component-haicc has cluster, start)" "a script the package has not: refused, with those it has"
 [ ! -e "$T/home/work/mrepos/local/demo-2" ] && ok "nothing built for it" || no "nothing built for it"
 is "$(haicc --output . boot/teardown demo 2>&1)" '{"tornDown":"demo"}' "torn down again"
 haicc . boot/deploy extra-1 base-package-runtime >/dev/null 2>&1; haicc . boot/deploy extra-2 base-package-runtime >/dev/null 2>&1
@@ -305,11 +305,18 @@ is "$(running | wc -l | tr -d ' ')" 1 "still one runtime"
 
 # 12. the machine level torn down: every runtime stopped, what boot/deploy
 # put in place removed; Bare, the sources and the scripts stay
-haicc . boot/deploy host base-component-haicc >/dev/null 2>&1; is $? 0 "the host deployed again"
-is "$(running | wc -l | tr -d ' ')" 2 "two runtimes running"
+# (the host deployed with the cluster script: itself in service, a swarm's
+# place in its main, two nodes deployed and in service)
+out=$(haicc --output . boot/deploy host base-component-haicc --flags continuation=cluster 2>&1); is $? 0 "haicc . boot/deploy host base-component-haicc --flags continuation=cluster: the host and its cluster, every command of the script done"
+has "$out" '"deployed":"node-1","mrepo":"local/node-1"' "node-1 deployed by the host"
+has "$out" '"deployed":"node-2","mrepo":"local/node-2"' "node-2 too"
+has "$out" '[{"uri":["main","."],"value":{},"children":["node-1","node-2","swarms"]}]' "its last command: the host read: its nodes and the swarm's place"
+is "$(haicc --output host/node-2 crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "a node in service: answering through the host"
+[ -d "$T/home/work/mrepos/local/node-1/inbox" ] && [ -d "$T/home/work/mrepos/local/node-2/inbox" ] && ok "each node at its place, by its unique URI" || no "each node at its place"
+is "$(running | wc -l | tr -d ' ')" 4 "four runtimes running: the boot mrepo's, the host's, the two nodes'"
 out=$(haicc boot/teardown 2>&1); is $? 0 "haicc boot/teardown"
-has "$out" '"tornDown":".","runtimes":2' "said: the root torn down, two runtimes stopped"
-is "$(running | wc -l | tr -d ' ')" 0 "no runtime left: the host's stopped with the boot mrepo's"
+has "$out" '"tornDown":".","runtimes":4' "said: the root torn down, four runtimes stopped: the nodes the host deployed among them"
+is "$(running | wc -l | tr -d ' ')" 0 "no runtime left: every runtime of the install stopped"
 [ ! -e "$T/home/work/mrepos" ] && [ ! -e "$T/home/work/packages" ] && [ ! -e "$T/home/work/mrepo.json" ] && ok "the mrepos, the package store and the setting removed" || no "what boot/deploy put in place removed" "$(ls "$T/home/work")"
 [ -x "$T/home/bare/bin/bare" ] && [ -f "$T/home/sources.list" ] && [ -x "$T/home/bin/haicc" ] && ok "Bare, the sources list and the scripts kept" || no "Bare, the sources list and the scripts kept"
 haicc boot/teardown >/dev/null 2>&1; is $? 3 "torn down twice: nothing there, exit 3"

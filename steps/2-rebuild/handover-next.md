@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 77). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 78). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -24,7 +24,8 @@ XPath has them, a filter's names by the URI's rules; 75
 the registry layer, several torn down by a query; 76 the same
 corrected: the links layer, an mrepo's own, and the mrepo registry, the
 boot mrepo's; 77 `continuation`: a command answers with a script to go
-on with, the terminal runs it).
+on with, the terminal runs it; 78 the cluster script: the swarm
+cluster we work towards, written as a script of the component).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -221,9 +222,18 @@ runs it, each command after the response of the one before; a deploy
 asked for a script of its package (`--flags continuation=<script>`)
 answers with it. A simple script: no nesting, at most 100 commands, the
 terminal only. `base-component-haicc` brings `scripts/start.json`. For
-demos that run on their own: a demo package (`base-demo-haicc`) needs
-its repository created by the human. Docker is fine for the first
-container node.
+**The work now: `swarm-cluster`** (`tasks.md`): "Let's add scripts to
+the component for what we still want to achieve - working swarm
+cluster. Once that is finished we can start with the other items on
+the list." `base-component-haicc`'s `scripts/cluster.json` is the
+target written down, and its check: what runs today is in it (part 78:
+the host in service, a place for the swarm, two nodes in service); each
+step a swarm still needs is designed together, built, then added as a
+line: where a swarm's node sits and its unique URI, a node made a swarm
+node (the `swarm` protocol), its replica in a container (Docker; no
+daemon runs in the cloud session: tried on the laptop), the nodes
+finding each other. The continuation is, in the human's view, to become
+"the heart of a JIT pipeline engine" (`vision.md`).
 KISS: enough for the swarm demos; a further
 design round comes with the next step. A rule since (`rules.md`): deploy
 and teardown, no upgrade in place. **Next in our order: `node-mrepos`**
@@ -275,7 +285,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 77. Its notes come
+  `handover-local.md`, are current for parts 60 to 78. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent
