@@ -50,6 +50,19 @@ test('request: the record written, value by value; its response read as stored',
   } finally { m.remove() }
 })
 
+test('request: its response seen as it arrives: the outbox folder watched, not looked at on a clock', async (t) => {
+  const m = mrepo()
+  try {
+    const answered = m.answer({ output: { ok: 2 } }, 100)
+    const began = Date.now()
+    // (a look only every 5 s: without the watching this would end in no response)
+    const r = await request(m.root, ['help/get'], { uri: 'local/boot', reply: '/haicc/terminal', timeout: 3, every: 5000 })
+    await answered
+    t.alike(JSON.parse(r.text).value.value.output, { ok: 2 }, 'the response read')
+    t.ok(Date.now() - began < 2500, 'well before the next look: it was told')
+  } finally { m.remove() }
+})
+
 test('request: no response in time: exit 4, the key said; the request stays', async (t) => {
   const m = mrepo()
   try {

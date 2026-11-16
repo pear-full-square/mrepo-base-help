@@ -16,7 +16,9 @@ the document's name in both folders.
 - `uri`: the mrepo's unique URI; the envelope's topic is `/<uri>/inbox`.
 - `reply`: the core's topic, where the completed form goes back.
 - `timeout`: seconds to wait, 120.
-- `every`: milliseconds between two looks, 200.
+- `every`: milliseconds between two looks, 200. The outbox folder is
+  watched: the response is read as it is written there; the looks are
+  the net, for an event missed or a folder that cannot be watched.
 
 ## Returns
 

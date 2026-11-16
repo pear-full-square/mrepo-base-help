@@ -17,6 +17,7 @@ The tests of haicc-base-app, a section per file, each test by its name.
 ## `request.test.js`
 
 - request: the record written, value by value; its response read as stored
+- request: its response seen as it arrives: the outbox folder watched, not looked at on a clock
 - request: no response in time: exit 4, the key said; the request stays
 
 ## `sources.test.js`

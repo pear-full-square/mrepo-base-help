@@ -3487,3 +3487,50 @@ test, 184 of 184 (7 more checks: the request records read with the
 flag and a filter, the flag at a step held for the command that
 follows, nothing without it, the host's records through a shortcut).
 `base-component-boot`'s `validate` three times. Nothing left running.
+
+## 73. `inbox-watcher`: a pass made when something arrives, not on a clock (2026-11-16)
+
+Task 7 of `tasks.md`. Raised when we looked at how a file in the inbox
+folder gets into git (the runtime looked every 200 ms, listing the
+whole folder and the whole `inbox` layer): "wouldn't it be better with
+a filewatcher?" Decided together, in the cleanup: "inbox-watcher: yes".
+
+- **The runtime** (`mrepo-base-runtime`, `run`): the pass is what it
+  was (the inbox folder's new files committed, the request protocol,
+  the execute protocol); when it is made changed. The inbox folder is
+  watched (`bare-fs`'s `watch`), and so is the outbox folder of each
+  linked mrepo a request here waits for: a file written there wakes a
+  pass. A pass that moved something (a branch's head changed) is
+  followed by the next at once. Nothing moving, nothing arriving:
+  nothing is listed, but for a slow look, the net for an event missed
+  (`idle`, 2 s).
+- **Looked at as before**, every 200 ms: a folder that cannot be
+  watched (not there yet), and a `git` repository, whose inbox is a
+  layer written by others. A pass that failed is not followed at once.
+- **The `haicc` app** watches the root's outbox folder for its
+  response, its looks kept as the net.
+
+**Measured** (the `haicc` test, 184 commands and checks, this
+container): 142 s before, 93 to 104 s after (three runs): about 0.25 s less a command,
+the waits between a folder written and the next look gone at each hop
+(the app, the root, a linked mrepo, back). An mrepo with nothing to do
+lists nothing.
+
+**Not in it**: the inbox folder and the `inbox` layer still only grow,
+and are listed whole when something arrives (`xpath.md`: how many to a
+folder; folders by date, keys that sort by time). `tools/commit-bench.js`'s
+`cycle` measures a request's cycle without the folders: not changed by
+this.
+
+**Validated**: the modules' tests (`mrepo-base-runtime` 6 tests, 122
+asserts: the cycle on both storages; `haicc-base-app` 16, 163: a
+response seen as it arrives, a look only every 5 s). The
+pre-release of the five packages that changed, each passing:
+`package-docs-mrepo` 8 units, 47 tests, 269 asserts;
+`base-package-runtime` 22, 306, 1930; `base-package-boot` 23, 317, 2038;
+`base-component-boot` 23, 312, 2106; `base-app-haicc` 23, 329, 2156.
+`tools/bare tools/release.js --strict`: exit 0, twelve packages, every
+report current. `tools/bare tools/code-check.js` and the READMEs: no
+problems. `base-component-boot`'s `validate` four times, its `boot` test
+passing each (the loop changed: a race would show here). The `haicc`
+test, 184 of 184, three times. Nothing left running.
