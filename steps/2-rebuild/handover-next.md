@@ -67,8 +67,9 @@ container. Without a daemon those tests fail, they do not skip.
 ## Right now
 
 **Pick up here** (2026-11-16, after part 79; everything in `main`,
-`execute/main` level with it; the product repositories: see "With the
-human, open")
+`execute/main` level with it, every repository pushed, the two new ones
+among them: `pear-full-square/mrepo-base-container`,
+`haiccing/base-package-container`)
 
 - **Where it stands**: `base-component-haicc`'s `scripts/cluster.json`
   runs to its end: the host in service, `swarms/swarm-1` in its `main`,
@@ -355,13 +356,6 @@ with the human first, unless the task says it is ours ("Left to us").
 
 **With the human, open**
 
-- **Two repositories to create** (part 79), then pushed from here:
-  `pear-full-square/mrepo-base-container`
-  (`sh tools/products.sh mrepo-base-container`) and
-  `haiccing/base-package-container`
-  (`sh tools/packages.sh -m "..." base-package-container`). Every other
-  repository that changed in part 79 is pushed (three modules, nine
-  packages).
 - Testing by hand on the local machine: the local agent built and
   tested `main` as of parts 65 and 66 (`c8200f7`, 2026-11-15): every
   step passed (the `haicc` test 152 of 152 three times, all twelve
@@ -398,6 +392,10 @@ with the human first, unless the task says it is ours ("Left to us").
 - **Ask point by point, briefly**: one question at a time, short; no walls
   of text. Discuss first; build what has settled; structure and design are
   decided with the human.
+- **A new repository asked for**: its description alone, in a block to
+  copy (2026-11-16: "description only to copy is enough"); its owner
+  and name in a line of text. Created with a licence, so `main` has a
+  first commit.
 - **Check yourself before asking** (GitHub: `gh api -X GET search/repositories
   -f q='<name> in:name org:<org>'`; the code; the docs).
 - **Few pushes** (GitHub suspended us once): one commit and one push per
