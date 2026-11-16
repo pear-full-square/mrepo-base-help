@@ -258,3 +258,34 @@ package's own that deploys it in a real, running mrepo.
   several places), generated on first request, cached under the same
   keyword with what it was made from, so it is made again when a source
   changes, and marked as generated.
+
+- On building `info` so (the map in `extract`, `get` by keyword, code
+  only; replacing `help/get`, `help/extract`, `howto/get`), the human:
+  "repos created but wait with implementation. for the missing page -
+  this is part of haici - continuous improvement. Is the internal
+  structure of the package ok? No changes needed?" The two repositories
+  exist: `pear-full-square/mrepo-base-info`, `haiccing/base-package-info`.
+  **Not to build yet.**
+- So a keyword without a page is not `info`'s to generate: `get` says
+  what there is and that the page is missing, and the miss is `haici`'s
+  to pick up (a page proposed for the package it belongs to).
+- Ours, on the package's internal structure, put back (not answered):
+  the folders are right as they are (an action a folder
+  `external/<action>/`, a README in every folder, `test/`, `howto/`,
+  `mrepo/`, `scripts/`): no restructuring. Three things are not uniform
+  and would be made so, package by package, in the review:
+  1. **A protocol's config does not name its module**: one field.
+  2. **The config is written in two places**: in the module for seven
+     protocols (`internal/config.js`, and a "Config" section in the
+     module's README), in the package's `protocol.js` for three (`boot`,
+     `help`, `runtime`), which have no "Config" section. So "config
+     options" has a fixed place for seven of ten.
+  3. **A protocol is described by two READMEs**, its package's and its
+     module's, with no rule on what goes where: four pairs both hold
+     "Commands" (`crud`, `container`, `howto`, `splectral`). One of the
+     two has to be the protocol's page.
+  And one thing to place: what has no protocol (the modules the runtime
+  runs on: request, execute, xpath, git, uri; the components, the
+  documentation packages, the app) has no keyword under a protocol.
+  Ours: a second keyword at the top, `packages`, the tree as it is
+  today with a module's pages once.
