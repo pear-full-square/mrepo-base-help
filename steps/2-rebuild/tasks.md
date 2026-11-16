@@ -115,6 +115,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
 | P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | built, parts 75 and 76 (the links layer, an mrepo's own; the mrepo registry, the boot mrepo's); the rest for the next design round |
+| | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `haici` | queued for building (2026-11-16; `help.md` the design) |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -1401,6 +1402,115 @@ simple, this is just POC." **Built**: part 81.
   `haicc` commands (each mrepo's links, its service state,
   `container/status`), for what ended without a command.
 - The first demo beyond the log.
+
+## `help-mvp`: the flag unit, the help and feedback flags, a first `haici`
+
+The first build of the design in `help.md` (help, howto, haici), queued
+for building (the human, 2026-11-16: "you queue this for building if you
+think the initial MVP is fully specified"). Not built yet.
+
+**Settled** (the human; `help.md` has each in the words used)
+
+- A flag is a folder of its own, everything it needs inside, so flags
+  are added independently; every flag's folder in the module that
+  processes flags, `mrepo-base-request` ("Request is always there").
+- The help flag and the feedback flag are rewrites: the command they are
+  attached to is not executed; the help flag triggers the `help`
+  protocol, the feedback flag a feedback command. Feedback "can be
+  supplied on anything that exists as command".
+- The feedback flag is the last flag on the last command part; all text
+  after it is the feedback text. Its command runs where the command
+  would have run.
+- `haici`, a protocol of its own (human ai continuous improvement),
+  starts from the request log; KISS: "don't do too much up front".
+- "wrong flag or issues with underlying functionality don't throw
+  errors but warnings."
+- A flag not recognised: "the command runs if it can, just warning on
+  what is not recognised. If you prefer strict with warnings, then no
+  execute. You decide." Ours, decided: strict (below).
+- The answer's form: "here you will be able to optimise the way you
+  want it. So we have to be clear with the instructions to hc." Ours,
+  decided (below).
+
+**Left to us, decided** (2026-11-16)
+
+- **Strict, with warnings**: a flag that is not one, a value its flag
+  does not take, a tail flag that is not last, a rewrite on a part that
+  is not the last, a rewrite whose protocol is not here or not active:
+  nothing of the command is executed. The request completes, not
+  failed; its answer says it was not run and why, its warnings in its
+  log, the flags there are named. The `haicc` command exits 1 for a
+  command not run, so a continuation stops there. Why: a slip of the
+  pen in a flag (`--flags hepl` on `boot/teardown`, or `feedbak` with
+  its text read as flags) must not run what was only asked about; a
+  warning and a second try cost little, a person's or hc's alike.
+  Today an unknown flag is ignored and the command runs: that changes.
+- **The answer's form, for help and haici** (as hc, their main user):
+  natural language, short; the commands to go on with written exactly
+  as they are typed; what is acted on (a warning, an error, the
+  request's id) in a fixed place; the record as it is with `--raw`.
+  Written as a rule in `mrepo-base-help`'s README, so what hc is told
+  and what it reads agree.
+- **The flag unit** (`mrepo-base-request`): `flags/<name>/`, each with
+  `index.js` (its declaration: `kind`, `scope`, `values` (a list, a
+  pattern, or none: it stands alone), `tail`; and for a rewrite, its
+  `rewrite(form, value)`, the form it becomes) and `README.md` (what it
+  does, an example: extracted into help, checked as a method is).
+  `flags/index.js` lists the folders (a bundle imports statically); the
+  module's test fails for a folder not listed. `lib/flags.js` keeps the
+  parsing (`--flags`, closed by `--` or the end; a tail flag takes the
+  rest of the line, `--` included) and resolves by kind and scope;
+  it names no flag.
+  - kinds: `modifier` (how a request is handled), `option` (read by one
+    action), `rewrite` (the command turned into another protocol's,
+    before the door: the door then checks the rewritten command);
+  - scopes: `chain` (carried down a chain until changed), `step` (its
+    own command), `last` (the last part only);
+  - the three there are moved in, their behaviour unchanged: `log`
+    (modifier, chain), `layer` (modifier, chain; read at a command's
+    own URI, not a passer's), `continuation` (option, step).
+- **`help`, a rewrite, last, no value**:
+  `haicc host crud/read swarms --flags help` becomes `help/command` at
+  the same URI, its arguments the command's (`crud/read`, `swarms`).
+  `help/command`, a new action of `mrepo-base-help` (also asked
+  directly: `haicc host help/command crud/read swarms`, offered at any
+  URI): the command as understood (protocol, action, URI, arguments);
+  what it does (the action's description, its README's one-liner and
+  summary from the help layer, found under its package's
+  `/external/<action>`; while the layer is not extracted yet, the
+  description alone, and said); the door's answer here and now
+  (`check`, as the execution runs it: allowed, or why not); the
+  arguments given against those the action names; the command to run
+  it, and `help/get` for more. Nothing of the command is executed.
+- **`feedback`, a rewrite, last, tail**:
+  `haicc host crud/read swarms --flags feedback the answer does not say
+  which layer` becomes `haici/feedback` at the same URI, its arguments
+  the text, then the command's. `haici/feedback` keeps nothing apart
+  from its own request's record (the request log is the store) and
+  answers that it was recorded, with its request's id; hc reads the
+  feedback from the request log (`layer=request`) until `haici` does
+  more.
+- **`haici`**: a new package and module, `base-package-haici` and
+  `mrepo-base-haici` (from the template; one action, `feedback`; its
+  own test, `mounted`); linked into `base-component-boot` and
+  `base-component-haicc`, activated by a `boot` hook in both (as
+  `help` is). **The human creates the two repositories**
+  (`haiccing/base-package-haici`, `pear-full-square/mrepo-base-haici`)
+  before they are pushed.
+- **Tests**: the flag unit's own (each kind and scope, the tail, the
+  strict cases, a folder not listed); `help/command` and
+  `haici/feedback` in their packages' `mounted` tests; the `haicc` test
+  extended: a command with `--flags help` answered and not run (its
+  state unchanged), with `--flags feedback ...` recorded and read back
+  with `layer=request`, an unknown flag not run (exit 1, the warning),
+  through a chain (`haicc host haicc node-1 ... --flags help`).
+
+**Not in it** (later, each when the work reaches it): the `howto`
+protocol and guided runs; an action not implemented in code calling hc
+with a prompt; `haici`'s sections from the request log; the help of a
+position (`haicc <uri> help/get` describing what is there); flags on
+the machine level's commands (`haicc boot/deploy`, `haicc sources`);
+findings rooted in their packages and fed to the HDLC.
 
 ## `external-request-api`: what the outside may ask, designed, not hard-coded
 
