@@ -7,6 +7,74 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-16: `61acff6`, built, tested, released
+
+The prompt ran as written, every step passed; then, on the human's word,
+the release (`local-run.md`, "the release `r-61acff6`"). The code not
+changed here.
+
+| Step | Result |
+|---|---|
+| 1. update | `main` fast-forwarded to `61acff6` (parts 67 to 82: among them the queries, the cluster with its containers, Splectral, the howto protocol) |
+| 2. `sh tools/install.sh` | exit 0: 0 fetched, 207 kept, 3 linked |
+| 3. `tools/bare tools/release.js` | exit 0: fifteen bundles from `61acff6`, Bare v1.36.0; every report `current`; `git status` clean |
+| 4. `sh haiccing/base-linux-haicc/test/run.sh`, three times | Docker 28.3.0, its server running; each exit 0, `# checks = 261/261 pass`, `# ok` (221 s, 215 s, 268 s); nothing left running, no container |
+| 5. the packages' `/test/full` | all fifteen exit 0, `"ok":true` (the longest: `base-component-boot` 215 s, `base-package-container` 119 s, `base-package-boot` and `base-app-haicc` 104 s, `base-package-runtime` 94 s); `release.js --strict`: exit 0, every report `current`; nothing left running, no container |
+| 6. `tools/bare tools/commit-bench.js --dir "/home/herma/haicc-commit-bench"` | exit 0, 565 s, `"ok":true`; no `"error"`, every `"errors"` 0; nothing left running |
+| 7. `haicc-install.sh`, sources, `haicc prereq` | `/usr/local/bin/haicc`; the clone's `sources/` linked; `prereq` all ok; no runtime and no work folder left from before (torn down by hand on 2026-11-15) |
+
+On step 6, as before: 14 cores here, not twelve; mains power not checked
+from here. The processor and the filesystem as on 2026-11-15:
+
+```
+CPU(s):                               14
+Model name:                           Intel(R) Core(TM) Ultra 5 225H
+Thread(s) per core:                   1
+Core(s) per socket:                   14
+```
+
+```
+Filesystem     Type  1K-blocks     Used Available Use% Mounted on
+/dev/sdc       ext4 1055762868 46318684 955740712   5% /
+```
+
+Every line it printed:
+
+```
+{"measure":"machine","cores":14,"platform":"linux","arch":"x64","bare":"v1.36.0","dir":"/home/herma/haicc-commit-bench/commit-bench-7EDQ2v"}
+{"measure":"loop","oneThreadMs":465,"threads":14,"allAtOnceMs":937,"gain":6.9}
+{"measure":"writers","mode":"threads","writers":1,"commitsEach":300,"commitsPerSecond":[125,133,134],"errors":0,"firstError":null,"lateStartMs":0}
+{"measure":"writers","mode":"threads","writers":2,"commitsEach":300,"commitsPerSecond":[246,221,235],"errors":0,"firstError":null,"lateStartMs":6}
+{"measure":"writers","mode":"threads","writers":4,"commitsEach":300,"commitsPerSecond":[328,336,337],"errors":0,"firstError":null,"lateStartMs":5}
+{"measure":"writers","mode":"threads","writers":8,"commitsEach":300,"commitsPerSecond":[491,479,477],"errors":0,"firstError":null,"lateStartMs":4}
+{"measure":"writers","mode":"threads","writers":12,"commitsEach":300,"commitsPerSecond":[582,596,614],"errors":0,"firstError":null,"lateStartMs":4}
+{"measure":"writers","mode":"threads","writers":14,"commitsEach":300,"commitsPerSecond":[720,654,670],"errors":0,"firstError":null,"lateStartMs":4}
+{"measure":"writers","mode":"threads","writers":16,"commitsEach":300,"commitsPerSecond":[689,704,933],"errors":0,"firstError":null,"lateStartMs":5}
+{"measure":"writers","mode":"threads","writers":24,"commitsEach":300,"commitsPerSecond":[725,687,744],"errors":0,"firstError":null,"lateStartMs":7}
+{"measure":"writers","mode":"processes","writers":1,"commitsEach":300,"commitsPerSecond":[140,148,136],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"processes","writers":2,"commitsEach":300,"commitsPerSecond":[247,266,247],"errors":0,"firstError":null,"lateStartMs":1}
+{"measure":"writers","mode":"processes","writers":4,"commitsEach":300,"commitsPerSecond":[629,380,373],"errors":0,"firstError":null,"lateStartMs":5}
+{"measure":"writers","mode":"processes","writers":8,"commitsEach":300,"commitsPerSecond":[563,586,582],"errors":0,"firstError":null,"lateStartMs":4}
+{"measure":"writers","mode":"processes","writers":12,"commitsEach":300,"commitsPerSecond":[692,655,718],"errors":0,"firstError":null,"lateStartMs":5}
+{"measure":"writers","mode":"processes","writers":14,"commitsEach":300,"commitsPerSecond":[891,746,687],"errors":0,"firstError":null,"lateStartMs":8}
+{"measure":"writers","mode":"processes","writers":16,"commitsEach":300,"commitsPerSecond":[738,742,660],"errors":0,"firstError":null,"lateStartMs":8}
+{"measure":"writers","mode":"processes","writers":24,"commitsEach":300,"commitsPerSecond":[654,660,757],"errors":0,"firstError":null,"lateStartMs":12}
+{"measure":"width","children":10,"commitsPerSecond":195}
+{"measure":"width","children":100,"commitsPerSecond":213}
+{"measure":"width","children":1000,"commitsPerSecond":124}
+{"measure":"width","children":10000,"commitsPerSecond":19}
+{"measure":"width","children":100,"levelsDeeper":5,"commitsPerSecond":130}
+{"measure":"history","commits":12000,"commitsPerSecondUpTo":{"2000":220,"4000":169,"6000":161,"8000":167,"10000":150,"12000":198},"looseObjects":59805}
+{"measure":"corestore","commitsPerSecond":197}
+{"measure":"native","commitsPerSecond":58}
+{"measure":"cycle","requests":"1 to 50","msEach":{"branchMade":2.5,"aCommit":4.4,"squashIntoMain":5.2,"branchRemoved":2.1,"together":14.2},"listBranches":{"msACall":1.1,"callsARequest":6},"isAncestor":{"msACall":0.7,"callsARequest":2}}
+{"measure":"cycle","requests":"51 to 100","msEach":{"branchMade":2.3,"aCommit":4.5,"squashIntoMain":4.6,"branchRemoved":1.9,"together":13.3},"listBranches":{"msACall":1,"callsARequest":6},"isAncestor":{"msACall":0.6,"callsARequest":2}}
+{"measure":"cycle","requests":"101 to 150","msEach":{"branchMade":2.1,"aCommit":-19.2,"squashIntoMain":6.2,"branchRemoved":1.6,"together":-9.2},"listBranches":{"msACall":0.9,"callsARequest":6},"isAncestor":{"msACall":1.1,"callsARequest":2}}
+{"measure":"cycle","requests":"151 to 200","msEach":{"branchMade":2.2,"aCommit":4.8,"squashIntoMain":5.5,"branchRemoved":1.7,"together":14.2},"listBranches":{"msACall":0.9,"callsARequest":6},"isAncestor":{"msACall":0.5,"callsARequest":2}}
+{"measure":"cycle","after":200,"underRefs":{"files":1,"folders":2}}
+{"ok":true,"measure":"done","measured":["machine","loop","writers","width","history","corestore","native","cycle"],"seconds":565}
+```
+
 ## 2026-11-15: help, howtos, nodes and where an mrepo is placed (for 2026-11-16)
 
 Discussed with the human after the headless run; the human: "that is for
