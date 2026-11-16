@@ -39,6 +39,13 @@ The exit code, a number.
   response record printed whole, unpacked across lines; exit 0 when its
   completed form holds an output, 1 an error, which is also said on
   stderr.
+- **A continuation**: a response that answers with a script to go on
+  with is followed: each of its commands sent from the position it is
+  written at, after the response of the one before, each response
+  printed as the first; where records are printed for reading, each
+  command is said first, as it would be typed. The first that fails ends
+  it, with its exit code. A continuation answered inside one is not
+  run; one of more than 100 commands is refused.
 - **The machine level**, `haicc boot/deploy` and `haicc boot/teardown`:
   above the root mrepo, in the same form.
 - **Its own**: `haicc sources`, `haicc output`, the usage.

@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 76). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 77). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -23,7 +23,8 @@ XPath has them, a filter's names by the URI's rules; 75
 `mrepo-registry`, the first build: an mrepo placed by its unique URI,
 the registry layer, several torn down by a query; 76 the same
 corrected: the links layer, an mrepo's own, and the mrepo registry, the
-boot mrepo's).
+boot mrepo's; 77 `continuation`: a command answers with a script to go
+on with, the terminal runs it).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -214,12 +215,15 @@ key, not for the outside; and the **mrepo registry**, in the boot
 mrepo's `main` at the position `registry`, a node an mrepo by its
 unique URI (`haicc registry/local crud/read "*"`). `main` holds what is
 needed to show a link (the shortcut: the mrepo, the link's key).
-**In discussion: `continuation`** (`tasks.md`; first named
-`demo-scripts`): any command may answer with a continuation, a script
-to continue with; the terminal (the `haicc` command) runs it, each
-command after the response of the one before: "a bit like an JIT
-pipeline". A deploy asked for a script of its package answers with it:
-demos that run on their own, howtos that run. To settle, then build. Docker is fine for the first container node.
+**`continuation` is built** (part 77; `tasks.md`): a command may answer,
+beside its output, with a script to go on with; the `haicc` command
+runs it, each command after the response of the one before; a deploy
+asked for a script of its package (`--flags continuation=<script>`)
+answers with it. A simple script: no nesting, at most 100 commands, the
+terminal only. `base-component-haicc` brings `scripts/start.json`. For
+demos that run on their own: a demo package (`base-demo-haicc`) needs
+its repository created by the human. Docker is fine for the first
+container node.
 KISS: enough for the swarm demos; a further
 design round comes with the next step. A rule since (`rules.md`): deploy
 and teardown, no upgrade in place. **Next in our order: `node-mrepos`**
@@ -271,7 +275,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 76. Its notes come
+  `handover-local.md`, are current for parts 60 to 77. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent

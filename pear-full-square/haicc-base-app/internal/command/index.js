@@ -7,7 +7,7 @@ const OWN = ['sources', 'output']
 const USAGE = ['help', '--help', '-h']
 const none = name => new Failure(`no command '${name}' (haicc --help)`, 2)
 // A position written as the root: `.`, or `./` and nothing after.
-const isRoot = uri => uri.replace(/^(\.\/)+/, '') === '.' || uri.replace(/^(\.\/)+/, '') === ''
+export const isRoot = uri => uri.replace(/^(\.\/)+/, '') === '.' || uri.replace(/^(\.\/)+/, '') === ''
 
 // A request's flags: a list after a URI, after this word: that step's.
 const FLAGS = '--flags'

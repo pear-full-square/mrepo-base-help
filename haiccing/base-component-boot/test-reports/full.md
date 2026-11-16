@@ -1,6 +1,6 @@
 # Test report: haiccing/base-component-boot
 
-The package passed its `full` set: all 23 units, 313 of 313 tests and 2151 of 2151 asserts.
+The package passed its `full` set: all 23 units, 313 of 313 tests and 2170 of 2170 asserts.
 
 | | |
 |---|---|
@@ -9,10 +9,10 @@ The package passed its `full` set: all 23 units, 313 of 313 tests and 2151 of 21
 | Result | passed |
 | Units | 23 of 23 passed |
 | Tests | 313 of 313 passed |
-| Asserts | 2151 of 2151 passed |
-| Run | 2026-11-16 05:18 UTC |
+| Asserts | 2170 of 2170 passed |
+| Run | 2026-11-16 06:02 UTC |
 | Bare | v1.36.0 |
-| Content | `530c9bb8732c07fe6031cc21a511a3bc71da78803453b9487924e6df8584d552` |
+| Content | `f90e745ec3bcf2bd4c79a9480e09ba52819c8b2f876847926c358745de4444d8` |
 
 ## Units
 
@@ -23,12 +23,12 @@ The package passed its `full` set: all 23 units, 313 of 313 tests and 2151 of 21
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 5 of 5 | 74 of 74 |
+| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 5 of 5 | 79 of 79 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 9 of 9 | 82 of 82 |
-| `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 89 of 89 |
+| `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 93 of 93 |
 | `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
 | `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 13 of 13 |
-| `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 177 of 177 |
+| `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 187 of 187 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 122 of 122 |
 | `/test/modules/pear-full-square/mrepo-base-service` | passed | 3 of 3 | 15 of 15 |
 | `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 52 of 52 |

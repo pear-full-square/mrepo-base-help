@@ -17,6 +17,7 @@ is for.
 | `protocol.js` | provides protocols: their configs and actions; linked into an mrepo, its protocols are loaded by the runtime; they are offered to the outside once activated |
 | `modules/`, `package.json` | carries its own dependencies |
 | `mrepo/` | comes with an mrepo, by layers |
+| `scripts/` | has scripts: lists of commands to go on with after it is deployed, a file each (`<name>.json`), answered as the deploy's continuation when asked for by name |
 | `test/` | has tests and test sets |
 | `test-reports/` | holds the proof that its tests passed: the report of its last pre-release |
 | `<name>/` | holds a further unit, by its URI part name |

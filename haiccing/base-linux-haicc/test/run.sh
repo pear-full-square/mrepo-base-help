@@ -259,6 +259,17 @@ out=$(haicc --output registry/local crud/read '*' 2>&1)
 has "$out" '"uri":["main","registry/local","host"]' "haicc registry/local crud/read '*': the host, in the mrepo registry by its unique URI"
 has "$out" '"uri":"local/host","at":"host","how":"deployed","folder":"../local/host","package":"haiccing/base-component-haicc"' "what the install knows of it: which mrepo, linked where, how it came, where it is, what it came from"
 is "$(haicc --output host crud/read registry 2>&1)" '[]' "no registry in the host: the boot mrepo keeps it"
+# a continuation: a deploy asked for a script of its package answers with
+# it, and the haicc command goes on with it: a command after the response
+# of the one before
+out=$(haicc . boot/deploy demo base-component-haicc --flags continuation=start 2>&1); is $? 0 "haicc . boot/deploy demo base-component-haicc --flags continuation=start: the deploy, then its script, each command done"
+has "$out" '"continuation": {' "the deploy's response: its continuation, the script"
+has "$out" 'haicc demo service/initialise' "each command of it said as it would be typed, written from the deployed mrepo's place"
+has "$out" 'haicc demo service/start' "in order"
+is "$(haicc --output demo crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "the mrepo brought into service by it: its crud answering"
+out=$(haicc . boot/deploy demo-2 base-component-haicc --flags continuation=nope 2>&1 >/dev/null); has "$out" "no script: nope (haiccing/base-component-haicc has start)" "a script the package has not: refused, with those it has"
+[ ! -e "$T/home/work/mrepos/local/demo-2" ] && ok "nothing built for it" || no "nothing built for it"
+is "$(haicc --output . boot/teardown demo 2>&1)" '{"tornDown":"demo"}' "torn down again"
 haicc . boot/deploy extra-1 base-package-runtime >/dev/null 2>&1; haicc . boot/deploy extra-2 base-package-runtime >/dev/null 2>&1
 [ -d "$T/home/work/mrepos/local/extra-1/inbox" ] && [ -d "$T/home/work/mrepos/local/extra-2/inbox" ] && ok "two more deployed, each at its place" || no "two more deployed"
 is "$(haicc --output . boot/teardown "registry/local/*[starts-with(at,'extra')]" 2>&1)" '[{"tornDown":"extra-1"},{"tornDown":"extra-2"}]' "haicc . boot/teardown \"registry/local/*[starts-with(at,'extra')]\": the mrepos the query selects in the registry torn down"

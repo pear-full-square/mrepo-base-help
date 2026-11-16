@@ -11,7 +11,9 @@ the value two levels down.
 
 ## Returns
 
-- `{ output }`: the form holds an output.
+- `{ output }`: the form holds an output. With `continuation`,
+  `{ at, commands }`, when the form answers with a script to go on with
+  (anything there that is no such thing is left out).
 - `{ error }`: the form holds an error, a string on one line. An error
   wins over an output.
 - `null`: the text is not a record, or its form is not completed.

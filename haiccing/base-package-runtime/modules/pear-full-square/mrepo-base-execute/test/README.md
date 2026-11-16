@@ -13,4 +13,4 @@ The tests of mrepo-base-execute, a section per file, each test by its name.
 - a command run in the execution: its entries under its own name, its flags in force from there on
 - executed: a form completed elsewhere handed over as execute hands one; a runtime merging it first: found done
 - failed: a runtime's error in the request executing
-- exec.run: a command executed here; exec.forward: sent on, the principal waiting, returned with the response
+- exec.run: a command executed here; exec.continuation: a script answered with the output; exec.forward: sent on, the principal waiting, returned with the response

@@ -32,6 +32,14 @@ branch is squashed into its target, one commit there; a failure resets instead. 
   processed has a waiting principal. Once the request protocol has added
   the other mrepo's response to the branch, the principal is returned with
   it here.
+- **A continuation** (`exec.continuation(commands, at)`): an action
+  answers, beside its output, with a script for who asked to go on with:
+  the commands, each its parts, and the position in this mrepo they are
+  written from. One a request, at most 100 commands; none with an error.
+  Not run here: the terminal runs it, a command after the response of
+  the one before. One that comes back from a linked mrepo is returned
+  with the response, its position behind the one the command was sent
+  on at.
 - **What is not there is said with what is**: `no protocol: <name>`, with
   the mrepo's protocols; `no action: <protocol> <action>`, with the
   protocol's actions.

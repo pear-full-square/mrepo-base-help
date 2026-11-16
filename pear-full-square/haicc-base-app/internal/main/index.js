@@ -3,8 +3,8 @@ import { existsSync } from 'bare-fs'
 import { join } from 'bare-path'
 import os from 'bare-os'
 import process from 'bare-process'
-import { viewOf } from 'mrepo-base-request'
-import { command } from '../command/index.js'
+import { viewOf, CEILING } from 'mrepo-base-request'
+import { command, isRoot } from '../command/index.js'
 import { request } from '../request/index.js'
 import { unpack } from '../unpack/index.js'
 import { outcome } from '../outcome/index.js'
@@ -43,14 +43,32 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
     // a command for the mrepos: into the root mrepo's inbox, its response printed
     if (!existsSync(join(root, 'inbox'))) throw new Failure(`no boot mrepo at ${work} (haicc boot/deploy)`, 3)
     const timeout = Number(env.HAICC_TIMEOUT) > 0 ? Number(env.HAICC_TIMEOUT) : 120
-    const { text } = await request(root, c.parts, { uri: CONFIG.root.uri, reply: CONFIG.reply, timeout })
     const print = c.print ?? (env.HAICC_OUTPUT === '1' ? 'output' : env.HAICC_RAW === '1' ? 'raw' : 'record')
-    if (print === 'raw') io.out(text.replace(/\n$/, ''))
-    if (print === 'record') io.out(unpack(text, widthOf(home, io.columns?.() ?? null).width))
-    const o = outcome(text)
-    if (!o) throw new Failure('the response holds no completed form', 5)
-    if ('error' in o) throw new Failure(o.error, 1)
-    if (print === 'output') io.out(JSON.stringify(o.output))
+    // one command sent, its response printed; -> its outcome
+    const send = async parts => {
+      const { text } = await request(root, parts, { uri: CONFIG.root.uri, reply: CONFIG.reply, timeout })
+      if (print === 'raw') io.out(text.replace(/\n$/, ''))
+      if (print === 'record') io.out(unpack(text, widthOf(home, io.columns?.() ?? null).width))
+      const o = outcome(text)
+      if (!o) throw new Failure('the response holds no completed form', 5)
+      if ('error' in o) throw new Failure(o.error, 1)
+      if (print === 'output') io.out(JSON.stringify(o.output))
+      return o
+    }
+    const o = await send(c.parts)
+    // A continuation: the response says what to go on with, a script: each
+    // command sent from the position it is written at, after the response
+    // of the one before; the first that fails ends it. A simple script: a
+    // continuation answered inside one is not run. At most CEILING commands.
+    if (o.continuation) {
+      const { at, commands } = o.continuation
+      if (commands.length > CEILING) throw new Failure(`a continuation of ${commands.length} commands: not run (at most ${CEILING})`, 1)
+      for (const parts of commands) {
+        // (said as it would be typed, where records are printed for reading)
+        if (print === 'record') io.out(`haicc ${at} ${parts.join(' ')}`)
+        await send(isRoot(at) ? parts : ['haicc', at, ...parts])
+      }
+    }
     return 0
   } catch (err) {
     if (err.message) io.err(`haicc: ${err.message}`)

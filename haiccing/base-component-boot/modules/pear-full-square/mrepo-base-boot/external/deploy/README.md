@@ -24,6 +24,12 @@ in, in that order, and the child is built at `<parent>/main/<name>/`.
 `deployed` is the position as written at `main`, `<name>`; `mrepo` is
 the child's unique URI.
 
+Asked for a script of the package (the request's flag,
+`continuation=<script>`), it answers with it as its continuation: the
+script's commands, read from the package's bundle (`scripts/<script>.json`),
+written from the deployed mrepo's own place. A script the package has
+not is refused before anything is built, with those it has.
+
 What it writes in the parent:
 
 - `main/<name>/.node.json`: the child's node, an empty document.

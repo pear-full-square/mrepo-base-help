@@ -3725,3 +3725,80 @@ deployed and torn down by one query into it). Nothing left running.
 A redeploy keeps its link's key: the same link, its mrepo built again;
 so `main` is the same after it, and its audit names the link's record
 and the registry's node only.
+
+## 77. `continuation`: a command answers with a script to go on with; the terminal runs it (2026-11-16)
+
+For demos that run on their own, and howtos that run. Raised once the
+registry was built ("now we can use this to deploy host and a swarm
+with some (bare) nodes"): "What we will need for the demos (that run on
+their own) is a script of commands that gets executed on boot." Shaped
+together, in three steps:
+
+- Ours first: the deployed mrepo runs its script itself. Answered:
+  "Can you pace the requests from the response seen in the terminal?
+  Read the script from the bundle and execute it in the terminal, I
+  think that is better. So adding the post-deploy flag returns the
+  script in the response and the terminal uses it to execute the script
+  from there."
+- Its name and its reach: "then we should not call it post deploy, it
+  is more something like 'continuation'. And it can be used in general.
+  For instance any command may return with a continuation, i.e. now
+  continue executing this script. It is a bit like an JIT pipeline."
+- Its limits, for now: "forget nesting of continuations for now. We
+  just do a simple script. terminal executes. ceiling 100."
+
+What is built:
+
+- **A response may hold a continuation** (`mrepo-base-request`:
+  `complete`, `continuationOf`, `CEILING`), beside its output, never
+  with an error: `{ at, commands }`: the commands, each its parts, at
+  most 100, and the position they are written from.
+- **Any action can answer with one** (`mrepo-base-execute`):
+  `exec.continuation(commands, at)`, one a request. Not run by the
+  mrepo. One that comes back from a linked mrepo is returned with the
+  response, its position behind the one the command was sent on at.
+- **The deploy answers with a script of its package** (`mrepo-base-boot`),
+  asked for by the request's flag, `continuation=<script>`: read from
+  the package's bundle (`scripts/<script>.json`), written from the
+  deployed mrepo's own place. A script the package has not is refused
+  before anything is built, with those it has.
+- **The terminal runs it** (`haicc-base-app`): the `haicc` command sends
+  each command from the position it is written at, after the response
+  of the one before, and prints each response as the first; where
+  records are printed for reading, each command is said first, as it
+  would be typed. The first that fails ends it, with its exit code. A
+  continuation answered inside one is not run; one of more than 100
+  commands is refused.
+- **A first script**: `base-component-haicc` brings `scripts/start.json`
+  (`service/initialise`, `service/start`): `haicc . boot/deploy host
+  base-component-haicc --flags continuation=start` deploys the host and
+  brings it into service. A package's `scripts/` is a part of the
+  package structure now (`package-docs-template`).
+
+**Ours, as built**: a script is a JSON list of commands, each a list of
+its parts, as a request's command is; the commands are written from the
+deployed mrepo's place, so a script does not depend on the name it is
+deployed at.
+
+**Not in it**: a continuation run by an mrepo (a script used "from
+host by using the registry to target the mrepo directly": later);
+nesting; a demo package (`base-demo-haicc`: its repository is to be
+created); the scripts shown by the help.
+
+**Validated**: the modules' tests (`mrepo-base-request` 16 tests, 187
+asserts; `mrepo-base-execute` 10, 93: an action's continuation, one
+through a shortcut; `mrepo-base-boot` 5, 79: a script of the package,
+one it has not; `haicc-base-app` 17, 177: a script run in order, ended
+at a failure, no nesting, the ceiling). Every package's pre-release,
+each passing; those it changed: `package-docs-template` 7 units, 47
+tests, 274 asserts; `package-docs-mrepo` 8, 47, 274;
+`base-component-haicc` 8, 53, 312; `base-package-service` 14, 242,
+1448; `base-package-runtime` 22, 307, 1976; `base-package-boot` 23,
+318, 2101; `base-component-boot` 23, 313, 2170; `base-app-haicc` 23,
+331, 2216. `tools/bare tools/release.js --strict`: exit 0, every report
+current. `tools/bare tools/code-check.js`: no problems. The READMEs:
+246 in the sources, no problems. `base-component-boot`'s `validate`
+twice. The `haicc` test, 202 of 202 (8 more checks: a deploy with
+`continuation=start`, its script said and run in order, the mrepo in
+service after it; a script the package has not, refused, nothing
+built). Nothing left running.

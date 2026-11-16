@@ -27,6 +27,7 @@ The tests of haicc-base-app, a section per file, each test by its name.
 
 ## `main.test.js`
 
+- a continuation: the response says what to go on with; each command sent after the response of the one before; the first that fails ends it
 - the usage; not a command: exit 2, said on stderr
 - nothing booted: an mrepo command and the teardown say so, exit 3; a deploy without the boot component in the sources
 - haicc sources: printed a line a source

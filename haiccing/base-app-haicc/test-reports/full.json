@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-app-haicc",
-  "content": "e738ac9b7fa3543812325f86c5aa28656455a3a9c04f07b9ae7558ecb362d5e8",
+  "content": "243ec06f29eb99ae0c70af60a7fd2dcb4fab84b2748cfd11f65e9626071375c6",
   "bare": "v1.36.0",
-  "date": "2026-11-16T05:07:39.468Z",
+  "date": "2026-11-16T06:04:30.064Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -75,12 +75,12 @@
       "unit": "/test/modules/pear-full-square/haicc-base-app",
       "ok": true,
       "tests": {
-        "passed": 16,
-        "total": 16
+        "passed": 17,
+        "total": 17
       },
       "asserts": {
-        "passed": 163,
-        "total": 163
+        "passed": 177,
+        "total": 177
       },
       "failures": []
     },
@@ -105,8 +105,8 @@
         "total": 10
       },
       "asserts": {
-        "passed": 89,
-        "total": 89
+        "passed": 93,
+        "total": 93
       },
       "failures": []
     },
@@ -144,8 +144,8 @@
         "total": 16
       },
       "asserts": {
-        "passed": 177,
-        "total": 177
+        "passed": 187,
+        "total": 187
       },
       "failures": []
     },

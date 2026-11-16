@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-16 by the cloud session (parts 60 to 76), for the local agent (a Linux
+Updated 2026-11-16 by the cloud session (parts 60 to 77), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,7 +93,7 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 76, and `handover-next.md`. Before your last
+`readme.md`, parts 30 to 77, and `handover-next.md`. Before your last
 run (`6ebec98`): every package has its own tests and a test report
 (parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
 relative (61, 62); `crud` makes structure in `main`, the shortcuts are
@@ -133,12 +133,16 @@ deployed it. The boot mrepo keeps the mrepo registry (76), a position
 in its `main`: `haicc registry/local crud/read "*"` lists the local
 mrepos, and several are torn down by a query there (`haicc .
 boot/teardown "registry/local/*"`). An mrepo's own record of what it
-links is its `links` layer, not for the outside. `haicc boot/teardown` now stops every runtime of the
+links is its `links` layer, not for the outside. And a command may
+answer with a continuation (77), a script the `haicc` command goes on
+with: `haicc . boot/deploy host base-component-haicc --flags
+continuation=start` deploys the host, then initialises and starts its
+service, each command shown as it runs. `haicc boot/teardown` now stops every runtime of the
 install, a node inside the host too. An install that is there is not
 migrated (our rule: deploy and teardown, no upgrade in place): tear
 down with the old `haicc` first, then install and deploy anew. To try
 by hand with the human. The `haicc`
-test has 194 checks now. New
+test has 202 checks now. New
 for you: `tools/commit-bench.js` (the prompt's step 6), the commits
 measured on the human's laptop. Known and not
 built: our packages are not published, so `haicc sources download`

@@ -35,7 +35,8 @@ haicc host crud/read swarms --flags log=verbose
   command's URI is that command's.
 - **A flag that is none**, or a value its flag does not take: ignored,
   with a warning in the request's log.
-- The flags there are: `log`, below, and `layer`.
+- The flags there are: `log`, below, `layer`, and `continuation`
+  ("A continuation", further down).
 
 ### The layer
 
@@ -90,6 +91,28 @@ passes one handler into `pending/default`; the inbox itself checks nothing.
 - **Before the mrepo is operational**, the runtime takes nothing from the
   inbox: its own requests come first, such as `help/extract`. The
   inbox's records wait.
+
+## A continuation
+
+A command may answer, beside its output, with a script to go on with:
+
+```json
+{ "output": { "deployed": "host" },
+  "continuation": { "at": "host", "commands": [["service/initialise"], ["service/start"]] } }
+```
+
+- **`commands`**: each its parts, as a request's command; at most 100.
+  **`at`**: the position they are written from.
+- **The terminal runs it**, not an mrepo: the `haicc` command sends each
+  one from that position, after the response of the one before, and
+  ends at the first that fails. A simple script: a continuation
+  answered inside one is not run.
+- **Through a shortcut** it comes back with the response, its position
+  behind the one the command was sent on at.
+- **Who answers with one**: an action, when it has something to go on
+  with. `boot/deploy` does when asked, by a flag, for a script of the
+  package it deploys: `haicc . boot/deploy host base-component-haicc
+  --flags continuation=start`.
 
 ## Commands sent on
 
