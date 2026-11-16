@@ -217,13 +217,26 @@ rest of the line (`--` in a feedback text would close the list); every
 flag carried down a chain (right for `log`, not for `layer` or a
 rewrite); flags not documented, so help cannot list them.
 
-**Proposed** (ours): a flag unit that parses and resolves only.
+**Settled** (the human, asked whether a flag is declared by its package
+in `protocol.js`): "I think a folder that contains a subfolder for each
+flag, and all the required info within that subfolder. Then flags can be
+independently added."
 
-- A flag declared by the package that owns it, in its `protocol.js`
-  beside its actions: its values, its kind, its scope (`log`, `layer`:
-  the request's own package). The runtime collects them from the linked
-  packages as it collects protocols: the flags there are depend on where
-  one stands.
+**Proposed** (ours): a flag unit that parses and resolves only: it
+finds a flag's folder and applies it by kind and scope, and knows no
+flag by name.
+
+- A flag's folder, `flags/<name>/`, the shape of a documented method:
+  `index.js` its declaration (kind, scope, values, a tail or not) and
+  its handling (how a modifier changes the request; the command a
+  rewrite makes); `README.md` what it does, with an example, extracted
+  into help, checked as a method is.
+- The folder in the module that owns the flag, beside `external/` and
+  `internal/`: `mrepo-base-request/flags/log/`, `flags/layer/`;
+  `mrepo-base-boot/flags/continuation/`; `mrepo-base-help/flags/help/`;
+  the haici module's `flags/feedback/`. The runtime collects them from
+  the linked packages as it collects protocols: a flag is there only
+  where its package is, at its version.
 - Kinds: a modifier (how a request is handled: `log`, `layer`, `guide`);
   an option, given to one action (`continuation`); a rewrite, the
   command turned into another protocol's, nothing executed (`help` into
