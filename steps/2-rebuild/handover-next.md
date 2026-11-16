@@ -355,6 +355,13 @@ with the human first, unless the task says it is ours ("Left to us").
 
 **With the human, open**
 
+- **Two repositories to create** (part 79), then pushed from here:
+  `pear-full-square/mrepo-base-container`
+  (`sh tools/products.sh mrepo-base-container`) and
+  `haiccing/base-package-container`
+  (`sh tools/packages.sh -m "..." base-package-container`). Every other
+  repository that changed in part 79 is pushed (three modules, nine
+  packages).
 - Testing by hand on the local machine: the local agent built and
   tested `main` as of parts 65 and 66 (`c8200f7`, 2026-11-15): every
   step passed (the `haicc` test 152 of 152 three times, all twelve
