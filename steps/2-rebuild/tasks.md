@@ -115,7 +115,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
 | P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | built, parts 75 and 76 (the links layer, an mrepo's own; the mrepo registry, the boot mrepo's); the rest for the next design round |
-| | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `haici` | queued for building (2026-11-16; `help.md` the design) |
+| | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `howto` and `haici` | queued for building (2026-11-16; `help.md` the design) |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -1403,7 +1403,7 @@ simple, this is just POC." **Built**: part 81.
   `container/status`), for what ended without a command.
 - The first demo beyond the log.
 
-## `help-mvp`: the flag unit, the help and feedback flags, a first `haici`
+## `help-mvp`: the flag unit, the help and feedback flags, a first `howto` and `haici`
 
 The first build of the design in `help.md` (help, howto, haici), queued
 for building (the human, 2026-11-16: "you queue this for building if you
@@ -1423,6 +1423,11 @@ think the initial MVP is fully specified"). Not built yet.
   would have run.
 - `haici`, a protocol of its own (human ai continuous improvement),
   starts from the request log; KISS: "don't do too much up front".
+- `howto` in it too (the human, on the task as first queued without it:
+  "and howto aswell no?"): a protocol of its own, the entry point to
+  scope an activity; activity words "we figure that out as we are
+  setting it up"; a guided run's details "as we start to create and run
+  them".
 - "wrong flag or issues with underlying functionality don't throw
   errors but warnings."
 - A flag not recognised: "the command runs if it can, just warning on
@@ -1497,6 +1502,34 @@ think the initial MVP is fully specified"). Not built yet.
   `help` is). **The human creates the two repositories**
   (`haiccing/base-package-haici`, `pear-full-square/mrepo-base-haici`)
   before they are pushed.
+- **`howto`**: a new package and module, `base-package-howto` and
+  `mrepo-base-howto` (from the template; its own test, `mounted`);
+  linked into both components, activated by a `boot` hook, its layer
+  extracted where help's is (`howto/extract`, the same hooks). KISS:
+  - a how-to is a folder in a package, `howto/<name>/`, its README: the
+    title, the one-liner, a line `Activity: <word>`, and one `sh` block:
+    each command as it is typed, the line above it a `#` comment saying
+    why; the last command the check that proves it worked;
+  - `howto/extract`: the `howto` layer from the linked packages'
+    `howto/` folders (an index by activity, each how-to's steps), the
+    READMEs checked as any README (they are in the help layer too);
+  - `howto/get . [<activity> | <activity>/<name>]`, `get` the default
+    action: nothing, the activities here, each with its how-tos'
+    one-liners; an activity, its how-tos; one, its steps with their why
+    and the command to run it. A word that is no activity here names
+    those that are (a warning, not an error);
+  - `howto/run . <activity>/<name>`: answers with the how-to's steps as
+    a continuation script (part 77): the terminal runs them, stopping at
+    the first that fails. Not guided yet: each step's help before it
+    comes with the guided run's details;
+  - the first how-tos, written from the steps the `haicc` test runs
+    today: in `base-component-haicc`, a node deployed and in service in
+    the host (activity `node`), a node's replica in a container (activity
+    `container`); in `base-component-boot`, the host deployed and
+    started (activity `host`). Each run in the `haicc` test with
+    `howto/run`, so a how-to that stops working fails there.
+  - **The human creates the two repositories**
+    (`haiccing/base-package-howto`, `pear-full-square/mrepo-base-howto`).
 - **Tests**: the flag unit's own (each kind and scope, the tail, the
   strict cases, a folder not listed); `help/command` and
   `haici/feedback` in their packages' `mounted` tests; the `haicc` test
@@ -1505,8 +1538,9 @@ think the initial MVP is fully specified"). Not built yet.
   with `layer=request`, an unknown flag not run (exit 1, the warning),
   through a chain (`haicc host haicc node-1 ... --flags help`).
 
-**Not in it** (later, each when the work reaches it): the `howto`
-protocol and guided runs; an action not implemented in code calling hc
+**Not in it** (later, each when the work reaches it): guided runs (each
+step's help before it, a run resumed); `haicc howto boot` as a short form
+at the machine level; an action not implemented in code calling hc
 with a prompt; `haici`'s sections from the request log; the help of a
 position (`haicc <uri> help/get` describing what is there); flags on
 the machine level's commands (`haicc boot/deploy`, `haicc sources`);

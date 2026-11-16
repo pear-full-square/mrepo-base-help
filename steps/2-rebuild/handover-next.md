@@ -75,8 +75,9 @@ protocols, `help` (static and dynamic), `howto` (the entry point by
 activity), `haici` (human ai continuous improvement, from the request
 log), headless Claude their user, their generator and the filler of what
 is not built. Its first build is queued, `help-mvp` (`tasks.md`): the
-flag unit, the help and feedback flags, a first `haici`; the human
-creates `haiccing/base-package-haici` and
+flag unit, the help and feedback flags, a first `howto` and `haici`;
+the human creates `haiccing/base-package-howto`,
+`pear-full-square/mrepo-base-howto`, `haiccing/base-package-haici` and
 `pear-full-square/mrepo-base-haici` first.
 
 **Pick up here** (2026-11-16, after part 81; everything in `main`,
