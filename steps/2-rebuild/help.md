@@ -237,8 +237,12 @@ flag by name.
   its handling (how a modifier changes the request; the command a
   rewrite makes); `README.md` what it does, with an example, extracted
   into help, checked as a method is.
-- A flag whose target is not there (`help` where the `help` protocol
-  is not active) says so, naming what is missing; never ignored.
+- **A rule** (the human): "wrong flag or issues with underlying
+  functionality don't throw errors but warnings." A flag that is not
+  one, or whose target is not there (`help` where the `help` protocol is
+  not active): a warning in the answer, naming what is missing; nothing
+  thrown. (Ours, to confirm: a rewrite whose target is missing still
+  runs nothing of the command.)
 - Kinds: a modifier (how a request is handled: `log`, `layer`, `guide`);
   an option, given to one action (`continuation`); a rewrite, the
   command turned into another protocol's, nothing executed (`help` into
@@ -250,3 +254,26 @@ flag by name.
   (`feedback`).
 - Each flag documented as an action is, a README in its module: help
   lists the flags there are here.
+
+## Our proposals answered (the human, 2026-11-16)
+
+Put as a list of seven, for a go or for discussion:
+
+1. **The answer's form**: "answer form can be natural language - what
+   do you prefer as user?" Ours, as the user hc is: natural language,
+   short; the commands to go on with written exactly as they are typed;
+   what is acted on (a warning, an error, the request's id) in a fixed
+   place; the record as it is with `--raw`, for code.
+2. **Activity words**: "we figure that out as we are setting it up".
+3. **A guided run**: "we will do the details as we start to create and
+   run them, don't do too much up front: KISS haici".
+4. **An action not implemented in code**: "an action that is not code
+   implemented call hc with a prompt".
+5. **Where haici's findings go**: "haici will feed back into the hdlc -
+   the haicc delivery life cycle - the development platform". (HDLC was
+   the haicc (software) development lifecycle in `tasks.md`; now the
+   haicc delivery life cycle.)
+6. **A finding rooted where it belongs** (the package that owns what it
+   is about): "yes".
+7. **The feedback command run where the command would have run** (its
+   last part): "yes, added to the end".
