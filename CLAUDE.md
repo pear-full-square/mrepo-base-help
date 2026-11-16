@@ -67,7 +67,8 @@ the work reaches it.
   human works with us, what is done, what is open, the roadmap. Tasks
   discussed and waiting to be built: `steps/2-rebuild/tasks.md`. Designs
   in discussion: `steps/2-rebuild/xpath.md` (XPath),
-  `steps/2-rebuild/help.md` (help, howto, haici).
+  `steps/2-rebuild/help.md` (help, howto, haici). The package review's
+  findings: `steps/2-rebuild/review.md`.
 
 ## Documentation
 
