@@ -41,7 +41,8 @@ yet, none has a go.
 registry design + mrepo as shortcut, then swarm node creation (container
 mrepo). What else on that list?"):
 
-1. **Cleanup**: the open tasks: `xpath-first`'s decisions confirmed,
+1. **Cleanup** (done, parts 70 to 74): the open tasks: `xpath-first`'s
+   decisions confirmed (part 74),
    `command-line-findings` (built, parts 70, 71),
    `request-layer-access` (built, part 72), `inbox-watcher` (built,
    part 73: "inbox-watcher: yes"). `teardown-cascade` is not cleanup: "no: We
@@ -104,7 +105,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 3 | `rest-removed` | the rest actions removed | built, part 64 |
 | 4 | `request-train-repairs` | a removed branch's folders, the squash into `main` | built, part 65 |
 | 5 | `logging` | flags, three levels, the request's metrics and audit | built, part 66 |
-| 6 | `xpath-first` | XPath phase 1: the engine, `crud` and `haicc` on it | built, parts 67 to 69; decisions to confirm |
+| 6 | `xpath-first` | XPath phase 1: the engine, `crud` and `haicc` on it | built, parts 67 to 69; its decisions gone through together, part 74 |
 | | `data-names-in-queries` | a document's key in its URI form in a query | built, part 69 |
 | 7 | `inbox-watcher` | the inbox watched by a file watcher, not polled | built, part 73 |
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |

@@ -1,6 +1,6 @@
 # For the local agent: what the release is now
 
-Updated 2026-11-16 by the cloud session (parts 60 to 73), for the local agent (a Linux
+Updated 2026-11-16 by the cloud session (parts 60 to 74), for the local agent (a Linux
 x86-64 machine with git, curl and tar; no Node.js needed). The task itself
 is in `prompt-local.md`; this is its background. The earlier releases (a
 setup file, three signed bundles, an executable) are in `local-run.md`,
@@ -93,7 +93,7 @@ GitHub release; it can only push commits. So:
 
 ## Where things stand
 
-`readme.md`, parts 30 to 73, and `handover-next.md`. Before your last
+`readme.md`, parts 30 to 74, and `handover-next.md`. Before your last
 run (`6ebec98`): every package has its own tests and a test report
 (parts 47 to 59); the `haicc` command is a Bare app (60); URIs are
 relative (61, 62); `crud` makes structure in `main`, the shortcuts are
@@ -123,8 +123,11 @@ are reachable (72): `main` is the default layer, a flag changes it:
 layer=request`. And the inbox is watched (73): a command is taken in as
 it is written, a pass follows a pass that moved something at once; the
 `haicc` test should take about a third less time than before (here 142
-s, then 93 to 104). To try by hand with the human. The `haicc`
-test has 184 checks now. New
+s, then 93 to 104). In a query a list is a child that repeats and a
+position counts from 1 (74: `tags[2]`, `swarms/*[1]`, `[last()]`); a
+name in a filter is lowercase, by the URI's rules (`public-key`). To
+try by hand with the human. The `haicc`
+test has 186 checks now. New
 for you: `tools/commit-bench.js` (the prompt's step 6), the commits
 measured on the human's laptop. Known and not
 built: our packages are not published, so `haicc sources download`

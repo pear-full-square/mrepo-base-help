@@ -613,12 +613,13 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
 | filter | a leaf further inside, by a path | `[value/value/uri='main/host']` | 1 |
 | filter | joined: `and`, `or`, `not()` | `[size>2 and name='sam']` | 1 |
 | filter | several in a row | `*[size>2][name]` | 1 |
-| filter | by position | `*[1]`, `*[last()]`, `[position()<3]` | 2 (needs an order) |
+| filter | by position | `*[1]`, `*[last()]`, `tags[2]` | 1 (part 74: alone in its filter; the order is the tree's own, a list's) |
+| filter | by position, joined or computed | `[position()<3]`, `[1 and name]` | 2 |
 | filter | a path in it that crosses a shortcut | `[nodes/*/state='started']` | 3 |
 | set | the union of two paths | `a/* \| b/*` | 2 |
 | function | `name()` | `*[name()='swarm-1']` | 1 |
 | function | `starts-with()`, `contains()` | `[starts-with(name,'s')]` | 1 |
-| function | `count()`, `last()`, `position()` | `count(swarms/*)` | 2 |
+| function | `count()`, `position()`; `last()` beyond `[last()]` | `count(swarms/*)` | 2 |
 | function | the other string ones: `concat`, `substring`, `substring-before`, `substring-after`, `string-length`, `normalize-space`, `translate`, `string` | | 3 |
 | function | numbers: `number`, `sum`, `floor`, `ceiling`, `round`; `+ - * div mod` | `[size*2>10]` | 3 |
 | function | booleans: `true()`, `false()`, `boolean()` | | 3 |
@@ -636,6 +637,10 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
   to 17 ms; a filter over 1,000 nodes just under a second) are listed
   there. A document's key is written in its URI form (part 69; the
   human: "camelCase becomes camel-case"): `[owner/public-key='k1']`.
+  A list in a document is a child that repeats, a position counts from
+  1 (part 74: "why not xpath positions? index is xpath as well"); a
+  name in a filter is a URI's, lowercase ("URIs must be valid by URI
+  rules": refused by the URI's validation, not by the query).
 - **Standard only**: our one form outside it, `*` in a quoted value as
   a wildcard (`[name='s*']`), is not built: `starts-with` and `contains`
   say it. The human's first example in standard form:

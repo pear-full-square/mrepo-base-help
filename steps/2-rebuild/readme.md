@@ -3534,3 +3534,46 @@ report current. `tools/bare tools/code-check.js` and the READMEs: no
 problems. `base-component-boot`'s `validate` four times, its `boot` test
 passing each (the loop changed: a race would show here). The `haicc`
 test, 184 of 184, three times. Nothing left running.
+
+## 74. `xpath-first`, its decisions gone through together: lists and positions as XPath has them; a filter's names by the URI's rules (2026-11-16)
+
+The decisions made alone while building parts 67 to 69, put to us both
+(six points), answered one by one.
+
+- **Kept** ("yes"): what `haicc` answers goes by the URI's form (one
+  position named: the command's value; a URI that selects: a list of
+  `{ at, value }`); nothing selected is an empty list, a position named
+  that is not there an error; how values compare.
+- **One position failing**: "there shouldn't be a commit yet, change
+  only in request branch". That is how it is, checked: an execution
+  writes on its own branches only; a failure discards them, nothing is
+  squashed into the target. Nothing to change.
+- **Lists** (ours was an index as a name, from 0: `tags/1`): "why not
+  xpath positions? index is xpath as well. The document internally can
+  have any type of structure navigated by xpath." Built (`mycelium-xpath`):
+  a list in a document is a child that repeats, as XPath sees one. Its
+  key names every item, in order (`tags`), a position picks one
+  (`tags[2]`), and an item's path says its position (`.../tags[2]`): a
+  path found is itself the query for it. In a filter a list holds for
+  any of its items (`[value/uri='host']`).
+- **A position** is with it, in the tree as well: `[n]`, from 1, and
+  `[last()]`, alone in a filter: the n-th of the nodes the step
+  selected under the same parent, in the order they came (the tree's
+  own order, names sorted; a list's). It reads nothing. `position()`,
+  and a position joined with something else, stay for phase 2.
+- **A key written as stored in a filter** (`publicKey`): "URIs must be
+  valid by URI rules"; "6 is a URI validation error, not an xpath
+  issue." Built in `mycelium-uri`, the URI's validation, where a URI
+  enters: what is no quoted value in a filter is written by the URI's
+  rules, lowercase (`public-key`); a capital or `_` there is refused as
+  a bad filter of the URI. The engine is not touched for it.
+
+**Validated**: the modules' tests (`mycelium-xpath` 21 tests, 141
+asserts; `mycelium-uri` 21, 195; `mrepo-base-xpath` 5, 49;
+`mrepo-base-crud` 9, 82). Every
+package's pre-release, each passing (all twelve carry `mycelium-uri`).
+`tools/bare tools/release.js --strict`: exit 0, every report current.
+`tools/bare tools/code-check.js` and the READMEs: no problems.
+`base-component-boot`'s `validate` twice. The `haicc` test, 186 of 186
+(2 more checks: a position in the tree, a name in a filter that is no
+URI's refused as a URI). Nothing left running.

@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 73). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 74). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -17,7 +17,9 @@ on it: task 6 built; 69 a document's key in a query in its URI form; 70
 lines, `haicc output`; 71 a flag list closed by `--` or the end of the
 command, nothing else; 72 `request-layer-access`: `main` the default
 layer, `layer=<name>`, a record read as its document; 73
-`inbox-watcher`: a pass made when something arrives, not on a clock).
+`inbox-watcher`: a pass made when something arrives, not on a clock; 74
+`xpath-first`'s decisions gone through together: lists and positions as
+XPath has them, a filter's names by the URI's rules).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -196,11 +198,12 @@ not acted on.
 
 **`command-line-findings` (task 8) is built** (parts 70 and 71): the human's
 three findings from the manual test. `inbox-watcher` (task 7) is built
-too (part 73). **The cleanup is done but for one thing**: the decisions
-made while building `xpath-first` (parts 67 to 69), to go through
-together. `teardown-cascade` is not cleanup: it goes with
-`mrepo-registry` ("that is a better place to do 'bulk teardown'").
-Then the order of work: `mrepo-registry`, the registry's design first.
+too (part 73), and the decisions made while building `xpath-first` are
+gone through together (part 74). **The cleanup is done.**
+`teardown-cascade` is not cleanup: it goes with `mrepo-registry` ("that
+is a better place to do 'bulk teardown'"). **Next in the order of work:
+`mrepo-registry`, the registry's design first**, in discussion, before
+anything is built.
 
 **Then, the human's priority: swarm nodes up and running** ("The
 roadmap", item 2): a command at a deeper position (the execution's
@@ -240,7 +243,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 73. Its notes come
+  `handover-local.md`, are current for parts 60 to 74. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent
