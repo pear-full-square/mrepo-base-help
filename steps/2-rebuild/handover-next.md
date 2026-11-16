@@ -74,7 +74,10 @@ container. Without a daemon those tests fail, they do not skip.
 protocols, `help` (static and dynamic), `howto` (the entry point by
 activity), `haici` (human ai continuous improvement, from the request
 log), headless Claude their user, their generator and the filler of what
-is not built. Nothing of it built.
+is not built. Its first build is queued, `help-mvp` (`tasks.md`): the
+flag unit, the help and feedback flags, a first `haici`; the human
+creates `haiccing/base-package-haici` and
+`pear-full-square/mrepo-base-haici` first.
 
 **Pick up here** (2026-11-16, after part 81; everything in `main`,
 `execute/main` level with it, every repository pushed, the two new ones
