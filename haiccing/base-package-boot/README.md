@@ -5,14 +5,14 @@ The boot protocol: it deploys, tears down and redeploys the mrepos linked in an 
 An mrepo that links it can deploy others. A deployed mrepo is built from
 a target package's list, placed by its unique URI beside the others
 (`<work>/mrepos/local/host`), gets its own runtime, is linked at its
-position by a shortcut, and is recorded in this mrepo's `registry`
+position by a shortcut, and its link is recorded in this mrepo's `links`
 layer, which the package brings. The first mrepo of a host, the boot mrepo,
 is put in place by `haiccing/base-component-boot`, which links this
 package.
 
 | | |
 |---|---|
-| [mrepo/](mrepo/) | its part of an mrepo's structure: the registry layer |
+| [mrepo/](mrepo/) | its part of an mrepo's structure: the links layer |
 | [test/](test/) | its tests: its protocol as mounted, and the generic ones |
 | [test-reports/](test-reports/) | the report of its last pre-release |
 | [modules/](modules/) | its code, assembled: ours and the third-party code |
@@ -36,32 +36,28 @@ haicc . boot/teardown host
 
 ## How to
 
-See what is deployed, and tear several down at once. The registry is a
-layer of nodes, an entry an mrepo by its unique URI; it is read with the
-flag that names the layer, and a query selects in it:
+See what the install has deployed, and tear several down at once. The
+boot mrepo keeps the mrepo registry in its `main`, at the position
+`registry`: a node an mrepo it deployed, by its unique URI.
 
 ```
 haicc . boot/deploy host base-component-haicc
-haicc . crud/read "local/*" --flags layer=registry
-haicc . crud/read "local/*[runtime/pid]" --flags layer=registry
-haicc . boot/teardown "local/*" --flags layer=registry
+haicc registry/local crud/read "*"
+haicc . crud/read "registry/local/*[runtime/pid]"
+haicc . boot/teardown "registry/local/*"
 ```
 
-The first deploys the host; the second lists every mrepo this one
-deployed, each with where it is on this machine, the package it came
-from and what runs it; the third only those with a runtime; the last
-tears down every one the query selects. An mrepo's own children are in
-its own registry: `haicc host crud/read "local/*" --flags layer=registry`.
-A node is torn down before its host.
-
-A target is needed: an mrepo cannot deploy or tear down itself. A position
-that exists locally, as data in `main`, cannot be a target.
+The first deploys the host; the second lists the local mrepos, each
+with where it is on this machine, the package it came from and what
+runs it; the third only those with a runtime; the last tears down every
+one the query selects. A node an mrepo deployed is torn down before that
+mrepo; `haicc boot/teardown` stops every runtime of the install.
 
 ## Package
 
 - `protocol.js`: the `boot` protocol, its config and its actions, from
   `mrepo-base-boot`.
 - `main.js`: the dispatcher, the bundle's main, generated.
-- `mrepo/`: its part of an mrepo's structure, the `registry` layer.
+- `mrepo/`: its part of an mrepo's structure, the `links` layer.
 
 Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

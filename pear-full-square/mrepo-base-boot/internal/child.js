@@ -7,13 +7,18 @@
 //   folder    the same, relative to this mrepo's own folder
 //   node      its node's document, in main: main/<name>/.node.json
 //   links     its shortcuts, in main beside it: main/<name>/.shortcuts.json,
-//             a list; the child is one entry, { mrepo }: only the link
+//             a list; the child is one entry, { mrepo, link }: what is
+//             needed to show the link: which mrepo, and the link's key
 //   local     what is local to this machine about it (where it is, the
-//             position that links to it, the package it was deployed
-//             from, the packages placed, its layers, its runtime's
-//             process): its entry in the registry layer, a node by its
-//             unique URI: registry/<swarm>/<name>/.node.json; main
-//             replicates, this does not
+//             position that links to it, how it came about, the package
+//             it was deployed from, the packages placed, its layers, its
+//             runtime's process): its link's record in the links layer,
+//             by the link's key: links/<key>.json (local(key): its path);
+//             main replicates, this does not
+//   registry  its node in the mrepo registry, in main, by its unique URI:
+//             main/registry/<swarm>/<name>/.node.json (swarm: its
+//             swarm's node above it); written where registers() says
+//             this mrepo keeps one: the boot mrepo
 //   mrepo     its unique URI: in its parent's swarm, <swarm>/<name>
 //   recorded  its link and what is local, as one record; null: not deployed
 //   exists    whether a node is there already without being this link:
@@ -24,7 +29,7 @@
 import { join, dirname, relative } from 'bare-path'
 import { segmented, joined, within, ROOT } from 'mycelium-uri'
 import { MREPOS } from 'mrepo-base-request'
-import { shortcutOf, shortcutsAt, registered, entryOf, uriOf } from 'mrepo-base-xpath'
+import { shortcutOf, shortcutsAt, linked, linkPath, registryOf, uriOf, REGISTRY } from 'mrepo-base-xpath'
 
 export const NODE = '.node.json'
 
@@ -41,21 +46,24 @@ export function child (exec, segments) {
   // placed by its unique URI, side by side with the others under the work
   // folder's mrepos/ (beside its parent, where there is no work folder)
   const placed = join(exec.runtime.work ? join(exec.runtime.work, MREPOS) : dirname(dir), mrepo)
-  const local = entryOf(mrepo)
-  const linked = async () => (await shortcutsAt(exec, at)).find(l => l.mrepo === mrepo) ?? null
-  const exists = async () => (await exec.select(`main/${at}`)).length > 0 && !(await linked())
+  const shortcut = async () => (await shortcutsAt(exec, at)).find(l => l.mrepo === mrepo) ?? null
+  const exists = async () => (await exec.select(`main/${at}`)).length > 0 && !(await shortcut())
   exec.log('debug', 'child', { at, mrepo, dir: placed })
   return {
     name: at,
     at,
     dir: placed,
-    // (as the registry says it: relative to this mrepo's own folder)
+    // (as its link's record says it: relative to this mrepo's own folder)
     folder: relative(dir, placed),
     node: `main/${at}/${NODE}`,
     links: shortcutOf(at),
-    local,
+    local: linkPath,
     mrepo,
-    recorded: async () => { const l = await linked(); return l ? { ...l, ...(await registered(exec, mrepo) ?? {}) } : null },
+    // (the mrepo registry: there where main has the node `registry`: the boot mrepo)
+    registry: `${registryOf(mrepo)}/${NODE}`,
+    swarm: `${registryOf(mrepo.split('/')[0])}/${NODE}`,
+    registers: async () => (await exec.find(`main/${REGISTRY}/${NODE}`)) !== null,
+    recorded: async () => { const l = await shortcut(); return l ? { ...l, ...(await linked(exec, l.link) ?? {}) } : null },
     exists,
     refuse: async () => { if (await exists()) throw new Error(`${at} exists locally: the boot protocol cannot target it`) }
   }

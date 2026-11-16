@@ -1,4 +1,0 @@
-{
-  "mode": "atomic",
-  "description": "The registry: the mrepos this mrepo deployed, an entry each by its unique URI: where it is on this machine, what it came from, what runs it."
-}

@@ -30,14 +30,15 @@ linked at that position. Its sources are beside its document:
 
 ```
 /main/host/.node.json                 {}
-/main/host/.shortcuts.json            [{ "mrepo": "local/host" }]
+/main/host/.shortcuts.json            [{ "mrepo": "local/host", "link": "<key>" }]
 ```
 
-- **A list**: each entry a source, by its unique URI. One is in use: a
-  child deployed there.
-- **Only the link**: nothing that is local to a machine. `main`
-  replicates; what the deploying mrepo knows about the child, the package
-  it came from and its runtime's process, is in its runtime layer.
+- **A list**: each entry a source, by its unique URI, with its link's
+  key. One is in use: a child deployed there.
+- **What is needed to show the link**, nothing that is local to a
+  machine. `main` replicates; what the deploying mrepo knows about the
+  child, where it is, the package it came from and its runtime's
+  process, is in its [links](../links/) layer, by the link's key.
 - **Managed by the boot protocol**: `boot/deploy` makes the node and its
   link, `boot/teardown` removes both. Deleting the node with `crud`
   removes the link, not the mrepo it leads to.
@@ -59,10 +60,11 @@ position is a shortcut when its node has sources.
   line, its stars and brackets being the shell's too.
 
 - **Where a shortcut leads on this machine** is read from the
-  [registry](../registry/): the linked mrepo's entry there, by its unique
-  URI, names its folder, with its inbox and outbox folders inside. The
-  shortcut at `host` leads to `<work>/mrepos/local/host/`. `main` itself
-  holds nothing that is local to a machine.
+  [links](../links/) layer: the link's record there, by the key the
+  shortcut names, says the mrepo's folder, with its inbox and outbox
+  folders inside. The shortcut at `host` leads to
+  `<work>/mrepos/local/host/`. `main` itself holds what is needed to show
+  a link, nothing that is local to a machine.
 - **A shortcut stops it.** What is below a shortcut, and its document,
   is in the mrepo it leads to. A command's own URI does not run through
   one: `crud/read host/swarms` is refused, with the way across. The way
@@ -74,6 +76,29 @@ position is a shortcut when its node has sources.
   known issue, resolved when the query has its union.
 - **Own shortcuts only.** An mrepo resolves its own; those of a linked
   mrepo are not visible from here.
+
+## The mrepo registry
+
+The boot mrepo keeps the registry of the install's mrepos, in its
+`main`, at the position `registry`: a node an mrepo it deployed, by the
+mrepo's unique URI, holding the mrepo's record (the same as its link's).
+
+```
+/main/registry/local/host/.node.json     { "uri": "local/host", "at": "host", "how": "deployed", "folder": "../local/host", ... }
+```
+
+It is a position as any: read, and queried, where it is.
+
+```
+haicc registry/local crud/read "*"
+haicc . crud/read "registry/local/*[runtime/pid]"
+haicc . boot/teardown "registry/local/*"
+```
+
+The last tears down every mrepo the query selects there, each at the
+position that links to it. Written by `boot/deploy` and `boot/teardown`,
+there where `main` has the node `registry`: the boot mrepo makes it as
+it boots. An mrepo deployed by another than the boot mrepo is not in it.
 
 ## Later
 

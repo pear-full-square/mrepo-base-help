@@ -33,11 +33,11 @@ function source (dir, packages) {
   writeFileSync(join(dir, 'haiccing', 'manifest.json'), JSON.stringify(manifest))
 }
 
-// A parent: main, runtime, packages, registry; its packages manifest (the store, the sources).
+// A parent: main, runtime, packages, links; its packages manifest (the store, the sources).
 async function parent (work, sources) {
   const src = mkdtempSync(join(tmpdir(), 'deploy-parent-'))
   try {
-    for (const l of ['main', 'runtime', 'packages', 'registry']) lj(join(src, l), 'atomic')
+    for (const l of ['main', 'runtime', 'packages', 'links']) lj(join(src, l), 'atomic')
     const { dir } = await build({ from: src, work, name: 'boot' })
     await place({ dir, store: join(work, 'packages'), sources, list: [] })
     return dir
@@ -80,7 +80,7 @@ function context (dir, backend, work) {
   return { exec, commit, repo }
 }
 
-test('deploy from a target package\'s list, placed by its unique URI, recorded in the registry; redeploy; teardown, one and several', async (t) => {
+test('deploy from a target package\'s list, placed by its unique URI, its link recorded; redeploy; teardown; the mrepo registry, several torn down', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'deploy-'))
   const pkgs = mkdtempSync(join(tmpdir(), 'deploy-src-'))
   try {
@@ -116,9 +116,11 @@ test('deploy from a target package\'s list, placed by its unique URI, recorded i
     t.ok(await child.read('/runtime/layer.json').then(() => true, () => false), 'the runtime layer itself is structure: from whichever package brings it')
     t.alike(d.packages, ['haiccing/base', 'haiccing/target'], 'its packages, in order')
     t.is(statSync(join(work, 'packages', 'haiccing', 'base.bundle')).ino, statSync(join(host, 'packages', 'haiccing', 'base.bundle')).ino, 'each linked from the store')
-    t.alike(json(await repo.read('/main/host/.shortcuts.json')), [{ mrepo: 'local/host' }], 'its shortcut, in main beside its node: a list, the mrepo linked there by its unique URI (in its parent\'s swarm); only the link')
+    const [shortcut] = json(await repo.read('/main/host/.shortcuts.json'))
+    t.alike([Object.keys(shortcut), shortcut.mrepo, /^[0-9a-f-]{36}$/.test(shortcut.link)], [['mrepo', 'link'], 'local/host', true], 'its shortcut, in main beside its node: a list, the mrepo linked there by its unique URI (in its parent\'s swarm) and the link\'s own key: what is needed to show it')
     t.alike(json(await repo.read('/main/host/.node.json')), {}, 'its node, in main: an empty document')
-    t.alike(json(await repo.read('/registry/local/host/.node.json')), { uri: 'local/host', at: 'host', folder: '../local/host', package: 'haiccing/target', packages: d.packages, layers: d.layers }, 'what is local to this machine about it, its entry in the registry, a node by its unique URI: where it is (from this mrepo\'s folder), the position that links to it, what it came from; main replicates, this does not')
+    t.alike(json(await repo.read(`/links/${shortcut.link}.json`)), { key: shortcut.link, uri: 'local/host', at: 'host', how: 'deployed', folder: '../local/host', package: 'haiccing/target', packages: d.packages, layers: d.layers }, 'what is local to this machine about it, its link\'s record in the links layer, by the link\'s key: which mrepo, the position that links to it, how it came about, where it is (from this mrepo\'s folder), what it came from; main replicates, this does not')
+    t.is(await repo.find('/main/registry/local/host/.node.json'), null, 'no mrepo registry kept here: main has no registry node')
     t.alike([d.mrepo, d.package], ['local/host', 'haiccing/target'], 'both said in what deploy returns')
     t.alike(json(await child.read('/runtime/mrepo.json')), { uri: 'local/host' }, 'its identity, in its own runtime layer')
     await t.exception(deploy(exec, { uri: ['main', 'host'], args: ['haiccing/target'] }), /deployed already/)
@@ -128,11 +130,13 @@ test('deploy from a target package\'s list, placed by its unique URI, recorded i
     await commit()
     t.is(r.tornDown, 'host')
     t.is(r.package, 'haiccing/target', 'redeployed, its type as recorded')
+    t.is(json(await repo.read('/main/host/.shortcuts.json'))[0].link, shortcut.link, 'the link keeps its key: the same link, its mrepo built again')
 
     // a runtime that does not stop (no socket, SIGTERM ignored): teardown ends it all the same
     const stubborn = spawn('sh', ['-c', 'trap "" TERM; while true; do sleep 1; done'], { stdio: 'ignore', detached: true })
-    const rec = json(await repo.read('/registry/local/host/.node.json'))
-    exec.put('/registry/local/host/.node.json', Buffer.from(JSON.stringify({ ...rec, runtime: { pid: stubborn.pid } })))
+    const key = json(await repo.read('/main/host/.shortcuts.json'))[0].link
+    const rec = json(await repo.read(`/links/${key}.json`))
+    exec.put(`/links/${key}.json`, Buffer.from(JSON.stringify({ ...rec, runtime: { pid: stubborn.pid } })))
     await commit()
     exec.entries = []
     t.alike(await teardown(exec, { uri: ['main', 'host'] }), { tornDown: 'host' })
@@ -141,17 +145,24 @@ test('deploy from a target package\'s list, placed by its unique URI, recorded i
     t.alike(exec.entries.filter(e => e.level === 'info').map(e => e.event), ['torn down'], 'what it did, at info')
     await commit()
     t.absent(existsSync(host), 'removed')
-    t.alike([await repo.read('/main/host/.shortcuts.json').catch(() => null), await repo.read('/main/host/.node.json').catch(() => null), await repo.read('/registry/local/host/.node.json').catch(() => null)], [null, null, null], 'its shortcut and its node out of main, what was local out of the runtime layer')
+    t.alike([await repo.read('/main/host/.shortcuts.json').catch(() => null), await repo.read('/main/host/.node.json').catch(() => null), (await repo.select('/links/*')).filter(([p]) => !p.endsWith('layer.json')).length], [null, null, 0], 'its shortcut and its node out of main, what was local out of the runtime layer')
     await t.exception(teardown(exec, { uri: ['main', 'host'] }), /not deployed/)
-    // several at once: a query over the registry, by unique URI
+    // the mrepo registry, where main has the node `registry` (the boot mrepo): an mrepo's node by its unique URI
+    exec.put('/main/registry/.node.json', Buffer.from('{}\n'))
+    await commit()
+    await t.exception(deploy(exec, { uri: ['main', 'registry'], args: ['haiccing/target'] }), /registry exists locally/, 'the registry\'s own position is no target')
     for (const n of ['one', 'two', 'three']) { await deploy(exec, { uri: ['main', n], args: ['haiccing/target'] }); await commit() }
-    t.alike((await repo.select('/registry/local/*')).map(([p]) => p), ['/registry/local/one', '/registry/local/three', '/registry/local/two'], 'three deployed: three entries in the registry')
-    t.alike(await teardown(exec, { uri: ['registry', "local/*[at='one' or at='two']"] }), [{ tornDown: 'one' }, { tornDown: 'two' }], 'teardown read at the registry: the entries a query selects, each torn down at its position')
+    t.alike((await repo.select('/main/registry/local/*')).map(([p]) => p).filter(p => !p.endsWith('.node.json')), ['/main/registry/local/one', '/main/registry/local/three', '/main/registry/local/two'], 'three deployed: three nodes in the registry, by unique URI')
+    const one = json(await repo.read('/main/registry/local/one/.node.json'))
+    t.alike([one.uri, one.at, one.how, one.folder, one.package, one.key === json(await repo.read('/main/one/.shortcuts.json'))[0].link], ['local/one', 'one', 'deployed', '../local/one', 'haiccing/target', true], 'a node there: the mrepo\'s record, the same as its link\'s')
+    t.alike(json(await repo.read('/main/registry/local/.node.json')), {}, 'its swarm a node above it')
+    t.alike(await teardown(exec, { uri: ['main', "registry/local/*[at='one' or at='two']"] }), [{ tornDown: 'one' }, { tornDown: 'two' }], 'teardown with a URI into the registry: the mrepos a query selects there, each torn down at its position')
     await commit()
     t.alike([existsSync(join(work, 'mrepos', 'local', 'one')), existsSync(join(work, 'mrepos', 'local', 'two')), existsSync(join(work, 'mrepos', 'local', 'three'))], [false, false, true], 'their folders gone, the third left')
-    t.alike(await teardown(exec, { uri: ['registry', 'local/*'] }), [{ tornDown: 'three' }], 'all that is left')
+    t.alike([await repo.find('/main/registry/local/one/.node.json'), (await repo.select('/links/*')).filter(([p]) => !p.endsWith('layer.json')).length], [null, 1], 'out of the registry, their links\' records gone: one link left')
+    t.alike(await teardown(exec, { uri: ['main', 'registry/local/*'] }), [{ tornDown: 'three' }], 'all that is left')
     await commit()
-    t.alike(await teardown(exec, { uri: ['registry', 'local/*'] }), [], 'nothing registered: nothing torn down, no error')
+    t.alike(await teardown(exec, { uri: ['main', 'registry/local/*'] }), [], 'nothing registered: nothing torn down, no error')
     await t.exception(deploy(exec, { uri: ['main', 'x'], args: ['haiccing/none'] }), /not in the store nor the sources/)
     await t.exception(deploy(exec, { uri: ['main', '../x'], args: ['haiccing/target'] }), /bad segment/, 'no way up')
     await t.exception(deploy(exec, { uri: ['main', 'a/b'], args: ['haiccing/target'] }), /not a name for an mrepo: a\/b/, 'one name below main')
