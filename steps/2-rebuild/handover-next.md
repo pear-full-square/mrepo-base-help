@@ -58,7 +58,73 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
 
 ## Right now
 
-**The state** (2026-11-15, everything in `main`, every repository pushed)
+**Pick up here** (2026-11-16, after part 78; everything in `main`,
+`execute/main` level with it, every repository pushed; written before a
+context reset)
+
+- **The next step, in the words used** (2026-11-16): "The next step
+  will be the creation of container mrepos. You could do this we a
+  continuation on the node commands - we can set a default for
+  continuation then one can use a standard command (i.e. haicc
+  swarms/swarm-1/node-1 service/initialise and there is a continuation
+  to deploy the container mrepo. What about creating a container
+  protocol with the methods to achieve this? Don't be too picky as to
+  what methods, create those that achieve our goal. That is sufficient
+  for the moment."
+- **Our view of it, not yet answered** (`tasks.md`, `swarm-cluster`,
+  "The next step"): yes to a `container` protocol; its first methods
+  only those the goal needs (a node's replica made in a container,
+  started, stopped, removed, its state said); a default continuation:
+  an mrepo's config names the script that follows an action, so a
+  standard command (`service/initialise`) answers with it without a
+  flag. Put this back to the human in a few lines, get the go, then
+  build; do not build on this reading alone.
+- **Where it stands**: `base-component-haicc`'s `scripts/cluster.json`
+  is the target written down and its check (part 78): the host in
+  service, `swarms/swarm-1` in its `main`, two nodes deployed and in
+  service. Each step a swarm still needs is designed together, built,
+  then added as a line of it. The nodes are still `local/node-1`,
+  `local/node-2`, one name below the host's `main`.
+- **No container tool runs in the cloud session** (Docker's client is
+  there, no daemon): what talks to Docker is written so a test can
+  stand in for it, and the real thing is tried on the human's laptop by
+  the local agent (`prompt-local.md`, `handover-local.md`: current for
+  part 78; a step for the container would be added to the prompt).
+- **How we work** (below, "How the human works with us", in full): a
+  team on equal terms: "we", an opinion and a recommendation with every
+  question; short answers, one question at a time; tasks named by their
+  label; a reading put back in its own words and confirmed before it is
+  built (part 75 was built on one that was not, and had to be
+  corrected: part 76); what is left to us is ours to decide and say.
+  What is settled is recorded in the words used.
+- **What cost time, to mind**: an apostrophe in a test's title or
+  message breaks the file, and a filter on the output hides it: read a
+  test run's last lines. One run at a time on `sources/`: a `haicc`
+  test started while bundles are rebuilt hangs. A full validation is
+  about 25 minutes: every package's pre-release
+  (`tools/bare tools/package-test.js haiccing/<package>`, in a loop),
+  `tools/bare tools/release.js --strict` (its exit code), the boot's
+  `validate` a few times, `sh haiccing/base-linux-haicc/test/run.sh`
+  (207 checks). Long runs go to the background, their output to a file
+  in the scratchpad, waited for.
+
+**What is built since part 66**, each a part of `readme.md`: 67 to 69
+and 74 `xpath-first` (a URI is a query: `mycelium-xpath`'s `query`,
+`mrepo-base-xpath`'s `query`, `crud` and `haicc`'s `goto` on it; lists
+and positions as XPath has them; a filter's names by the URI's rules);
+70 and 71 `command-line-findings` (flags after a URI, a list closed by
+`--` or the end of the command; a record printed packed; `haicc
+output`); 72 `request-layer-access` (`main` the default layer,
+`--flags layer=<name>`); 73 `inbox-watcher` (a pass when something
+arrives); 75 and 76 `mrepo-registry` (an mrepo placed by its unique URI
+under `mrepos/`; the `links` layer, an mrepo's own; the mrepo registry
+in the boot mrepo's `main`, `haicc registry/local crud/read "*"`); 77
+`continuation` (a command answers with a script to go on with, the
+`haicc` command runs it; `--flags continuation=<script>` on a deploy);
+78 the cluster script.
+
+
+**The state** (as of 2026-11-16, part 78: everything in `main`, every repository pushed; the paragraphs below are older, kept for what they say)
 
 - The `haicc` command installs, boots, deploys a host from
   `base-component-haicc`, starts its service, deploys a node inside it
@@ -67,8 +133,8 @@ Then the validation in `CLAUDE.md` works. To see the whole thing run:
   pinned, each with a test of its own and a current, passing report
   (parts 47 to 64). `tools/bare tools/release.js --strict` passes;
   `tools/bare tools/code-check.js` and the README checks have no
-  problems; the `haicc` test 152 of 152; `base-component-boot`'s `boot`
-  test passing.
+  problems; the `haicc` test 207 of 207 (part 78); `base-component-boot`'s
+  `boot` test passing.
 - The `haicc` command is a Bare app, `base-app-haicc` (part 60); the
   shell, `base-linux-haicc`, is the first step only. The command's form
   is in one place now: `pear-full-square/haicc-base-app`,
