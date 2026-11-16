@@ -20,7 +20,7 @@ the tests: `boot.test.js`. It leaves nothing running.
      protocol itself, which stays closed to the outside), its help
      extracted;
    - the host deployed by a command at the root, `boot/deploy host
-     <package>`: built inside the boot mrepo (`main/host/`), its runtime
+     <package>`: placed by its unique URI beside the boot mrepo (`mrepos/local/host/`), its runtime
      running, its node and its shortcut in `main`
      (`host/.shortcuts.json`), only the link, its unique URI `local/host`; the records followed, the request
      history in `request/done`;

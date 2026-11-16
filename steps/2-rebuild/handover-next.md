@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 74). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-16, part 75). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -19,7 +19,9 @@ command, nothing else; 72 `request-layer-access`: `main` the default
 layer, `layer=<name>`, a record read as its document; 73
 `inbox-watcher`: a pass made when something arrives, not on a clock; 74
 `xpath-first`'s decisions gone through together: lists and positions as
-XPath has them, a filter's names by the URI's rules).
+XPath has them, a filter's names by the URI's rules; 75
+`mrepo-registry`, the first build: an mrepo placed by its unique URI,
+the registry layer, several torn down by a query).
 The documentation of what is built is in the packages:
 `haiccing/package-docs-template` and `haiccing/package-docs-mrepo`, and
 each folder's README.
@@ -202,14 +204,20 @@ too (part 73), and the decisions made while building `xpath-first` are
 gone through together (part 74). **The cleanup is done.**
 `teardown-cascade` is not cleanup: it goes with `mrepo-registry` ("that
 is a better place to do 'bulk teardown'"), then dropped ("it can be done
-with xpath"). **Next in the order of work: `mrepo-registry`, the
-registry's design first**, in discussion since 2026-11-16 (`tasks.md`,
-"P1 · `mrepo-registry`": what was said so far, in the words used; the
-registry is for the host-local mrepos only, not those in containers;
-the open question "Do we create a swarm protocol?": yes, on top of
-`boot` and `service`; KISS: enough for the swarm demos; our proposed
-first build is there, waiting for the go; a new rule in `rules.md`:
-deploy and teardown, no upgrade in place). Nothing built.
+with xpath"). **`mrepo-registry`'s first build is done** (part 75;
+`tasks.md`, "P1 · `mrepo-registry`": the discussion in the words used,
+the proposal, the go). KISS: enough for the swarm demos; a further
+design round comes with the next step. A rule since (`rules.md`): deploy
+and teardown, no upgrade in place. **Next in our order: `node-mrepos`**
+(P2): a swarm node is a bridgehead mrepo on the host and its replica in
+a container; a `swarm` protocol on top of `boot` and `service` (deploy
+the bridgehead as a standard mrepo, initialise it as a swarm node,
+master or not, replicate it into a container; the bridgehead master,
+the container slave by default: who manages, who follows). To design
+together first. Then `swarm-demos`, with Splectral in them if we can
+("like we had before": `tasks.md`). Help and howto as a system come
+after the demos ("Better not mix"); until then each build carries its
+own documentation and the howto information it needs.
 
 **Then, the human's priority: swarm nodes up and running** ("The
 roadmap", item 2): a command at a deeper position (the execution's
@@ -249,7 +257,7 @@ with the human first, unless the task says it is ours ("Left to us").
   `xpath.md`, "Commits": the same shape, about twice as fast a writer,
   800 to 900 commits a second with all cores, the cycle flat at 13 to
   15 ms. Its prompt, `prompt-local.md`, and its background,
-  `handover-local.md`, are current for parts 60 to 74. Its notes come
+  `handover-local.md`, are current for parts 60 to 75. Its notes come
   back in `local-note.md`: fetch and read them when told, and act on
   what they report.
 - No release yet: on the human's word, created by the local agent

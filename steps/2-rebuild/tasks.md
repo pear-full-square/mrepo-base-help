@@ -111,7 +111,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | 8 | `command-line-findings` | flags after the URI, a record packed on its lines, `haicc output` | built, parts 70 and 71 |
 | 9 | `request-layer-access` | the request records reachable, `layer=request` | built, part 72 |
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
-| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | in discussion, design first |
+| P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | first build done, part 75; the rest for the next design round |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -965,8 +965,10 @@ flag for that? layer=request". **Built**: part 72 of `readme.md`.
 
 ## P1 · `mrepo-registry`: mrepos as shortcuts, with a registry of the host-local mrepos
 
-Next in our order of work, after the cleanup (done, parts 70 to 74). In
-discussion since 2026-11-16; nothing built. Design first.
+Next in our order of work, after the cleanup (done, parts 70 to 74).
+Discussed 2026-11-16; **the first build is done** (part 75 of
+`readme.md`): the four points of "Proposed first build" below. What it
+left out is listed there, for the next design round.
 
 **Said so far** (2026-11-16, on what is settled and what the registry
 is)
@@ -1050,6 +1052,23 @@ way for the swarm demos)
   will be a rule. An update will be a new install in passive mode
   (reading data from previous) with switchover." Written into
   `rules.md`, "Development and deployment".
+
+**The go** (2026-11-16, on our asking whether the first build comes
+now or after help and howto): "do help documentation, and required
+howtos info but focus on the build. Once we have container nodes and we
+can achieve the simple demos that we approach help and howto
+systematically. Better not mix." So: the proposed first build, with its
+documentation and the howto information it needs; help and howto as a
+system after the container nodes and the demos.
+
+**For the demos** (`swarm-demos`, P3): "Would be nice if we could have
+splectral in those demos (like we had before)." Splectral: the view of
+a swarm in a browser, with its observers of the p2p events; removed
+from this repository when what nothing used was removed
+(`readme.md`, part 21 or so: "the `splectral-*`", "`splectral/`"), kept
+in the history and in its own repositories; reviewed in
+`steps/1-review/findings.md`. To bring back when the work reaches the
+demos.
 
 **Our reading so far, to confirm** (ours, put back in the discussion)
 

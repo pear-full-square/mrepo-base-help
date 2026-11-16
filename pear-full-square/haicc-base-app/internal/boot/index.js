@@ -16,10 +16,11 @@ export async function deploy ({ home, work, bare, org, boot, stdio = 'inherit' }
   return new Promise(resolve => child.on('exit', code => resolve(code ?? 1)))
 }
 
-// The mrepos from one down: those deployed below it first (in the shadow
-// of its main, at any depth), itself last.
-function mrepos (dir) {
-  const below = []
+// The mrepos of the install: every folder holding a .git under the work
+// folder's mrepos/ (each placed by its unique URI, side by side), the root
+// last.
+function mrepos (work, root) {
+  const others = []
   const walk = d => {
     for (const n of readdirSync(d).sort()) {
       const p = join(d, n)
@@ -27,21 +28,21 @@ function mrepos (dir) {
       // catch: not there: not a folder
       try { folder = statSync(p).isDirectory() } catch {}
       if (!folder) continue
-      if (existsSync(join(p, '.git'))) below.push(...mrepos(p)); else walk(p)
+      if (existsSync(join(p, '.git'))) { if (p !== root) others.push(p) } else walk(p)
     }
   }
-  if (existsSync(join(dir, 'main'))) walk(join(dir, 'main'))
-  return [...below, dir]
+  if (existsSync(join(work, 'mrepos'))) walk(join(work, 'mrepos'))
+  return [...others, root]
 }
 
-// haicc boot/teardown: every runtime under the root stopped, then what
+// haicc boot/teardown: every runtime of the install stopped, then what
 // boot/deploy put in place removed; what was done.
 export async function teardown ({ work, root }) {
   if (!existsSync(root)) throw new Failure(`no boot mrepo at ${work} (nothing to tear down)`, 3)
   // the runtime's library only here: nothing else of the app needs it
   const { stop } = await import('mrepo-base-runtime')
   let runtimes = 0
-  for (const dir of mrepos(root)) {
+  for (const dir of mrepos(work, root)) {
     try { if (await stop({ repo: dir })) runtimes++ } catch (err) { throw new Failure(`a runtime under ${work} did not stop`, 1, { cause: err }) }
   }
   // what boot/deploy put in place, by name: nothing else in the work folder

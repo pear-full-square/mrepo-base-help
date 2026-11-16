@@ -186,7 +186,7 @@ test('its response: the record unpacked, as stored, or the output alone; the exi
 })
 
 test('boot/teardown: what boot/deploy put in place removed by name, the rest kept', async (t) => {
-  for (const d of ['mrepos/boot/.git', 'mrepos/boot/main/host/.git', 'packages/haiccing', 'kept']) mkdirSync(join(work, d), { recursive: true })
+  for (const d of ['mrepos/boot/.git', 'mrepos/local/host/.git', 'packages/haiccing', 'kept']) mkdirSync(join(work, d), { recursive: true })
   writeFileSync(join(work, 'mrepo.json'), '{}')
   let r = asked('boot/teardown', await haicc(['boot/teardown']))
   t.alike([r.code, r.out, r.err], [0, JSON.stringify({ tornDown: '.', runtimes: 0, work }) + '\n', ''], 'said: the root torn down, no runtime was running')

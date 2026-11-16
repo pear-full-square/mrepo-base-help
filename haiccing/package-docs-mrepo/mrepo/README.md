@@ -14,6 +14,7 @@ Each layer, its README:
 | [packages/](packages/) | the code it runs |
 | [protocols/](protocols/) | its external API |
 | [help/](help/) | its documentation |
+| [registry/](registry/) | the mrepos it deployed, what this machine knows of each |
 | [inbox/](inbox/) | records posted to it |
 | [outbox/](outbox/) | records it sends |
 | [request/](request/) | the request layers: pending, executing, done |
@@ -55,11 +56,11 @@ storage.
 ## The mrepo's folder
 
 An mrepo is a folder, `<dir>`. The first, the boot mrepo, put in place by
-`base-component-boot`, is `<work>/mrepos/boot/`; every other lives inside its parent, at
-`<parent>/main/<position>/` (the host: `boot/main/host/`). That `main/`
-folder is a shadow structure of the `main` layer: what is linked at a
-position sits there at the same path. The parent has a node for it in
-`main`, a shortcut: the link, nothing of its data. A running mrepo sees only forward
+`base-component-boot`, is `<work>/mrepos/boot/`; every other is placed by its
+unique URI, side by side with it: `<work>/mrepos/<swarm>/<name>/` (the
+host: `mrepos/local/host/`). The mrepo that deployed it has a node for it
+in `main`, a shortcut: the link, nothing of its data; and an entry in its
+`registry` layer: where it is on this machine. A running mrepo sees only forward
 (a URI has no `..`); outside is reached through a mapping (the work
 folder's package store, named in its packages manifest).
 
@@ -73,7 +74,6 @@ the host `local/host`. Its inbox is addressed by it: `/local/host/inbox`.
   inbox/         input through the filesystem: a record written here is committed
   outbox/        output: each record committed is written here too (there from the start)
   packages/      its packages, hard linked, for Bare to run
-  main/<name>/   the shadow of main: an mrepo linked at that position, inside it
   runtime.sock   its runtime's local connection (status, stop)
 ```
 

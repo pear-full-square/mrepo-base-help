@@ -119,7 +119,7 @@ there, and that mrepo's response becomes the request's result.
 { "command": ["haicc", "host", "help/get", ".", "packages"],
   "protocol": "haicc", "action": "goto", "uri": ["main", "host"],
   "args": ["help/get", "/packages"],
-  "remote": { "at": "host", "folder": "main/host", "key": "…" },
+  "remote": { "at": "host", "folder": "../local/host", "key": "…" },
   "output": { } }
 ```
 
