@@ -32,6 +32,10 @@ bare base-app-haicc.bundle /run <argument>...
   the root mrepo: `haicc boot/deploy` puts the boot mrepo in place and
   starts its runtime; `haicc boot/teardown` stops every runtime and
   removes what the deploy put in place.
+- **`haicc scripts`** lists the install's scripts, `<home>/scripts`:
+  the user's by name, a package's as `<org>/<package>/<name>`. `haicc
+  <URI> haicc/file <URI> <name>` reads one here and sends its lines as
+  `haicc/script`, to run where its URI points.
 - **`haicc sources`** lists the sources registered; `unlink`, `https`,
   `no-https` and `download` change them.
 - **`haicc --help`** prints the forms, with examples.
@@ -73,10 +77,7 @@ The parts go as typed, unnamed; the mrepo interprets them.
 
 `HAICC_HOME` and `HAICC_WORK` name haicc's own folder and the work
 folder; `HAICC_TIMEOUT`, `HAICC_RAW` and `HAICC_OUTPUT` set the wait
-and the printing. `HAICC_MREPO` and `HAICC_MREPO_URI`, set by a runtime
-for its shell hooks: the folder and the unique URI of the mrepo a
-command goes to, straight into its own inbox, in place of the root. The
-module's `main` documents each. The width a
+and the printing. The module's `main` documents each. The width a
 record is printed to is set with `haicc output`.
 
 ## Package

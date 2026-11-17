@@ -262,6 +262,28 @@ is "$(haicc --output host/swarms/swarm-1 crud/read . 2>&1)" '[{"uri":["main","sw
 is "$(haicc --output 'host/swarms/*' crud/read . 2>&1)" '[{"at":"swarms/swarm-1","value":[{"uri":["main","swarms/swarm-1","."],"value":{},"children":[]}]}]' "a query through the shortcut: selected in the host"
 is "$(haicc --output . crud/read swarms 2>&1)" '[]' "nothing of it in the boot mrepo: each mrepo its own main"
 
+# 9a. scripts: haicc/script, its lines run where the haicc points, each
+# after the one before; a heredoc on stdin; the install's scripts by name
+# (haicc/file, haicc scripts); a line that fails; an mrepo by its
+# registry reference
+out=$(haicc --output host haicc/script . 'crud/create notes/s
+crud/read notes/s' 2>&1); is $? 0 "haicc host haicc/script . '<lines>': two lines run at the host"
+has "$out" '"line":"crud/read notes/s"' "each line with what it answered"
+has "$out" '"uri":["main","notes/s"]' "the second saw what the first made: one after the other"
+out=$(printf 'crud/read notes/s\n' | haicc --output host haicc/script . 2>&1); has "$out" '"line":"crud/read notes/s"' "haicc host haicc/script . with a heredoc: the lines from stdin"
+out=$(haicc --output host haicc/script notes 'crud/read s' 2>&1); has "$out" '"uri":["main","notes","s"]' "haicc host haicc/script notes '...': its lines run at notes in the host (the position its own segment)"
+is "$(haicc scripts 2>&1)" "" "haicc scripts: none kept yet"
+mkdir -p "$T/home/scripts"; printf '# a check\ncrud/read notes/s\n' > "$T/home/scripts/check.haicc"
+is "$(haicc scripts 2>&1)" "check" "haicc scripts: the install's scripts, by name"
+out=$(haicc --output host haicc/file . check 2>&1); is $? 0 "haicc host haicc/file . check: the install's script, read here, run at the host"
+has "$out" '"line":"crud/read notes/s"' "its lines sent as haicc/script"
+out=$(haicc host haicc/file . nope 2>&1 >/dev/null); is $? 3 "a script the install has not: exit 3"
+out=$(haicc host haicc/script . 'crud/read notes/s
+nosuch/thing' 2>&1 >/dev/null); is $? 1 "a line that fails: exit 1"
+has "$out" "line 2: nosuch/thing" "said, which line"
+out=$(haicc --output registry/local/host crud/read notes/s 2>&1); has "$out" '"uri":["main","notes/s"]' "haicc registry/local/host ...: the host by its registry reference, where the registry says it is linked"
+haicc host crud/delete notes recurse >/dev/null 2>&1
+
 # 9b. a request's log, and its flags: info unasked; --flags log=verbose,
 # log=debug, after a URI: that step's, held down the chain; a flag that is
 # none

@@ -3,7 +3,7 @@ import { Failure } from '../failure.js'
 import { MACHINE } from '../boot/index.js'
 
 // The commands that are neither for the mrepos nor the machine level.
-const OWN = ['sources', 'output']
+const OWN = ['sources', 'output', 'scripts']
 const USAGE = ['help', '--help', '-h']
 const none = name => new Failure(`no command '${name}' (haicc --help)`, 2)
 // A position written as the root: `.`, or `./` and nothing after.

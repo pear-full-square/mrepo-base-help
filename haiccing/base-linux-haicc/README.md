@@ -46,6 +46,7 @@ exits 3.
   sources/        what haicc sources download fetched: Bare, the packages
   bare/           Bare, unpacked by haicc prereq
   work/           the app's work folder
+  scripts/        the install's scripts: <name>.haicc, <org>/<package>/<name>.haicc
 ```
 
 `HAICC_HOME` names another folder.

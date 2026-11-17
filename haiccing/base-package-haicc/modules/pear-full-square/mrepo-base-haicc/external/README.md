@@ -6,4 +6,3 @@ The haicc protocol's actions.
 
 - [goto](goto/)
 - [script](script/)
-- [file](file/)

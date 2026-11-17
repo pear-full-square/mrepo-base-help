@@ -60,8 +60,11 @@ docs mrepo: `haicc docs info/get <keywords>`.
   sources folder.
 - **shortcut**: a node in `main` leading to another mrepo; `haicc` hops
   through it.
-- **hook**: a command an mrepo runs on a status transition: its runtime
-  starting, its service's `initialise`, `start`, `stop`, `shutdown`.
+- **hook**: what an mrepo runs on a status transition, a file a
+  transition of simple commands: its runtime starting, its service's
+  `initialise`, `start`, `stop`, `shutdown`.
+- **script**: lines, each a simple command, run where the `haicc` points
+  (`haicc <URI> haicc/script <URI> '<lines>'`).
 - **continuation**: a script a command answers with, to go on with.
 - **docs mrepo**: the install's documentation, every package's pages,
   read with `info/get`; any other mrepo answers about itself.

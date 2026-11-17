@@ -100,8 +100,8 @@ test('goto: an mrepo by its registry reference: on as at the position the regist
   t.alike(await goto(exec, { uri: ['main', 'registry/local'], args: ['crud/read', '.'] }), { ran: ['crud/read', '.'] }, 'a registry node that is no record: a position like any other')
 })
 
-test('haicc/script and haicc/file: the lines, each a simple command, run where the URI points; the request waits for them', async (t) => {
-  const { script, file } = await import('../index.js'); const { parse, words } = await import('mrepo-base-request')
+test('haicc/script: the lines, each a simple command, run where the URI points; the request waits for them', async (t) => {
+  const { script } = await import('../index.js'); const { parse, words } = await import('mrepo-base-request')
   t.alike(words(`crud/create swarms/swarm-1 '{"kind":"swarm"}'`), ['crud/create', 'swarms/swarm-1', '{"kind":"swarm"}'], 'split as the shell splits: a quoted part one word, its quotes off')
   t.alike(words('a "b \\"c\\" d" e'), ['a', 'b "c" d', 'e'], 'in double quotes, a backslash keeps the next character')
   t.exception(() => words("a 'b"), /a quote not closed/)
@@ -113,8 +113,4 @@ test('haicc/script and haicc/file: the lines, each a simple command, run where t
   t.is(waited.length, 1, 'one job: the lines, run through the mrepo\'s own inbox')
   t.alike(await script({ ...exec, resumed: { output: [{ line: 'service/start', output: 1 }] } }, { uri: ['main', '.'], args: ['x'] }), [{ line: 'service/start', output: 1 }], 'resumed: what each line gave')
   await t.exception(script({ ...exec, resumed: { error: 'line 2: service/start: not now' } }, { uri: ['main', '.'], args: ['x'] }), /line 2: service\/start: not now/, 'resumed with a failure: the line that failed said')
-  t.is(await file(exec, { uri: ['main', '.'], args: ['runtime/hooks/initialise.haicc'] }), null, 'haicc/file: a file of the mrepo, its lines waited for')
-  await t.exception(file(exec, { uri: ['main', '.'], args: ['runtime/none.haicc'] }), /no file: runtime\/none.haicc/)
-  await t.exception(file(exec, { uri: ['main', '.'], args: ['../x'] }), /not a file of this mrepo/)
-  await t.exception(file(exec, { uri: ['main', '.'], args: [] }), /missing argument: file/)
 })

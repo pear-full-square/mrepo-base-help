@@ -22,7 +22,7 @@ const UNITS = {
   "/test/package": () => Promise.all([import("./test/package/run.js")]),
   "/test/modules/pear-full-square/mrepo-base-info": () => Promise.all([import("./modules/pear-full-square/mrepo-base-info/test/info.test.js")]),
   "/test/modules/pear-full-square/mycelium-uri": () => Promise.all([import("./modules/pear-full-square/mycelium-uri/test/names.test.js"), import("./modules/pear-full-square/mycelium-uri/test/relative.test.js"), import("./modules/pear-full-square/mycelium-uri/test/uri.test.js")]),
-  "/test/modules/pear-full-square/pkgm-base-check": () => Promise.all([import("./modules/pear-full-square/pkgm-base-check/test/mrepo.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/package.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/patterns.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/rules.test.js")]),
+  "/test/modules/pear-full-square/pkgm-base-check": () => Promise.all([import("./modules/pear-full-square/pkgm-base-check/test/mrepo.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/package.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/patterns.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/rules.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/tests.test.js")]),
 }
 // The test sets: their tests by name (modules: every module's unit tests).
 const SETS = {"/test/full":["configured","info","code","mrepo","package","modules"],"/test/validate-in-situ":["info-in-situ","mrepo-in-situ"],"/test/validate":["configured","info","code","mrepo","package"]}
