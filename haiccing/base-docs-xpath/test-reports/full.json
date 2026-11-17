@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-xpath",
-  "content": "b6ffa7fe9baae811f29b021fb88339308aead1601a0977a2a71b7c0d2896f7e7",
+  "content": "111ecf79c6e3c49bb725eb0dffe01074fe153e8a70870ba7684079c43c71916b",
   "bare": "v1.36.0",
-  "date": "2026-11-17T04:41:33.115Z",
+  "date": "2026-11-17T05:34:50.934Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -79,8 +79,8 @@
         "total": 7
       },
       "asserts": {
-        "passed": 52,
-        "total": 52
+        "passed": 53,
+        "total": 53
       },
       "failures": []
     },
@@ -101,12 +101,12 @@
       "unit": "/test/modules/pear-full-square/pkgm-base-check",
       "ok": true,
       "tests": {
-        "passed": 17,
-        "total": 17
+        "passed": 19,
+        "total": 19
       },
       "asserts": {
-        "passed": 46,
-        "total": 46
+        "passed": 54,
+        "total": 54
       },
       "failures": []
     }

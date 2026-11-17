@@ -38,5 +38,3 @@ mrepo a work folder's setting names, as the p2p host.)
 - `run.js`: the entry, the runtime's process.
 - `protocol.js`: its protocol, `runtime` (run), its action and config
   passed to the runtime by `run.js`.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

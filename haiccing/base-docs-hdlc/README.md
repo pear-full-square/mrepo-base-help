@@ -107,6 +107,9 @@ Before every commit:
   nothing by accident fails.
 - **No commit while a build runs** over the tree: it catches files
   mid-rewrite.
+- **The implementation validation**: every pattern a package implements
+  (its kind, a layer, hooks, a service, a continuation script) has a
+  how-to naming it; one without fails the code check.
 
 ## Branches
 
@@ -138,6 +141,10 @@ Before every commit:
 - **Scheduled work**: requests, from a person or from `haici`, planned
   into phases and items; an agent takes up an item it may do alone.
 - **Tasks have labels**, meaningful, named whenever a task is.
+- **A new pattern, a how-to**: a pattern not done before gets a how-to:
+  a proof of concept first, saved as a how-to, then the implementation.
+  The how-to lives in the package the pattern belongs to and names it,
+  `Pattern: <name>`.
 - **A reading is put back in its own words** and confirmed before it is
   built.
 - **Each part of the work is recorded**: what was built, what was

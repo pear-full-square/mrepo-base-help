@@ -671,3 +671,137 @@ On our three small points (the human):
   'automatically' because we lack the functionality." So for now a
   command, as the host's: `haicc . boot/deploy docs base-component-docs`;
   the boot install doing both when it can.
+
+## The review, a package at a time (2026-11-17)
+
+The human: "Have a look at the boot package, what is still missing? I
+think we should make a list of missing tests and examples - both
+transient installs - that should be added (later)."
+
+### base-package-boot
+
+Sound: three actions, each its page in the module (Signature, Arguments
+where it takes any, Returns, Errors, Design); the config in
+`protocol.js`; `mounted`, the config value by value and every refusal.
+
+**Documentation, now** (ours, put to the human):
+
+1. The menu has no jump to the actions: `info/get boot/deploy` is not
+   there, only `boot/modules/mrepo-base-boot/external/deploy`.
+2. No "Config" section: where each action is offered (`<name>`,
+   `swarms/<swarm>/<name>`, for teardown `registry/<swarm>/<name>`), a
+   target needed, `package` required for `deploy`, optional for
+   `redeploy`.
+3. "Commands" and "How to" become how-tos: a child deployed; a swarm's
+   node deployed; the registry read and several torn down.
+4. `teardown`'s page: its URI forms, one child or a registry query.
+5. A claim to settle: the README says a node an mrepo deployed is torn
+   down before that mrepo; the action orders nothing so (only the
+   machine's `haicc boot/teardown` stops every runtime): the claim
+   wrong, or the behaviour missing (`teardown-cascade`, `tasks.md`).
+
+**Tests and examples, later: each a transient install** (`install-tests`,
+`tasks.md`):
+
+- Tests of its own (today in other packages' tests only): deploy for
+  real (the runtime answering, the shortcut, the `links` record, the
+  registry's node); teardown (all of it gone); redeploy (from the
+  package it was deployed from, and another); a swarm's node
+  (`<swarm>/<name>`); teardown by a registry query; teardown of a child
+  with a child inside, as A5 settles.
+- Examples (`example/`): a host and a node, deployed, read through
+  both, torn down; a swarm of two nodes; the registry listed, queried,
+  torn down by a query.
+
+- **The human, on boot's config**: "where each action is offered:
+  <name>, swarms/<swarm>/<name>, and for teardown also
+  registry/<swarm>/<name>; --> isn't this component stuff. The package
+  here is the protocol (only) no?" Yes: the config names positions
+  other packages' structures bring (`swarms/`, the haicc component's;
+  `registry/`, the boot component's), and derives a node's unique URI
+  from the path. Ours, put to the human: the protocol offered anywhere
+  below `main` (`**`, a target needed, as `crud`); a position's meaning
+  from the structure's documents (a swarm a node whose document says
+  so; the unique URI from the nearest swarm node above, else `local`);
+  `teardown` a query, whatever it selects torn down, the registry's
+  layout not the action's. A design change: decided before code.
+- **Settled** (the human): "yes, structure documents give positions their
+  meaning. Meaning is set by components or solution. We are going to
+  create the solution package later, stuff that should go there can be
+  parked. In this case the structure goes into the boot component. And
+  the component needs to supply the 'management logic' that comes with
+  the (simple) deploy and teardown. Now, shouldn't that be an override
+  of the boot protocol actions? How do you see that working?"
+- Ours, put to the human: an extension, not an override (two
+  implementations of one protocol, which runs depending on the list's
+  order; a component carrying code). The protocol does the simple thing,
+  offered anywhere below `main`, the unique URI from the nearest swarm
+  node's document, else `local`. **Action hooks**, beside the
+  transition hooks: `mrepo/runtime/hooks/boot.deploy/`,
+  `boot.teardown/`, run after the action as the mrepo's own, a hook
+  naming values of the action it follows (`registry/{uri}`): the one new
+  mechanism. Logic that needs code a protocol of its own (`registry`:
+  record, remove, list), listed by the boot component, called by its
+  hooks. The boot component: the registry's structure, its hooks (after
+  deploy recorded, after teardown removed, before teardown what the
+  child deployed torn down: the cascade). Parked for the solution:
+  `swarms/`, the cluster, the mrepos of an install.
+- The human: "what about actions that need to run before the command
+  (teardown)". Ours, put to the human: two points an action,
+  `<protocol>.<action>.before/` and `.after/`, run in the same request's
+  execution, in name order. A before hook prepares or refuses: one that
+  fails fails the request, the action not run (a guard too). An after
+  hook records: one that fails fails the request, the action's effects
+  outside the repository staying: bookkeeping that cannot fail goes
+  after, what can fail before. The cascade a before hook
+  (`boot.teardown.before`: what the child deployed torn down first), each
+  teardown running its own before hooks, as deep as the tree; which
+  mrepos the child deployed the `registry` protocol's to answer.
+  Parameters: the action's form before, its output too after.
+- The human: "yes, but that would be as good as replacing the original
+  action with some override, don't you think so?" Ours: functionally
+  yes; hooks scatter the flow (before, the action, after) and their
+  order between packages is a question of its own. So, put to the human:
+  **an override as a script**: the component redefines an action,
+  `mrepo/runtime/actions/<protocol>.<action>.json`, a list of commands
+  as a continuation script is; inside it the protocol's action is the
+  original, outside (a request, a hook) the override; one request, one
+  execution, one record, a failing command stopping it there; parameters
+  from the request and the steps before; one override an action an
+  mrepo, by the package that defines it, as runtime config is. In place
+  of the before and after hooks.
+- The human: "the override would be a script. It would mean that the
+  component replace protocol action mapping with a script". Our reading,
+  put back: the runtime maps each protocol action to its implementation
+  (today the package's `protocol.js`); the package defining an mrepo may
+  replace an entry with a script, `mrepo/runtime/actions/<protocol>.<action>.json`,
+  laid into the runtime layer as hooks are; only the implementation
+  changes, the interface (where offered, what it takes, the gate) stays
+  the protocol's; inside the script the action is the original; one
+  mapping an mrepo. To settle while building: the parameters
+  (`{target}`, `{package}`, a step's output), the script's answer (the
+  original action's output). Built as its own part: the mapping
+  overridable in the runtime, a `registry` protocol (the registry's
+  logic out of `mrepo-base-boot`), the boot component's scripts
+  (`teardown` with the cascade, `deploy`), boot offered anywhere below
+  `main`, the unique URI from the structure's documents; a proof of
+  concept and its how-to first.
+- The human: "However, there must be a way to call the base
+  implementation. what about protocol/boot/deploy?" Ours: yes, explicit,
+  in place of a rule by context: `boot/teardown` the action as the mrepo
+  maps it, overridden or not; `protocol/boot/teardown` the protocol's
+  own implementation, always. The cascade needs both: `boot/teardown
+  {each}` through the override, `protocol/boot/teardown {target}` the
+  base. Internal by a rule already there: the protocol protocol is never
+  activated for the outside, so an override is not bypassed from
+  outside. The runtime: a command of three parts, `protocol/<protocol>/<action>`,
+  sent to the package's function directly, the action's own gate and
+  arguments. To confirm.
+- **Settled** (the human): "yes, record it as settled, but we don't need
+  internal/external constraint at the moment. Let commandline open to
+  target the protocol version as well." So: a component replaces a
+  protocol action's mapping with a script
+  (`mrepo/runtime/actions/<protocol>.<action>.json`); `boot/teardown` the
+  action as mapped, `protocol/boot/teardown` the protocol's own
+  implementation, open to the command line too, no constraint. A code
+  change, after the review (`review-code`, `tasks.md`).

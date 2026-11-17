@@ -54,5 +54,3 @@ removed.
 - `main.js`: the dispatcher, the bundle's main, generated.
 - No structure of its own: the nodes are made in `main`, the runtime
   package's layer.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

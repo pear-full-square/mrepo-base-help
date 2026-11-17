@@ -1865,3 +1865,28 @@ pattern belongs to. The patterns of parts 85 and 86 written as how-tos
 documentation package, a new component (`base-docs-package`); a
 module's config moved into its package, a package brought to the new
 form (`base-docs-hdlc`).
+
+## `install-tests`: each package's tests and examples as transient installs
+
+The human (2026-11-17): "make a list of missing tests and examples -
+both transient installs - that should be added (later)". Each package's
+review adds its list in `review.md` ("The review, a package at a
+time"); built together, later. A transient install: deployed, exercised,
+torn down, nothing left.
+
+## `review-code`: the code changes the review finds, built after it
+
+The human (2026-11-17): "Do we list these as code modifications, which
+we address after the review?" Yes: the review settles documentation
+package by package and lists here what needs code, built after it.
+
+- **boot** (`review.md`, "base-package-boot"): positions given their
+  meaning by the structure's documents (boot offered anywhere below
+  `main`, the unique URI from the nearest swarm node's document, else
+  `local`); a component replacing an action's mapping with a script
+  (`mrepo/runtime/actions/<protocol>.<action>.json`, its parameters, its
+  answer the original's); `protocol/<protocol>/<action>`, the protocol's
+  own implementation, open to the command line; a `registry` protocol,
+  the registry's logic out of `mrepo-base-boot`; the boot component's
+  scripts (`teardown` with its cascade, `deploy`). A proof of concept
+  and its how-to first. Parked for the solution: `swarms/`, the cluster.
