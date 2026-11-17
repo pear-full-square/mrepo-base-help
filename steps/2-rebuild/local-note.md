@@ -7,7 +7,7 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
-## 2026-11-17: the install from the releases, `a91bc16`
+## 2026-11-17: the install from the releases, `b7ce3ea`
 
 The human: "the instructions on haiccing are wrong, it should install
 from haiccing package", then "Test the github release locally and fix
@@ -18,7 +18,7 @@ no source holding the app. Nothing fetched our packages (the app's
 `download haiccing` said "not published yet", and the app cannot fetch
 its own bundle).
 
-Fixed, the code changed on the human's word (`a91bc16`, on top of part
+Fixed, the code changed on the human's word (`b7ce3ea`, on top of part
 85):
 
 - `haicc sources download haiccing`, in sh beside Bare
