@@ -47,3 +47,25 @@ inspect. One line a check, the count last; exit 0 passed, 1 failed.
     deployed: both runtimes stopped, the mrepos and the package store
     removed, Bare, the sources list and the scripts kept; a second time,
     nothing there; `haicc boot/deploy` brings it back.
+
+## In a container
+
+`sh test/container.sh`: the haicc command installed in a container as on
+a machine, from the host's sources, the prerequisite of a node run in its
+container. A plain `debian:bookworm-slim` container with nothing of haicc
+in its image; Docker answering (else skipped), the image there (pulled
+once; offline, put there beforehand). The container removed after, its
+folder too; `--keep` leaves both.
+
+1. **The container**: haicc's home a folder of the host's; the sources
+   mounted read only at the same path as on the host; the host's user;
+   `--init`, which reaps a runtime that ended (without it a stopped
+   runtime stays a zombie and counts as running).
+2. **The install**: the installer, `haicc sources link` with the host's
+   sources, `haicc prereq` every line ok.
+3. **The boot and a host in service**: `haicc boot/deploy`; the host
+   deployed with `--flags continuation=start`.
+4. **Commands**: a script's lines at the host; the host by its registry
+   reference; `info/get`; the service stopped.
+5. **The teardown**: both runtimes stopped, none left in the container;
+   the work folder emptied; Bare kept.

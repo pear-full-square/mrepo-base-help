@@ -26,6 +26,9 @@ fi
 mkdir -p "$home/bin" "$bin"
 home=$(cd "$home" && pwd)
 bin=$(cd "$bin" && pwd)
+# the command registered in the install's own bin/ would replace the script
+# it starts, and start itself for ever
+[ "$bin" != "$home/bin" ] || { echo "haicc-install.sh: --bin is the install's own folder, $home/bin: name another" >&2; exit 2; }
 cat > "$home/bin/haicc" <<'HAICC_INSTALL_FILE_END'
 #!/bin/sh
 # haicc: the command, on Linux. The command itself is an app, run with Bare

@@ -41,6 +41,9 @@ fi
 mkdir -p "$home/bin" "$bin"
 home=$(cd "$home" && pwd)
 bin=$(cd "$bin" && pwd)
+# the command registered in the install's own bin/ would replace the script
+# it starts, and start itself for ever
+[ "$bin" != "$home/bin" ] || { echo "haicc-install.sh: --bin is the install's own folder, $home/bin: name another" >&2; exit 2; }
 HEAD
   for f in "$here"/bin/*; do
     n=$(basename "$f")
