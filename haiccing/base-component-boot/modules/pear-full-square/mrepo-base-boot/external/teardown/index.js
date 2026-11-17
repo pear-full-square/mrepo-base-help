@@ -23,7 +23,7 @@ const inRegistry = uri => { const u = joined(segmented(uri)); return u === `${MA
 
 export async function teardown (exec, { uri }) {
   if (inRegistry(uri)) return several(exec, uri)
-  const c = child(exec, uri)
+  const c = await child(exec, uri)
   const recorded = await c.recorded()
   if (!recorded) { await c.refuse(); throw new Error(`not deployed: ${c.at}`) }
   // Its runtime stopped first (when it runs), waited for until its process

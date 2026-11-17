@@ -10,15 +10,15 @@ standing for the parent's.
 
 - **What it provides**: one protocol, `boot`, with a function for every
   action configured and no other.
-- **Its config, value by value**: the three actions at one name below
-  the mrepo or at a swarm's node (`swarms/<swarm>/<name>`), a target
-  needed; `deploy` with its package required,
+- **Its config, value by value**: the three actions at any position
+  below `main`, a target needed; `deploy` with its package required,
   `redeploy` with it optional, `teardown` with none; no state of its own.
 - **Its config in effect**: a request checked: no target, no package,
-  a deeper URI that is no swarm's node, not activated, each refused as
-  it should be; a swarm's node allowed.
+  not activated, each refused as it should be; a deeper position and a
+  query into the registry allowed.
 - **`deploy`**: each refusal, before anything is built: the mrepo itself,
-  not a name, the swarm `local`, a swarm's node whose swarm has no node,
+  not a name, a position whose node above is not there, the swarm
+  `local`, a position below a shortcut,
   deployed already, data in `main` at that position, a folder
   in the way, no package, no store, a package in no source. A refusal
   writes nothing and leaves no folder.

@@ -9,7 +9,7 @@ import { child } from '../../internal/child.js'
 
 // (link: the key of the link, when it has one already: a redeploy keeps it)
 export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept = null } = {}) {
-  const c = child(exec, uri)
+  const c = await child(exec, uri)
   if (await c.recorded()) throw new Error(`deployed already: ${c.at}`)
   // a position that exists locally (data in main there): not a target
   await c.refuse()

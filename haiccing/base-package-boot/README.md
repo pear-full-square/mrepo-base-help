@@ -4,12 +4,11 @@ The boot protocol: it deploys, tears down and redeploys the mrepos linked in an 
 
 An mrepo that links it can deploy others. A deployed mrepo is built from
 a target package's list, placed by its unique URI beside the others
-(`<work>/mrepos/local/host`; a swarm's node, deployed at
-`swarms/<swarm>/<name>`: `<work>/mrepos/<swarm>/<name>`), gets its own runtime, is linked at its
+(`<work>/mrepos/local/host`), gets its own runtime, is linked at its
 position by a shortcut, and its link is recorded in this mrepo's `links`
-layer, which the package brings. The first mrepo of a host, the boot mrepo,
-is put in place by `haiccing/base-component-boot`, which links this
-package.
+layer, which the package brings. The first mrepo of a host, the boot
+mrepo, is put in place by `haiccing/base-component-boot`, which links
+this package.
 
 ## Links
 
@@ -30,12 +29,16 @@ deployed or torn down.
 
 | action | offered at | arguments |
 |---|---|---|
-| `deploy` | `<name>`, `swarms/<swarm>/<name>` | the package, required |
-| `teardown` | those, and `registry/<swarm>/<name>` | none |
+| `deploy` | any position below `main` | the package, required |
+| `teardown` | the same; a query into the registry, `registry/<swarm>/*` | none |
 | `redeploy` | as `deploy` | the package, optional: the one it was deployed from |
 
-The positions name structures other packages bring: `swarms/` the haicc
-component's, `registry/` the boot component's. A child's own children
+What a position means its documents say, not this config: the nearest
+node above it whose document is `{"kind":"swarm"}` makes the child that
+swarm's node (`<swarm>/<name>`); none, it is in its parent's swarm
+(`local/host`). `kind` names the type of a node's data structure; a
+schema's name, later. The node above it is there first; a position below a
+shortcut is another mrepo's, refused. A child's own children
 are not torn down with it: only the machine's `haicc boot/teardown`
 stops every runtime of the install.
 

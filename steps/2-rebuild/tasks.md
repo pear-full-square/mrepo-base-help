@@ -1912,13 +1912,19 @@ The human (2026-11-17): "Do we list these as code modifications, which
 we address after the review?" Yes: the review settles documentation
 package by package and lists here what needs code, built after it.
 
-- **boot** (`review.md`, "base-package-boot"): positions given their
-  meaning by the structure's documents (boot offered anywhere below
-  `main`, the unique URI from the nearest swarm node's document, else
-  `local`). The override is not built for base (`review.md`); the
-  registry's logic and the cascade go to the component's script
-  library, tried with the solution install (`base-solution-haicc`).
-  Parked for the solution: `swarms/`, the cluster.
-- **docs** (`review.md`, "base-component-haicc, base-component-docs"):
-  `documents: sources` reads the folder sources only; a `github:<org>`
-  source's manifest read too, so an install from GitHub documents all.
+- **boot**, **done** (2026-11-17): positions given their meaning by
+  the structure's documents: `deploy`, `teardown`, `redeploy` offered at
+  any position below `main` (`**`, a target needed); the unique URI from
+  the nearest node above whose document is `{"kind":"swarm"}`, by that
+  node's name, else the parent's swarm; the node above there first; a
+  position below a shortcut refused. The protocol names no `swarms/`; the
+  haicc component's script `cluster` and the how-tos make the swarm's
+  node with its document. The override not built for base; the
+  registry's logic and the cascade to the component's script library,
+  with the solution install. Parked for the solution: `swarms/`, the
+  cluster.
+- **docs**, **no change needed** (2026-11-17): `documents: sources`
+  reads the folder sources only, as `fetch` does: every package an
+  install deploys comes from a folder; `haicc sources download` fetches
+  into haicc's own sources folder and registers it, `folder:<path>`. An
+  install from GitHub documents all.

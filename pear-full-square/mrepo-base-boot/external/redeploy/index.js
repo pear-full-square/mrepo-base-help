@@ -4,7 +4,7 @@ import { deploy } from '../deploy/index.js'
 import { teardown } from '../teardown/index.js'
 
 export async function redeploy (exec, form) {
-  const c = child(exec, form.uri)
+  const c = await child(exec, form.uri)
   const was = await c.recorded()
   exec.log('verbose', 'again', { at: c.at, package: form.args?.[0] ?? was?.package ?? null, from: was?.package ?? null })
   const down = await teardown(exec, form)

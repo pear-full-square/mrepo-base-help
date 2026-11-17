@@ -992,3 +992,17 @@ human: "Don't always build everything while we are making changes";
 everything before a milestone) and "Products" (when the human asks, or
 at an agreed milestone); `base-docs-vision`'s "Continuations" (the
 scripts settled for base, to build).
+
+### review-code, done (2026-11-17)
+
+- **Boot positions from the structure's documents**: built (`tasks.md`,
+  `review-code`). The human, on the key: "kind of folder, so you propose
+  to use kind for data structure type? Later down the line this will
+  become schema then." Ours: yes, `kind` names the type of the data
+  structure at a node, what the position is; a schema, later, describes
+  that type (its fields, its check, its AVRO form): the document keeps
+  `kind`, its value the schema's name. No rename then.
+- **Documents from GitHub**: no change needed. The human: "yes, we work
+  airgapped and never install direct from the internet." A principle:
+  an install deploys from a sources folder only; a download fills that
+  folder. To write into `base-docs-haicc` (after the build running now).
