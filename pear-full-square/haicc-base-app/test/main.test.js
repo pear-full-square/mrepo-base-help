@@ -196,3 +196,28 @@ test('boot/teardown: what boot/deploy put in place removed, nothing else; no run
     t.is(await s.run(['boot/teardown']), 3, 'twice: nothing there, exit 3')
   } finally { s.remove() }
 })
+
+test('the install\'s scripts: haicc scripts lists them; haicc/file <URI> <name> reads one here and sends it as haicc/script', async (t) => {
+  const s = setup()
+  try {
+    t.is(await s.run(['scripts']), 0, 'none yet: exit 0')
+    t.alike(s.out, [], 'nothing listed')
+    mkdirSync(join(s.home, 'scripts', 'haiccing', 'base-component-haicc'), { recursive: true })
+    writeFileSync(join(s.home, 'scripts', 'check.haicc'), 'crud/read .\n')
+    writeFileSync(join(s.home, 'scripts', 'haiccing', 'base-component-haicc', 'node.haicc'), 'service/initialise\nservice/start\n')
+    t.is(await s.run(['scripts']), 0)
+    t.alike(s.out, ['check', 'haiccing/base-component-haicc/node'], 'the user\'s, then each package\'s, by name')
+    mkdirSync(join(s.root, 'inbox'), { recursive: true }); mkdirSync(join(s.root, 'outbox'), { recursive: true })
+    let a = answerAll(s.root, [{ output: [{ line: 'crud/read .' }] }])
+    t.is(await s.run(['--output', 'host', 'haicc/file', '.', 'check']), 0, 'exit 0')
+    t.alike(await a.all, [['haicc', 'host', 'haicc/script', '.', 'crud/read .\n']], 'sent as haicc/script, its lines read here: no mrepo reads a file of the machine')
+    a = answerAll(s.root, [{ output: [] }])
+    t.is(await s.run(['--output', '.', 'haicc/file', 'swarms/swarm-1', 'haiccing/base-component-haicc/node']), 0)
+    t.alike(await a.all, [['haicc/script', 'swarms/swarm-1', 'service/initialise\nservice/start\n']], 'a package\'s, by its org and package; its URI where the lines run')
+    a.stop()
+    t.is(await s.run(['host', 'haicc/file', '.', 'nope']), 3, 'no such script: exit 3')
+    t.ok(/^haicc: no script: nope \(/.test(s.err[0]), 'said, with where it was looked for')
+    t.is(await s.run(['host', 'haicc/file', '.', '../etc/passwd']), 2, 'a path: no name, exit 2')
+    t.is(await s.run(['host', 'haicc/file', '.']), 2, 'no name: exit 2')
+  } finally { s.remove() }
+})

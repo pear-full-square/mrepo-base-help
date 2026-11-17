@@ -2,7 +2,7 @@
 // position, or sent on where the node is a shortcut. Linked into an mrepo,
 // its config is loaded by the runtime and its action run.
 // The work is mrepo-base-haicc's; here the mounting.
-import { goto, script, file } from './modules/pear-full-square/mrepo-base-haicc/index.js'
+import { goto, script } from './modules/pear-full-square/mrepo-base-haicc/index.js'
 
 // The haicc protocol's config, the package's: goto, its default action (haicc alone is
 // haicc/goto), at any position. Not behind the service's door: the command
@@ -16,12 +16,11 @@ export const protocols = {
     default: 'goto',
     actions: {
       goto: { uris: ['**'], args: ['command'], command: true, description: 'Go to the node positions the URI selects and execute the command that follows at each; where the URI reaches a shortcut, the command is sent to the mrepo linked there, with what is left of the URI. An mrepo by its registry reference, registry/<swarm>/<name>: where the registry records it is linked.' },
-      script: { uris: ['**'], args: ['script'], description: 'A script\'s lines, each a simple command, executed where the URI points, each after the one before; the first that fails ends it. Its argument the lines, one string (a shell multi-line string, or a heredoc).' },
-      file: { uris: ['**'], args: ['file'], description: 'The lines of a file of this mrepo (a path from its root, its layer first) executed as haicc/script executes them, where the URI points.' }
+      script: { uris: ['**'], args: ['script'], description: 'A script\'s lines, each a simple command, executed where the URI points, each after the one before; the first that fails ends it. Its argument the lines, one string (a shell multi-line string, or a heredoc).' }
     }
   }
 }
 
 export const actions = {
-  haicc: { goto, script, file }
+  haicc: { goto, script }
 }

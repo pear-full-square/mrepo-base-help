@@ -56,14 +56,14 @@ test('what it provides: one protocol, haicc, its config and its action', (t) => 
   t.alike(Object.keys(mounted.actions.haicc).sort(), Object.keys(mounted.protocols.haicc.actions).sort(), 'a function for every action configured, and no other')
 })
 
-test('its config, value by value: goto, the default action, at any position; script and file', (t) => {
+test('its config, value by value: goto, the default action, at any position; script', (t) => {
   const cfg = mounted.protocols.haicc
   t.is(cfg.package, 'haiccing/base-package-haicc', 'the package that brings it')
   t.ok(cfg.description, 'its description')
   t.is(cfg.default, 'goto', 'haicc alone is haicc/goto')
   t.alike(Object.keys(cfg).sort(), ['actions', 'default', 'description', 'package'], 'nothing else')
-  t.alike(Object.keys(cfg.actions), ['goto', 'script', 'file'], 'three actions')
-  t.alike([cfg.actions.script.uris, cfg.actions.script.args, cfg.actions.file.uris, cfg.actions.file.args], [['**'], ['script'], ['**'], ['file']], 'script and file at any position, their URI where the lines run: their argument the lines, the file')
+  t.alike(Object.keys(cfg.actions), ['goto', 'script'], 'two actions')
+  t.alike([cfg.actions.script.uris, cfg.actions.script.args], [['**'], ['script']], 'script at any position, its URI where the lines run: its argument the lines')
   const goto = cfg.actions.goto
   t.alike(goto.uris, ['**'], 'at any position: the root, a shortcut, deeper')
   t.alike(goto.args, ['command'], 'one argument, required and named: the command that follows')
@@ -110,16 +110,14 @@ test('goto: what it refuses', async (t) => {
   t.alike([executed, sent], [[], []], 'a refusal executes nothing and sends nothing')
 })
 
-test('script and file: the request waits for its lines, run where the URI points; resumed, what each gave', async (t) => {
+test('script: the request waits for its lines, run where the URI points; resumed, what each gave', async (t) => {
   const { exec } = execution({ ...HOST, '/runtime/hooks/initialise.haicc': 'info/extract' })
   const jobs = []
   const waiting = { ...exec, runtime: { dir: '/work/mrepos/boot', uri: 'local/boot' }, resumed: null, wait: job => { jobs.push(job); return null }, find: async p => (p === '/runtime/hooks/initialise.haicc' ? Buffer.from('info/extract\n') : null) }
   t.is(await act('script', waiting, { uri: ['main', '.'], args: ['service/initialise\nservice/start'] }), null, 'script: the request waits for its lines')
-  t.is(await act('file', waiting, { uri: ['main', '.'], args: ['runtime/hooks/initialise.haicc'] }), null, 'file: a file of the mrepo, the same')
-  t.is(jobs.length, 2, 'each a job: its lines through the mrepo\'s own inbox')
+  t.is(jobs.length, 1, 'a job: its lines through the mrepo\'s own inbox')
   t.alike(await act('script', { ...waiting, resumed: { output: [{ line: 'service/start', output: 1 }] } }, { uri: ['main', '.'], args: ['x'] }), [{ line: 'service/start', output: 1 }], 'resumed: what each line gave')
   await t.exception(act('script', waiting, { uri: ['main', '.'], args: ['# nothing'] }), /missing argument: script/, 'no command among the lines: refused')
-  await t.exception(act('file', waiting, { uri: ['main', '.'], args: ['runtime/none.haicc'] }), /no file: runtime\/none.haicc/, 'a file that is not there')
 })
 
 test('every action the config names was run here', (t) => {

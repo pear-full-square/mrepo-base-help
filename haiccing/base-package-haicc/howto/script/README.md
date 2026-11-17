@@ -28,8 +28,12 @@ haicc host haicc/script . <<'END'
 crud/create swarms/swarm-2 '{"kind":"swarm"}'
 boot/deploy swarms/swarm-2/node-1 base-component-haicc
 END
-# a file of your own, its lines on stdin
-haicc host haicc/script . < my-check.haicc
+# a script kept in the install, by its name: <home>/scripts/check.haicc
+haicc host haicc/file . check
+# a package's, installed under its org and package
+haicc host haicc/file swarms/swarm-2 haiccing/base-component-haicc/node
+# what the install keeps
+haicc scripts
 ```
 
 ## Notes
@@ -38,3 +42,6 @@ haicc host haicc/script . < my-check.haicc
   node-1 ...`) is a hop like any.
 - **No variables, no logic**: the position is the input; a script
   written relative to where it runs is run elsewhere by pointing there.
+- **The install's scripts** (`haicc/file`): `<home>/scripts/<name>.haicc`,
+  a package's at `<org>/<package>/<name>.haicc`; read by the terminal,
+  sent as `haicc/script`. A name, never a path.

@@ -15,3 +15,4 @@ code, `usage.js` the usage's text.
 - [sources](sources/)
 - [output](output/)
 - [boot](boot/)
+- [scripts](scripts/)

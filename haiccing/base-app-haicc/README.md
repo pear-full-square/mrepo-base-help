@@ -32,6 +32,10 @@ bare base-app-haicc.bundle /run <argument>...
   the root mrepo: `haicc boot/deploy` puts the boot mrepo in place and
   starts its runtime; `haicc boot/teardown` stops every runtime and
   removes what the deploy put in place.
+- **`haicc scripts`** lists the install's scripts, `<home>/scripts`:
+  the user's by name, a package's as `<org>/<package>/<name>`. `haicc
+  <URI> haicc/file <URI> <name>` reads one here and sends its lines as
+  `haicc/script`, to run where its URI points.
 - **`haicc sources`** lists the sources registered; `unlink`, `https`,
   `no-https` and `download` change them.
 - **`haicc --help`** prints the forms, with examples.

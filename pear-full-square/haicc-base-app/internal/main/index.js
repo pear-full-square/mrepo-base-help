@@ -10,6 +10,7 @@ import { unpack } from '../unpack/index.js'
 import { outcome } from '../outcome/index.js'
 import { sourcesCommand } from '../sources/index.js'
 import { outputCommand, widthOf } from '../output/index.js'
+import { scriptsCommand, withFile } from '../scripts/index.js'
 import { MACHINE } from '../boot/index.js'
 import { CONFIG } from '../config.js'
 import { Failure } from '../failure.js'
@@ -30,6 +31,10 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
     if (c.kind === 'usage') { io.out(USAGE); return 0 }
     if (c.kind === 'sources') {
       for (const line of sourcesCommand(home, c.args, { org: CONFIG.org, err: io.err })) io.out(line)
+      return 0
+    }
+    if (c.kind === 'scripts') {
+      for (const line of scriptsCommand(home, c.args)) io.out(line)
       return 0
     }
     if (c.kind === 'output') {
@@ -58,7 +63,9 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
       return o
     }
     // haicc/script and its URI, no lines after them: the lines from stdin (a heredoc)
-    const parts = c.parts.at(-2) === 'haicc/script' && io.stdin ? [...c.parts, await io.stdin()] : c.parts
+    // haicc/file <URI> <name>: the install's script read here, sent as haicc/script
+    const given = withFile(home, c.parts)
+    const parts = given.at(-2) === 'haicc/script' && io.stdin ? [...given, await io.stdin()] : given
     const o = await send(parts)
     // A continuation: the response says what to go on with, a script, its
     // lines simple commands: sent on as one command to the root, which has
