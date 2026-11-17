@@ -666,3 +666,8 @@ On our three small points (the human):
   `docs`; read with `haicc docs info/get <keywords>`. The documentation
   packages leave every other list; an mrepo's own `info` is about what
   is deployed in it. Deployed by the install (ours, not answered).
+- **Deployed by the boot install** (the human): "it is part of the boot
+  install, I think host will be as well. We don't do it you
+  'automatically' because we lack the functionality." So for now a
+  command, as the host's: `haicc . boot/deploy docs base-component-docs`;
+  the boot install doing both when it can.
