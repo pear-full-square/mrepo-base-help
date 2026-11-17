@@ -1956,7 +1956,9 @@ registry, we can create info views on all mrepos."
    and slave is a direction, not a rank: the side a command starts at is
    its master, the side it is replicated to and executed at its slave.
    The host is master for what it sends into the container's node; the
-   node is master for what it sends out to the host. Designed when the
+   node is master for what it sends out to the host. Only between those
+   two haicc installs, the host and the node in its container: "it
+   doesn't cover communication within the swarm". Designed when the
    container comes back.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
