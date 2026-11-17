@@ -82,8 +82,10 @@ repository's and its tools'.
   for it to stop answering.
 - **A removal by a variable is refused** by a safety check: write it as
   `"${VAR:?}"`, or make a fresh folder with `mktemp -d`.
-- **What it all looks like**: `tools/bare tools/info-view.js` writes every
-  package's and mrepo's info into one page, `sources/info-view.html`.
+- **What it all looks like**: `tools/bare tools/info-view.js` deploys the
+  docs mrepo in a transient install (every package in `sources/`, after
+  `tools/release.js`) and writes its info into one page,
+  `sources/info-view.html`; nothing left after.
 
 ## Execution
 

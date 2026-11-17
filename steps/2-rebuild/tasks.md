@@ -1857,6 +1857,10 @@ registry, we can create info views on all mrepos."
    run differently for each type. Tried out with the solution install.
    **Open, to discuss**: how scripts run ("all command run as haicc
    (the external commands) but we need some more discussion on this").
+   **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
+   bundle, so the docs mrepo cannot document it; a documentation-only
+   form of it with the solution, the solution's list naming what the
+   docs mrepo documents in place of `documents: sources`.
 3. **The Splectral viewer** (`splectral-docs`, above).
 4. **Info views on every mrepo**: the boot mrepo's registry lists them;
    each answers `info/get` about itself. **Settled** (the human: "yes,
