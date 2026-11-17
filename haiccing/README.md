@@ -6,7 +6,8 @@ each at `haiccing/<repo>`, in the package structure
 
 - Packages, each one protocol: `base-package-runtime/`, the runtime;
   `base-package-protocol/`, the activation of protocols;
-  `base-package-help/`, help; `base-package-howto/`, how-tos by activity; `base-package-boot/`, the boot protocol;
+  `base-package-help/`, help; `base-package-howto/`, how-tos by activity;
+  `base-package-info/`, an mrepo's pages by keywords; `base-package-boot/`, the boot protocol;
   `base-package-service/`, the service; `base-package-haicc/`, haicc;
   `base-package-crud/`, structure in `main`; `base-package-container/`,
   an mrepo's replica in a container; `base-package-splectral/`,

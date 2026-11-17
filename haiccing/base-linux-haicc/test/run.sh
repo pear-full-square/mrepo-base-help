@@ -166,7 +166,7 @@ out=$(haicc host boot/deploy 2>&1 >/dev/null); is "$out" "haicc: missing argumen
 out=$(haicc host 2>&1); is $? 2 "haicc host, no command: exit 2 at the command line"
 out=$(haicc . protocol/activate . service 2>&1 >/dev/null); is "$out" "haicc: not now: protocol activate (protocol is not active)" "activating a protocol is the hooks', not a command from outside"
 out=$(haicc . deploy/teardown host 2>&1 >/dev/null); is $? 1 "a protocol that is not there: exit 1"
-is "$out" "haicc: no protocol: deploy (boot, crud, haicc, help, howto, runtime)" "said, with the protocols there"
+is "$out" "haicc: no protocol: deploy (boot, crud, haicc, help, howto, info, runtime)" "said, with the protocols there"
 out=$(haicc . boot/remove host 2>&1 >/dev/null); is "$out" "haicc: no action: boot remove (deploy, redeploy, teardown)" "an action that is not there: said, with the protocol's actions"
 
 # 9. a node inside the host; commands chained through both
@@ -309,6 +309,28 @@ has "$(haicc --output host help/get . packages/haiccing/base-component-haicc/how
 out=$(haicc --output host howto/get . pipeline 2>&1); is $? 0 "an activity that is none here: answered, no error"
 has "$out" '{"asked":"pipeline","found":false,"why":"no activity pipeline here","activities":[' "said, with the activities there are"
 is "$(haicc --output host howto/extract 2>&1)" '{"howtos":2,"activities":["container","node"],"changed":false,"problems":0}' "haicc host howto/extract: extracted already, with the help, by its hook; no how-to against its form"
+
+# 9d. info: the pages by keywords from the top down, the keywords where the
+# URI is, no dot
+out=$(haicc --output . info 2>&1)
+has "$out" '"keyword":".","choices":[{"title":"base-component-boot"' "haicc . info: the boot mrepo's top page, its own package's README (info alone is info/get)"
+has "$out" '{"keyword":"boot","oneliner":"' "its keywords: an included package by its name without the prefix"
+out=$(haicc --output host info 2>&1)
+has "$out" '"choices":[{"title":"base-component-haicc"' "haicc host info: the host's top page"
+has "$out" '{"keyword":"container","oneliner":"' "its included packages"
+has "$out" '{"keyword":"modules","oneliner":"' "and the pages made at extraction: modules"
+has "$out" '{"keyword":"third-party","oneliner":"' "and third-party"
+has "$(haicc --output host info/get boot 2>&1)" '"title":"base-package-boot"' "haicc host info/get boot: a protocol's page, its package's README"
+out=$(haicc --output host info/get info/extract 2>&1)
+has "$out" '"title":"extract","oneliner":"Writes the mrepo' "haicc host info/get info/extract: an action, a jump from its package into its module"
+has "$out" '{"keyword":"info/extract/signature"' "its sections below it"
+has "$(haicc --output host info/get info extract signature 2>&1)" '"title":"Signature"' "a section; the keywords as words too"
+has "$(haicc --output host info/get modules/mrepo-base-info 2>&1)" '"title":"mrepo-base-info"' "a module, once, under modules"
+has "$(haicc --output host info/get third-party 2>&1)" '"generated":true' "third-party: made at extraction, marked so"
+has "$(haicc --output host info/get mrepo 2>&1)" '"choices":[{"title":"mrepo/"' "a keyword with several meanings: each a choice"
+out=$(haicc --output host info/get nothing-here 2>&1); is $? 1 "a keyword that is not there: exit 1"
+has "$out" "no nothing-here here: nearest ." "said, with the nearest and what is below it"
+has "$(haicc --output host info/extract 2>&1)" '"changed":false' "haicc host info/extract: extracted already, by its hook"
 
 # 10. torn down: the node; the service stopped and shut down; the host
 is "$(haicc --output host boot/teardown node-1 2>&1)" '{"tornDown":"node-1"}' "haicc host boot/teardown node-1"

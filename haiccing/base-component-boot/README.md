@@ -12,26 +12,26 @@ the sources are there before it runs: `haicc boot/deploy`, of
 bare base-component-boot.bundle --work=<folder> --sources=folder:<sources>
 ```
 
-| | |
-|---|---|
-| [mrepo/](mrepo/) | its part of the structure: the list of its packages |
-| [howto/](howto/) | its how-tos: what is done from the boot mrepo |
-| [test/](test/) | its tests: the boot end to end, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
 
-## Packages
+- [mrepo](mrepo/)
+- [howto](howto/)
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
-| package | brings |
-|---|---|
-| `base-package-runtime` | the runtime, its layers, the `runtime` protocol |
-| `base-package-help` | the `help` protocol and the help layer |
-| `base-package-howto` | the `howto` protocol and the howto layer |
-| `base-package-protocol` | the `protocol` protocol: activate, deactivate |
-| `base-package-boot` | the `boot` protocol: deploy, teardown, redeploy |
-| `base-package-haicc` | the `haicc` protocol: goto |
-| `base-package-crud` | the `crud` protocol: create, read, delete: structure in `main` |
-| `package-docs-mrepo`, `package-docs-package` | the documentation |
+## Included packages
+
+- [base-package-runtime](../base-package-runtime/)
+- [base-package-help](../base-package-help/)
+- [base-package-howto](../base-package-howto/)
+- [base-package-info](../base-package-info/)
+- [base-package-protocol](../base-package-protocol/)
+- [base-package-boot](../base-package-boot/)
+- [base-package-haicc](../base-package-haicc/)
+- [base-package-crud](../base-package-crud/)
+- [package-docs-mrepo](../package-docs-mrepo/)
+- [package-docs-package](../package-docs-package/)
 
 ## Steps
 
@@ -68,7 +68,8 @@ command as typed and a GUID. Each step's outcome is logged in it.
   to it, and it passes on those for the mrepos linked in it.
 - No `service`: it is not service managed. Its `boot` hooks, fired by its
   runtime each time it starts, activate its protocols, extract its
-  help and make sure the node `registry` is in its `main`.
+  help, its how-tos and its info, and make sure the node `registry` is in
+  its `main`.
 - **It keeps the mrepo registry**: the mrepos of the install, a node
   each by its unique URI under `registry` in its `main`
   (`registry/local/host`), written by `boot/deploy` and `boot/teardown`:
