@@ -12,7 +12,6 @@ code, `usage.js` the usage's text.
 - [request](request/)
 - [unpack](unpack/)
 - [outcome](outcome/)
-- [script](script/)
 - [sources](sources/)
 - [output](output/)
 - [boot](boot/)

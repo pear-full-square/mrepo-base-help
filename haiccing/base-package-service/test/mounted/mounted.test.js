@@ -29,14 +29,14 @@ const act = async (name, exec) => {
 // <transition>/<name>, each its command.
 const hooksDir = join(pkg, 'mrepo', 'runtime', 'hooks')
 const brought = {}
-for (const t of existsSync(hooksDir) ? readdirSync(hooksDir).sort() : []) for (const f of readdirSync(join(hooksDir, t)).sort()) brought[`${t}/${f.slice(0, -5)}`] = json('mrepo', 'runtime', 'hooks', t, f)
+for (const f of existsSync(hooksDir) ? readdirSync(hooksDir).sort() : []) readFileSync(join(hooksDir, f), 'utf8').split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')).forEach((l, i) => { brought[`${f.replace(/\.haicc$/, '')}/${i + 1}`] = l.split(/\s+/) })
 
 // An execution as an action sees it: the runtime layer's files by URI (the
 // state, the hooks), the commands it is asked to run kept in order.
-function execution (state, hooks = brought, { failing = null } = {}) {
+function execution (state, hooks = brought) {
   const files = { '/runtime/service.json': Buffer.from(JSON.stringify({ state })) }
-  for (const [name, command] of Object.entries(hooks)) files[`/runtime/hooks/${name}.json`] = Buffer.from(JSON.stringify(command))
-  const commands = []
+  { const texts = {}; for (const [name, command] of Object.entries(hooks)) { const tr = name.split('/')[0]; texts[tr] = (texts[tr] ?? '') + command.join(' ') + '\n' } for (const [tr, text] of Object.entries(texts)) files[`/runtime/hooks/${tr}.haicc`] = Buffer.from(text) }
+  const waited = []
   const writes = []
   const exec = {
     read: async uri => { if (!(uri in files)) throw new Error(`nothing at ${uri}`); return files[uri] },
@@ -47,10 +47,13 @@ function execution (state, hooks = brought, { failing = null } = {}) {
     step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
     select: async pattern => Object.keys(files).filter(p => p.startsWith(pattern.slice(0, -1))).map(p => [p, {}]),
     put: (uri, bytes) => { writes.push(uri); files[uri] = Buffer.from(bytes) },
-    run: async (command, opts) => { if (command[0] === failing) throw new Error(`${failing}: refused`); commands.push([command.join(' '), opts]) },
+    runtime: { dir: '/x', uri: 'local/x' },
+    resumed: null,
+    // a job waited for: kept, its lines the runtime's to run; none here
+    wait: job => { waited.push(job); return null },
   }
   const now = () => JSON.parse(files['/runtime/service.json'].toString()).state
-  return { exec, commands, writes, now }
+  return { exec, waited, writes, now }
 }
 
 test('what it provides: one protocol, service, its config and its actions', (t) => {
@@ -94,43 +97,41 @@ test('its structure: the state it starts in, and its list of packages', (t) => {
 // The hooks it brings, each named here with its command: deployed alone,
 // what the mrepo offers from its boot, and what its initialise does.
 const HOOKS = {
-  'boot/activate-info': ['protocol/activate', '.', 'info'],
-  'boot/activate-runtime': ['protocol/activate', '.', 'runtime'],
-  'boot/activate-service': ['protocol/activate', '.', 'service'],
-  'initialise/info-extract': ['info/extract']
+  'boot/1': ['protocol/activate', '.', 'info'],
+  'boot/2': ['protocol/activate', '.', 'runtime'],
+  'boot/3': ['protocol/activate', '.', 'service'],
+  'initialise/1': ['info/extract']
 }
 
 test('its hooks, file by file: at boot info, runtime and service activated; on initialise the info extracted', (t) => {
-  t.alike(brought, HOOKS, 'each hook file, its transition and its command; none that is not named here')
+  t.alike(brought, HOOKS, 'each hook file, its transition, each line its command; none that is not named here')
   t.absent(Object.keys(brought).some(n => /^(start|stop|shutdown)\//.test(n)), 'none on start, stop or shutdown: deployed alone it has no door to open')
 })
 
-test('initialise: its hook run first, as the mrepo\'s own, then the state moved', async (t) => {
-  const { exec, commands, writes, now } = execution('booted')
-  t.alike(await act('initialise', exec), { service: 'initialised', state: 'initialised' }, 'what it returns: what was done, the state now')
-  t.alike(commands, [['info/extract', { own: true }]], 'the package\'s own initialise hook, run in the execution as the mrepo\'s own; the boot hooks are not its to run')
+test('initialise: its hook file there, the request waits for its lines; resumed, the state moved', async (t) => {
+  const { exec, waited, writes, now } = execution('booted')
+  t.is(await act('initialise', exec), null, 'it waits: its lines run by the runtime, through the mrepo\'s own inbox')
+  t.alike([waited.length, now(), writes], [1, 'booted', []], 'one job; the state not moved yet, nothing written')
+  t.alike(await act('initialise', { ...exec, resumed: { output: [{ line: 'info/extract', output: {} }] } }), { service: 'initialised', state: 'initialised' }, 'resumed: what was done, the state now')
   t.alike([now(), writes], ['initialised', ['/runtime/service.json']], 'one write: the state')
 })
 
-test('start, stop, shutdown: the state moved each time, no hook of its own to run', async (t) => {
-  const { exec, commands, now } = execution('initialised')
+test('start, stop, shutdown: no hook file of its own, the state moved at once', async (t) => {
+  const { exec, waited, now } = execution('initialised')
   t.alike(await act('start', exec), { service: 'started', state: 'started' })
   t.alike(await act('stop', exec), { service: 'stopped', state: 'initialised' }, 'stopped: back to initialised')
   t.alike(await act('shutdown', exec), { service: 'shut down', state: 'booted' }, 'shut down: back to booted')
-  t.alike([now(), commands], ['booted', []])
+  t.alike([now(), waited.length], ['booted', 0])
 })
 
-test('hooks dropped in by a package that defines the mrepo: each transition its own, in name order; one failing, the state not moved', async (t) => {
-  const dropped = { 'start/b-open': ['protocol/activate', '.', 'boot'], 'start/a-first': ['x/first'], 'stop/close': ['protocol/deactivate', '.', 'boot'], 'shutdown/last': ['x/last'] }
-  const { exec, commands, now } = execution('initialised', dropped)
-  await act('start', exec)
-  t.alike(commands, [['x/first', { own: true }], ['protocol/activate . boot', { own: true }]], 'start: its hooks only, by name')
-  await act('stop', exec)
-  t.alike(commands.at(-1), ['protocol/deactivate . boot', { own: true }], 'stop: its own')
-  const bad = execution('initialised', dropped, { failing: 'x/last' })
-  await t.exception(act('shutdown', bad.exec), /x\/last: refused/, 'a hook that fails: the transition fails')
-  t.alike([bad.now(), bad.writes], ['initialised', []], 'the state not moved, nothing written')
-  t.is(now(), 'initialised')
+test('a hook file dropped in by a package that defines the mrepo: each transition its own; a line failed, the state not moved', async (t) => {
+  const dropped = { 'start/1': ['x/first'], 'start/2': ['protocol/activate', '.', 'boot'], 'shutdown/1': ['x/last'] }
+  const { exec, waited, now, writes } = execution('initialised', dropped)
+  t.is(await act('start', exec), null, 'start: waits for its own lines')
+  t.alike(await act('stop', { ...exec }), { service: 'stopped', state: 'initialised' }, 'stop: no file of its own, at once')
+  await t.exception(act('shutdown', { ...exec, resumed: { error: 'line 1: x/last: refused' } }), /hook shutdown: line 1: x\/last: refused/, 'a line that failed: the transition fails, saying which')
+  t.alike([now(), waited.length], ['initialised', 1], 'the state not moved by the failure')
+  t.ok(writes.every(w => w === '/runtime/service.json'))
 })
 
 test('every action the config names was run here', (t) => {

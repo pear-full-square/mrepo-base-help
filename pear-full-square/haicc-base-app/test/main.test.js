@@ -49,24 +49,20 @@ function answerAll (root, results) {
   return { all, commands, stop: () => clearInterval(t) }
 }
 
-test('a continuation: the response says what to go on with, a script: run with sh for its position, its output said; where it stops, the command fails', async (t) => {
+test('a continuation: the response says what to go on with, a script: sent on as haicc/script where it was answered for; its outcome printed', async (t) => {
   const s = setup()
   try {
     mkdirSync(join(s.root, 'inbox'), { recursive: true }); mkdirSync(join(s.root, 'outbox'), { recursive: true })
-    let a = answerAll(s.root, [{ output: { deployed: 'host' }, continuation: { at: 'host', script: 'echo "at=$HAICC_AT"\necho "out=$HAICC_OUTPUT"\ncase ":$PATH:" in *":$HAICC_HOME/bin:"*) echo bin ;; esac\n' } }])
+    const script = 'service/initialise\nservice/start\n'
+    let a = answerAll(s.root, [{ output: { deployed: 'host' }, continuation: { at: 'host', script } }, { output: [{ line: 'service/initialise' }, { line: 'service/start' }] }])
     t.is(await s.run(['--output', '.', 'boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start']), 0, 'exit 0: the script done')
-    await a.all
-    t.alike(s.out, ['{"deployed":"host"}', 'at=host', 'out=1', 'bin'], 'the output, then the script\'s lines: run for its position (HAICC_AT), printing as the command does, haicc\'s own bin on the PATH')
+    t.alike(await a.all, [['boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start'], ['haicc', 'host', 'haicc/script', script]], 'the command, then its script, one command: haicc/script at the position it was answered for')
+    t.alike(s.out, ['{"deployed":"host"}', '[{"line":"service/initialise"},{"line":"service/start"}]'], '--output: each one\'s output')
 
-    a = answerAll(s.root, [{ output: 1, continuation: { at: '.', script: 'echo one\nexit 3\necho never\n' } }])
-    t.is(await s.run(['--output', '.', 'x/y']), 1, 'a script that stops with another exit code: exit 1')
+    a = answerAll(s.root, [{ output: 1, continuation: { at: '.', script: 'x/y\n' } }, { error: 'line 1: x/y: no protocol' }])
+    t.is(await s.run(['--output', '.', 'a/b']), 1, 'the script fails: exit 1')
     await a.all
-    t.alike([s.out, s.err], [['1', 'one'], ['haicc: the continuation stopped: exit 3']], 'what it said until it stopped; where it stopped said')
-
-    a = answerAll(s.root, [{ output: 1, continuation: { at: '.', script: 'echo here\n' } }])
-    t.is(await s.run(['.', 'x/y']), 0)
-    await a.all
-    t.ok(s.out.includes('# the continuation, run for .') && s.out.includes('here'), 'records printed for reading: the continuation said before its lines')
+    t.alike([a.commands[1], s.err], [['haicc/script', 'x/y\n'], ['haicc: line 1: x/y: no protocol']], 'at the root: sent plain; where it stopped, said')
     a.stop()
 
     a = answerAll(s.root, [{ output: 1, continuation: { at: 'host', commands: [['a/b']] } }])

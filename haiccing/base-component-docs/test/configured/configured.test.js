@@ -19,7 +19,7 @@ const json = (...p) => JSON.parse(readFileSync(join(pkg, ...p), 'utf8'))
 // <transition>/<name>, each its command.
 const hooksDir = join(pkg, 'mrepo', 'runtime', 'hooks')
 const brought = {}
-for (const t of readdirSync(hooksDir).sort()) for (const f of readdirSync(join(hooksDir, t)).sort()) brought[`${t}/${f.slice(0, -5)}`] = json('mrepo', 'runtime', 'hooks', t, f)
+for (const f of existsSync(hooksDir) ? readdirSync(hooksDir).sort() : []) readFileSync(join(hooksDir, f), 'utf8').split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')).forEach((l, i) => { brought[`${f.replace(/\.haicc$/, '')}/${i + 1}`] = l.split(/\s+/) })
 
 const LIST = [
   'haiccing/base-package-runtime',
@@ -36,9 +36,9 @@ const LIST = [
 // Each hook named here with its command: what the docs mrepo offers from
 // its boot, and its info extracted.
 const HOOKS = {
-  'boot/activate-info': ['protocol/activate', '.', 'info'],
-  'boot/activate-runtime': ['protocol/activate', '.', 'runtime'],
-  'boot/info-extract': ['info/extract']
+  'boot/1': ['protocol/activate', '.', 'info'],
+  'boot/2': ['protocol/activate', '.', 'runtime'],
+  'boot/3': ['info/extract']
 }
 
 test('its list of packages, in deploy order, itself last', (t) => {
@@ -89,7 +89,7 @@ test('every hook names a protocol and an action a listed package provides', (t) 
 // listed packages' own actions.
 function world () {
   const files = {}
-  for (const [name, command] of Object.entries(brought)) files[`/runtime/hooks/${name}.json`] = Buffer.from(JSON.stringify(command))
+  { const texts = {}; for (const [name, command] of Object.entries(brought)) { const tr = name.split('/')[0]; texts[tr] = (texts[tr] ?? '') + command.join(' ') + '\n' } for (const [tr, text] of Object.entries(texts)) files[`/runtime/hooks/${tr}.haicc`] = Buffer.from(text) }
   const commands = []
   const exec = {
     runtime: { protocols: provided, dir: pkg },
@@ -120,7 +120,7 @@ test('what its hooks do: the boot opens info and runtime, and extracts the info'
   // the boot: the runtime places these as its own, in name order
   for (const name of Object.keys(brought).sort()) await w.exec.run(brought[name])
   t.alike(w.active(), ['info', 'runtime'], 'after the boot: info, and the runtime\'s')
-  t.absent(w.active().includes('protocol'), 'the protocol protocol is never opened: activating is the hooks\' business')
+  t.absent(w.active().includes('protocol'), 'the protocol protocol: not a hook\'s, the runtime opens it itself')
   t.ok(w.commands.includes('info/extract'), 'its info extracted, by its hook')
   const ran = Object.entries(brought).filter(([, c]) => w.commands.includes(c.join(' '))).map(([n]) => n).sort()
   t.alike(ran, Object.keys(brought).sort(), 'every hook the component brings was run here')
