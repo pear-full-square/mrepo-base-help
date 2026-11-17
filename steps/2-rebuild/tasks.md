@@ -1865,3 +1865,11 @@ pattern belongs to. The patterns of parts 85 and 86 written as how-tos
 documentation package, a new component (`base-docs-package`); a
 module's config moved into its package, a package brought to the new
 form (`base-docs-hdlc`).
+
+## `install-tests`: each package's tests and examples as transient installs
+
+The human (2026-11-17): "make a list of missing tests and examples -
+both transient installs - that should be added (later)". Each package's
+review adds its list in `review.md` ("The review, a package at a
+time"); built together, later. A transient install: deployed, exercised,
+torn down, nothing left.

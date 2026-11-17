@@ -671,3 +671,44 @@ On our three small points (the human):
   'automatically' because we lack the functionality." So for now a
   command, as the host's: `haicc . boot/deploy docs base-component-docs`;
   the boot install doing both when it can.
+
+## The review, a package at a time (2026-11-17)
+
+The human: "Have a look at the boot package, what is still missing? I
+think we should make a list of missing tests and examples - both
+transient installs - that should be added (later)."
+
+### base-package-boot
+
+Sound: three actions, each its page in the module (Signature, Arguments
+where it takes any, Returns, Errors, Design); the config in
+`protocol.js`; `mounted`, the config value by value and every refusal.
+
+**Documentation, now** (ours, put to the human):
+
+1. The menu has no jump to the actions: `info/get boot/deploy` is not
+   there, only `boot/modules/mrepo-base-boot/external/deploy`.
+2. No "Config" section: where each action is offered (`<name>`,
+   `swarms/<swarm>/<name>`, for teardown `registry/<swarm>/<name>`), a
+   target needed, `package` required for `deploy`, optional for
+   `redeploy`.
+3. "Commands" and "How to" become how-tos: a child deployed; a swarm's
+   node deployed; the registry read and several torn down.
+4. `teardown`'s page: its URI forms, one child or a registry query.
+5. A claim to settle: the README says a node an mrepo deployed is torn
+   down before that mrepo; the action orders nothing so (only the
+   machine's `haicc boot/teardown` stops every runtime): the claim
+   wrong, or the behaviour missing (`teardown-cascade`, `tasks.md`).
+
+**Tests and examples, later: each a transient install** (`install-tests`,
+`tasks.md`):
+
+- Tests of its own (today in other packages' tests only): deploy for
+  real (the runtime answering, the shortcut, the `links` record, the
+  registry's node); teardown (all of it gone); redeploy (from the
+  package it was deployed from, and another); a swarm's node
+  (`<swarm>/<name>`); teardown by a registry query; teardown of a child
+  with a child inside, as A5 settles.
+- Examples (`example/`): a host and a node, deployed, read through
+  both, torn down; a swarm of two nodes; the registry listed, queried,
+  torn down by a query.
