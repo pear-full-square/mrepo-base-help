@@ -1919,6 +1919,25 @@ registry, we can create info views on all mrepos."
    only from there. `HAICC_MREPO` goes. **Parked**: the container's
    replica ("the container needs its own haicc install - a partial one
    to dispatch commands. We look at that further down the line.").
+   **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
+   folder: "I propose we have a fixed folder within the haicc install for
+   script files, called scripts, next to work"; "if we do a script
+   install then we give the scripts folder the same structure as always:
+   [org]/[package]"; on input variables, ours: not for base, the
+   position is the input, a script written relative to where it runs
+   (`cluster` at the swarm's node: run at `host/swarms/swarm-2`, it
+   builds that swarm); positional arguments (`$1`...) later, when a
+   script needs one ("yes, record it and build it after the
+   validation"). So: `<home>/scripts/<name>.haicc` (the user's) and
+   `<home>/scripts/<org>/<package>/<name>.haicc` (a package's, installed);
+   `haicc <URI> haicc/file <name>` the terminal's: it reads the file and
+   sends its lines on as `haicc/script`; a name, no path; no mrepo reads
+   a file of the machine: the mrepo's `haicc/file` action goes. `haicc
+   scripts` lists them. Package scripts stay continuations in the
+   bundles; installing them into `scripts/` later.
+   **To measure**: the execution time, old build against new (the
+   boot, a host's initialise and start, a script of five lines against
+   five calls).
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the
