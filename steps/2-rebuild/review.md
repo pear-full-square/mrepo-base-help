@@ -557,3 +557,15 @@ On our three small points (the human):
   README with a folder below) and `## Included packages` (a package that
   defines an mrepo, `../<package>/`); "A new package", the clone
   candidate and its steps; the template's own READMEs as menus.
+- The menu's name: "happy with your links naming" (the human): `## Links`.
+- **A new package, a how-to in time** (the human): "actually, the new
+  package should eventually be driven by howto". It is a section of the
+  template now, its steps the development repository's tools; when the
+  HDLC brings those into packages as protocol actions, it becomes the
+  template's how-to.
+- **`info` tested on `package-docs-package`** (the human: "will you test
+  the info protocol on the package docs package?"). Ours: three levels:
+  `mrepo-base-info`'s own test on the template's tree (the keywords
+  expected; the problems as fixtures of its own); the generic `help`
+  test of every package an `info` test; the `haicc` test on a host, its
+  component with `## Included packages`.
