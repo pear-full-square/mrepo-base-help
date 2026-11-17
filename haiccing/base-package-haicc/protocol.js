@@ -16,8 +16,8 @@ export const protocols = {
     default: 'goto',
     actions: {
       goto: { uris: ['**'], args: ['command'], command: true, description: 'Go to the node positions the URI selects and execute the command that follows at each; where the URI reaches a shortcut, the command is sent to the mrepo linked there, with what is left of the URI. An mrepo by its registry reference, registry/<swarm>/<name>: where the registry records it is linked.' },
-      script: { uris: ['**'], args: ['script'], here: true, description: 'A script\'s lines, each a simple command, executed where the URI points, each after the one before; the first that fails ends it. Its argument the lines, one string (a shell multi-line string, or a heredoc).' },
-      file: { uris: ['**'], args: ['file'], here: true, description: 'The lines of a file of this mrepo (a path from its root, its layer first) executed as haicc/script executes them, where the URI points.' }
+      script: { uris: ['**'], args: ['script'], description: 'A script\'s lines, each a simple command, executed where the URI points, each after the one before; the first that fails ends it. Its argument the lines, one string (a shell multi-line string, or a heredoc).' },
+      file: { uris: ['**'], args: ['file'], description: 'The lines of a file of this mrepo (a path from its root, its layer first) executed as haicc/script executes them, where the URI points.' }
     }
   }
 }

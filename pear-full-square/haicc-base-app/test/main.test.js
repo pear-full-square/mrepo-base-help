@@ -56,13 +56,13 @@ test('a continuation: the response says what to go on with, a script: sent on as
     const script = 'service/initialise\nservice/start\n'
     let a = answerAll(s.root, [{ output: { deployed: 'host' }, continuation: { at: 'host', script } }, { output: [{ line: 'service/initialise' }, { line: 'service/start' }] }])
     t.is(await s.run(['--output', '.', 'boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start']), 0, 'exit 0: the script done')
-    t.alike(await a.all, [['boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start'], ['haicc', 'host', 'haicc/script', script]], 'the command, then its script, one command: haicc/script at the position it was answered for')
+    t.alike(await a.all, [['boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start'], ['haicc', 'host', 'haicc/script', '.', script]], 'the command, then its script, one command: haicc/script at the mrepo it was answered for, its URI . there')
     t.alike(s.out, ['{"deployed":"host"}', '[{"line":"service/initialise"},{"line":"service/start"}]'], '--output: each one\'s output')
 
     a = answerAll(s.root, [{ output: 1, continuation: { at: '.', script: 'x/y\n' } }, { error: 'line 1: x/y: no protocol' }])
     t.is(await s.run(['--output', '.', 'a/b']), 1, 'the script fails: exit 1')
     await a.all
-    t.alike([a.commands[1], s.err], [['haicc/script', 'x/y\n'], ['haicc: line 1: x/y: no protocol']], 'at the root: sent plain; where it stopped, said')
+    t.alike([a.commands[1], s.err], [['haicc/script', '.', 'x/y\n'], ['haicc: line 1: x/y: no protocol']], 'at the root: sent plain; where it stopped, said')
     a.stop()
 
     a = answerAll(s.root, [{ output: 1, continuation: { at: 'host', commands: [['a/b']] } }])

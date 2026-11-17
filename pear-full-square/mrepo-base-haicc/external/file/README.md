@@ -2,13 +2,13 @@
 
 Executes the lines of a file of the mrepo, where the URI points, as haicc/script executes them.
 
-`haicc <URI> haicc/file <file>`: the file a path from the mrepo's root,
+`haicc <URI> haicc/file <URI> <file>`: the file a path from the mrepo's root,
 its layer first: a hook file, `runtime/hooks/initialise.haicc`. A file
 on the terminal's machine goes with `haicc/script`, on stdin.
 
 ## Signature
 
-`file(exec, { uri, args })`: requested as `haicc/file <file>`.
+`file(exec, { uri, args })`: requested as `haicc/file <URI> <file>`.
 
 ## Arguments
 

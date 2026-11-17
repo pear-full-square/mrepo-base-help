@@ -63,7 +63,7 @@ test('its config, value by value: goto, the default action, at any position; scr
   t.is(cfg.default, 'goto', 'haicc alone is haicc/goto')
   t.alike(Object.keys(cfg).sort(), ['actions', 'default', 'description', 'package'], 'nothing else')
   t.alike(Object.keys(cfg.actions), ['goto', 'script', 'file'], 'three actions')
-  t.alike([cfg.actions.script.uris, cfg.actions.script.args, cfg.actions.script.here, cfg.actions.file.uris, cfg.actions.file.args, cfg.actions.file.here], [['**'], ['script'], true, ['**'], ['file'], true], 'script and file at any position, no URI of their own (here: where they were sent): their argument the lines, the file')
+  t.alike([cfg.actions.script.uris, cfg.actions.script.args, cfg.actions.file.uris, cfg.actions.file.args], [['**'], ['script'], ['**'], ['file']], 'script and file at any position, their URI where the lines run: their argument the lines, the file')
   const goto = cfg.actions.goto
   t.alike(goto.uris, ['**'], 'at any position: the root, a shortcut, deeper')
   t.alike(goto.args, ['command'], 'one argument, required and named: the command that follows')

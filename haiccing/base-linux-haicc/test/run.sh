@@ -302,7 +302,7 @@ is "$(haicc --output host crud/read registry 2>&1)" '[]' "no registry in the hos
 # mrepo: its lines executed there, each after the one before
 out=$(haicc . boot/deploy demo base-component-haicc --flags continuation=start 2>&1); is $? 0 "haicc . boot/deploy demo base-component-haicc --flags continuation=start: the deploy, then its script, each command done"
 has "$out" '"continuation": {' "the deploy's response: its continuation, the script"
-has "$out" 'haicc demo haicc/script' "the script sent on as one command, to the deployed mrepo"
+has "$out" 'haicc demo haicc/script .' "the script sent on as one command, to the deployed mrepo, its URI . there"
 has "$out" '"line": "service/initialise"' "its lines executed there, each with what it answered"
 has "$out" '"line": "service/start"' "in order"
 is "$(haicc --output demo crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "the mrepo brought into service by it: its crud answering"
