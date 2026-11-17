@@ -849,4 +849,90 @@ with it; the cascade is the boot component's override (`review-code`).
   and hook are put in request response and handled by terminal to submit
   automatically. Although we have lifted access restrictions, we can
   still tag requests and internally or externally triggered." Recorded
-  in `tasks.md`, `base-solution-haicc`.
+  in `tasks.md`, `base-solution-haicc`. Ours: a runtime restarting by itself
+  has no terminal for its boot hooks. The human: "can't the runtime issue
+  a console command?" Ours: yes, `sh <hook>`, not waited for, `haicc`
+  and `sh` being everywhere in base; hooks the runtime's always,
+  continuations the terminal's. The human: "hooks run by the runtime".
+
+### base-package-crud
+
+Sound: three actions, each its page in the module (Signature, Arguments
+where it takes any, Returns, Errors, Design for `delete`); the config in
+`protocol.js`, no `update`; `mounted`, the config value by value, each
+action and each refusal, nothing written by a refused one.
+
+**Documentation, done** (2026-11-17): the menu jumps to `create`,
+`read`, `delete`; "Config" a table (where offered, the target, the
+arguments; no `update`); "Commands" two how-tos, `howto/structure`
+(nodes created, read, removed, repeated) and `howto/query` (every child,
+a filter, a value inside a document, another layer's records, a
+selection removed).
+
+**Tests and examples, later** (`install-tests`): the protocol in a
+running mrepo, through the inbox (today the `haicc` command's end to end
+test only, as `mounted` says); a selection removed by a filter
+(`crud/delete "swarms/*[size<2]"`, read's path, not tested itself);
+examples: a swarm's structure built, queried, removed.
+
+**Across the modules, for later** (ours, put to the human): every
+module's README says `npm test`, and its `package.json` runs
+`bare ../../node_modules/brittle/cmd.js`, a path of this development
+repository: in the module's own repository neither holds. Bare only, and
+self-contained: the module's test command its own. **Done** (the human: "can't we make
+the changes now?"): every module's `test` is `brittle-bare
+test/*.test.js`, `brittle` and `bare-runtime` its dev dependencies (the
+versions the root pins), its `package-lock.json` entry the same; its
+README names that command.
+
+### base-package-info, -protocol, -service, -haicc
+
+Sound in all four: each action its page in its module (Signature,
+Returns, Errors; Arguments where it takes any; Design where there is a
+choice made); the config in `protocol.js`; `mounted` tests.
+
+**Documentation, done** (2026-11-17, no rebuild between packages, the
+human: "do a number of repos"): the menus jump to the actions
+(`protocol`, `service`, `haicc`; `info` had them); "Config" a table in
+each (`service`'s states merged into it: from, to, what its hooks do);
+"Commands" become how-tos: `info` `howto/read` (the docs mrepo and an
+mrepo's own, by keywords, a choice, extracted again), `service`
+`howto/lifecycle` (initialise, start, behind the door, stop, shutdown),
+`haicc` `howto/hop` (once, chained, at a position inside, below a
+shortcut refused). `protocol` has no how-to of its own: activating is
+the hooks' (`base-docs-package`, `howto/hooks`).
+
+**Settled design, to build** (`tasks.md`, `base-solution-haicc`):
+`protocol`'s "Hooks" (a JSON command a file) and "the protocol protocol
+not a request from outside" change with the scripts (hooks shell, run
+by the runtime) and the restrictions lifted for base.
+
+**Tests and examples, later** (`install-tests`): each protocol in a
+running mrepo through the inbox (today the `haicc` command's end to end
+test); `goto` at a query's positions (several nodes selected); `service`
+in each state refusing the others; examples: a host's lifecycle, a
+chain of hops.
+
+### base-package-runtime, -container, -splectral
+
+Sound in all three: each action its page in its module; the config in
+`protocol.js`; their own tests.
+
+**Documentation, done** (2026-11-17): the menus jump to the actions;
+"Config" a table in each (`container`'s and `splectral`'s "Commands"
+folded into it); how-tos: `runtime` `howto/test-in-situ` (a set's dry
+run, the in-situ set, one module's tests, in a running mrepo),
+`container` `howto/node` (its "How to": a swarm's node given its
+container, reached, removed before its teardown), `splectral`
+`howto/watch` (its "How to": the install's commands seen in a browser).
+
+**Settled design, to build** (`base-solution-haicc`): `splectral`'s
+script `start` and the haicc component's `cluster` are JSON command
+lists answered as continuations: shell scripts with the scripts'
+building.
+
+**Tests and examples, later** (`install-tests`): `runtime/run` from the
+command line (today in `base-component-boot`'s boot test, by its
+inbox); `container` without Docker (`no Docker`, each action) and
+`status` `gone`; `splectral` on a taken port, started again; examples:
+a node in its container, Splectral watching a cluster deployed.

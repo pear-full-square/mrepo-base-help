@@ -25,4 +25,4 @@ haicc "swarms/*[state='started']" crud/read .
 
 ## Tests
 
-- `npm test`: goto on a context written for it.
+- `brittle-bare test/*.test.js`: goto on a context written for it.

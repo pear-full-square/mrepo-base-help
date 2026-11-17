@@ -9,30 +9,13 @@ removes them. There is no update.
 
 ## Links
 
+- [create](modules/pear-full-square/mrepo-base-crud/external/create/)
+- [read](modules/pear-full-square/mrepo-base-crud/external/read/)
+- [delete](modules/pear-full-square/mrepo-base-crud/external/delete/)
+- [howto](howto/)
 - [test](test/)
 - [test-reports](test-reports/)
 - [modules](modules/)
-
-## Commands
-
-```
-haicc . crud/create swarms/swarm-1 {"size":3}
-haicc . crud/read swarms
-haicc . crud/read swarms/*
-haicc . crud/delete swarms recurse
-haicc host crud/create swarms/swarm-1
-```
-
-- `crud/create <URI> [<value>]`: the node and its parents made; one
-  there already left as it is. The value is its document, JSON; none:
-  `{}`.
-- `crud/read <URI>`: an array of the nodes selected, each with its
-  document and its children's names. `*` as the last name part selects
-  the children. Nothing there: an empty array.
-- `crud/delete <URI> [recurse]`: the nodes selected removed; one with
-  children only with `recurse`. Nothing there: an empty array.
-
-Every action can be repeated: the second time changes nothing.
 
 ## Nodes
 
@@ -43,9 +26,18 @@ not the mrepo it leads to.
 
 ## Config
 
-In `protocol.js`, the package's: the three actions anywhere in `main`;
-`create` and `delete` need a target, the layer itself is neither made nor
-removed.
+The `crud` protocol's, in `protocol.js`: where each action is offered,
+what it takes. Every action can be repeated: the second time changes
+nothing.
+
+| action | offered at | target | arguments |
+|---|---|---|---|
+| `create` | anywhere in `main` | needed | the node's document, JSON, optional: `{}` |
+| `read` | anywhere in `main` | `.` reads the layer itself | none |
+| `delete` | anywhere in `main` | needed | `recurse`, optional |
+
+There is no `update`: asked for, it is answered with the actions there
+are.
 
 ## Package
 

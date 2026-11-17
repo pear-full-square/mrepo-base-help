@@ -11,6 +11,11 @@ that deactivates it again.
 
 ## Links
 
+- [initialise](modules/pear-full-square/mrepo-base-service/external/initialise/)
+- [start](modules/pear-full-square/mrepo-base-service/external/start/)
+- [stop](modules/pear-full-square/mrepo-base-service/external/stop/)
+- [shutdown](modules/pear-full-square/mrepo-base-service/external/shutdown/)
+- [howto](howto/)
 - [mrepo](mrepo/)
 - [test](test/)
 - [test-reports](test-reports/)
@@ -22,22 +27,22 @@ that deactivates it again.
 - [base-package-info](../base-package-info/)
 - [base-package-protocol](../base-package-protocol/)
 
-## States
-
-| state | allowed |
-|---|---|
-| `booted` | `initialise` |
-| `initialised` | `start`, `shutdown` |
-| `started` | `stop`, and what its `start` hooks activated |
-
-Each action answers what was done and the state the service is in now:
-`service/stop` answers `{ "service": "stopped", "state": "initialised" }`.
-
 ## Config
 
-In `protocol.js`, the package's: each action at the mrepo itself, `.`, with the states that
-allow it. The runtime's check reads it: the state machine is configuration,
-not code.
+The `service` protocol's, in `protocol.js`: each action at the mrepo
+itself, `.`, with the states that allow it. The runtime's check reads
+it: the state machine is configuration, not code.
+
+| action | from | to | its hooks |
+|---|---|---|---|
+| `initialise` | `booted` | `initialised` | made ready: its info extracted |
+| `start` | `initialised` | `started` | its door opened: what is behind it activated |
+| `stop` | `started` | `initialised` | its door closed again |
+| `shutdown` | `initialised` | `booted` | |
+
+In `started`, what its `start` hooks activated is allowed too. Each
+action answers what was done and the state the service is in now:
+`service/stop` answers `{ "service": "stopped", "state": "initialised" }`.
 
 ## Package
 

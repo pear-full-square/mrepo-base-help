@@ -65,7 +65,7 @@ mrepo's root (`runtime/service.json`) or slash-led, the same.
 
 ## Tests
 
-- `npm test`: the unit tests
+- `brittle-bare test/*.test.js`: the unit tests
 
 The action's context (`exec`): `read`, `select` (overlaid: a target read
 from its execution branch), `find` (as `read`, for a file that may not be

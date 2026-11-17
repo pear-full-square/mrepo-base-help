@@ -11,6 +11,8 @@ into its runtime layer.
 
 ## Links
 
+- [activate](modules/pear-full-square/mrepo-base-protocol/external/activate/)
+- [deactivate](modules/pear-full-square/mrepo-base-protocol/external/deactivate/)
 - [test](test/)
 - [test-reports](test-reports/)
 - [modules](modules/)
@@ -38,8 +40,12 @@ hooks' business, not a request from outside.
 
 ## Config
 
-In `protocol.js`, the package's: both actions at `.`, the mrepo itself,
-their argument the protocol's name.
+The `protocol` protocol's, in `protocol.js`; no state.
+
+| action | offered at | arguments |
+|---|---|---|
+| `activate` | `.`, the mrepo itself | the protocol's name |
+| `deactivate` | `.`, the mrepo itself | the protocol's name |
 
 ## Package
 

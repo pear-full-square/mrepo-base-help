@@ -47,5 +47,5 @@ besides: the same record as a node there, by the child's unique URI.
 
 ## Tests
 
-- `npm test`: the unit tests: building, running a built mrepo on the
+- `brittle-bare test/*.test.js`: the unit tests: building, running a built mrepo on the
   runtime, the actions.
