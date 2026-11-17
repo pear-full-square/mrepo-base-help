@@ -16,13 +16,13 @@ const ENTRIES = {
 // carried module's unit tests.
 const UNITS = {
   "/test/code": () => Promise.all([import("./test/code/run.js")]),
-  "/test/help": () => Promise.all([import("./test/help/run.js")]),
-  "/test/help-in-situ": () => Promise.all([import("./test/help-in-situ/run.js")]),
+  "/test/info": () => Promise.all([import("./test/info/run.js")]),
+  "/test/info-in-situ": () => Promise.all([import("./test/info-in-situ/run.js")]),
   "/test/mounted": () => Promise.all([import("./test/mounted/run.js")]),
   "/test/mrepo": () => Promise.all([import("./test/mrepo/run.js")]),
   "/test/mrepo-in-situ": () => Promise.all([import("./test/mrepo-in-situ/run.js")]),
   "/test/package": () => Promise.all([import("./test/package/run.js")]),
-  "/test/modules/pear-full-square/mrepo-base-help": () => Promise.all([import("./modules/pear-full-square/mrepo-base-help/test/help.test.js")]),
+  "/test/modules/pear-full-square/mrepo-base-info": () => Promise.all([import("./modules/pear-full-square/mrepo-base-info/test/info.test.js")]),
   "/test/modules/pear-full-square/mrepo-base-request": () => Promise.all([import("./modules/pear-full-square/mrepo-base-request/test/boxes.test.js"), import("./modules/pear-full-square/mrepo-base-request/test/check.test.js")]),
   "/test/modules/pear-full-square/mycelium-container-document": () => Promise.all([import("./modules/pear-full-square/mycelium-container-document/test/documents.test.js")]),
   "/test/modules/pear-full-square/mycelium-git": () => Promise.all([import("./modules/pear-full-square/mycelium-git/test/bundle.test.js"), import("./modules/pear-full-square/mycelium-git/test/engines.test.js"), import("./modules/pear-full-square/mycelium-git/test/hyperdrive.test.js"), import("./modules/pear-full-square/mycelium-git/test/isogit.test.js"), import("./modules/pear-full-square/mycelium-git/test/mixed.test.js"), import("./modules/pear-full-square/mycelium-git/test/native.test.js"), import("./modules/pear-full-square/mycelium-git/test/p2pgit.test.js"), import("./modules/pear-full-square/mycelium-git/test/split.test.js")]),
@@ -33,7 +33,7 @@ const UNITS = {
   "/test/modules/pear-full-square/splectral-server": () => Promise.all([import("./modules/pear-full-square/splectral-server/test/server.test.js")]),
 }
 // The test sets: their tests by name (modules: every module's unit tests).
-const SETS = {"/test/full":["mounted","help","code","mrepo","package","modules"],"/test/validate-in-situ":["help-in-situ","mrepo-in-situ"],"/test/validate":["mounted","help","code","mrepo","package"]}
+const SETS = {"/test/full":["mounted","info","code","mrepo","package","modules"],"/test/validate-in-situ":["info-in-situ","mrepo-in-situ"],"/test/validate":["mounted","info","code","mrepo","package"]}
 
 // What a target runs: its units (a set, /test/modules, a unit); null: none.
 export function expand (target) {

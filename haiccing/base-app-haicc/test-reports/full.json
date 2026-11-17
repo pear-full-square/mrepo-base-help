@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-app-haicc",
-  "content": "7bb59b22af57518a86acbfe1ed8d5e61d0bfe8a37c5a2bba9c2211a40fe29bf0",
+  "content": "0c98452f3bb7730b0aa0fe515374f85b16fc8105db475783f70e91521f25ecb1",
   "bare": "v1.36.0",
-  "date": "2026-11-17T01:33:56.025Z",
+  "date": "2026-11-17T04:01:07.175Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -20,7 +20,7 @@
       "failures": []
     },
     {
-      "unit": "/test/help",
+      "unit": "/test/info",
       "ok": true,
       "tests": {
         "passed": 1,
@@ -88,12 +88,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-crud",
       "ok": true,
       "tests": {
-        "passed": 9,
-        "total": 9
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 82,
-        "total": 82
+        "passed": 76,
+        "total": 76
       },
       "failures": []
     },
@@ -111,15 +111,15 @@
       "failures": []
     },
     {
-      "unit": "/test/modules/pear-full-square/mrepo-base-help",
+      "unit": "/test/modules/pear-full-square/mrepo-base-info",
       "ok": true,
       "tests": {
-        "passed": 5,
-        "total": 5
+        "passed": 7,
+        "total": 7
       },
       "asserts": {
-        "passed": 27,
-        "total": 27
+        "passed": 52,
+        "total": 52
       },
       "failures": []
     },
@@ -131,8 +131,8 @@
         "total": 3
       },
       "asserts": {
-        "passed": 13,
-        "total": 13
+        "passed": 10,
+        "total": 10
       },
       "failures": []
     },
@@ -166,12 +166,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-service",
       "ok": true,
       "tests": {
-        "passed": 3,
-        "total": 3
+        "passed": 2,
+        "total": 2
       },
       "asserts": {
-        "passed": 15,
-        "total": 15
+        "passed": 11,
+        "total": 11
       },
       "failures": []
     },

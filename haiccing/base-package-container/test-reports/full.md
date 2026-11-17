@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-container
 
-The package passed its `full` set: all 24 units, 321 of 321 tests and 2159 of 2159 asserts.
+The package passed its `full` set: all 24 units, 320 of 320 tests and 2159 of 2159 asserts.
 
 | | |
 |---|---|
@@ -8,30 +8,30 @@ The package passed its `full` set: all 24 units, 321 of 321 tests and 2159 of 21
 | Set | `full` |
 | Result | passed |
 | Units | 24 of 24 passed |
-| Tests | 321 of 321 passed |
+| Tests | 320 of 320 passed |
 | Asserts | 2159 of 2159 passed |
-| Run | 2026-11-17 01:43 UTC |
+| Run | 2026-11-17 04:09 UTC |
 | Bare | v1.36.0 |
-| Content | `6520bb97c3c21fce6dfddf3c0faca68f0400284a7dd3061faf6904e027d33673` |
+| Content | `a383c2f28bf16db97f998605c7eab021065c6b0ddcbb759536d2d18179d477d9` |
 
 ## Units
 
 | Unit | Result | Tests | Asserts |
 |---|---|---|---|
 | `/test/mounted` | passed | 5 of 5 | 35 of 35 |
-| `/test/help` | passed | 1 of 1 | 2 of 2 |
+| `/test/info` | passed | 1 of 1 | 2 of 2 |
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
 | `/test/modules/pear-full-square/mrepo-base-boot` | passed | 5 of 5 | 91 of 91 |
-| `/test/modules/pear-full-square/mrepo-base-container` | passed | 5 of 5 | 65 of 65 |
-| `/test/modules/pear-full-square/mrepo-base-crud` | passed | 9 of 9 | 82 of 82 |
+| `/test/modules/pear-full-square/mrepo-base-container` | passed | 4 of 4 | 53 of 53 |
+| `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 93 of 93 |
-| `/test/modules/pear-full-square/mrepo-base-help` | passed | 5 of 5 | 27 of 27 |
-| `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 13 of 13 |
+| `/test/modules/pear-full-square/mrepo-base-info` | passed | 7 of 7 | 52 of 52 |
+| `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 10 of 10 |
 | `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 187 of 187 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 122 of 122 |
-| `/test/modules/pear-full-square/mrepo-base-service` | passed | 3 of 3 | 15 of 15 |
+| `/test/modules/pear-full-square/mrepo-base-service` | passed | 2 of 2 | 11 of 11 |
 | `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 52 of 52 |
 | `/test/modules/pear-full-square/mycelium-container-document` | passed | 1 of 1 | 8 of 8 |
 | `/test/modules/pear-full-square/mycelium-git` | passed | 144 of 144 | 777 of 777 |

@@ -6,10 +6,10 @@ import { openStore } from 'p2p-store'
 import { mrepos } from 'p2p-mrepo'
 import { openRepo, writer } from 'mycelium-git'
 import { layer, record, wrap, complete, guid, begin, request, principals, EXECUTE } from 'mrepo-base-request'
-import { bootedHost } from 'mrepo-base-runtime/test/fixture.js'
-import { initialise, start, stop, shutdown, CONFIG } from 'mrepo-base-service'
-import { activate, deactivate, CONFIG as PROTOCOL } from 'mrepo-base-protocol'
-import { create, read, remove, CONFIG as CRUD_CONFIG } from 'mrepo-base-crud'
+import { bootedHost, PROTOCOLS } from 'mrepo-base-runtime/test/fixture.js'
+import { initialise, start, stop, shutdown } from 'mrepo-base-service'
+import { activate, deactivate } from 'mrepo-base-protocol'
+import { create, read, remove } from 'mrepo-base-crud'
 import { execute, executed, failed } from '../index.js'
 
 // The protocols as packages would offer them: crud, service, protocol (the
@@ -17,7 +17,6 @@ import { execute, executed, failed } from '../index.js'
 const CRUD = { crud: { create, read, delete: remove } }
 const ALL = { ...CRUD, service: { initialise, start, stop, shutdown }, protocol: { activate, deactivate } }
 const any = { uris: ['**'] }
-const PROTOCOLS = { service: CONFIG, protocol: PROTOCOL, crud: CRUD_CONFIG }
 
 // The runtime's context over a booted host, in this process.
 async function withHost (work, fn) {
@@ -395,11 +394,11 @@ test('exec.run: a command executed here; exec.continuation: a script answered wi
       t.alike([sent.topic, sent.value.topic, sent.value.value, sent.key], ['/local/other/inbox', `/local/host/execute/${name}`, ['service/start'], p.waits], 'in the linked mrepo\'s inbox folder: addressed to it by its unique URI, the command unchanged, its core addressed back to this request\'s branch')
       // the linked mrepo's response, in its outbox folder: collected, added to
       // the branch, the principal returned with it
-      writeFileSync(join(other, 'outbox', `${p.waits}.json`), JSON.stringify(wrap('/outbox', complete({ ...sent.value, value: { command: sent.value.value, protocol: 'service', action: 'start', uri: ['.'], args: [] } }, { ok: true, continuation: { at: '.', commands: [['help/get']] }, value: { service: 'started' } }))))
+      writeFileSync(join(other, 'outbox', `${p.waits}.json`), JSON.stringify(wrap('/outbox', complete({ ...sent.value, value: { command: sent.value.value, protocol: 'service', action: 'start', uri: ['.'], args: [] } }, { ok: true, continuation: { at: '.', commands: [['info/get']] }, value: { service: 'started' } }))))
       for (let i = 0; i < 4; i++) { await request(ctx2); await execute(ctx2, { actions: acts }) }
       const back = (await json(ctx2.repo, `/request/done/${name}.json`)).value.value
       t.alike(back.output, { service: 'started' }, 'returned with the response: a response is not checked as a request (service start is not allowed here now, the service being started)')
-      t.alike(back.continuation, { at: 'other', commands: [['help/get']] }, 'the linked mrepo\'s continuation comes back with its response, its position seen from here: behind the one the command was sent on at')
+      t.alike(back.continuation, { at: 'other', commands: [['info/get']] }, 'the linked mrepo\'s continuation comes back with its response, its position seen from here: behind the one the command was sent on at')
       t.alike((await principals(ctx2)).length, 0, 'its branch removed')
     })
   } finally { rmSync(work, { recursive: true, force: true }) }

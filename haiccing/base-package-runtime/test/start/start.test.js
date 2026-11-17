@@ -69,8 +69,8 @@ test('the runtime: started, answering, stopped', { timeout: 60000 }, async (t) =
       for (const [p] of await repo.select('/request/done/*')) if (!p.endsWith('layer.json')) done.push(JSON.parse((await repo.read(p)).toString()).value.value)
       if (done.length < 3) await wait(100)
     }
-    t.alike(done.map(f => f.command.join(' ')).sort(), ['help/extract', 'protocol/activate . help', 'protocol/activate . runtime'], 'its boot hooks: each a request of its own, done')
-    t.ok(done.every(f => /^no protocol: (help|protocol) \(runtime\)$/.test(f.error ?? '')), 'none of them possible here: no package linked, said')
+    t.alike(done.map(f => f.command.join(' ')).sort(), ['info/extract', 'protocol/activate . info', 'protocol/activate . runtime'], 'its boot hooks: each a request of its own, done')
+    t.ok(done.every(f => /^no protocol: (info|protocol) \(runtime\)$/.test(f.error ?? '')), 'none of them possible here: no package linked, said')
     t.alike(await repo.select('/protocols/*'), [], 'so nothing is active')
     // through its inbox: nothing is active by default
     t.is((await send(work, backend, { protocol: 'runtime', action: 'run', uri: '.', args: ['packages/haiccing/x/test/validate'] }))?.error, 'not now: runtime run (runtime is not active)', 'a request from outside for a protocol that is loaded and not active: refused as it executes')

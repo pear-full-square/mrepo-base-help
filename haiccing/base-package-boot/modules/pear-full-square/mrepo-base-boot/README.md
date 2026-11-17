@@ -10,11 +10,11 @@ module also holds the install routine. Carried by
 `haiccing/base-component-boot`, which builds the boot mrepo with the same
 routine.
 
-| | |
-|---|---|
-| [external/](external/) | the boot protocol's actions, a directory each |
-| [internal/](internal/) | the install routine and what the actions use, a directory each |
-| [test/](test/) | its tests, what each checks |
+## Links
+
+- [external](external/)
+- [internal](internal/)
+- [test](test/)
 
 ## Design
 

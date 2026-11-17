@@ -11,11 +11,11 @@ unique URI is the bridgehead's with `container` behind it:
 and reaches it as any linked mrepo, through its inbox and outbox
 folders. Offered by `haiccing/base-package-container`.
 
-| | |
-|---|---|
-| [external/](external/) | the container protocol's actions |
-| [internal/](internal/) | the part that talks to Docker, the replica an action is about |
-| [test/](test/) | its tests |
+## Links
+
+- [external](external/)
+- [internal](internal/)
+- [test](test/)
 
 ## Commands
 
@@ -62,10 +62,6 @@ is for the mrepos on the host.
 - **Linux**: the bridgehead knows the replica's runtime is up by its
   socket in the mapped folder, which needs the host and the container on
   one kernel.
-
-## Config
-
-`CONFIG`, in `internal/config.js`: the five actions at the mrepo itself.
 
 ## Tests
 

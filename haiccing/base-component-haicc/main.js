@@ -15,17 +15,17 @@ const ENTRIES = {
 const UNITS = {
   "/test/code": () => Promise.all([import("./test/code/run.js")]),
   "/test/configured": () => Promise.all([import("./test/configured/run.js")]),
-  "/test/help": () => Promise.all([import("./test/help/run.js")]),
-  "/test/help-in-situ": () => Promise.all([import("./test/help-in-situ/run.js")]),
+  "/test/info": () => Promise.all([import("./test/info/run.js")]),
+  "/test/info-in-situ": () => Promise.all([import("./test/info-in-situ/run.js")]),
   "/test/mrepo": () => Promise.all([import("./test/mrepo/run.js")]),
   "/test/mrepo-in-situ": () => Promise.all([import("./test/mrepo-in-situ/run.js")]),
   "/test/package": () => Promise.all([import("./test/package/run.js")]),
-  "/test/modules/pear-full-square/mrepo-base-help": () => Promise.all([import("./modules/pear-full-square/mrepo-base-help/test/help.test.js")]),
+  "/test/modules/pear-full-square/mrepo-base-info": () => Promise.all([import("./modules/pear-full-square/mrepo-base-info/test/info.test.js")]),
   "/test/modules/pear-full-square/mycelium-uri": () => Promise.all([import("./modules/pear-full-square/mycelium-uri/test/names.test.js"), import("./modules/pear-full-square/mycelium-uri/test/relative.test.js"), import("./modules/pear-full-square/mycelium-uri/test/uri.test.js")]),
   "/test/modules/pear-full-square/pkgm-base-check": () => Promise.all([import("./modules/pear-full-square/pkgm-base-check/test/mrepo.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/package.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/rules.test.js")]),
 }
 // The test sets: their tests by name (modules: every module's unit tests).
-const SETS = {"/test/full":["configured","help","code","mrepo","package","modules"],"/test/validate-in-situ":["help-in-situ","mrepo-in-situ"],"/test/validate":["configured","help","code","mrepo","package"]}
+const SETS = {"/test/full":["configured","info","code","mrepo","package","modules"],"/test/validate-in-situ":["info-in-situ","mrepo-in-situ"],"/test/validate":["configured","info","code","mrepo","package"]}
 
 // What a target runs: its units (a set, /test/modules, a unit); null: none.
 export function expand (target) {

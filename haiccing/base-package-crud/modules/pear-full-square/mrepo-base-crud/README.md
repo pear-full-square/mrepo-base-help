@@ -8,11 +8,11 @@ selects several: a `*`, filters on the nodes' documents, a query read by
 `mycelium-xpath` through `mrepo-base-xpath`. There is no update. Offered by
 `haiccing/base-package-crud`.
 
-| | |
-|---|---|
-| [external/](external/) | the crud protocol's actions |
-| [internal/](internal/) | a node as it is stored, the nodes a URI selects |
-| [test/](test/) | its tests |
+## Links
+
+- [external](external/)
+- [internal](internal/)
+- [test](test/)
 
 ## Commands
 
@@ -37,12 +37,6 @@ haicc . crud/delete swarms recurse
 - **A shortcut is a node**: read, it says where its data comes from;
   deleted, the link goes, not what it leads to. A URI does not run
   through it.
-
-## Config
-
-`CONFIG`, in `internal/config.js`: the three actions anywhere in `main`;
-`create` and `delete` need a target, the layer itself is neither made nor
-removed.
 
 ## Tests
 

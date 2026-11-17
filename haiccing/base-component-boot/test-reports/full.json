@@ -1,26 +1,28 @@
 {
   "package": "haiccing/base-component-boot",
-  "content": "d1ad626144cf743afd82fe552eaaddab07803014ab6f400d96a2b71d743fc15f",
+  "content": "2955bbfaf7b06e08a81a2ac37612bcf499a617401199265a534db9d7b7ef598a",
   "bare": "v1.36.0",
-  "date": "2026-11-17T01:38:31.530Z",
+  "date": "2026-11-17T04:04:58.826Z",
   "set": "full",
-  "ok": true,
+  "ok": false,
   "units": [
     {
       "unit": "/test/boot",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 2,
+        "passed": 1,
         "total": 2
       },
       "asserts": {
-        "passed": 125,
-        "total": 125
+        "passed": 119,
+        "total": 121
       },
-      "failures": []
+      "failures": [
+        "the boot: put in place, its runtime started, nothing deployed; the host deployed, redeployed, torn down, deployed again by commands; haicc; run again"
+      ]
     },
     {
-      "unit": "/test/help",
+      "unit": "/test/info",
       "ok": true,
       "tests": {
         "passed": 1,
@@ -88,12 +90,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-crud",
       "ok": true,
       "tests": {
-        "passed": 9,
-        "total": 9
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 82,
-        "total": 82
+        "passed": 76,
+        "total": 76
       },
       "failures": []
     },
@@ -111,15 +113,15 @@
       "failures": []
     },
     {
-      "unit": "/test/modules/pear-full-square/mrepo-base-help",
+      "unit": "/test/modules/pear-full-square/mrepo-base-info",
       "ok": true,
       "tests": {
-        "passed": 5,
-        "total": 5
+        "passed": 7,
+        "total": 7
       },
       "asserts": {
-        "passed": 27,
-        "total": 27
+        "passed": 52,
+        "total": 52
       },
       "failures": []
     },
@@ -131,8 +133,8 @@
         "total": 3
       },
       "asserts": {
-        "passed": 13,
-        "total": 13
+        "passed": 10,
+        "total": 10
       },
       "failures": []
     },
@@ -166,12 +168,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-service",
       "ok": true,
       "tests": {
-        "passed": 3,
-        "total": 3
+        "passed": 2,
+        "total": 2
       },
       "asserts": {
-        "passed": 15,
-        "total": 15
+        "passed": 11,
+        "total": 11
       },
       "failures": []
     },

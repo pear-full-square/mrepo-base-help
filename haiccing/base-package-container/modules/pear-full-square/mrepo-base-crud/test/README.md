@@ -12,4 +12,3 @@ The tests of mrepo-base-crud, a section per file, each test by its name.
 - delete: the nodes selected made sure to be gone; children only with recurse; idempotent
 - a shortcut: a node that is a link, read with where it leads; deleted, the link goes; a URI does not run through it
 - another layer, for the mrepo's own requests: the same, the layer first
-- the config: create, read and delete, anywhere in main; no update
