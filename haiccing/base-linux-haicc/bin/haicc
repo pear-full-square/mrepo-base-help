@@ -5,6 +5,8 @@
 # app's start.
 #   haicc sources link <folder>     its own: a folder linked as a source
 #   haicc sources download bare     its own: Bare fetched over https
+#   haicc sources download <org>    its own: our packages fetched over
+#                                   https, from their releases
 #   haicc prereq [--check]          its own: what the app needs to start,
 #                                   checked; Bare put in place
 #   haicc --help                    its own commands said, then the app's
@@ -18,13 +20,16 @@ export HAICC_HOME
 . "$here/haicc-lib.sh"
 
 usage () {
-  cat <<'USAGE'
+  cat <<USAGE
 Before anything else, Bare and the sources:
 haicc sources link <folder>                     a local folder linked as a
                                                 source: Bare's runtime and
                                                 the packages come from it
 haicc sources download bare                     Bare's runtime fetched over
                                                 https, checked against its pin
+haicc sources download $HAICC_ORG                 the packages fetched over https
+                                                from their releases, checked
+                                                against their manifest
 haicc prereq [--check]                          what the command needs to
                                                 start, checked; Bare put in
                                                 place from the sources
@@ -37,10 +42,11 @@ app () {
   [ -x "$HAICC_BARE" ] || return 0
   in_sources "$HAICC_ORG/$APP_PACKAGE.bundle"
 }
-# Is every part after the first one of bare, third-party (and one there)?
-only_bare () {
+# Is every part after the first one of bare, third-party, our organisation
+# (and one there)? Those are fetched before the app can start.
+only_own () {
   [ $# -gt 0 ] || return 1
-  for _w in "$@"; do case "$_w" in bare|third-party) ;; *) return 1 ;; esac; done
+  for _w in "$@"; do case "$_w" in bare|third-party|"$HAICC_ORG") ;; *) return 1 ;; esac; done
 }
 
 case "${1:-}" in
@@ -48,7 +54,7 @@ case "${1:-}" in
   sources)
     case "${2:-}" in
       link) shift; exec sh "$here/haicc-sources" "$@" ;;
-      download) if (shift 2; only_bare "$@"); then shift; exec sh "$here/haicc-sources" "$@"; fi ;;
+      download) if (shift 2; only_own "$@"); then shift; exec sh "$here/haicc-sources" "$@"; fi ;;
     esac ;;
   ''|help|--help|-h)
     usage
