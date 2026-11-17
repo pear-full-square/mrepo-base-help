@@ -620,3 +620,9 @@ On our three small points (the human):
   in), `base-docs-hdlc`, `base-docs-xpath` (the URI within it),
   `base-docs-haicc` (the overview and our terms). The repositories by
   the human.
+- **The URI its own documentation package after all** (the human: "ok,
+  agreed. And that means we keep docs URI as well"): `base-docs-uri`, an
+  independent unit by meaning (how a URI is written, data names);
+  `base-docs-xpath` links to it where a query is a URI. The list:
+  `base-docs-package`, `base-docs-hdlc`, `base-docs-uri`,
+  `base-docs-xpath`, `base-docs-haicc`.
