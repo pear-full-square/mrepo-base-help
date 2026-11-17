@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-hdlc",
-  "content": "92e4a97dee7f2f90fd293e5137d7352ebeca622ac532912247739a2a7f547234",
+  "content": "85f965f486484d15bb66fd72f510cf71fff7a3ccefe11641a07648619ae8b071",
   "bare": "v1.36.0",
-  "date": "2026-11-17T13:35:28.985Z",
+  "date": "2026-11-17T23:26:23.313Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -101,12 +101,12 @@
       "unit": "/test/modules/pear-full-square/pkgm-base-check",
       "ok": true,
       "tests": {
-        "passed": 19,
-        "total": 19
+        "passed": 23,
+        "total": 23
       },
       "asserts": {
-        "passed": 54,
-        "total": 54
+        "passed": 62,
+        "total": 62
       },
       "failures": []
     }
