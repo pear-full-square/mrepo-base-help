@@ -92,6 +92,75 @@ host (base-component-haicc)                 the node (base-component-haicc),
    waits there; `haicc` says the node's container is not running (its
    state, from Docker) instead of timing out.
 
+## The link type, and what the shared folder means
+
+The host links a folder whose mrepo another install runs. Today's code
+takes every linked folder for one of its own (`how: 'deployed'`) or for
+a replica it made (`how: 'container'`, the design this replaces). Read
+from the code (2026-11-17), what follows from the folder shared between
+two installs:
+
+1. **Not the host's runtime.** A child's teardown and redeploy
+   (`mrepo-base-boot`) stop its runtime with `mrepo-base-runtime`'s
+   `stop({ repo, pid })`: asked over its socket, then signalled by the
+   pid it recorded. The node's pid is the container's: on the host it is
+   another process, or none, and `SIGTERM`, `SIGKILL` would go to it.
+   **Rule**: the host never starts, stops or signals a container-run
+   mrepo; its boot actions refuse one; it is torn down through the
+   container (the container's own `haicc boot/teardown`, then the
+   container removed).
+2. **The socket is not shared.** `runtime.sock` is in the mrepo's folder
+   when the path is short enough for a Unix socket, else in the
+   temporary folder by the path's hash. Inside the container the path
+   is short (`/haicc/work/...`), on the host it is long: the two sides
+   name the socket differently, and the host's `/tmp` is not the
+   container's. **Rule**: the host speaks to the node only through its
+   inbox and outbox folders; its state comes from Docker and the node's
+   answers.
+3. **Two registries.** The container's install records its node, and
+   the mrepos the node deploys, in its own boot mrepo; the host records
+   the shell in its own. The same unique URI in both, neither seeing the
+   other. **Rule**: the host's entry says the mrepo is container-run;
+   what the node deploys is in the container's registry only, reached
+   from the host through the node.
+4. **Paths are each side's.** What the node records holds the
+   container's paths (`/haicc/...`); the sources are at the same path
+   on both sides (mounted so), nothing else is. **Rule**: the host uses
+   no absolute path read from the node's data; the link's record holds
+   the folder as the host sees it.
+5. **The machine's teardown.** `haicc boot/teardown` on the host stops
+   the runtimes it finds under `<work>/mrepos/` (it never walks
+   `containers/`: good, it does not touch the container's), then removes
+   the containers it finds by each `.git` under `<work>/containers/` and
+   its folder's label. With the container's whole home there, the
+   `.git` folders are deeper (`.../work/mrepos/...`) and the label is
+   the home's: none is found, the containers stay. **Rule**: the
+   containers found by the pair's folder, the home, labelled with it;
+   nothing walked inside it; the folder removed after.
+6. **One writer.** The node's runtime alone writes its repository and
+   its outbox; the host only adds files to its inbox (written whole,
+   then renamed: never read half written) and reads its outbox.
+   **Rule**: the host never opens the node's repository to write; read
+   only, if it reads it at all (open question 2).
+7. **File events across the mount**: the same kernel, a file the host
+   writes is seen by the container's watcher; the runtime's slow look
+   covers an event missed. Nothing to do.
+8. **The user**: the container runs as the host's user, so what it
+   writes the host can remove. **Rule**: kept (`--user`, as the test).
+9. **Versions**: both installs from the same sources, so the same
+   versions; a new release linked on the host reaches the container
+   only when its install is deployed again. For base: the same sources,
+   both deployed again; two versions talking is for later.
+
+**The link type** that follows: the link's record says its mrepo is
+**run by another install**, here a container's: `how: 'container'`
+(today's meaning, a replica, goes with today's actions), with the
+container's name and image, the pair's folder (the container's home, as
+the host sees it), and the node's folder in it. Every action that would
+act on a linked mrepo's runtime or folder (the boot protocol's
+teardown and redeploy, the machine's teardown, a status) reads `how`
+first.
+
 ## What changes
 
 - **`mrepo-base-container`**, reworked: today its actions make a replica
@@ -102,6 +171,10 @@ host (base-component-haicc)                 the node (base-component-haicc),
   and `pair.haicc` written, the container made and started, the shell
   recorded. The `replica` how-to and the component's `cluster` script
   change with them.
+- **`mrepo-base-boot`**: teardown and redeploy refuse a link whose
+  `how` is `container` (rule 1).
+- **`haicc-base-app`**: the machine's teardown finds the containers by
+  the pair's folder (rule 5).
 - **`base-linux-haicc`**: nothing; its installer is what `start.sh` runs.
 - **Tests**: the haicc command's test, section 12 (the cluster), its
   nodes as pairs; the container module's own test.
