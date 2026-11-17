@@ -1889,6 +1889,26 @@ registry, we can create info views on all mrepos."
    polling). The how-to `hooks` in its shell form. To follow: every hook
    shell, boot hooks run by the runtime, the JSON hooks and their runner
    gone, requests tagged by trigger.
+   **Settled** (the human, 2026-11-17), replacing shell for base: a
+   `haicc` per command costs a Bare start (~410 ms) and a request (~400
+   ms), measured; a kept-open terminal saves only `sh`'s 3 ms; a
+   resident server belongs with AVRO RPC ("once we have avro we can use
+   the rpc server for this"). So: "for base we only allow simple
+   commands and launch once", and "haicc on it own is haicc/goto. Now we
+   add haicc/file and haicc/script": `haicc <URI> haicc/script '<lines>'`
+   (a shell multi-line string, or a heredoc on stdin: "could we do like
+   a shell multiline?"), `haicc <URI> haicc/file <file>`; a line a simple
+   command; "the script is executed where the initial haicc is
+   pointing": each line as if typed at that position (`haicc host
+   haicc/script` runs `service/initialise` as `haicc host
+   service/initialise`); the first that fails stops it. No `$HAICC_AT`.
+   Ours, to settle while building: each line sent through the mrepo's
+   own inbox, tagged internal, the script's request waiting
+   (`exec.wait`); `haicc/file` a file in the mrepo (a hook file, a
+   package's script), a local file sent with the heredoc form; hooks one
+   file a transition, run by the runtime with `haicc/file`;
+   continuations a package's script run with `haicc/script` where it was
+   deployed.
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the
