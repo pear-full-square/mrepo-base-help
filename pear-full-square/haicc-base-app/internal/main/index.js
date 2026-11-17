@@ -3,11 +3,12 @@ import { existsSync } from 'bare-fs'
 import { join } from 'bare-path'
 import os from 'bare-os'
 import process from 'bare-process'
-import { viewOf, CEILING } from 'mrepo-base-request'
+import { viewOf } from 'mrepo-base-request'
 import { command, isRoot } from '../command/index.js'
 import { request } from '../request/index.js'
 import { unpack } from '../unpack/index.js'
 import { outcome } from '../outcome/index.js'
+import { script } from '../script/index.js'
 import { sourcesCommand } from '../sources/index.js'
 import { outputCommand, widthOf } from '../output/index.js'
 import { MACHINE } from '../boot/index.js'
@@ -56,18 +57,16 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
       return o
     }
     const o = await send(c.parts)
-    // A continuation: the response says what to go on with, a script: each
-    // command sent from the position it is written at, after the response
-    // of the one before; the first that fails ends it. A simple script: a
-    // continuation answered inside one is not run. At most CEILING commands.
+    // A continuation: the response says what to go on with, a script, shell
+    // text calling haicc: run with sh for the position it names (HAICC_AT),
+    // haicc on the PATH, printing as this command does; where it stops
+    // with another exit code, this command fails.
     if (o.continuation) {
-      const { at, commands } = o.continuation
-      if (commands.length > CEILING) throw new Failure(`a continuation of ${commands.length} commands: not run (at most ${CEILING})`, 1)
-      for (const parts of commands) {
-        // (said as it would be typed, where records are printed for reading)
-        if (print === 'record') io.out(`haicc ${at} ${parts.join(' ')}`)
-        await send(isRoot(at) ? parts : ['haicc', at, ...parts])
-      }
+      const { at, script: text } = o.continuation
+      if (print === 'record') io.out(`# the continuation, run for ${at}`)
+      const shell = { ...env, HAICC_HOME: home, HAICC_WORK: work, HAICC_AT: at, PATH: `${join(home, 'bin')}:${env.PATH ?? '/usr/local/bin:/usr/bin:/bin'}`, ...(print === 'output' ? { HAICC_OUTPUT: '1' } : print === 'raw' ? { HAICC_RAW: '1' } : {}) }
+      const code = await script(text, { env: shell, io })
+      if (code !== 0) throw new Failure(`the continuation stopped: exit ${code}`, 1)
     }
     return 0
   } catch (err) {

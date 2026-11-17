@@ -94,7 +94,7 @@ test('the mrepo it defines: its list of packages, itself last; its hooks, file b
     const [p, a] = first.split('/')
     if (p === 'splectral') t.ok(mounted.protocols.splectral.actions[a], `${name}: ${first} is an action of the protocol`)
   }
-  t.alike(json('scripts', 'start.json'), [['service/initialise'], ['service/start']], 'its script start: the mrepo brought into service, its start hook starting the server')
+  t.ok(/haicc "\$HAICC_AT" service\/initialise\nhaicc "\$HAICC_AT" service\/start/.test(readFileSync(join(pkg, 'scripts', 'start.sh'), 'utf8')), 'its script start, shell: the mrepo brought into service, its start hook starting the server')
 })
 
 test('the actions: nothing running; what start refuses; its server started from the package\'s own program, asked, ended', { timeout: 60000 }, async (t) => {
