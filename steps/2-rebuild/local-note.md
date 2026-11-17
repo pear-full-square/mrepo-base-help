@@ -7,6 +7,23 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-17: released and installed from GitHub
+
+`r-46a3b3f` published, every package (`local-run.md`). Installed from
+GitHub in a clean folder, it found two defects in the download: a
+connection reset in the middle of a large file was not retried, and a
+failed download left the Bare fetched before it unregistered. Fixed
+(`61314e0` on `execute/main`: a fetch tried five times, going on from
+what it got; the folder registered after each download), 288/288 three
+times, `base-linux-haicc` released again as `r-61314e0`. Then from
+scratch, from GitHub, the four lines as written: every command exit 0.
+The haiccing profile's "Start here" now those four lines (`cdfc7c1`).
+
+Not merged into `main`: the cloud session is restructuring the
+documentation on `execute/main` (the human: "If things break, just hold
+off"). The fix and these notes are on `execute/main`, on top of that
+work; `main` gets them with it.
+
 ## 2026-11-17: the install from the releases, `b7ce3ea`
 
 The human: "the instructions on haiccing are wrong, it should install
