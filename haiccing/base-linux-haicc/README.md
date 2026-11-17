@@ -18,7 +18,8 @@ everything else.
 
 `haicc-install.sh` carries the scripts and the pins, nothing else:
 `--home=<folder>` is haicc's own folder, `~/.haicc` by default;
-`--bin=<folder>` is where the command is registered. Then the sources:
+`--bin=<folder>` is where the command is registered, not the install's
+own `bin/`. Then the sources:
 downloaded over https, or a sources folder linked. The how-to `install`.
 
 ## Commands

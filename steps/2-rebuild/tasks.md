@@ -2056,7 +2056,20 @@ registry, we can create info views on all mrepos."
    install in the container and test it. The install will need the
    sources as host." A regular haicc install inside the node's
    container, from the same sources as the host's install, tested
-   there, before the pair deploy is built on it.
+   there, before the pair deploy is built on it. **Built and tested**
+   (2026-11-17): `haiccing/base-linux-haicc/test/container.sh`, 18 checks,
+   about 30 s, three runs passed: a plain `debian:bookworm-slim`
+   container, nothing of haicc in its image; haicc's home a folder of the
+   host's, mounted; the host's sources mounted read only at the same
+   path and linked; the installer, `prereq`, the boot, a host by
+   `continuation=start`, a script, the registry reference, `info/get`,
+   the teardown, nothing left. Found: **`--init` is needed**: the
+   runtimes are started in the background, and without an init that
+   reaps them a stopped runtime stays a zombie, counted as running, and
+   the teardown fails; and the installer now refuses a `--bin` that is
+   the install's own `bin/` (the command would replace the script it
+   starts and start itself for ever). The node's container in the pair
+   deploy is made this way.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script

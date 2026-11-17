@@ -39,7 +39,8 @@ history, and each package and module has its own repository).
   and, after a context reset, `steps/2-rebuild/handover-next.md`: how the
   human works with us, what is done, what is open. Scheduled work:
   `steps/2-rebuild/tasks.md`. Designs in discussion:
-  `steps/2-rebuild/xpath.md`, `steps/2-rebuild/help.md`. The package
+  `steps/2-rebuild/xpath.md`, `steps/2-rebuild/help.md`, the pair deploy
+  `steps/2-rebuild/pair.md`. The package
   review: `steps/2-rebuild/review.md`.
 
 ## Validation, the commands
@@ -54,6 +55,8 @@ The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
   `SOURCES=$PWD/sources tools/bare sources/haiccing/base-component-boot.bundle /test/validate`;
   nothing left running after (`pgrep -fa "bin/bare"`).
 - The `haicc` command end to end: `sh haiccing/base-linux-haicc/test/run.sh`.
+- The `haicc` command installed in a container, from the host's sources:
+  `sh haiccing/base-linux-haicc/test/container.sh` (Docker).
 - Docker, for what makes containers: in a cloud session no daemon runs
   when it starts: `sh tools/docker.sh`; no container left after
   (`docker ps -a --filter label=haicc.folder`).

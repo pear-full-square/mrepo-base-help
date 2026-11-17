@@ -44,6 +44,10 @@ with an AI agent as their user. Only the notes are committed.
 >    lines `# checks = 303/303 pass` and `# ok`. `docker version` must
 >    show a server first. Nothing left after each run:
 >    `pgrep -fa "bin/bare"`, `docker ps -a --filter label=haicc.folder`.
+>    Then the install in a container, from these sources, three times:
+>    `sh haiccing/base-linux-haicc/test/container.sh` (18 checks, about
+>    half a minute; `debian:bookworm-slim` must be there: pulled once, or
+>    from your mirror).
 > 5. **Run the packages' own tests**, each from its bundle, for every
 >    bundle in `sources/haiccing/`:
 >    `SOURCES=$PWD/sources tools/bare sources/haiccing/<package>.bundle /test/full`
