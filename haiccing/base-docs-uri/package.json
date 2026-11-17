@@ -1,0 +1,20 @@
+{
+  "name": "base-docs-uri",
+  "description": "Documentation package: how a URI is written in the base family, relative URIs, segments, data names.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "main.js",
+  "docs": true,
+  "modules": [
+    "pear-full-square/mrepo-base-help",
+    "pear-full-square/pkgm-base-check"
+  ],
+  "template": {
+    "repository": "haiccing/base-docs-package",
+    "commit": "bdbd40a43b150c0e9a43bb175c85874fbffd596b"
+  },
+  "scripts": {
+    "test": "bare test/run.js"
+  }
+}

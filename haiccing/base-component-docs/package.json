@@ -1,0 +1,19 @@
+{
+  "name": "base-component-docs",
+  "description": "Component: the docs mrepo, the platform's documentation packages, deployed in the boot mrepo and read with info.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "main.js",
+  "modules": [
+    "pear-full-square/mrepo-base-help",
+    "pear-full-square/pkgm-base-check"
+  ],
+  "template": {
+    "repository": "haiccing/base-docs-package",
+    "commit": "bdbd40a43b150c0e9a43bb175c85874fbffd596b"
+  },
+  "scripts": {
+    "test": "bare test/run.js"
+  }
+}

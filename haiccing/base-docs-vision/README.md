@@ -1,15 +1,19 @@
-# Vision
+# base-docs-vision
 
-References here to `docs/` and `notes/` point into this repository's
-history: those folders were removed on 2026-11-11.
+The haicc platform's vision: the directions the work takes, not yet settled.
 
-Status: **directions, not settled** (2026-10-30; taken from phase 2,
-2026-11-07, where parts were agreed with the human and say so). Kept so
-decisions take them into account, and added to every seed for
-information. Details: `splectrum/dev-env-1-mycelium-git@33634de:notes/vision.md`,
-`splectrum/dev-env-2-p2p-cluster@c6b73bb:vision.md` and its `notes/`.
+Kept so that decisions take them into account. Parts were agreed with a
+person and say so; the rest is direction. Nothing here is built unless
+the packages' own documentation says it is: what is built is documented
+where it is, and leaves the vision.
 
-## The mycelium base layer
+## Links
+
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
+
+## Mycelium
 
 From the bottom:
 
@@ -29,8 +33,7 @@ From the bottom:
   lives in topics in Kafka's sense, single-partition to start, with
   Kafka's functionality and names, built basic and evolving into
   mycelium's p2p Kafka; state is built from topics, never written
-  directly (`notes/topics.md` in `splectrum/dev-env-2-p2p-cluster`,
-  `mycelium-topic`).
+  directly (`mycelium-topic`).
 - **Multi-paradigm data:** records in topics are the lower level, objects
   (files, documents, any git object) the higher, side by side in a
   repository; an object may be generated from a change log of records,
@@ -42,7 +45,7 @@ instance, the module repository, data instance repositories. Each is its
 own set of rules and capabilities; the request flow, deploy, publish and
 sync belong to the paradigms that use them.
 
-## P2P and the outside world
+## P2P
 
 Fetch and push are the outside world's way: a client reaches a server.
 Inside P2P the same needs are met by subscription and replication. The
@@ -50,15 +53,14 @@ boundary is found, not assumed, once Hypercore is understood. Links over
 copies follow naturally from the cluster: a node holds links and loads
 lazily what it reads.
 
-## Values on the wire and at rest
+## Values
 
-Agreed with the human, 2026-11-08: `docs/design/values.md` (the data type,
-encodings and containers; compact-encoding the envelope, AVRO the content;
-RPC on the replication connection). Mycelium repositories, the branch model
-and portable execution: `docs/design/repositories.md`; the levels'
-structure and Pear below HAICC: `docs/design/structure.md`.
+Agreed with the human, 2026-11-08: the data type, encodings and
+containers (compact-encoding the envelope, AVRO the content; RPC on the
+replication connection); mycelium repositories, the branch model and
+portable execution; the levels' structure, Pear below HAICC.
 
-## Packages, deployments and the cluster
+## Cluster
 
 - No npm inside P2P: a package comes in once, at the boundary, and then
   lives in P2P under its own identity, as a repository.
@@ -81,13 +83,13 @@ and keeps the record of it. Input is a request, output its response on
 `main`; the next one takes it in itself. Every step can be traced and
 rerun on its own. The test-run instance was the first.
 
-## Bundles and storage
+## Storage
 
 Bundles are the transport between repositories outside replication:
 self-contained, immutable, verifiable, shared by hash. Loose objects stay
 the working store; deltas are an optimisation for later.
 
-## Organisations: infrastructure and language
+## Organisations
 
 Agreed 2026-11-02. The layers: the p2p and language substrate, mycelium
 the repository layer, splectrum the language layer, haicc the project
@@ -119,7 +121,7 @@ depends on nothing outside itself.
 - **Splectral, the future vision** (the human, 2026-11-02): a platform for
   multiple functional components that are part of a solution. Approached
   step by step. First feedback towards it, from the local run of the
-  demos (`steps/9-click-and-run/demos-local-run.md`): a solution (the demo
+  demos: a solution (the demo
   app) as one tab with its own menu, its components as tabs inside it;
   time shown on every screen, not only the timeline.
 - **`splectrum`: the language layer**: language modules, for building real applications on
@@ -131,12 +133,12 @@ depends on nothing outside itself.
   implemented, validated, released and deployed, with the records and the
   repositories as its memory. It is what this repository's process does by
   hand, made explicit and runnable, stage by stage. Its first module is
-  the deployment stage, `haicc-reconcile` (`notes/haicc-reconcile.md`):
+  the deployment stage, `haicc-reconcile`:
   declare what a module needs, check it, make it so.
 - **`p2p-propagate`**: later, a desired state (node types and their
   configurations) carried across a swarm, each node reconciling its part.
 
-## Authority, configurable
+## Authority
 
 The split of authority between the swarm (its configuration, on the
 master) and the managers (the substrate: containers, networks, ...) is the
@@ -152,9 +154,9 @@ Modules are used as packages: sets referenced as one unit (below
 mycelium, `third-party` and ours, `p2p`; then `mycelium`; `splectral`;
 `haicc`). Third-party
 code comes in once, at the boundary, and is ours from then on. Projects
-layer as cascading click and runs (`notes/packages.md`).
+layer as cascading click and runs.
 
-## Releases and Pear
+## Releases
 
 - Pear (Holepunch's runtime and platform for p2p applications: staged,
   seeded and released from a `pear://` link) comes in when versions are
@@ -168,7 +170,7 @@ layer as cascading click and runs (`notes/packages.md`).
   capability store.
 
 
-## Pipelines, and mycelium as a database server
+## Pipelines
 
 Discussed with the human, 2026-11-13: a direction for the distant horizon.
 What the human said is stated as it is; what is marked proposed or open is
@@ -255,7 +257,7 @@ rollback); AVRO the rows' schema.
 ### Overlays, and distributed transactions
 
 The human, 2026-11-14 (with the shortcuts moved into `main`, a file
-beside the node's document: `steps/2-rebuild/tasks.md`, task 2). A node
+beside the node's document). A node
 can draw its data from several mrepos and hold local data beside it: what
 is seen is the combination, an overlay; what is stored stays apart, and a
 write goes to the local side only. For instance a local layer adds
@@ -273,7 +275,7 @@ simply never shown and can be cleared. It is the pipeline's request
 branch, one commit at the end, across mrepos.
 
 
-## Agents: each mrepo's help and howto their interface
+## Agents
 
 Discussed with the human, 2026-11-15. What the human said is stated as
 it is; what is marked ours is not agreed.
@@ -288,7 +290,7 @@ it is; what is marked ours is not agreed.
   sees only what is there, so it cannot reach for what is absent, and the
   help cannot be stale, so it does not guess. Every step it takes is an
   ordinary request: gated, logged, audited, committed.
-- **Tried** (2026-11-15, the local machine; `steps/2-rebuild/local-note.md`):
+- **Tried** (2026-11-15, the local machine):
   Claude Code headless, `claude -p`, allowed only the `haicc` command,
   asked what `.` and `host` hold. Told nothing but that `haicc --help`
   exists, it read `help/get` at each, then `crud/read`, and answered
@@ -303,11 +305,10 @@ it is; what is marked ours is not agreed.
   enhanced help as its third stage) and HAICC, human–AI creative
   collaboration (above). The howto is new: not designed.
 
-## Continuations: the heart of a JIT pipeline engine
+## Continuations
 
 Said 2026-11-16, once a command could answer with a continuation (a
-script to go on with, run by the terminal: `steps/2-rebuild/readme.md`,
-part 77). What was said is stated as it is; nothing of it is designed.
+script to go on with, run by the terminal). What was said is stated as it is; nothing of it is designed.
 
 - "I think this continuation idea is another good one. Since we keep
   request state the system can write the next set of commands on the
@@ -324,3 +325,45 @@ part 77). What was said is stated as it is; nothing of it is designed.
   one driven inside an mrepo, not through the inbox; nesting; a script
   used from elsewhere through the registry ("that functionality will be
   added later, not now").
+
+## Repository layers
+
+Proposals on layers beyond `main`, never built:
+
+  - A capability branch holds the installed modules: the code as deployed,
+    as plain folders. Inside, code calls code directly; there is no
+    catalogue.
+  - A categorisation by capability URI belongs to external APIs, where a
+    requester names what it wants and the name must be mapped to an
+    implementation. It is deferred to that level, together with the
+    local-scope overlay below.
+  - Capability branches are named by purpose, not by library: a
+    capability branch is a deployed environment holding the whole
+    capability layer. The repository name already carries the phase.
+  - Local scope is config, in its own overlay: `overlay/config`, by
+    `main`'s paths, referring to capabilities by URI (deferred, with the
+    categorisation, to the external API level).
+  - A layer is *local* (a branch here), *imported* (fetched here with its
+    history), or *virtual* (resolved from another repository at compose
+    time, never stored here). Private config is a virtual layer from the
+    private instance repository.
+
+Development and deployment through capability branches, never built:
+
+- The code is developed on `main` as data and deployed as a tree into a
+  `capability/<purpose>` branch to operate.
+- `capability/default` operates this repository's own functionality.
+  `capability/test` is where development deploys and test runs, without
+  touching `capability/default`. More test lanes, if needed, are further
+  `capability/<purpose>` branches (e.g. `capability/test-isogit`).
+- Promotion deploys the tree tested on `capability/test` into
+  `capability/default`. The first deployment is a bootstrap by hand.
+- Code is tested against every git backend; development may start on
+  one (native git, the reference) and add the others.
+
+## Open
+
+- Execution branch prefix: `execute/<target>` (as here) or
+  `execution/<target>`.
+
+- Whether history may be rewritten to remove leaked data.

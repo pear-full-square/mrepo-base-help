@@ -1,0 +1,20 @@
+{
+  "name": "base-docs-haicc",
+  "description": "Documentation package: the haicc platform, what it is, its levels from the machine to the swarm, and our terms.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "main.js",
+  "docs": true,
+  "modules": [
+    "pear-full-square/mrepo-base-help",
+    "pear-full-square/pkgm-base-check"
+  ],
+  "template": {
+    "repository": "haiccing/base-docs-package",
+    "commit": "bdbd40a43b150c0e9a43bb175c85874fbffd596b"
+  },
+  "scripts": {
+    "test": "bare test/run.js"
+  }
+}

@@ -364,6 +364,18 @@ has "$(haicc --output host info/get mrepo 2>&1)" '"choices":[{"title":"mrepo/"' 
 out=$(haicc --output host info/get nothing-here 2>&1); is $? 1 "a keyword that is not there: exit 1"
 has "$out" "no nothing-here here: nearest ." "said, with the nearest and what is below it"
 has "$(haicc --output host info/extract 2>&1)" '"changed":false' "haicc host info/extract: extracted already, by its hook"
+# the docs mrepo: the platform's documentation, deployed in the boot mrepo
+# (part of the boot install, a command until it does it)
+out=$(haicc --raw . boot/deploy docs base-component-docs 2>&1); is $? 0 "haicc . boot/deploy docs base-component-docs: the docs mrepo"
+out=$(haicc --output docs info/get 2>&1)
+has "$out" '"choices":[{"title":"base-component-docs"' "haicc docs info/get: the platform's front page, the docs component's README"
+has "$out" '{"keyword":"hdlc","oneliner":"' "the documentation packages by keyword: hdlc"
+has "$out" '{"keyword":"uri","oneliner":"' "uri"
+has "$out" '{"keyword":"vision","oneliner":"' "vision"
+has "$(haicc --output docs info/get hdlc/validation 2>&1)" '"title":"Validation"' "haicc docs info/get hdlc/validation: a section of how work is done"
+has "$(haicc --output docs info/get package/mrepo/request 2>&1)" '"title":"/request"' "package/mrepo/request: a layer at run time, in the package specification"
+has "$(haicc --output docs info/get info/get 2>&1)" '"title":"get"' "info/get: the info protocol's action, documented there too"
+is "$(haicc --output . boot/teardown docs 2>&1)" '{"tornDown":"docs"}' "haicc . boot/teardown docs: torn down again"
 
 # 10. torn down: the node; the service stopped and shut down; the host
 is "$(haicc --output host boot/teardown node-1 2>&1)" '{"tornDown":"node-1"}' "haicc host boot/teardown node-1"
