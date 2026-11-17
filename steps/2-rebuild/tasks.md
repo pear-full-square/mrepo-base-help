@@ -1909,6 +1909,16 @@ registry, we can create info views on all mrepos."
    file a transition, run by the runtime with `haicc/file`;
    continuations a package's script run with `haicc/script` where it was
    deployed.
+   **Settled** (the human: "What this does is give any repo access to
+   the whole haicc setup. Unless we apply a fixed prefix. In fact we
+   could execute it through the registry reference (so a mrepo must know
+   its local or swarm URI)"; "yes, park the container, keep registry/ and
+   build it"): an mrepo's own commands carry a fixed prefix, its registry
+   reference, `registry/<swarm>/<name>`: `goto` at a registry node sends
+   the command on to the mrepo it records, as at a shortcut; forward
+   only from there. `HAICC_MREPO` goes. **Parked**: the container's
+   replica ("the container needs its own haicc install - a partial one
+   to dispatch commands. We look at that further down the line.").
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the
