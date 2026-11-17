@@ -59,18 +59,18 @@ export function structureOf ({ store, pkg }) {
   return out
 }
 
-// A script of a package: shell text calling haicc, by name, in its bundle
-// (/scripts/<name>.sh); null when it has none of that name.
+// A script of a package: its lines, each a simple command, by name, in its
+// bundle (/scripts/<name>.haicc); null when it has none of that name.
 export function scriptOf ({ store, pkg, name }) {
   const bundle = Bundle.from(readFileSync(join(store, `${pkg}.bundle`)))
-  const key = `/scripts/${name}.sh`
+  const key = `/scripts/${name}.haicc`
   if (!(key in bundle.files)) return null
   const text = bundle.read(key).toString()
-  if (!text.trim()) throw new Error(`not a script: ${pkg} ${name} (shell text, empty)`)
+  if (!text.split('\n').some(l => l.trim() && !l.trim().startsWith('#'))) throw new Error(`not a script: ${pkg} ${name} (no command in it)`)
   return text
 }
 // The names of a package's scripts.
-export const scriptsOf = ({ store, pkg }) => Object.keys(Bundle.from(readFileSync(join(store, `${pkg}.bundle`))).files).filter(k => /^\/scripts\/[^/]+\.sh$/.test(k)).map(k => k.slice('/scripts/'.length, -'.sh'.length)).sort()
+export const scriptsOf = ({ store, pkg }) => Object.keys(Bundle.from(readFileSync(join(store, `${pkg}.bundle`))).files).filter(k => /^\/scripts\/[^/]+\.haicc$/.test(k)).map(k => k.slice('/scripts/'.length, -'.haicc'.length)).sort()
 
 export function put (from, to) {
   mkdirSync(dirname(to), { recursive: true })

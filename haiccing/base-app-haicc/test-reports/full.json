@@ -1,23 +1,25 @@
 {
   "package": "haiccing/base-app-haicc",
-  "content": "2797706e1bdf1d23b62c08825304af4f69439aa1a2b9f6f718bd0f0219f7059c",
+  "content": "0f266fe639e8d3f433d75524aa12e0e60d77838140c5a7f629196a10e517a1cc",
   "bare": "v1.36.0",
-  "date": "2026-11-17T09:16:28.020Z",
+  "date": "2026-11-17T11:59:44.875Z",
   "set": "full",
-  "ok": true,
+  "ok": false,
   "units": [
     {
       "unit": "/test/command",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 8,
+        "passed": 7,
         "total": 8
       },
       "asserts": {
-        "passed": 71,
+        "passed": 70,
         "total": 71
       },
-      "failures": []
+      "failures": [
+        "a command for the mrepos: its record in the root's inbox, value by value"
+      ]
     },
     {
       "unit": "/test/info",
@@ -79,8 +81,8 @@
         "total": 17
       },
       "asserts": {
-        "passed": 171,
-        "total": 171
+        "passed": 170,
+        "total": 170
       },
       "failures": []
     },
@@ -99,16 +101,18 @@
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-execute",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 10,
+        "passed": 9,
         "total": 10
       },
       "asserts": {
-        "passed": 93,
-        "total": 93
+        "passed": 97,
+        "total": 98
       },
-      "failures": []
+      "failures": [
+        "execute: execution branches from their targets, the record completed, squashed into each target"
+      ]
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-info",
@@ -144,8 +148,8 @@
         "total": 16
       },
       "asserts": {
-        "passed": 186,
-        "total": 186
+        "passed": 187,
+        "total": 187
       },
       "failures": []
     },
@@ -157,8 +161,8 @@
         "total": 6
       },
       "asserts": {
-        "passed": 122,
-        "total": 122
+        "passed": 124,
+        "total": 124
       },
       "failures": []
     },
@@ -170,8 +174,8 @@
         "total": 2
       },
       "asserts": {
-        "passed": 11,
-        "total": 11
+        "passed": 13,
+        "total": 13
       },
       "failures": []
     },

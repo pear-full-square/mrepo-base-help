@@ -38,7 +38,7 @@ const run = async (ctx, value) => {
 test('execute: execution branches from their targets, the record completed, squashed into each target', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       let r = await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       t.alike(r, { ok: true, value: { service: 'initialised', state: 'initialised' } })
@@ -65,7 +65,7 @@ test('execute: execution branches from their targets, the record completed, squa
 test('the execution context: read-only to the action, the runtime\'s context read through it', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       let seen = null
       const actions = { ...ALL, service: { ...ALL.service, initialise: async exec => { seen = { frozen: Object.isFrozen(exec) && Object.isFrozen(exec.runtime), name: exec.runtime.name, writer: 'writer' in exec.runtime, branches: (await exec.runtime.branches()).includes('runtime'), service: JSON.parse((await exec.runtime.read('/runtime/service.json')).toString()).state }; return 'seen' } } }
@@ -80,7 +80,7 @@ test('the execution context: read-only to the action, the runtime\'s context rea
 test('local commit and rollback in an action; the global commit at its end, a failure rolling back globally', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
@@ -159,7 +159,7 @@ test('local commit and rollback in an action; the global commit at its end, a fa
 test('the request\'s log: info unasked (its audit, its metrics), the action\'s entries under its name, as much as its flag asks', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
@@ -208,7 +208,7 @@ test('the request\'s log: info unasked (its audit, its metrics), the action\'s e
 test('a step of an action: measured at the boundary, what it took and what it read and wrote; a file that may not be there', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
@@ -255,7 +255,7 @@ test('a step of an action: measured at the boundary, what it took and what it re
 test('an error ends a request at the boundary: what stopped it, its causes, the step it was at, what was undone', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
@@ -292,7 +292,7 @@ test('an error ends a request at the boundary: what stopped it, its causes, the 
 test('a command run in the execution: its entries under its own name, its flags in force from there on', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })
@@ -313,7 +313,7 @@ test('a command run in the execution: its entries under its own name, its flags 
 test('executed: a form completed elsewhere handed over as execute hands one; a runtime merging it first: found done', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       const core = complete(record(null, { protocol: 'service', action: 'boot', uri: ['.'] }, guid()), { ok: true, value: { booted: true } })
       await executed(ctx, core.key, wrap(`/${EXECUTE}`, core))
@@ -336,7 +336,7 @@ test('executed: a form completed elsewhere handed over as execute hands one; a r
 test('failed: a runtime\'s error in the request executing', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       t.alike(await failed(ctx, 'runtime: x'), [], 'none executing: none completed (the caller says it on stderr)')
       const core = record(null, { protocol: 'service', action: 'initialise', uri: ['.'] }, guid())
@@ -350,7 +350,7 @@ test('failed: a runtime\'s error in the request executing', async (t) => {
 test('exec.run: a command executed here; exec.continuation: a script answered with the output; exec.forward: sent on, the principal waiting, returned with the response', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'execute-'))
   try {
-    await bootedHost(work, { preload: false })
+    await bootedHost(work, { preload: false, hooks: false })
     await withHost(work, async ctx => {
       await run(ctx, { protocol: 'service', action: 'initialise', uri: ['.'] })
       await run(ctx, { protocol: 'service', action: 'start', uri: ['.'] })

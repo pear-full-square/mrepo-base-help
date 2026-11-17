@@ -1,23 +1,25 @@
 {
   "package": "haiccing/base-component-boot",
-  "content": "664ef05d29197b55bf99540492fd4f5fc46883c33442fa5f10282e8e365f3fc9",
+  "content": "a00f50e0ad835c861d69eef8d24b86e3e8bad10c21d4794e4e52ecc404d7fa1b",
   "bare": "v1.36.0",
-  "date": "2026-11-17T08:57:06.119Z",
+  "date": "2026-11-17T12:05:24.122Z",
   "set": "full",
-  "ok": true,
+  "ok": false,
   "units": [
     {
       "unit": "/test/boot",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 2,
+        "passed": 1,
         "total": 2
       },
       "asserts": {
-        "passed": 121,
+        "passed": 109,
         "total": 121
       },
-      "failures": []
+      "failures": [
+        "the boot: put in place, its runtime started, nothing deployed; the host deployed, redeployed, torn down, deployed again by commands; haicc; run again"
+      ]
     },
     {
       "unit": "/test/info",
@@ -99,16 +101,18 @@
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-execute",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 10,
+        "passed": 9,
         "total": 10
       },
       "asserts": {
-        "passed": 93,
-        "total": 93
+        "passed": 97,
+        "total": 98
       },
-      "failures": []
+      "failures": [
+        "execute: execution branches from their targets, the record completed, squashed into each target"
+      ]
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-info",
@@ -157,8 +161,8 @@
         "total": 6
       },
       "asserts": {
-        "passed": 122,
-        "total": 122
+        "passed": 124,
+        "total": 124
       },
       "failures": []
     },
@@ -170,8 +174,8 @@
         "total": 2
       },
       "asserts": {
-        "passed": 11,
-        "total": 11
+        "passed": 13,
+        "total": 13
       },
       "failures": []
     },

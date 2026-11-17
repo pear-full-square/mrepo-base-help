@@ -10,7 +10,7 @@ export async function request (root, parts, { uri, reply, timeout = 120, every =
   // the command, in its core (where the completed form goes back), in an
   // envelope addressed to the mrepo's inbox; written whole, then renamed
   // into place (the folder's write): the runtime never sees half of one
-  inboxOf(root).write(key, wrap(`/${uri}/inbox`, record(reply, parts, key)))
+  inboxOf(root).write(key, wrap(`/${uri}/inbox`, { ...record(reply, parts, key), headers: { trigger: 'external' } }))
   // its response: the completed form, in the outbox folder under the same key
   // waited for by watching the folder: looked at when something is written
   // there, and every `every` all the same (an event missed, a folder that

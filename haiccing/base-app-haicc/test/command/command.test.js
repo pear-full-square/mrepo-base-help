@@ -114,7 +114,7 @@ test('a command for the mrepos: its record in the root\'s inbox, value by value'
   t.alike(envelope.headers, {}, 'its headers empty')
   t.is(envelope.value.topic, '/haicc/terminal', 'its core addressed back to the terminal')
   t.is(envelope.value.key, envelope.key, 'the same key')
-  t.alike(envelope.value.headers, {}, 'the core\'s headers empty')
+  t.alike(envelope.value.headers, { trigger: 'external' }, 'the core\'s headers: triggered from outside, a terminal')
   t.alike(envelope.value.value, ['boot/deploy', 'host', 'base-component-haicc'], 'at the root the command plain, its parts as typed, unnamed')
   t.alike(readdirSync(join(root, 'inbox')), [file], 'nothing half written left beside it')
 

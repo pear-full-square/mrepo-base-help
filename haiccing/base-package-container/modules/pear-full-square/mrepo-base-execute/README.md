@@ -24,6 +24,13 @@ branch is squashed into its target, one commit there; a failure resets instead. 
   did on its branch, commit by commit, stays out of the target's
   history) and removed; discarded on a failure. Its branch of
   `request/execute`, the request's record, is merged, a plain merge.
+- **A job waited for** (`exec.wait(job)`, `lib/wait.js`): an action
+  parks its request until an outside job, an async function, ends; its
+  writes so far are dropped, the runtime is free meanwhile. The job's
+  result is written as a completed record into the mrepo's own
+  `waiting/outbox/<key>.json`, collected as a linked mrepo's response is,
+  and the action executed again with it: `form.resumed`, `{ output }` or
+  `{ error }`. One wait a request.
 - **A command sent on** (`exec.forward(to, command)`, `lib/remote.js`): an
   action that finds its position a shortcut sends the command that follows
   to the mrepo linked there, unchanged, into its inbox folder. Nothing of

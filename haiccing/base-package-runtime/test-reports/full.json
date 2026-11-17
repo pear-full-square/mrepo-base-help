@@ -1,23 +1,25 @@
 {
   "package": "haiccing/base-package-runtime",
-  "content": "648012a195fe3698eea0cde521876605c1dd31241e5efbf8b443e642c118e767",
+  "content": "557ccdcb840f1f68d9e413ef6a32664d59ab0ec5a8b752228fe572d24fa8a8a0",
   "bare": "v1.36.0",
-  "date": "2026-11-17T07:38:09.542Z",
+  "date": "2026-11-17T12:15:01.760Z",
   "set": "full",
-  "ok": true,
+  "ok": false,
   "units": [
     {
       "unit": "/test/start",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 1,
+        "passed": 0,
         "total": 1
       },
       "asserts": {
-        "passed": 8,
+        "passed": 7,
         "total": 8
       },
-      "failures": []
+      "failures": [
+        "the runtime: started, answering, stopped"
+      ]
     },
     {
       "unit": "/test/info",
@@ -92,8 +94,8 @@
         "total": 10
       },
       "asserts": {
-        "passed": 93,
-        "total": 93
+        "passed": 98,
+        "total": 98
       },
       "failures": []
     },
@@ -144,8 +146,8 @@
         "total": 6
       },
       "asserts": {
-        "passed": 122,
-        "total": 122
+        "passed": 124,
+        "total": 124
       },
       "failures": []
     },
@@ -157,8 +159,8 @@
         "total": 2
       },
       "asserts": {
-        "passed": 11,
-        "total": 11
+        "passed": 13,
+        "total": 13
       },
       "failures": []
     },

@@ -20,4 +20,5 @@ export async function runLines (exec, text, uri) {
   return exec.wait(() => run({ dir: exec.runtime.dir, uri: exec.runtime.uri, submit: exec.runtime.submit, answer: exec.runtime.answer }, lines, at))
 }
 
+// log: in runLines, above
 export const script = (exec, { uri, args = [] }) => runLines(exec, args.join(' '), uri)

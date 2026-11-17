@@ -154,6 +154,9 @@ const runtimeView = ctx => Object.freeze({
   uri: ctx.uri ?? ctx.name,
   work: ctx.work ?? null,
   dir: ctx.dir ?? null,
+  // a record into the mrepo's own inbox, as its storage takes one
+  submit: ctx.submit ?? null,
+  answer: ctx.answer ?? null,
   branches: async () => (await ctx.backend.listBranches()).map(([b]) => b),
   // the protocols the runtime loaded, their configs by name
   protocols: ctx.protocols ?? {},
@@ -352,6 +355,9 @@ export async function execute (ctx, { actions = {} } = {}) {
       // runtime free meanwhile; then the action executed again with its
       // result, form.resumed ({ output } or { error }). Its writes before
       // it waits are dropped. One a request, not resumed twice.
+      // what the request was resumed with, after a wait: the same to an
+      // action run inside it (exec.run); null when it was not
+      resumed: form.resumed ?? null,
       wait: job => {
         if (waited || forwarded) throw new Error('waiting already')
         if (form.resumed) throw new Error('resumed already: no second wait')

@@ -2,6 +2,7 @@
 // are executed where the URI points (README.md beside it).
 import { runLines } from '../script/index.js'
 
+// log: in runLines (../script/index.js): what the script runs
 export async function file (exec, { uri, args = [] }) {
   if (exec.resumed) return runLines(exec, null, uri)
   const [path] = args
