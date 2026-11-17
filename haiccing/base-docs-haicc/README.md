@@ -54,7 +54,11 @@ docs mrepo: `haicc docs info/get <keywords>`.
 - **position**: where a command stands; a URI names it.
 - **shortcut**: a node in `main` leading to another mrepo; `haicc` hops
   through it.
+- **hook**: a command an mrepo runs on a status transition: its runtime
+  starting, its service's `initialise`, `start`, `stop`, `shutdown`.
 - **continuation**: a script a command answers with, to go on with.
+- **docs mrepo**: the install's documentation, every package's pages,
+  read with `info/get`; any other mrepo answers about itself.
 - **HDLC**: the haicc delivery lifecycle, how work is done.
 - **haici**: human ai continuous improvement, findings from the request
   log, fed back to the HDLC.

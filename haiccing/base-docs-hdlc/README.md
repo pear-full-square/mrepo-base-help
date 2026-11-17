@@ -107,6 +107,10 @@ Before every commit:
   nothing by accident fails.
 - **No commit while a build runs** over the tree: it catches files
   mid-rewrite.
+- **Partial while changes are made**: not every build every time. A
+  batch of changes, then one rebuild and what the changes touch: the
+  changed packages' pre-releases, the checks; documentation alone, the
+  checks and the docs view. Everything before a milestone.
 - **The implementation validation**: every pattern a package implements
   (its kind, a layer, hooks, a service, a continuation script) has a
   how-to naming it; one without fails the code check.
@@ -129,7 +133,8 @@ Before every commit:
   it has in development, `<org>/<repo>`. Once validated, each one that
   changed is updated from development: a module's history split and
   plain-merged into its repository; a package's folder written over its
-  repository's `main`.
+  repository's `main`. When the human asks, or at a milestone agreed
+  with them: not after every change.
 - **New repositories are created by a person.**
 - **Deploy and teardown, no upgrade in place**: what changes how things
   are placed or stored comes with a new deploy after a teardown; an

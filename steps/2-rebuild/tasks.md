@@ -1919,3 +1919,6 @@ package by package and lists here what needs code, built after it.
   registry's logic and the cascade go to the component's script
   library, tried with the solution install (`base-solution-haicc`).
   Parked for the solution: `swarms/`, the cluster.
+- **docs** (`review.md`, "base-component-haicc, base-component-docs"):
+  `documents: sources` reads the folder sources only; a `github:<org>`
+  source's manifest read too, so an install from GitHub documents all.

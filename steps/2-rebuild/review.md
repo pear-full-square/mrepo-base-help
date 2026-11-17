@@ -936,3 +936,59 @@ command line (today in `base-component-boot`'s boot test, by its
 inbox); `container` without Docker (`no Docker`, each action) and
 `status` `gone`; `splectral` on a taken port, started again; examples:
 a node in its container, Splectral watching a cluster deployed.
+
+### base-component-haicc, base-component-docs
+
+Sound: each its list and its hooks, checked value by value and walked
+by its own test, `configured`, against the packages listed.
+
+**Documentation, done** (2026-11-17):
+
+- `base-component-haicc`'s how-tos addressed the boot mrepo (`haicc .
+  crud/create swarms/swarm-1`, `haicc swarms/swarm-1/node-1 ...`) while
+  saying "in this host", and named keywords of before (`container/replica`,
+  `node/deploy`): rewritten at the host (`haicc host ...`, `haicc host
+  haicc swarms/swarm-1/node-1 ...`), the replica removed before its node
+  in `replica`; a third how-to, `cluster`: the host and a swarm of two
+  nodes in containers by the script `cluster`, read, taken down.
+- `base-component-docs`'s `mrepo/` page: `documents: sources`, every
+  other package documented.
+
+**Settled design, to build**: `cluster` and `start` shell scripts with
+the scripts' building; `swarms/` parked for the solution.
+
+**Code, later** (`review-code`): `documents: sources` reads the folder
+sources only (`available`, `mrepo-base-boot`): an install from
+`github:<org>` gets a docs mrepo documenting its list alone. The
+github source's manifest read as well.
+
+**Tests and examples, later** (`install-tests`): the cluster taken down
+(each replica removed, the nodes, the host); the docs mrepo from a
+github source; examples: a host with one node step by step (`deploy`,
+`replica`), the cluster.
+
+### base-app-haicc, base-linux-haicc
+
+**Documentation, done** (2026-11-17): menus with a `howto/`; the app's
+command list left to `haicc --help` (its examples), its forms kept; two
+how-tos, `output` (whole, raw, output alone, the width) and `flags`
+(log, layer, continuation; where a flag list goes); the Linux package's
+"Install" a how-to, `install` (downloaded or a folder linked, offline);
+"only `haicc sources download bare` reaches the network" corrected: every
+download does. And `base-component-boot`'s how-to `boot`, ours of
+earlier today, corrected: the machine's `haicc boot/teardown` removes
+what the boot put in place, so a boot after it builds anew.
+
+**Tests and examples, later** (`install-tests`): `haicc output <width>`
+kept across commands; `sources download bare haiccing` in one command;
+`--home` and `--bin` elsewhere; example: an install from the releases.
+
+### The documentation packages
+
+`base-docs-package`, `-uri`, `-xpath`: current. Brought up to date
+(2026-11-17): `base-docs-haicc`'s terms (`hook`, `docs mrepo`);
+`base-docs-hdlc`'s "Validation" (partial while changes are made, the
+human: "Don't always build everything while we are making changes";
+everything before a milestone) and "Products" (when the human asks, or
+at an agreed milestone); `base-docs-vision`'s "Continuations" (the
+scripts settled for base, to build).
