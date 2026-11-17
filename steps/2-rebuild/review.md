@@ -883,7 +883,12 @@ self-contained: the module's test command its own. **Done** (the human: "can't w
 the changes now?"): every module's `test` is `brittle-bare
 test/*.test.js`, `brittle` and `bare-runtime` its dev dependencies (the
 versions the root pins), its `package-lock.json` entry the same; its
-README names that command.
+README names that command. **Corrected** (2026-11-17): `bare-runtime` out of the
+modules' dev dependencies, `brittle` kept: the assembly carries a
+module's dependencies into each package (`modules/node_modules`), so
+every package carried Bare's 93 MB binary, pushed with the milestone to
+the product repositories. `brittle-bare` uses the Bare installed, a
+prerequisite.
 
 ### base-package-info, -protocol, -service, -haicc
 
