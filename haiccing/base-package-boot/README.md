@@ -13,51 +13,31 @@ package.
 
 ## Links
 
+- [deploy](modules/pear-full-square/mrepo-base-boot/external/deploy/)
+- [teardown](modules/pear-full-square/mrepo-base-boot/external/teardown/)
+- [redeploy](modules/pear-full-square/mrepo-base-boot/external/redeploy/)
+- [howto](howto/)
 - [mrepo](mrepo/)
 - [test](test/)
 - [test-reports](test-reports/)
 - [modules](modules/)
 
-## Commands
+## Config
 
-```
-haicc . boot/deploy host base-component-haicc
-haicc host boot/deploy node-1 base-package-runtime
-haicc host boot/redeploy node-1
-haicc host boot/teardown node-1
-haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc
-haicc . boot/teardown host
-```
+The `boot` protocol's, in `protocol.js`: where each action is offered,
+what it takes. Each needs a target: `.`, the mrepo itself, cannot be
+deployed or torn down.
 
-- `boot/deploy <name> <package>`: the mrepo built at that position from
-  the package's list, its runtime started, its shortcut placed. The
-  package alone means `haiccing/<package>`. One name below `main`, the
-  mrepo is in this mrepo's swarm (`local/host`); at
-  `swarms/<swarm>/<name>`, below a swarm's node made first
-  (`crud/create swarms/<swarm>`), it is that swarm's node:
-  `<swarm>/<name>`.
-- `boot/teardown <name>`: its runtime stopped, the mrepo and its shortcut
-  removed.
-- `boot/redeploy <name> [<package>]`: both in turn.
+| action | offered at | arguments |
+|---|---|---|
+| `deploy` | `<name>`, `swarms/<swarm>/<name>` | the package, required |
+| `teardown` | those, and `registry/<swarm>/<name>` | none |
+| `redeploy` | as `deploy` | the package, optional: the one it was deployed from |
 
-## How to
-
-See what the install has deployed, and tear several down at once. The
-boot mrepo keeps the mrepo registry in its `main`, at the position
-`registry`: a node an mrepo it deployed, by its unique URI.
-
-```
-haicc . boot/deploy host base-component-haicc
-haicc registry/local crud/read "*"
-haicc . crud/read "registry/local/*[runtime/pid]"
-haicc . boot/teardown "registry/local/*"
-```
-
-The first deploys the host; the second lists the local mrepos, each
-with where it is on this machine, the package it came from and what
-runs it; the third only those with a runtime; the last tears down every
-one the query selects. A node an mrepo deployed is torn down before that
-mrepo; `haicc boot/teardown` stops every runtime of the install.
+The positions name structures other packages bring: `swarms/` the haicc
+component's, `registry/` the boot component's. A child's own children
+are not torn down with it: only the machine's `haicc boot/teardown`
+stops every runtime of the install.
 
 ## Package
 
