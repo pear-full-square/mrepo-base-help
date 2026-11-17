@@ -1848,7 +1848,15 @@ registry, we can create info views on all mrepos."
    component: the mrepos an install is made of, as a script run by the
    continuation: the host, the docs mrepo, Splectral, deployed and
    started; `haicc boot/deploy` with it a whole install. How the boot
-   names it: to settle then.
+   names it: to settle then. **Settled** (the human, 2026-11-17):
+   base runs on one boot component, in three versions (host, node,
+   container node); a component carries a script library, its custom
+   versions of functionality. Base operations are protocols, custom
+   versions scripts, in the base family; scripts will be able to
+   replace protocols. Not on `boot/deploy`: `service/initialise`, say,
+   run differently for each type. Tried out with the solution install.
+   **Open, to discuss**: how scripts run ("all command run as haicc
+   (the external commands) but we need some more discussion on this").
 3. **The Splectral viewer** (`splectral-docs`, above).
 4. **Info views on every mrepo**: the boot mrepo's registry lists them;
    each answers `info/get` about itself. **Settled** (the human: "yes,
@@ -1883,10 +1891,7 @@ package by package and lists here what needs code, built after it.
 - **boot** (`review.md`, "base-package-boot"): positions given their
   meaning by the structure's documents (boot offered anywhere below
   `main`, the unique URI from the nearest swarm node's document, else
-  `local`); a component replacing an action's mapping with a script
-  (`mrepo/runtime/actions/<protocol>.<action>.json`, its parameters, its
-  answer the original's); `protocol/<protocol>/<action>`, the protocol's
-  own implementation, open to the command line; a `registry` protocol,
-  the registry's logic out of `mrepo-base-boot`; the boot component's
-  scripts (`teardown` with its cascade, `deploy`). A proof of concept
-  and its how-to first. Parked for the solution: `swarms/`, the cluster.
+  `local`). The override is not built for base (`review.md`); the
+  registry's logic and the cascade go to the component's script
+  library, tried with the solution install (`base-solution-haicc`).
+  Parked for the solution: `swarms/`, the cluster.
