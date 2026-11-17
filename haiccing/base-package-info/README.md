@@ -9,35 +9,28 @@ fills it, `info` answers a page and the keywords below it.
 
 ## Links
 
-- [extract](modules/pear-full-square/mrepo-base-info/external/extract/)
 - [get](modules/pear-full-square/mrepo-base-info/external/get/)
+- [extract](modules/pear-full-square/mrepo-base-info/external/extract/)
+- [howto](howto/)
 - [mrepo](mrepo/)
 - [test](test/)
 - [test-reports](test-reports/)
 - [modules](modules/)
 
-## Commands
-
-```
-haicc host info
-haicc host info/get boot
-haicc host info/get boot/deploy
-haicc host info/extract
-```
-
-- `info`, or `info/get [<keywords>]`, the keywords where the URI is,
-  no dot: nothing asked, the top page and
-  the keywords below it; a keyword path, its page, each keyword below
-  with its one-liner. A keyword with several meanings answers each, a
-  choice.
-- `info/extract`: the info layer written again from the linked packages,
-  with its problems. Run by a hook as the mrepo is made ready.
-
 ## Config
 
-The `info` protocol's, in `protocol.js`: `get`, its default action, its
-keywords where the URI is (`**`); `extract`, at the mrepo itself; no
-state.
+The `info` protocol's, in `protocol.js`; no state.
+
+| action | offered at | arguments |
+|---|---|---|
+| `get`, the default | its keywords where the URI is (`**`): `info/get boot/deploy` | none |
+| `extract` | `.`, the mrepo itself | none |
+
+`get`: nothing asked, the top page and the keywords below it; a keyword
+path, its page and each keyword below it with its one-liner; a keyword
+with several meanings, each a choice. `extract`: the info layer written
+again from the linked packages, with its problems; run by a hook as the
+mrepo is made ready.
 
 ## Package
 

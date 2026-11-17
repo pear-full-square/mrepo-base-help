@@ -884,3 +884,31 @@ the changes now?"): every module's `test` is `brittle-bare
 test/*.test.js`, `brittle` and `bare-runtime` its dev dependencies (the
 versions the root pins), its `package-lock.json` entry the same; its
 README names that command.
+
+### base-package-info, -protocol, -service, -haicc
+
+Sound in all four: each action its page in its module (Signature,
+Returns, Errors; Arguments where it takes any; Design where there is a
+choice made); the config in `protocol.js`; `mounted` tests.
+
+**Documentation, done** (2026-11-17, no rebuild between packages, the
+human: "do a number of repos"): the menus jump to the actions
+(`protocol`, `service`, `haicc`; `info` had them); "Config" a table in
+each (`service`'s states merged into it: from, to, what its hooks do);
+"Commands" become how-tos: `info` `howto/read` (the docs mrepo and an
+mrepo's own, by keywords, a choice, extracted again), `service`
+`howto/lifecycle` (initialise, start, behind the door, stop, shutdown),
+`haicc` `howto/hop` (once, chained, at a position inside, below a
+shortcut refused). `protocol` has no how-to of its own: activating is
+the hooks' (`base-docs-package`, `howto/hooks`).
+
+**Settled design, to build** (`tasks.md`, `base-solution-haicc`):
+`protocol`'s "Hooks" (a JSON command a file) and "the protocol protocol
+not a request from outside" change with the scripts (hooks shell, run
+by the runtime) and the restrictions lifted for base.
+
+**Tests and examples, later** (`install-tests`): each protocol in a
+running mrepo through the inbox (today the `haicc` command's end to end
+test); `goto` at a query's positions (several nodes selected); `service`
+in each state refusing the others; examples: a host's lifecycle, a
+chain of hops.
