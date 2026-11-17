@@ -700,6 +700,15 @@ where it takes any, Returns, Errors, Design); the config in
    machine's `haicc boot/teardown` stops every runtime): the claim
    wrong, or the behaviour missing (`teardown-cascade`, `tasks.md`).
 
+**Done** (2026-11-17): the menu jumps to the three actions
+(`boot/deploy`, `boot/teardown`, `boot/redeploy`); "Config" in the
+README, a table of where each action is offered and what it takes, the
+positions' coupling to the components named; "Commands" and "How to"
+became three how-tos, `howto/child`, `howto/swarm-node`,
+`howto/registry`; `teardown`'s page names its three URI forms. The
+cascade claim (5) removed: today a child's children are not torn down
+with it; the cascade is the boot component's override (`review-code`).
+
 **Tests and examples, later: each a transient install** (`install-tests`,
 `tasks.md`):
 
