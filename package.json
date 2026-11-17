@@ -27,7 +27,8 @@
     "pear-full-square/mrepo-base-crud",
     "pear-full-square/mrepo-base-container",
     "pear-full-square/splectral-server",
-    "pear-full-square/mrepo-base-howto"
+    "pear-full-square/mrepo-base-howto",
+    "pear-full-square/mrepo-base-info"
   ],
   "dependencies": {
     "bare-bundle": "1.11.0",

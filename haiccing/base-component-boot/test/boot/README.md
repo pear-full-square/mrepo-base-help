@@ -18,7 +18,7 @@ the tests: `boot.test.js`. It leaves nothing running.
    - its boot hooks, placed by its runtime as its own requests as it
      started, in name order: its protocols activated (not the `protocol`
      protocol itself, which stays closed to the outside), its help
-     extracted;
+     extracted, its how-tos and its info;
    - the host deployed by a command at the root, `boot/deploy host
      <package>`: placed by its unique URI beside the boot mrepo (`mrepos/local/host/`), its runtime
      running, its node and its shortcut in `main`

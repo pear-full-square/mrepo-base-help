@@ -4274,3 +4274,82 @@ the READMEs as files (316): no problems; `tools/bare tools/code-check.js`
 (23 modules, 16 packages): no problems. The other packages unchanged
 (their pins stay); the boot and the `haicc` test not run: no runtime,
 app, script or component changed.
+
+## 85. The `info` protocol: `extract` and `get`, beside `help` and `howto` (2026-11-17)
+
+The third phase of `review.md`, "The structure of `info`, settled"; the
+human: "go ahead"; on the transition: "keep the old stuff and implement
+info, that is the right decision"; on keywords: "There is no issue with
+duplication, the result returns the choices there are. [...] we are
+setting up the structure and identifying meaningful keywords. How we
+deal with them is a later concern."
+
+- **`mrepo-base-info`**, the module:
+  - `info/extract`: from the linked packages' bundles, the top the
+    mrepo's own package (the manifest's last); each README a page,
+    written once, a module's at `modules/<org>/<module>/`; the keywords
+    from the menus (`## Links`), the included packages (`## Included
+    packages`, each by its name without the prefix; none: taken from
+    the list), the sections; `modules` and `third-party` made here;
+    `index.json`, a keyword and its choices; `problems.json`.
+  - `info/get <keywords>`: the keywords where the URI is, no dot
+    (`haicc host info/get boot/deploy`), or as words; each choice its
+    page without its menus (a section: its text) and the keywords below
+    it with their one-liners; a keyword not there: the nearest, and
+    what is below it.
+- **`base-package-info`**, the package: cloned from `base-package-howto`
+  as the template's "A new package" says; its config in `protocol.js`;
+  its README in the new form, its menu jumping to the two actions in its
+  module.
+- **The `info` layer**: named in `mycelium-git`'s `LAYERS` and `SOLO`
+  and `mrepo-base-execute`'s `TARGETS`; documented in
+  `package-docs-mrepo` (`/info`).
+- **Both components include `info`**: in their lists after `howto`; its
+  hooks, activated at `boot`, extracted where the help is (the boot
+  mrepo at `boot`, the haicc mrepo at `initialise`); their READMEs the
+  first with `## Links` and `## Included packages`.
+
+**Decided while building** (ours, said here)
+
+- **`help` and `howto` stay until the review ends** (the human agreed):
+  every package's generic tests run through `mrepo-base-help` (`help`,
+  `help-in-situ`, the runtime handing over `/help/index.json`). They go
+  when every package is brought to the new template.
+- **The old form is read and reported**: a README without a menu, the
+  links of its text (not those in code, not its included packages),
+  each a problem `menu`: the review's checklist.
+- **A keyword holds its choices**: several pages under one keyword
+  (`mrepo`: the component's folder and the documentation package) are
+  each a choice; no problem.
+- **At the top, `modules` and `third-party` are made here**: the top
+  package's own `modules/` folder gives way to them.
+- **A package's link to a module's top points to its one place**
+  (`see: modules/<module>`), not walked again; a jump deeper (an action)
+  is walked under the package.
+- **`get` takes `**`**, as `crud` does: its keywords are its URI.
+- **The old help check skips a link out of its package**: a sibling, an
+  included package, is not its to check.
+- **`mrepo-base-info` registered in the root's workspaces** (`package.json`,
+  `package-lock.json`), so packages can assemble it.
+
+**Found on the way**: a README with included packages but no menu read
+them as its links (fixed: the old form's links leave that section out);
+a section starting with inline code had no one-liner (fixed: only a code
+fence is not prose); a link to a file (`third-party.json`) read as a
+page in the old form (fixed: folders and `.md` only).
+
+**A host's info**, extracted from the sources: 853 keywords, 301 pages;
+74 problems, all `menu`: the old form, across 13 packages and 21
+modules: the review's list.
+
+**Validated**: `mrepo-base-info`'s own tests (7 tests, 52 asserts);
+`base-package-info`'s `mounted` (4 tests); the pre-release of all
+sixteen packages, each passing; `tools/bare tools/release.js --strict`:
+exit 0. The help extract and the READMEs as files: no problems;
+`tools/bare tools/code-check.js`: no problems. The boot's `validate`
+three times, passing. The `haicc` test, 277 of 277 (16 more checks:
+`info` on the boot mrepo and the host, a package, an action by a jump,
+a section, a module, `third-party`, a keyword's choices, one not there,
+`info/extract`), three times (the second and third after a restart of
+the session's container cut the second short). Nothing left running,
+no container left.

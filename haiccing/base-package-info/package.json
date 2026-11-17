@@ -1,0 +1,20 @@
+{
+  "name": "base-package-info",
+  "description": "Package: the info protocol, an mrepo's pages extracted from its packages and read by keywords from the top down.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "main.js",
+  "modules": [
+    "pear-full-square/mrepo-base-info",
+    "pear-full-square/mrepo-base-help",
+    "pear-full-square/pkgm-base-check"
+  ],
+  "template": {
+    "repository": "haiccing/package-docs-package",
+    "commit": "ccd2bd154c56aa32320dc544ac2c3093404abadd"
+  },
+  "scripts": {
+    "test": "bare test/run.js"
+  }
+}

@@ -1,6 +1,6 @@
 # Test report: haiccing/base-component-boot
 
-The package passed its `full` set: all 23 units, 313 of 313 tests and 2183 of 2183 asserts.
+The package passed its `full` set: all 23 units, 313 of 313 tests and 2184 of 2184 asserts.
 
 | | |
 |---|---|
@@ -9,16 +9,16 @@ The package passed its `full` set: all 23 units, 313 of 313 tests and 2183 of 21
 | Result | passed |
 | Units | 23 of 23 passed |
 | Tests | 313 of 313 passed |
-| Asserts | 2183 of 2183 passed |
-| Run | 2026-11-16 23:52 UTC |
+| Asserts | 2184 of 2184 passed |
+| Run | 2026-11-17 01:38 UTC |
 | Bare | v1.36.0 |
-| Content | `be8ba6ed760ef3115f45178b4df56e86a4db3bd2d63ae4b46dbeabd6b13e983d` |
+| Content | `d1ad626144cf743afd82fe552eaaddab07803014ab6f400d96a2b71d743fc15f` |
 
 ## Units
 
 | Unit | Result | Tests | Asserts |
 |---|---|---|---|
-| `/test/boot` | passed | 2 of 2 | 124 of 124 |
+| `/test/boot` | passed | 2 of 2 | 125 of 125 |
 | `/test/help` | passed | 1 of 1 | 2 of 2 |
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |

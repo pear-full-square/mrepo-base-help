@@ -116,8 +116,8 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | | `external-request-api` | what the outside may ask (protocols, actions), designed, not hard-coded | to discuss |
 | P1 | `mrepo-registry` | mrepos as shortcuts, a registry of the host-local mrepos | built, parts 75 and 76 (the links layer, an mrepo's own; the mrepo registry, the boot mrepo's); the rest for the next design round |
 | | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `howto` and `haici` | in three steps (2026-11-16): `howto/extract` and `howto/get` with the first how-tos built, part 82; then `package-review`; then the flag unit, `help/annotate`, `haici/feedback`, `explore` and `plan` scoped |
-| | `package-docs-package` | the template renamed, its rules for `info`, a new package as a clone of the best candidate | settled 2026-11-16 (`review.md`, "The structure of `info`"); the human renames the repository |
-| | `info` | the static side: `extract` (keywords from the links tables, the modules once, `third-party`), `get`; replaces `help/get`, `help/extract`, `howto/get` | settled 2026-11-16 (`review.md`), after `package-docs-package` |
+| | `package-docs-package` | the template renamed, its rules for `info`, a new package as a clone of the best candidate | built, parts 83 and 84 |
+| | `info` | the static side: `extract` (keywords from the links tables, the modules once, `third-party`), `get`; replaces `help/get`, `help/extract`, `howto/get` | built, part 85, beside `help` and `howto` (they go when the review ends) |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:

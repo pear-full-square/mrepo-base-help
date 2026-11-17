@@ -15,6 +15,7 @@ Each layer, its README:
 | [protocols/](protocols/) | its external API |
 | [help/](help/) | its documentation |
 | [howto/](howto/) | its how-tos, by activity |
+| [info/](info/) | its pages, by keywords from the top down |
 | [links/](links/) | the mrepos it links, what this machine knows of each: its own use |
 | [inbox/](inbox/) | records posted to it |
 | [outbox/](outbox/) | records it sends |
@@ -39,7 +40,7 @@ Each layer has a mode, in its `layer.json`:
 
 | mode | written | layers |
 |---|---|---|
-| atomic | one commit at a time, by the runtime | `main`, `runtime`, `protocols`, `help`, `howto` |
+| atomic | one commit at a time, by the runtime | `main`, `runtime`, `protocols`, `help`, `howto`, `info` |
 | replicated | as atomic, also copied out as files | `packages` |
 | non-atomic | its own writers, in parallel | `inbox`, `outbox`, `request/*`, `execute/*` |
 

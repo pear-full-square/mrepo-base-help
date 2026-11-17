@@ -9,35 +9,35 @@ Applications and demos are deployed on top of it; they bring the
 structures in `main`, such as the folders where swarms and their nodes are
 created.
 
-| | |
-|---|---|
-| [mrepo/](mrepo/) | its part of the structure: the list of its packages |
-| [scripts/](scripts/) | its scripts: what to go on with after a deploy |
-| [howto/](howto/) | its how-tos: what is done in a host |
-| [test/](test/) | its tests: its list and its hooks as configured, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
 
-## Packages
+- [mrepo](mrepo/)
+- [scripts](scripts/)
+- [howto](howto/)
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
-| package | brings |
-|---|---|
-| `base-package-runtime` | the runtime, its layers, the `runtime` protocol |
-| `base-package-help` | the `help` protocol and the help layer |
-| `base-package-howto` | the `howto` protocol and the howto layer |
-| `base-package-protocol` | the `protocol` protocol: activate, deactivate |
-| `base-package-boot` | the `boot` protocol: deploy, teardown, redeploy |
-| `base-package-service` | the `service` protocol and the service state |
-| `base-package-haicc` | the `haicc` protocol: goto |
-| `base-package-crud` | the `crud` protocol: create, read, delete: structure in `main` |
-| `base-package-container` | the `container` protocol: create, start, stop, remove, status: its replica in a container |
-| `package-docs-mrepo`, `package-docs-package` | the documentation |
+## Included packages
+
+- [base-package-runtime](../base-package-runtime/)
+- [base-package-help](../base-package-help/)
+- [base-package-howto](../base-package-howto/)
+- [base-package-info](../base-package-info/)
+- [base-package-protocol](../base-package-protocol/)
+- [base-package-boot](../base-package-boot/)
+- [base-package-service](../base-package-service/)
+- [base-package-haicc](../base-package-haicc/)
+- [base-package-crud](../base-package-crud/)
+- [base-package-container](../base-package-container/)
+- [package-docs-mrepo](../package-docs-mrepo/)
+- [package-docs-package](../package-docs-package/)
 
 ## Deploying
 
 By the boot mrepo, with a command at the root. The mrepo starts `booted`:
 its boot protocol, its crud protocol and its container protocol are
-behind the service's door, activated by hooks on `start`. Its help and its how-tos are extracted by hooks on `initialise`. Each service
+behind the service's door, activated by hooks on `start`. Its help, its how-tos and its info are extracted by hooks on `initialise`. Each service
 command answers what was done and the state now.
 
 ```
