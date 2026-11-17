@@ -1840,6 +1840,13 @@ stream, the renderers); a view a command bound to a renderer, declared
 as data in a package (`views/<name>.json`); six generic renderers
 (page, tree, document, table, log, buttons); seven questions for the
 session.
+**Settled** (the human: "The splectral components (basically commands,
+UI elements, info, ...) have to be self-contained the same as haiccing
+packages. That means that it includes the UI element sets and create a
+page or pages with it."): a Splectral component carries its commands,
+its UI element set (by copy, as a package carries its modules), its
+info, and makes its own page or pages; the server carries no UI
+elements of its own. The proposal updated (question 2 settled).
 
 ## The order after the restructure (the human, 2026-11-17)
 
