@@ -2078,6 +2078,12 @@ registry, we can create info views on all mrepos."
    "full replication", the layers' configuration and the response as
    replicated data above, for the container; replicating commits comes
    with a node on another machine. The design: `pair.md`.
+   **Settled, who executes what** (the human, 2026-11-17): "The
+   container has a haicc registry with the node mrepo registered, and it
+   executes the commands on it. The host has the node also registered in
+   the registry, and forwards all node commands to it, but it forwards
+   the haicc platform commands acting on the container mrepo to the
+   container haicc platform." In `pair.md`.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script

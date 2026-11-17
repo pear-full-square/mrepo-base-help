@@ -18,6 +18,21 @@ node on another machine, where there is no shared folder; recorded in
 `tasks.md`, not built now. What is below is the design with that taken
 out.
 
+## Settled: who executes what (the human, 2026-11-17)
+
+"The container has a haicc registry with the node mrepo registered, and
+it executes the commands on it. The host has the node also registered in
+the registry, and forwards all node commands to it, but it forwards the
+haicc platform commands acting on the container mrepo to the container
+haicc platform."
+
+- **The container's platform**: its registry has the node; it executes
+  the platform commands on it (the boot protocol's).
+- **The host's platform**: its registry has the node too; every command
+  for the node it forwards to the node; a platform command acting on
+  the node it forwards to the container's platform.
+- **The host's own**: the container's lifecycle, through Docker.
+
 ## What it is
 
 A node deployed at a position of the host runs in a Docker container,
