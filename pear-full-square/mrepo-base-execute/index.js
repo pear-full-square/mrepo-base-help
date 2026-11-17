@@ -157,6 +157,8 @@ const runtimeView = ctx => Object.freeze({
   // a record into the mrepo's own inbox, as its storage takes one
   submit: ctx.submit ?? null,
   answer: ctx.answer ?? null,
+  // a command placed as the mrepo's own internal request, its completed form back
+  own: ctx.own ?? null,
   branches: async () => (await ctx.backend.listBranches()).map(([b]) => b),
   // the protocols the runtime loaded, their configs by name
   protocols: ctx.protocols ?? {},

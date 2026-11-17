@@ -32,8 +32,9 @@ its lines at `swarms/swarm-1` in the host.
 
 ## Design
 
-- **Each line its own request**, through the mrepo's own inbox, tagged
-  as its own (`trigger: internal`); the script's request waits for them
+- **Each line its own request**, through the mrepo's own inbox, checked
+  as any command from outside is (a hook's lines, the mrepo's own, are
+  internal requests instead); the script's request waits for them
   (`exec.wait`), the runtime free meanwhile. A line that hops is a hop
   like any other.
 - **Forward only**: the lines stand where the script was sent; from

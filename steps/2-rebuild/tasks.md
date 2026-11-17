@@ -1959,9 +1959,19 @@ registry, we can create info views on all mrepos."
    a file of the machine: the mrepo's `haicc/file` action goes. `haicc
    scripts` lists them. Package scripts stay continuations in the
    bundles; installing them into `scripts/` later.
-   **To measure**: the execution time, old build against new (the
-   boot, a host's initialise and start, a script of five lines against
-   five calls).
+   **Measured** (2026-11-17, twice each, old build against new): the
+   boot until it answers 7.7-8.1 s against 9.0-9.9 s; a host's
+   initialise 4.5-5.0 against 7.5-7.6; start 2.0-2.4 against 5.0-5.2;
+   stop 2.1-2.2 against 4.6-5.3; deploy and ordinary commands the same;
+   five calls 7.5-8.0 s, the same five as one haicc/script 6.6-6.8 s. A
+   hook line costs about 1 s: a request of its own through the inbox and
+   the outbox. Ours: (1) hook lines as the mrepo's own internal requests,
+   (2) a cheaper request pipeline. The human: "do (1) now and note (2)
+   for later". (1) built.
+   **Later, (2)**: a request costs about 1 s, every command alike (the
+   inbox, pending, execute, done, the outbox, each a commit in the
+   mrepo's layers): fewer commits a request (pending, execute and done
+   moves merged), measured the same way.
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the
