@@ -10,29 +10,16 @@ everything else.
 
 ## Links
 
+- [howto](howto/)
 - [bin](bin/)
 - [test](test/)
 
 ## Install
 
-```sh
-curl -fsSLO https://github.com/haiccing/base-linux-haicc/releases/latest/download/haicc-install.sh
-sh haicc-install.sh
-haicc sources download bare haiccing
-haicc prereq
-haicc boot/deploy
-haicc . boot/deploy host base-component-haicc
-haicc host service/initialise
-haicc host service/start
-```
-
-`haicc-install.sh` carries the scripts and the pins, nothing else.
+`haicc-install.sh` carries the scripts and the pins, nothing else:
 `--home=<folder>` is haicc's own folder, `~/.haicc` by default;
-`--bin=<folder>` is where the command is registered. The first four
-lines are answered here; from `haicc boot/deploy` on, by the app. Instead
-of the download, a sources folder can be linked: `haicc sources link
-<folder>` (the development repository's `sources/`, built by
-`tools/release.js`).
+`--bin=<folder>` is where the command is registered. Then the sources:
+downloaded over https, or a sources folder linked. The how-to `install`.
 
 ## Commands
 
@@ -65,7 +52,7 @@ exits 3.
 
 ## Network
 
-Only `haicc sources download bare` reaches the network. An install from
+Only `haicc sources download` reaches the network. An install from
 a linked sources folder is offline and repeats exactly.
 
 ## Not yet

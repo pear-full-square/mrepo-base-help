@@ -17,9 +17,9 @@ haicc prereq
 haicc boot/deploy
 # what it is: its info, extracted by its boot hooks
 haicc . info/get
-# every runtime of the install stopped
+# every runtime of the install stopped, what the boot put in place removed (Bare, the sources, the scripts kept)
 haicc boot/teardown
-# booted again: already built, nothing repeated, its runtime started again
+# booted again: the boot mrepo built anew, its runtime started
 haicc boot/deploy
 ```
 

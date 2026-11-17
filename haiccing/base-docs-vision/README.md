@@ -325,6 +325,12 @@ script to go on with, run by the terminal). What was said is stated as it is; no
   one driven inside an mrepo, not through the inbox; nesting; a script
   used from elsewhere through the registry ("that functionality will be
   added later, not now").
+- Settled for base, 2026-11-17, to build with the solution install:
+  one gateway, the inbox, every command submitted there; one language,
+  shell calling `haicc`, for a component's scripts and its hooks;
+  continuations in a request's response, run by the terminal; hooks run
+  by the runtime as console commands; base operations protocols, custom
+  versions scripts.
 
 ## Repository layers
 

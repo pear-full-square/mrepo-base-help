@@ -12,23 +12,12 @@ bare base-app-haicc.bundle /run <argument>...
 
 ## Links
 
+- [howto](howto/)
 - [test](test/)
 - [test-reports](test-reports/)
 - [modules](modules/)
 
 ## Commands
-
-```
-haicc boot/deploy
-haicc . boot/deploy host base-component-haicc
-haicc host service/initialise
-haicc host service/start
-haicc host boot/deploy node-1 base-package-runtime
-haicc host haicc node-1 info/get
-haicc host boot/teardown node-1
-haicc . boot/teardown host
-haicc boot/teardown
-```
 
 - **A URI first** is a command for the mrepos:
   `haicc <URI> <protocol>/<action> <argument>...`. A URI is relative,
@@ -45,7 +34,7 @@ haicc boot/teardown
   removes what the deploy put in place.
 - **`haicc sources`** lists the sources registered; `unlink`, `https`,
   `no-https` and `download` change them.
-- **`haicc --help`** prints the forms.
+- **`haicc --help`** prints the forms, with examples.
 
 ## Record
 

@@ -966,3 +966,29 @@ github source's manifest read as well.
 (each replica removed, the nodes, the host); the docs mrepo from a
 github source; examples: a host with one node step by step (`deploy`,
 `replica`), the cluster.
+
+### base-app-haicc, base-linux-haicc
+
+**Documentation, done** (2026-11-17): menus with a `howto/`; the app's
+command list left to `haicc --help` (its examples), its forms kept; two
+how-tos, `output` (whole, raw, output alone, the width) and `flags`
+(log, layer, continuation; where a flag list goes); the Linux package's
+"Install" a how-to, `install` (downloaded or a folder linked, offline);
+"only `haicc sources download bare` reaches the network" corrected: every
+download does. And `base-component-boot`'s how-to `boot`, ours of
+earlier today, corrected: the machine's `haicc boot/teardown` removes
+what the boot put in place, so a boot after it builds anew.
+
+**Tests and examples, later** (`install-tests`): `haicc output <width>`
+kept across commands; `sources download bare haiccing` in one command;
+`--home` and `--bin` elsewhere; example: an install from the releases.
+
+### The documentation packages
+
+`base-docs-package`, `-uri`, `-xpath`: current. Brought up to date
+(2026-11-17): `base-docs-haicc`'s terms (`hook`, `docs mrepo`);
+`base-docs-hdlc`'s "Validation" (partial while changes are made, the
+human: "Don't always build everything while we are making changes";
+everything before a milestone) and "Products" (when the human asks, or
+at an agreed milestone); `base-docs-vision`'s "Continuations" (the
+scripts settled for base, to build).
