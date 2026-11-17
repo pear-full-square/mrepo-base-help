@@ -1,10 +1,10 @@
 {
   "package": "haiccing/base-package-boot",
-  "content": "abe0a181f0f16c9e4422927bacfbfdade47487688f6f86d25a23d93fa71352df",
+  "content": "51551c51ddd3c6ebd847979442a2a239d9409fb3acfb608c8ad3dcc265d83cd1",
   "bare": "v1.36.0",
-  "date": "2026-11-17T11:56:29.542Z",
+  "date": "2026-11-17T12:28:10.454Z",
   "set": "full",
-  "ok": false,
+  "ok": true,
   "units": [
     {
       "unit": "/test/mounted",
@@ -99,18 +99,16 @@
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-execute",
-      "ok": false,
+      "ok": true,
       "tests": {
-        "passed": 9,
+        "passed": 10,
         "total": 10
       },
       "asserts": {
-        "passed": 97,
+        "passed": 98,
         "total": 98
       },
-      "failures": [
-        "execute: execution branches from their targets, the record completed, squashed into each target"
-      ]
+      "failures": []
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-info",

@@ -1,24 +1,24 @@
 # Test report: haiccing/base-package-runtime
 
-The package did not pass its `full` set: 21 of 22 units passed, 309 of 310 tests and 2009 of 2010 asserts.
+The package passed its `full` set: all 22 units, 310 of 310 tests and 2010 of 2010 asserts.
 
 | | |
 |---|---|
 | Package | `haiccing/base-package-runtime` |
 | Set | `full` |
-| Result | failed |
-| Units | 21 of 22 passed |
-| Tests | 309 of 310 passed |
-| Asserts | 2009 of 2010 passed |
-| Run | 2026-11-17 12:15 UTC |
+| Result | passed |
+| Units | 22 of 22 passed |
+| Tests | 310 of 310 passed |
+| Asserts | 2010 of 2010 passed |
+| Run | 2026-11-17 12:34 UTC |
 | Bare | v1.36.0 |
-| Content | `557ccdcb840f1f68d9e413ef6a32664d59ab0ec5a8b752228fe572d24fa8a8a0` |
+| Content | `25b76aea306229414b81cdff18a86a0bf4261f5222d9ccf7840d311c42a8787c` |
 
 ## Units
 
 | Unit | Result | Tests | Asserts |
 |---|---|---|---|
-| `/test/start` | failed | 0 of 1 | 7 of 8 |
+| `/test/start` | passed | 1 of 1 | 8 of 8 |
 | `/test/info` | passed | 1 of 1 | 2 of 2 |
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
@@ -40,9 +40,5 @@ The package did not pass its `full` set: 21 of 22 units passed, 309 of 310 tests
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 19 of 19 | 54 of 54 |
-
-## Failures
-
-- `/test/start`: the runtime: started, answering, stopped
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

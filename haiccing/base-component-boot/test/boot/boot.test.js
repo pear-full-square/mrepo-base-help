@@ -21,7 +21,8 @@ const pkg = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
 // What a start of the boot adds to the requests done: the boot's own, then
 // its runtime's as it starts.
-const STARTS = ['boot deploy boot', 'crud create main/registry', 'info extract .', 'protocol activate .', 'protocol activate .', 'protocol activate .', 'protocol activate .', 'protocol activate .']
+// (sorted: the boot's request; the protocol protocol opened by the runtime, its own; the boot hook file's lines through the inbox, at main)
+const STARTS = ['boot deploy boot', 'crud create main/registry', 'info extract main/.', 'protocol activate .', 'protocol activate main/.', 'protocol activate main/.', 'protocol activate main/.', 'protocol activate main/.', 'protocol activate main/.']
 const alive = pid => spawnSync('kill', ['-0', String(pid)], { stdio: 'ignore' }).status === 0
 const SOURCES = resolve(process.env.SOURCES || join(pkg, '..', '..', 'sources'))
 const have = ['base-package-runtime', 'base-package-info', 'base-package-protocol', 'base-package-boot', 'base-package-service', 'base-package-haicc', 'base-component-boot', 'base-component-haicc'].every(p => existsSync(join(SOURCES, 'haiccing', `${p}.bundle`)))
