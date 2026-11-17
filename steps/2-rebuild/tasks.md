@@ -2030,7 +2030,8 @@ registry, we can create info views on all mrepos."
    implemented in the simplest way". So: the layers replicated are a
    configuration of the pair, every layer to start with; the simplest
    implementation that works.
-   **Proposed** (ours, 2026-11-17, not yet settled):
+   **Settled too** (the human, 2026-11-17: "take your proposal as
+   settled"), ours as proposed:
    - **The response as replicated data**: it comes back in the node's
      commits, its outbox layer; its arrival on the host says the
      replica is up to date with it, a read after a write never stale,
@@ -2051,7 +2052,11 @@ registry, we can create info views on all mrepos."
      host's copy), not master and slave: replica is already our word
      (p2p-mrepo, the how-tos), and which side was which was mistaken
      once.
-   Designed when the container comes back.
+   **The prerequisite** (the human, 2026-11-17): "we need the haicc
+   install in the container and test it. The install will need the
+   sources as host." A regular haicc install inside the node's
+   container, from the same sources as the host's install, tested
+   there, before the pair deploy is built on it.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script
