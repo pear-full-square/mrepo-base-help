@@ -49,6 +49,6 @@ the platform's first step.
 
 ## Tests
 
-- `brittle-bare test/*.test.js`: the command line read, a record printed, a command sent to
+- `brittle-bare test/*.test.js` (Bare installed): the command line read, a record printed, a command sent to
   a folder standing in for the root, the sources, the command line whole.
   No runtime is started.
