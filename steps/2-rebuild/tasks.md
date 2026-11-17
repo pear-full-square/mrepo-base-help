@@ -1993,6 +1993,38 @@ registry, we can create info views on all mrepos."
      node's outbox layer is on disk, not in the store, today) or an
      entry on a core of the node's; and the node's own commands to the
      host, the reverse way, said earlier, whether they stay.
+   **The pattern** (the human, 2026-11-17): "The easiest patter would be
+   that everything executes on the container node and there is full
+   replication back to the host node. What gets replicated are the
+   commits, not the folder actions - we can discuss this. This 'pair
+   deploy' needs to be analysed. Host needs an empty shell, container a
+   regular install. Host needs to subscribe to all of container's data.
+   Host must forward inbox to container. Container processes." So a
+   **pair deploy**: on the host an empty shell, its inbox forwarded, all
+   of the node's data subscribed to; in the container a regular install
+   that executes everything; what is replicated, the node's commits.
+   The analysis to come, with the human; the points to discuss:
+   - **Commits, for every layer**: the atomic layers live in the store,
+     the request and execute layers on disk in native git, so the store
+     replicated would not carry them all; commits do. mycelium-git has
+     what it takes: `importLayer`, a layer taken in, an existing one
+     only forward (the one writer is the node, so nothing conflicts),
+     and bundles, a branch's commits as bytes.
+   - **How they travel**: bundles, a ref's new commits, over the
+     stream, or a core the node appends them to; or, for base, a fetch
+     through the mounted folder.
+   - **The inbox forwarded**: by the shell, over the stream; or, for
+     base, the node's inbox folder is the host's, shared by the mount,
+     and nothing is forwarded at all. The same for the outbox, where
+     the terminal waits.
+   - **The shell**: a registry entry, an inbox, the replica; no
+     runtime that executes. Whether a read at the host is answered from
+     the replica or sent on like everything else.
+   - **The pair deploy itself**: one `boot/deploy` making the shell, the
+     container, the install inside it (the sources mounted read only,
+     airgapped), and the link between them; the teardown of both;
+     the container down: the shell's inbox waits, its replica as it
+     was.
    Designed when the container comes back.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
