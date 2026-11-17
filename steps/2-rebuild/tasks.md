@@ -2169,3 +2169,16 @@ package by package and lists here what needs code, built after it.
   every module; the drift it found fixed (the hooks, scripts, registry
   and documents tests), a page for pkgm-base-manager, a section for
   mrepo-base-info.
+- **A runtime that stops taking its inbox in**, **open** (found
+  2026-11-17, once in five runs of the haicc command's test, section 12):
+  a node's container replica, after its `service/start` answered, took
+  nothing more from its inbox: its process alive, idle (no CPU, waiting
+  on events), every request it had taken done, two left in its inbox
+  folder for minutes, the other node's replica in the same run fine. Its
+  pass loop no longer rescheduled itself: most likely a pass awaiting
+  something that never ended (`busy` held, every wake only marking
+  `again`), since the slow look (`idle`) would otherwise have taken the
+  files in. The replica's folder kept for it (the session's scratchpad,
+  `stuck-replica`). To find before the local run, which runs the test
+  three times: a pass that runs too long said in the runtime's log, then
+  the cause.
