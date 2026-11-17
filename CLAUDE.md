@@ -34,8 +34,8 @@ the work reaches it.
   `base-app-haicc` (the `haicc` command, an app run with Bare from its
   bundle: the machine level, the sources, a command put in the boot
   mrepo's inbox); `base-linux-haicc` (the first step on Linux, sh scripts,
-  no bundle: a folder linked, Bare put in place, the `haicc` that starts
-  the app); and the
+  no bundle: a folder linked or the packages downloaded from their
+  releases, Bare put in place, the `haicc` that starts the app); and the
   documentation packages `package-docs-package` (the package structure,
   the README rules, modules and methods, tests; the template a package
   starts from: its `test/` holds the generic tests, a folder each) and

@@ -7,6 +7,48 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-17: the install from the releases, `b7ce3ea`
+
+The human: "the instructions on haiccing are wrong, it should install
+from haiccing package", then "Test the github release locally and fix
+it. Create a manifest that works." Tried as a visitor, in a clean
+folder: `haicc-install.sh` from `base-linux-haicc`'s latest release
+worked, `haicc sources download bare` too; `haicc prereq` then exit 3,
+no source holding the app. Nothing fetched our packages (the app's
+`download haiccing` said "not published yet", and the app cannot fetch
+its own bundle).
+
+Fixed, the code changed on the human's word (`b7ce3ea`, on top of part
+85):
+
+- `haicc sources download haiccing`, in sh beside Bare
+  (`bin/haicc-sources`): the organisation's manifest from
+  `base-linux-haicc`'s latest release (`manifest.json`, the sources'
+  `haiccing/manifest.json` as it is), then each package's bundle and
+  addons from its own release (`r-<its commit>`), each checked against
+  the manifest (sha256), the manifest written last; again, nothing
+  fetched twice. `HAICC_RELEASES` names another base (the test's
+  `file://`). The app's own `download haiccing` is not reached from the
+  command line any more; it stays as it is (for the cloud session to
+  decide).
+- `tools/release.js`: the manifest names the packages built only. It
+  kept `package-docs-template`'s entry and bundle after the rename; as
+  published, every install would have fetched it.
+- The haicc test: the download from a copy of the releases made from
+  the sources, eleven checks (fetched, the manifest and the bundles as
+  in the sources, the addons, the folder registered, nothing fetched
+  twice, a bundle not as the manifest says refused and not kept, no
+  manifest). 288/288 three times; `release.js --strict` every report
+  current; the checks no problems.
+- Tried against `r-61acff6`'s assets (a local copy, the manifest added):
+  the download, `prereq`, `boot/deploy`, Splectral, the cluster,
+  `host howto`, `boot/teardown`, all exit 0, nothing left.
+
+To make it work on GitHub: a release of this commit, every package, and
+`base-linux-haicc` with `haicc-install.sh` and `manifest.json`. Then the
+haiccing profile's "Start here" becomes the four lines of the package's
+README. Both on the human's word.
+
 ## 2026-11-17: the five organisations on every profile
 
 The human: "I think it should explain the five orgs that hang together".

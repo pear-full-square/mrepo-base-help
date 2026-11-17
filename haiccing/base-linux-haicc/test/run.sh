@@ -106,8 +106,41 @@ has "$out" "no boot mrepo" "said: no boot mrepo (haicc boot/deploy)"
 is "$(haicc sources no-https)" "folder:$SOURCES" "haicc sources no-https: the backup off"
 haicc sources https >/dev/null; haicc sources link "$SOURCES" >/dev/null
 is "$(haicc sources | wc -l | tr -d ' ')" 2 "https back on; a folder linked twice is listed once"
-out=$(haicc sources download "$HAICC_ORG" 2>&1); is $? 3 "haicc sources download $HAICC_ORG: our packages are not published yet, exit 3"
-has "$out" "not published yet" "said"
+# our packages downloaded from their releases, in sh, into another
+# install: a copy of the releases' layout made from the sources
+# (HAICC_RELEASES, file://), the manifest an asset of base-linux-haicc's
+# (each package at its own release, r-<its commit>; its addons, all of them)
+rel=$T/releases
+mkdir -p "$rel/base-linux-haicc/releases/latest/download"
+cp "$SOURCES/$HAICC_ORG/manifest.json" "$rel/base-linux-haicc/releases/latest/download/"
+(cd "$SOURCES" && tar -cf "$T/addons.tar" addons)
+sed -n 's/^      "file": "\(.*\)",$/\1/p; s/^      "commit": "\(.......\).*/\1/p' "$SOURCES/$HAICC_ORG/manifest.json" | paste - - > "$T/released"
+while read -r f c; do
+  p=$(basename "$f" .bundle); d=$rel/$p/releases/download/r-$c
+  mkdir -p "$d"; cp "$SOURCES/$f" "$d/"; cp "$T/addons.tar" "$d/$p-addons.tar"
+done < "$T/released"
+tag=r-$(sed -n "s|^$HAICC_ORG/$APP_PACKAGE.bundle\t||p" "$T/released")
+sh "$pkg/haicc-install.sh" --home="$T/dl" --bin="$T/dlbin" >/dev/null 2>&1
+out=$(HAICC_RELEASES=file://$rel "$T/dlbin/haicc" sources download "$HAICC_ORG" 2>&1)
+is $? 0 "haicc sources download $HAICC_ORG: our packages fetched from their releases"
+has "$out" "$HAICC_ORG/$APP_PACKAGE: fetched ($tag)" "each from its own release, r-<commit>"
+cmp -s "$T/dl/sources/$HAICC_ORG/manifest.json" "$SOURCES/$HAICC_ORG/manifest.json" && ok "the manifest written, as published" || no "the manifest written, as published"
+same=yes; while read -r f c; do cmp -s "$SOURCES/$f" "$T/dl/sources/$f" || same=no; done < "$T/released"
+is "$same" yes "every bundle there, as in the sources"
+is "$(ls "$T/dl/sources/addons" | wc -l | tr -d ' ')" "$(sed -n 's/^        "\([0-9a-f]\{64\}\)",\{0,1\}$/\1/p' "$SOURCES/$HAICC_ORG/manifest.json" | sort -u | wc -l | tr -d ' ')" "every addon the manifest names there"
+has "$("$T/dlbin/haicc" prereq --check)" "ok       sources: $T/dl/sources" "the folder registered: it holds the app"
+out=$(HAICC_RELEASES=file://$rel "$T/dlbin/haicc" sources download "$HAICC_ORG" 2>&1)
+is $? 0 "again: nothing fetched twice"
+has "$out" "$HAICC_ORG/$APP_PACKAGE: there" "said: there"
+rm "$T/dl/sources/$HAICC_ORG/$APP_PACKAGE.bundle"
+printf x >> "$rel/$APP_PACKAGE/releases/download/$tag/$APP_PACKAGE.bundle"
+out=$(HAICC_RELEASES=file://$rel "$T/dlbin/haicc" sources download "$HAICC_ORG" 2>&1)
+is $? 3 "a bundle not as its manifest says: exit 3"
+has "$out" "not as the manifest says (sha256)" "said"
+[ ! -e "$T/dl/sources/$HAICC_ORG/$APP_PACKAGE.bundle" ] && ok "and not kept" || no "and not kept"
+out=$(HAICC_RELEASES=file://$T/nowhere "$T/dlbin/haicc" sources download "$HAICC_ORG" 2>&1)
+is $? 3 "no manifest to fetch: exit 3"
+has "$out" "could not fetch the manifest" "said"
 haicc sources download nosuch >/dev/null 2>&1; is $? 3 "nothing to download by that name: exit 3"
 
 # 6. the boot: the boot mrepo at the root, its runtime started, nothing deployed
