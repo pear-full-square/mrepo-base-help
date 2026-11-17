@@ -7,6 +7,18 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-17: the five organisations on every profile
+
+The human: "I think it should explain the five orgs that hang together".
+The same section added to all five profiles, "The five organisations",
+one line each, the page's own marked "(this one)"; splectrum's line in
+the human's words ("where SPLectrum as a philosophy project lives and
+engineering gets planned"). On splectrum's page the sentence that already
+named the other four removed. Shown first, pushed on the human's word,
+one commit each on `main`: `splectrum` `553c66e`, `bare-for-pear`
+`c9d4f66`, `pear-full-square` `30851eb`, `haiccing` `aca1595`,
+`splectral` `4f3ebff`.
+
 ## 2026-11-17: the organisation profiles (`prompt-local-profiles.md`)
 
 Done as the prompt says: the five `.github` repositories read, the
