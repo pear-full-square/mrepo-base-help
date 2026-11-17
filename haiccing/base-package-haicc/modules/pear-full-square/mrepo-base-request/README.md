@@ -138,4 +138,4 @@ setting.
 
 ## Tests
 
-- `brittle-bare test/*.test.js`: the unit tests
+- `brittle-bare test/*.test.js` (Bare installed): the unit tests
