@@ -95,5 +95,3 @@ record is printed to is set with `haicc output`.
 - `main.js`: the dispatcher, the bundle's main, generated. The program is
   its `/run` entry, named first so that a URI is never taken for a test.
 - No mrepo side: an app is not linked into an mrepo.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

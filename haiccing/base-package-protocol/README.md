@@ -47,5 +47,3 @@ their argument the protocol's name.
   from `mrepo-base-protocol`.
 - `main.js`: the dispatcher, the bundle's main, generated.
 - No structure of its own: the `protocols` layer is the runtime package's.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

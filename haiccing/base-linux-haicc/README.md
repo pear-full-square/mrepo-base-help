@@ -80,5 +80,3 @@ a linked sources folder is offline and repeats exactly.
 - `build.sh`: writes `haicc-install.sh` from `bin/` and `pins`. Run it
   after a change to either.
 - `haicc-install.sh`: the installer, generated.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

@@ -44,5 +44,3 @@ not code.
 - `protocol.js`: the `service` protocol, its config and its actions, from
   `mrepo-base-service`.
 - `main.js`: the dispatcher, the bundle's main, generated.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

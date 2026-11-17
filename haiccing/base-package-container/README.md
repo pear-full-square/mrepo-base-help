@@ -86,5 +86,3 @@ In `protocol.js`, the package's: the five actions at the mrepo itself.
 - `main.js`: the dispatcher, the bundle's main, generated.
 - No structure of its own: the replica's node is made in `main`, its
   link's record in the `links` layer, both the runtime package's.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

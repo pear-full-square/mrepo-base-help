@@ -44,5 +44,3 @@ state.
 - `protocol.js`: the `info` protocol, its config and its actions, from
   `mrepo-base-info`.
 - `main.js`: the dispatcher, the bundle's main, generated.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

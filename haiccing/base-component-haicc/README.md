@@ -46,5 +46,3 @@ haicc host service/start
 
 - No protocol and no code of its own: `main.js` is the dispatcher, the
   bundle's main, generated; it offers the tests.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

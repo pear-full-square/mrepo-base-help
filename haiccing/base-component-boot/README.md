@@ -75,5 +75,3 @@ command as typed and a GUID. Each step's outcome is logged in it.
 - `run.js`: the entry, the program above.
 - `main.js`: the dispatcher, the bundle's main, generated.
 - No protocol of its own.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

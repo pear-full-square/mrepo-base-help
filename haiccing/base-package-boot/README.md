@@ -65,5 +65,3 @@ mrepo; `haicc boot/teardown` stops every runtime of the install.
   `mrepo-base-boot`.
 - `main.js`: the dispatcher, the bundle's main, generated.
 - `mrepo/`: its part of an mrepo's structure, the `links` layer.
-
-Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).
