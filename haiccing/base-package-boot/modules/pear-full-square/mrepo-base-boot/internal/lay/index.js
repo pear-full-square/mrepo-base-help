@@ -2,7 +2,7 @@
 // folder, the structure an mrepo is built from (README.md beside it).
 import { mkdirSync, writeFileSync } from 'bare-fs'
 import { join, dirname } from 'bare-path'
-import { fetch, structureOf } from '../fetch/index.js'
+import { available, fetch, structureOf } from '../fetch/index.js'
 
 // Runtime config: what a package drops into the runtime layer (its hooks,
 // its service state, ...), not the layer's own definition.
@@ -13,7 +13,8 @@ export function lay ({ store, sources, target, into }) {
   fetch({ store, sources, pkg: target })
   const listed = structureOf({ store, pkg: target })['packages/layer.json']
   if (!listed) throw new Error(`${target} lists no packages (mrepo/packages/layer.json)`)
-  const list = JSON.parse(listed.toString()).packages || []
+  const parsed = JSON.parse(listed.toString())
+  const list = parsed.packages || []
   // The package that defines the mrepo: the last in the list.
   const last = list[list.length - 1]
   for (const pkg of list) {
@@ -29,5 +30,10 @@ export function lay ({ store, sources, target, into }) {
       writeFileSync(join(into, p), bytes)
     }
   }
-  return { list }
+  // What it documents beyond its list (documents: sources): every package
+  // the sources offer, its documentation only: no structure laid in.
+  if (parsed.documents !== undefined && parsed.documents !== 'sources') throw new Error(`${target}: documents what? ${parsed.documents} (sources)`)
+  const documented = parsed.documents === 'sources' ? available(sources).filter(pkg => !list.includes(pkg)) : []
+  for (const pkg of documented) fetch({ store, sources, pkg })
+  return { list, documented }
 }
