@@ -5,11 +5,12 @@ tar; Docker, its daemon running and the user allowed to use it, for the
 nodes' containers; `gh`, logged in, for the releases).
 Nothing is signed. This run builds the sources, tests them, then
 **releases them** (the human, 2026-11-17: "Local should also build and
-push the releases") and tests the install from GitHub. Only the notes
-are committed.
+push the releases"), tests the install from GitHub, and reviews the docs
+with an AI agent as their user. Only the notes are committed.
 
 > Build the sources locally, test them, release every package on GitHub,
-> install from the release, and prepare the human's test session.
+> install from the release, review the docs as an AI agent would use
+> them, and prepare the human's test session.
 >
 > 1. **Update the clone.** In your clone of
 >    https://github.com/splectrum/splectrum-dev-env-3-mycelium, check out
@@ -77,14 +78,54 @@ are committed.
 >    install is there or left a boot mrepo running, say so and leave it:
 >    `haicc boot/teardown` with the old `haicc` is the human's (no upgrade
 >    in place). Do not run `haicc boot/deploy`: that is the human's.
-> 10. **Tell the human** it is ready: what 4, 5 and 6 printed last, the
+> 10. **A docs quality review, an AI agent the user** (the human,
+>    2026-11-17). The aim is full AI autonomy: an agent given haicc and
+>    a need should find what to do in haicc's own docs. Review them as
+>    that agent, not as their writer:
+>    - **Your sources: the docs as an install has them, nothing else.**
+>      In a temporary install of your own (`--home=` and `--bin=` in a
+>      temporary folder, from the release; not the human's), boot, deploy
+>      the docs mrepo, and read through `haicc <URI> info/get [keywords]`
+>      and `haicc --help` only: no repository, no source code, no
+>      `steps/`. `sources/info-view.html` is the same content, to check
+>      against.
+>    - **Tasks to do from them**, each by what the docs say, the commands
+>      run: install and boot; a host in service; a node deployed under
+>      the host and a command sent to it; a swarm of two nodes, each with
+>      its container; find a record and read it with a query; run several
+>      commands as one script, and from a file of the install's; read a
+>      request's log and what it changed; find which actions an mrepo
+>      offers and what each takes; Splectral; tear it all down. And one
+>      of a writer: what it takes to make a package of your own (the
+>      how-to `package`, the patterns).
+>    - **For each task**: whether the docs got you there; where you
+>      looked first and where the answer was; each step that failed or
+>      surprised you (the command, what the docs said, what happened);
+>      what you had to guess.
+>    - **For the docs as a whole**: finding things (are the keywords the
+>      words an agent would try first; does the top lead down to what is
+>      needed; dead ends); correctness (a command that does not run as
+>      written, a page that says what the code does not); completeness
+>      (what an action takes and answers, its errors, exit codes); terms
+>      (one word one meaning, each defined where first met); size (a
+>      page too long to take in, an answer that needs five pages);
+>      consistency between pages, the how-tos and `--help`.
+>    - **Findings, ranked** by how much each would stop an agent: each
+>      with where (the keywords or page), what is wrong, and a proposal.
+>      Write them in `steps/2-rebuild/docs-review-local.md`, dated,
+>      naming `<commit>`. Do not change the docs: report, and propose.
+>    - Tear the install down after; nothing left running, the folder
+>      removed.
+> 11. **Tell the human** it is ready: what 4, 5 and 6 printed last, the
 >    release, where `haicc` was registered, the docs view
->    (`sources/info-view.html`), and the test session below.
-> 11. **Write a note back** in `steps/2-rebuild/local-note.md`: a new
+>    (`sources/info-view.html`), the docs review's first findings, and
+>    the test session below.
+> 12. **Write a note back** in `steps/2-rebuild/local-note.md`: a new
 >    section at the top, dated, naming `<commit>`: what ran, each result,
 >    anything that did not run as written and why (a proposal and a patch
->    if you have one). Commit only `local-note.md` and `local-run.md` on
->    `execute/main`, merge into `main` (a plain merge), push both.
+>    if you have one). Commit only `local-note.md`, `local-run.md` and
+>    `docs-review-local.md` on `execute/main`, merge into `main` (a plain
+>    merge), push both.
 >
 > Do not change the code: report, and propose.
 
