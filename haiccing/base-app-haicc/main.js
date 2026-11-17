@@ -38,7 +38,7 @@ const UNITS = {
   "/test/modules/pear-full-square/p2p-mrepo": () => Promise.all([import("./modules/pear-full-square/p2p-mrepo/test/contract.test.js"), import("./modules/pear-full-square/p2p-mrepo/test/local.test.js"), import("./modules/pear-full-square/p2p-mrepo/test/mrepo.test.js")]),
   "/test/modules/pear-full-square/p2p-replicate": () => Promise.all([import("./modules/pear-full-square/p2p-replicate/test/replicate.test.js")]),
   "/test/modules/pear-full-square/p2p-store": () => Promise.all([import("./modules/pear-full-square/p2p-store/test/store.test.js")]),
-  "/test/modules/pear-full-square/pkgm-base-check": () => Promise.all([import("./modules/pear-full-square/pkgm-base-check/test/mrepo.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/package.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/patterns.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/rules.test.js")]),
+  "/test/modules/pear-full-square/pkgm-base-check": () => Promise.all([import("./modules/pear-full-square/pkgm-base-check/test/mrepo.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/package.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/patterns.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/rules.test.js"), import("./modules/pear-full-square/pkgm-base-check/test/tests.test.js")]),
 }
 // The test sets: their tests by name (modules: every module's unit tests).
 const SETS = {"/test/full":["command","info","code","mrepo","package","modules"],"/test/validate-in-situ":["info-in-situ","mrepo-in-situ"],"/test/validate":["command","info","code","mrepo","package"]}
