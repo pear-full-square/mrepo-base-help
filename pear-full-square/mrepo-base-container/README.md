@@ -65,6 +65,6 @@ is for the mrepos on the host.
 
 ## Tests
 
-- `npm test`: the actions on an execution written for them, with Docker:
+- `brittle-bare test/*.test.js`: the actions on an execution written for them, with Docker:
   a real container made, started, reached, stopped and removed. It fails
   where no Docker daemon answers.

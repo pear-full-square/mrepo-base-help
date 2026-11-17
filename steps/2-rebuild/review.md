@@ -879,4 +879,8 @@ examples: a swarm's structure built, queried, removed.
 module's README says `npm test`, and its `package.json` runs
 `bare ../../node_modules/brittle/cmd.js`, a path of this development
 repository: in the module's own repository neither holds. Bare only, and
-self-contained: the module's test command its own.
+self-contained: the module's test command its own. **Done** (the human: "can't we make
+the changes now?"): every module's `test` is `brittle-bare
+test/*.test.js`, `brittle` and `bare-runtime` its dev dependencies (the
+versions the root pins), its `package-lock.json` entry the same; its
+README names that command.
