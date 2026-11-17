@@ -2,142 +2,144 @@
 
 Give this to Claude Code on the local machine (Linux x86-64; git, curl,
 tar; Docker, its daemon running and the user allowed to use it, for the
-nodes' containers; `gh` for a release; `git` also for one measurement
-of step 6).
-Nothing is signed. The sources are built
-locally and used locally; a release is created only when the human asks.
-Only its note is committed.
+nodes' containers; `gh`, logged in, for the releases).
+Nothing is signed. This run builds the sources, tests them, then
+**releases them** (the human, 2026-11-17: "Local should also build and
+push the releases") and tests the install from GitHub. Only the notes
+are committed.
 
-> Build the sources locally and test the `haicc` command end to end, so the
-> human can then use it from the command line.
+> Build the sources locally, test them, release every package on GitHub,
+> install from the release, and prepare the human's test session.
 >
 > 1. **Update the clone.** In your clone of
->    https://github.com/splectrum/splectrum-dev-env-3-mycelium (no clone
->    yet: clone it first), check out `main` and pull.
-> 2. **Install the dependencies.** `sh tools/install.sh` (no Node.js or npm
->    needed: it replays `package-lock.json` with curl and tar). Then check
->    that `node_modules/bare-runtime-linux-x64/bin/bare` exists.
-> 3. **Build the sources.** From the clone's folder:
->    `tools/bare tools/release.js`. It writes into `sources/` (gitignored,
->    never committed): every package's bundle and their manifest
->    (`sources/haiccing/`), their native addons (`sources/addons/`), and
->    Bare's tarball as the lockfile pins it (`sources/holepunchto/`,
->    fetched once with curl, checked against its sha512). It also writes
->    the installer again, `haiccing/base-linux-haicc/haicc-install.sh`;
->    `git status` must show no change after it (if it does, say so in your
->    note and do not commit it).
-> 4. **Run the test of the `haicc` command**, from the clone's folder,
->    three times (a race shows one run in a few):
->    `sh haiccing/base-linux-haicc/test/run.sh`. It works in a temporary
->    folder and ends by itself (four to five minutes; the first run
->    longer: Docker pulls `debian:bookworm-slim` once, for the image the
->    nodes' containers are made from): the installer, the
->    sources linked, Bare put in place, the boot, the host deployed from
->    `base-component-haicc`, its service started, a node deployed inside
->    it, commands chained through both, nodes created, read and deleted
->    with `crud`, queries (a filter, a command at each position a URI
->    selects, a URI through shortcuts), a request's log and its flags,
->    the cluster (a swarm's two nodes deployed at `swarms/swarm-1/<name>`,
->    each with its replica in a Docker container, commands sent on into
->    a container, a container stopped, started and removed), Splectral
->    (its mrepo deployed beside the host, its page and its lines asked
->    with curl), the teardowns. One line a
->    check (261 of them); the last
->    lines say
->    `# checks = <n>/<n> pass` and `# ok`; exit 0 passed, 1 failed. It
->    leaves nothing running: check with `pgrep -fa "bin/bare"` and
->    `docker ps -a --filter label=haicc.folder` (no container). Before
->    the first run: `docker version` must show a server; if it does not,
->    say so in your note and run the rest: the checks about the
->    containers then fail, the others pass.
-> 5. **Run the packages' own tests**, each from its bundle, from the clone's
->    folder, for each of `base-package-runtime`, `base-package-protocol`,
->    `base-package-help`, `base-package-boot`, `base-package-service`,
->    `base-package-haicc`, `base-package-crud`, `base-package-container`
->    (it makes a real container: Docker again), `base-package-splectral`,
->    `base-package-howto`,
->    `base-component-boot`,
->    `base-component-haicc`, `base-app-haicc`, `package-docs-mrepo`,
->    `package-docs-template`:
+>    https://github.com/splectrum/splectrum-dev-env-3-mycelium, check out
+>    `main` and pull. Write down the commit: it is the one you build,
+>    test and release (`<commit>` below, short form).
+> 2. **Install the dependencies.** `sh tools/install.sh`, then check that
+>    `node_modules/bare-runtime-linux-x64/bin/bare` exists.
+> 3. **Build the sources.** `tools/bare tools/release.js`: every
+>    package's bundle and the manifest (`sources/haiccing/`, nineteen
+>    bundles), the native addons (`sources/addons/`), Bare's tarball
+>    (`sources/holepunchto/`), and the installer again,
+>    `haiccing/base-linux-haicc/haicc-install.sh`. `git status` must show
+>    no change after it; if it does, say so in your note and stop before
+>    the release.
+> 4. **Run the test of the `haicc` command** three times:
+>    `sh haiccing/base-linux-haicc/test/run.sh`. 303 checks; its last
+>    lines `# checks = 303/303 pass` and `# ok`. `docker version` must
+>    show a server first. Nothing left after each run:
+>    `pgrep -fa "bin/bare"`, `docker ps -a --filter label=haicc.folder`.
+> 5. **Run the packages' own tests**, each from its bundle, for every
+>    bundle in `sources/haiccing/`:
 >    `SOURCES=$PWD/sources tools/bare sources/haiccing/<package>.bundle /test/full`
->    (exit 0 passed; its last line is the result, `"ok":true`; the boot
->    component's, the runtime's, the boot package's and the app's take a
->    few minutes each). Do not run `tools/package-test.js`: it writes the
->    packages' test reports, which are the cloud session's to commit.
->    Then `tools/bare tools/release.js --strict`: it says, for each
->    package, whether the report committed with it is the one of the
->    bundle you built (`current`); say in your note if one is not.
-> 6. **Measure the commits** (the human's laptop has twelve cores: what
->    do the same measurements give there). From the clone's folder:
->    `tools/bare tools/commit-bench.js --dir "$HOME/haicc-commit-bench"`
->    (a folder on the laptop's disk, not a RAM disk; it makes the folder
->    and removes what it wrote, up to a few hundred MB meanwhile). It
->    prints one line of JSON a measurement and ends with
->    `{"ok":true,"measure":"done",...}`; ten to twenty minutes. Run it
->    with the laptop on mains power and little else running. Into your
->    note: every line it printed, as printed; the processor
->    (`lscpu | grep -E "Model name|^CPU\(s\)|Thread|Core"`); the
->    filesystem of the folder (`df -T "$HOME"`); and anything that
->    failed (a line with `"error"`, or `"errors"` above 0). What it
->    measures and what it gave in the cloud session:
->    `steps/2-rebuild/xpath.md`, "Commits: how often, and what git
->    handles". It leaves nothing running.
-> 7. **Install it for the human**, in their home folder:
->    `sh haiccing/base-linux-haicc/haicc-install.sh` (it puts the scripts in
->    `~/.haicc` and registers `haicc` in `/usr/local/bin` when that can be
->    written, else in `~/.local/bin`; it says if that folder is not on the
->    PATH). Then `haicc sources link "$PWD/sources"` and `haicc prereq`
->    (it must end with every line `ok`: Bare put in place, and a source
->    holding the app, `haiccing/base-app-haicc.bundle`). If an earlier
->    install left a boot mrepo running (`pgrep -fa "bin/bare"`), say so in
->    your note and leave it: stopping it is the human's (`haicc
->    boot/teardown`). Do not run `haicc boot/deploy`: that is the human's.
-> 8. **Tell the human** it is ready: what steps 4 and 5 printed last (or
->    what failed and how), where `haicc` was registered, and the commands
->    to try, in this order:
->    `haicc boot/deploy`, `haicc . boot/deploy host base-component-haicc`,
->    `haicc host service/initialise`, `haicc host service/start`,
->    `haicc host help/get`, `haicc . howto` and `haicc host howto` (what
->    can be done here, by activity; `haicc host howto/get . node/deploy`
->    for one how-to's steps), `haicc . crud/create swarms/swarm-1`,
->    `haicc . crud/read swarms`, `haicc . crud/read .`,
->    then a swarm's node with its container, at the host:
->    `haicc host crud/create swarms/swarm-1`,
->    `haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc`,
->    `haicc host haicc swarms/swarm-1/node-1 service/initialise`,
->    `haicc host haicc swarms/swarm-1/node-1 service/start`,
->    `haicc host haicc swarms/swarm-1/node-1 container/create`,
->    `haicc host haicc swarms/swarm-1/node-1 container/start`,
->    `haicc host/swarms/swarm-1/node-1/container crud/read .` (answered
->    from inside the container; `docker ps` shows it); or all of it in
->    one, instead of the host's three commands above:
->    `haicc . boot/deploy host base-component-haicc --flags continuation=cluster`;
->    and, before any of it, Splectral, to watch the commands arrive in
->    a browser on the laptop:
->    `haicc . boot/deploy splectral base-package-splectral --flags continuation=start`,
->    `haicc splectral splectral/status` (it says the page's URL:
->    `http://127.0.0.1:4400`, another port when that one is taken);
->    `haicc host crud/read . --flags log=verbose` (a request's log with
->    its action's steps), `haicc --flags log=debug -- host crud/read .`
->    (flags in front, closed by `--`: for the whole chain); and to undo:
->    `haicc boot/teardown` (every runtime stopped, the containers
->    removed). A URI has
->    no leading slash any more: `.` is the root, `host` the position
->    `host`. A work folder left by an earlier version (`~/.haicc/work`)
->    is not carried over: `haicc boot/teardown` first, with the `haicc`
->    that made it, or remove the folder. The boot mrepo's runtime keeps running
->    after `haicc boot/deploy`; its work folder is `~/.haicc/work`. A
->    command prints its response record whole, unpacked across lines;
->    `haicc --raw ...` as it is stored, one line; `haicc --output ...` the
->    output alone. Every record now holds its `log`: what the request
->    changed and its metrics, always; more with `--flags log=verbose` or
->    `log=debug`. `haicc --help` lists the commands.
-> 9. **Write a note back**: what ran, each result, anything that did not
->    run as written and why (with a proposal and a patch if you have one,
->    as before), in `steps/2-rebuild/local-note.md`: a new section at the
->    top, dated, naming the commit you tested. Commit only that file on
->    `execute/main`, merge it into `main` (a plain merge), push both.
+>    (exit 0, last line `"ok":true`). Do not run `tools/package-test.js`:
+>    the reports are the cloud session's to commit. Then
+>    `tools/bare tools/release.js --strict`: every report `current`; say
+>    in your note if one is not.
+> 6. **The docs view**: `tools/bare tools/info-view.js` deploys the docs
+>    mrepo in a transient install and writes `sources/info-view.html`, one
+>    page to browse every package's info by keywords. It must end with
+>    `"problems":0` and leave nothing running. Keep the page for the
+>    human.
+> 7. **Release**, only when 4 and 5 passed on `<commit>`. As
+>    `steps/2-rebuild/handover-local.md`, "Releases", and as you did for
+>    `r-46a3b3f` (`local-run.md`):
+>    - the package repositories are already written from `main`
+>      (`tools/packages.sh`, by the cloud session); run it again only if
+>      `<commit>` changed a package, and say so;
+>    - a release `r-<commit>` on each package's repository
+>      (`github.com/haiccing/<package>`), its tag at that repository's
+>      `main`: its bundle, its manifest entry, its addons, as `sources/`
+>      holds them; `base-linux-haicc`: `haicc-install.sh` and
+>      `manifest.json` (the sources' `haiccing/manifest.json` as it is),
+>      marked latest. Sizes and digests on GitHub checked against the
+>      local files.
+>    - The packages are not those of `r-46a3b3f`: the docs packages are
+>      now `base-docs-*` and `base-component-docs`, with bundles; there is
+>      no `base-package-help`, `base-package-howto`, `package-docs-mrepo`
+>      or `package-docs-package` any more (the info protocol replaced help
+>      and howto). Release only what the manifest names. Say in your note
+>      which old repositories are left without a current release, for the
+>      human to decide on.
+>    - Record it in `local-run.md`, a new section at the top: the commit,
+>      each repository, its tag, its assets with sizes and sha256.
+> 8. **Install from GitHub**, in a clean temporary folder
+>    (`--home=` and `--bin=` there), the steps of the how-to `install`
+>    (`haiccing/base-linux-haicc/howto/install/`) as written: the
+>    installer from the latest release, `haicc sources download bare
+>    haiccing`, `haicc prereq`, `haicc boot/deploy`, `haicc . boot/deploy
+>    host base-component-haicc --flags continuation=cluster`,
+>    `haicc boot/teardown`. Every command exit 0; nothing left; the
+>    folder removed.
+> 9. **Install it for the human**, in their home folder, from the release:
+>    `haicc-install.sh` from the latest release, `haicc sources download
+>    bare haiccing`, `haicc prereq` (every line `ok`). If an earlier
+>    install is there or left a boot mrepo running, say so and leave it:
+>    `haicc boot/teardown` with the old `haicc` is the human's (no upgrade
+>    in place). Do not run `haicc boot/deploy`: that is the human's.
+> 10. **Tell the human** it is ready: what 4, 5 and 6 printed last, the
+>    release, where `haicc` was registered, the docs view
+>    (`sources/info-view.html`), and the test session below.
+> 11. **Write a note back** in `steps/2-rebuild/local-note.md`: a new
+>    section at the top, dated, naming `<commit>`: what ran, each result,
+>    anything that did not run as written and why (a proposal and a patch
+>    if you have one). Commit only `local-note.md` and `local-run.md` on
+>    `execute/main`, merge into `main` (a plain merge), push both.
 >
-> Do not change the code: report, and propose. Do not create a release
-> unless the human asks: how, when they do, is in
-> `steps/2-rebuild/handover-local.md`, "Releases".
+> Do not change the code: report, and propose.
+
+## The human's test session: what to cover
+
+What is new since the last local run (`61314e0`), each to try by hand,
+in this order. A URI has no leading slash: `.` is the root (the boot
+mrepo), `host` the position `host`.
+
+1. **Install and boot**, from the release (above): `haicc boot/deploy`;
+   `haicc . boot/deploy host base-component-haicc --flags
+   continuation=start` (the host deployed, then its service initialised
+   and started, each command shown as it runs).
+2. **The info protocol**, which replaced help and howto: `haicc . info/get`,
+   `haicc . info/get boot`, `haicc . info/get boot/deploy`, `haicc host
+   info/get`; keywords from the top down, each answer a page and the
+   keywords below it.
+3. **The docs mrepo**, the install's manual: `haicc . boot/deploy docs
+   base-component-docs`, then `haicc docs info/get` (every package the
+   sources hold, documented); and the same as one page,
+   `sources/info-view.html`, in a browser.
+4. **Hooks**: the service's transitions run their hooks, `.haicc` files,
+   one command a line, as the mrepo's own requests: watch
+   `haicc host service/stop` and `service/start` (a few seconds each:
+   their cost is noted, a cheaper request pipeline moved back).
+5. **Scripts**: lines run where the URI points, each after the one
+   before, the first that fails ending it:
+   `haicc host haicc/script . 'crud/create notes/a
+   crud/read notes/a'`; at a position, `haicc host haicc/script notes
+   'crud/read a'`; from stdin, a heredoc:
+   `haicc host haicc/script . <<'EOF'` … `EOF`; a line that fails (its
+   number said, exit 1).
+6. **The install's scripts**: a file `~/.haicc/scripts/<name>.haicc`
+   (lines as above, `#` comments); `haicc scripts` lists them;
+   `haicc host haicc/file . <name>` runs one at the host. A package's
+   scripts would go in `~/.haicc/scripts/<org>/<package>/`.
+7. **The registry reference**: `haicc registry/local crud/read "*"` (the
+   local mrepos), `haicc registry/local/host crud/read .` (the host by its
+   reference, wherever it is linked).
+8. **A swarm and its nodes**: a swarm is a node whose document says so,
+   `haicc host crud/create swarms/swarm-1 '{"kind":"swarm"}'`; or all of
+   it at once, the component's script, `haicc . boot/deploy host
+   base-component-haicc --flags continuation=cluster` (after `haicc
+   boot/teardown` and `haicc boot/deploy`, the host not there yet: a
+   swarm of two nodes, each with its replica in a container; `docker
+   ps`); `haicc host/swarms/swarm-1/node-1/container crud/read .`
+   answered from inside a container.
+9. **Splectral**, to watch the commands arrive: `haicc . boot/deploy
+   splectral base-package-splectral --flags continuation=start`, then
+   `haicc splectral splectral/status` for the page's URL.
+10. **The log and flags**: `haicc host crud/read . --flags log=verbose`,
+   `haicc --flags log=debug -- host crud/read .`, the request records:
+   `haicc host crud/read "done/*" --flags layer=request`.
+11. **Teardown**: `haicc boot/teardown` (every runtime stopped, the
+   containers removed; the scripts and the sources kept).
+
+Write down anything surprising: what was said, what was expected. The
+findings come back to the cloud session as before.
