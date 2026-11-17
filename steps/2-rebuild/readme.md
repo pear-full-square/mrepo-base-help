@@ -4440,3 +4440,17 @@ distributed across the new structure."):
   browsed by keywords, as `info/get` answers, the command shown, the
   problems per view (`sources/info-view.html`); published for the human
   to evaluate the work with.
+
+**Validated**: the full run: every package's pre-release, the boot's
+`validate` three times, the `haicc` test 288 of 288 three times (the
+docs mrepo deployed and read, the how-tos as pages, `info` on the boot
+mrepo, the host and a node), nothing left running, no container left;
+two pre-releases failing in it (the runtime's `start` test still on
+`help`'s hooks, fixed; `base-component-boot`'s boot test once, the race
+it is run several times for: it passed in the boot's three runs and in
+the next run). Then, the offload's last documentation changed (the
+human: "don't do full rebuilds, partial enough to continue is fine"),
+the partial run: every pre-release passing, `tools/bare
+tools/release.js --strict` exit 0, `tools/bare tools/info-extract.js`
+(the boot mrepo, a host, the docs mrepo: no problem) and `--files`, and
+`tools/bare tools/code-check.js`: no problems.

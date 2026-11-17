@@ -1,25 +1,23 @@
 {
   "package": "haiccing/base-component-boot",
-  "content": "2955bbfaf7b06e08a81a2ac37612bcf499a617401199265a534db9d7b7ef598a",
+  "content": "b9f666577b3b02994978977ce65c17a6d2df79be35318502fb1fd1a3263be10a",
   "bare": "v1.36.0",
-  "date": "2026-11-17T04:04:58.826Z",
+  "date": "2026-11-17T04:40:48.894Z",
   "set": "full",
-  "ok": false,
+  "ok": true,
   "units": [
     {
       "unit": "/test/boot",
-      "ok": false,
+      "ok": true,
       "tests": {
-        "passed": 1,
+        "passed": 2,
         "total": 2
       },
       "asserts": {
-        "passed": 119,
+        "passed": 121,
         "total": 121
       },
-      "failures": [
-        "the boot: put in place, its runtime started, nothing deployed; the host deployed, redeployed, torn down, deployed again by commands; haicc; run again"
-      ]
+      "failures": []
     },
     {
       "unit": "/test/info",
