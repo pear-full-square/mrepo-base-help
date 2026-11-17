@@ -712,3 +712,16 @@ where it takes any, Returns, Errors, Design); the config in
 - Examples (`example/`): a host and a node, deployed, read through
   both, torn down; a swarm of two nodes; the registry listed, queried,
   torn down by a query.
+
+- **The human, on boot's config**: "where each action is offered:
+  <name>, swarms/<swarm>/<name>, and for teardown also
+  registry/<swarm>/<name>; --> isn't this component stuff. The package
+  here is the protocol (only) no?" Yes: the config names positions
+  other packages' structures bring (`swarms/`, the haicc component's;
+  `registry/`, the boot component's), and derives a node's unique URI
+  from the path. Ours, put to the human: the protocol offered anywhere
+  below `main` (`**`, a target needed, as `crud`); a position's meaning
+  from the structure's documents (a swarm a node whose document says
+  so; the unique URI from the nearest swarm node above, else `local`);
+  `teardown` a query, whatever it selects torn down, the registry's
+  layout not the action's. A design change: decided before code.
