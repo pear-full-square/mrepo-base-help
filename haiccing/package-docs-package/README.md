@@ -3,6 +3,15 @@
 The haiccing package structure, documented. Each folder here is a part
 of a structure unit; its README says what goes there.
 
+## Links
+
+- [mrepo](mrepo/)
+- [test](test/)
+- [test-reports](test-reports/)
+- [name](name/)
+- [example](example/)
+- [modules](modules/)
+
 ## A structure unit
 
 A folder, at any level: a package, a further unit inside it, a test, an
@@ -25,15 +34,6 @@ is for.
 | `example/` | has examples |
 | `README.md` | says what it is; extracted into an mrepo's help layer |
 
-| | |
-|---|---|
-| [mrepo/](mrepo/) | an mrepo's definition, by layers |
-| [test/](test/) | tests, a folder each, and the sets |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [name/](name/) | a further unit |
-| [example/](example/) | examples, a folder each |
-| [modules/](modules/) | its dependencies, assembled: the help module its tests use |
-
 ## The rules
 
 - One structure, many purposes: a definition, documentation in place,
@@ -52,8 +52,8 @@ is for.
   carried in the package's bundle and read from it by path.
 - `modules/` is assembled, never edited by hand.
 - **READMEs cascade**: a unit's README links to the README of each folder
-  below it, and each of those to theirs, so from the top every folder is
-  reached. The exceptions: no README inside a layer of `mrepo/` (it would
+  below it, in its menu ("READMEs"), and each of those to theirs, so from
+  the top every folder is reached. The exceptions: no README inside a layer of `mrepo/` (it would
   be committed into it; `mrepo/`'s own README covers its layers), and
   `modules/<org>/<module>/` brings its own (linked from `modules/`'s,
   written when the modules are assembled).
@@ -68,7 +68,15 @@ where `help get` serves it at three levels. Its shape:
 
 <one-liner>
 
-<summary, then the links table>
+<summary>
+
+## Links
+
+<a list of links, one a folder below>
+
+## Included packages
+
+<a list of links, one a package of its list>
 
 ## <section>
 ```
@@ -76,8 +84,8 @@ where `help get` serves it at three levels. Its shape:
 1. **One-liner**: the first paragraph, one sentence of at most 120
    characters, saying what the item is. No parentheses, no references.
 2. **Summary**: everything up to the first `##` heading, at most 100
-   words: what it does and how it is used, then the table of links to the
-   folders below. Everything else goes into sections.
+   words: what it does and how it is used. Everything else goes into
+   sections.
 3. **Self-contained**: no references to the development repository
    (`docs/`, `steps/`). A README stands on its own or links within its
    package.
@@ -85,8 +93,20 @@ where `help get` serves it at three levels. Its shape:
 5. **Section titles are short, stable nouns** ("Usage", "API", "Tests",
    "Design"), at most three words, or a file's name, so a section can be
    asked for by name.
+6. **The menu, `## Links`**, the first section: a list of links to the
+   folders below, one each, a label and nothing more (`- [test](test/)`):
+   what each is, its own README's one-liner says, once. The label is the
+   folder's name. A README with no folder below has no menu.
+7. **Included packages, `## Included packages`**, after the menu, in the
+   README of a package that defines an mrepo only: the packages of its
+   list (`mrepo/packages/layer.json`) but itself, in deploy order, each a
+   link to its sibling, its name the label and `../<package>/` the
+   target, as they stand beside each other
+   here and in an mrepo's `packages/<org>/`.
 
-`tools/help-extract.js` in the development repository checks them.
+`tools/help-extract.js` in the development repository checks them (the
+menu's place and form, and the included packages against the list, come
+with `info`).
 
 ## Modules
 
@@ -172,6 +192,42 @@ from them ("Modules", above).
 
 `template`: the commit of this template the package was brought to ("From
 the template", below).
+
+## A new package
+
+A new package is a clone of the best candidate among the packages there
+are, not built from nothing: a package that runs and passes is the
+closest start.
+
+The candidate:
+
+1. **The same kind**: a protocol (`protocol.js` and its module), a
+   component (a list, `main` empty), a documentation package (`"docs":
+   true`), an app (`run.js`, run from its bundle).
+2. **The same parts**: `mrepo/`, `scripts/`, `howto/`, `deploy.js`, a
+   service, a unit of its own.
+3. **The most recent**: the newest template pin, a current report.
+
+The steps, from the development repository:
+
+```sh
+# the candidate copied, its report not: the new package has none yet
+cp -a haiccing/<candidate> haiccing/<new> && rm -f haiccing/<new>/test-reports/full.*
+# brought to the current template: the generic tests, test-reports/, the pin
+sh tools/package-template.sh <new>
+# then by hand: package.json's name, description and modules; the README; for a
+# protocol its module cloned the same way (pear-full-square/<module>), its name
+# in protocol.js and the config; the candidate's own test replaced by one of
+# the new package's; what the candidate had and the new one does not, removed
+# its pre-release: built, its full set run, its report written
+tools/bare tools/package-test.js haiccing/<new>
+```
+
+A protocol that brings a layer of its own: the layer's name added to
+`mycelium-git`'s lists (`LAYERS`, `SOLO`) and `mrepo-base-execute`'s
+`TARGETS`, or the boot refuses it (`not a layer`). The package's and the
+module's repositories are created by the human; deployed, the package is
+added to a component's list.
 
 ## From the template
 

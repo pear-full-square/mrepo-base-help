@@ -4224,3 +4224,53 @@ The help extract (546 READMEs, 10 packages) and the READMEs as files
 packages): no problems. The boot's `validate` three times, passing. The
 `haicc` test, 261 of 261, three times. Nothing left running, no
 container left.
+
+## 84. The template's rules: the menu, the included packages, a new package (2026-11-17)
+
+The second phase of `review.md`, "The structure of `info`, settled";
+the human: "yes to both, go ahead with the template rules" (`review.md`,
+"The menu and the included packages").
+
+- **`## Links`, the menu**: the first section of a README with a folder
+  below, a list of links, a label each and nothing more; the one-liner
+  lives once, in the README it belongs to. The label the folder's name.
+- **`## Included packages`**: in the README of a package that defines an
+  mrepo, the packages of its list but itself, in deploy order, each a
+  sibling link (`../<package>/`).
+- **"A new package"**: a clone of the best candidate (the same kind, the
+  same parts, the most recent pin and a current report) and its steps as
+  typed commands; a layer of its own named in `mycelium-git` and
+  `mrepo-base-execute`. A section, not a how-to: a how-to's steps are
+  `haicc` commands, these are the development repository's tools (they
+  move into the HDLC's packages, the human).
+- **The template's own READMEs as menus**: its top, `test/`, the
+  example's four. What `test/`'s table said, which tests are generic,
+  is said once in its text.
+
+**Decided while building** (ours, said here)
+
+- **The menu named `## Links`**, every README's, not "package links":
+  it is in every README with a folder below; at a package's top it is
+  the package's links. "Included packages" as the human named it, not
+  "dependencies": a `package.json`'s dependencies are its modules.
+- **The checks of the new form come with `info`**: the menu's place and
+  form, the included packages against the list. Today's check sees a
+  `../` link as nothing there, so no component takes `## Included
+  packages` before then.
+- **Left for the review**: the generated `modules/README.md` (a table,
+  in every package: its generator changes them all); the example's
+  jumps and categories come with `info`'s check.
+
+**Found on the way**: the README's shape example held placeholder links,
+read as links by the help check (`<folder>/: nothing there`): written in
+words instead. A work-in-progress commit made while the strict release
+reassembled `base-app-haicc`'s modules recorded two of its files as
+deleted (`modules/README.md`, `third-party.json`): put back, the same
+bytes. No commit while a build runs over the tree.
+
+**Validated**: `package-docs-package`'s pre-release passing; `tools/bare
+tools/release.js --strict`: exit 0. The help extract (546 READMEs) and
+the READMEs as files (316): no problems; `tools/bare tools/code-check.js`
+(23 modules, 16 packages): no problems. The other packages unchanged
+(their pins stay); the boot and the `haicc` test not run: no runtime,
+app, script or component changed.

@@ -11,23 +11,24 @@ test/
   <name>/                 a test or a test group: its run.js, its README
 ```
 
-| | |
-|---|---|
-| [help/](help/) | generic: the READMEs against the README rules |
-| [code/](code/) | generic: the code against the code rules |
-| [mrepo/](mrepo/) | generic: the integrity of the mrepo side |
-| [package/](package/) | generic: the package against this structure |
-| [modules/](modules/) | generic, a group: every carried module's own tests |
-| [help-in-situ/](help-in-situ/) | generic: the help where it is deployed |
-| [mrepo-in-situ/](mrepo-in-situ/) | generic: the package as an mrepo holds it |
-| [name/](name/) | a test of the package's own |
+## Links
+
+- [help](help/)
+- [code](code/)
+- [mrepo](mrepo/)
+- [package](package/)
+- [modules](modules/)
+- [help-in-situ](help-in-situ/)
+- [mrepo-in-situ](mrepo-in-situ/)
+- [name](name/)
 
 ## A folder each
 
 Every test has its folder here, the generic ones too: nothing runs that
 has no folder. The generic tests are the same in every package and come
-with this template; a test of the package's own is named as the package
-likes. Run through the package's dispatcher (`main.js`, its bundle's
+with this template (`help`, `code`, `mrepo`, `package`, `modules`,
+`help-in-situ`, `mrepo-in-situ`); a test of the package's own is named as
+the package likes (`name` here). Run through the package's dispatcher (`main.js`, its bundle's
 main), every one by path.
 
 A package's `test/README.md` lists its sets and links to each test's
