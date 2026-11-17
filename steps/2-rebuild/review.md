@@ -786,3 +786,14 @@ where it takes any, Returns, Errors, Design); the config in
   (`teardown` with the cascade, `deploy`), boot offered anywhere below
   `main`, the unique URI from the structure's documents; a proof of
   concept and its how-to first.
+- The human: "However, there must be a way to call the base
+  implementation. what about protocol/boot/deploy?" Ours: yes, explicit,
+  in place of a rule by context: `boot/teardown` the action as the mrepo
+  maps it, overridden or not; `protocol/boot/teardown` the protocol's
+  own implementation, always. The cascade needs both: `boot/teardown
+  {each}` through the override, `protocol/boot/teardown {target}` the
+  base. Internal by a rule already there: the protocol protocol is never
+  activated for the outside, so an override is not bypassed from
+  outside. The runtime: a command of three parts, `protocol/<protocol>/<action>`,
+  sent to the package's function directly, the action's own gate and
+  arguments. To confirm.
