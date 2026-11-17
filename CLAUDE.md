@@ -92,7 +92,8 @@ repository's and its tools'.
 - **Product repositories:** a session attaches them and pushes: each
   module's (`sh tools/products.sh <module>...`, from `main`) and each
   package's (`sh tools/packages.sh -m "<what changed>" <package>...`).
-  New repositories are created by the human.
+  Pushed when the human asks, or at a milestone agreed with them; not
+  after every change. New repositories are created by the human.
 - **Planning:** the phase's request comes from `splectrum/roadmap-1`; the
   work is planned here, as it goes, and its outcome reported back.
 - In a Claude Code cloud session, execution runs on `execute/main`, merged
