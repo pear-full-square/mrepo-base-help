@@ -16,6 +16,11 @@ bare <dir>/packages/haiccing/base-package-runtime.bundle <dir>
 - [test](test/)
 - [test-reports](test-reports/)
 
+## Included packages
+
+- [base-package-info](../base-package-info/)
+- [base-package-protocol](../base-package-protocol/)
+
 ## Usage
 
 The mrepo at `<dir>` (on the filesystem storage), started from its own

@@ -16,6 +16,12 @@ that deactivates it again.
 - [test-reports](test-reports/)
 - [modules](modules/)
 
+## Included packages
+
+- [base-package-runtime](../base-package-runtime/)
+- [base-package-info](../base-package-info/)
+- [base-package-protocol](../base-package-protocol/)
+
 ## States
 
 | state | allowed |

@@ -12,7 +12,7 @@
   ],
   "template": {
     "repository": "haiccing/base-docs-package",
-    "commit": "e633d074ee15b460b5c31750486561dddcb77641"
+    "commit": "d6d99cffc82361d9c15ae86fd723045537ba63b3"
   },
   "scripts": {
     "test": "bare test/run.js"

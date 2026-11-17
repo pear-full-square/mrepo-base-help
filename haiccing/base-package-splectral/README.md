@@ -17,6 +17,13 @@ it sends no command.
 - [test-reports](test-reports/)
 - [modules](modules/)
 
+## Included packages
+
+- [base-package-runtime](../base-package-runtime/)
+- [base-package-info](../base-package-info/)
+- [base-package-protocol](../base-package-protocol/)
+- [base-package-service](../base-package-service/)
+
 ## How to
 
 See the commands of an install in a browser. The boot mrepo is there
