@@ -569,3 +569,54 @@ On our three small points (the human):
   expected; the problems as fixtures of its own); the generic `help`
   test of every package an `info` test; the `haicc` test on a host, its
   component with `## Included packages`.
+
+### The documentation packages (2026-11-17)
+
+- The human: "what other docs package should we create. I am happy to
+  have all documentation covered by such packages."
+- **The HDLC** (the human): "hdlc - yes, that will become the 'build
+  pipeline', very important. One caveat, may that on not end up as a
+  package - a protocol? Do we document it now and transfer it to a
+  package when it is built?" Ours: documented now, what does not depend
+  on an implementation (the lifecycle, its rules, autonomy, the vision)
+  stays in the documentation package; the tools' part, a section marked
+  as today's tooling, moves into the protocol's package when it is built
+  (its actions documented in its module; "A new package" its how-to).
+- **No protocol documentation package**: the human, "doesn't protocol
+  overlap with mrepo?", then "and in fact that is a part of package.";
+  "why not package only, compile time and run time?" So **one**
+  documentation package for the package, compile time (the template as
+  it is) and run time (`package-docs-mrepo` merged in: each layer one
+  page, what a package lays in and what it holds running). Of a
+  protocol: what a package writes (`protocol.js`, the config) and how a
+  running mrepo treats it (loading, the gate, activation, hooks,
+  states), each in its place there. The table of protocols in
+  `/protocols`, out of date, goes.
+- **On pinning, corrected** (the human): "I think you overdo it with
+  pinning. We don't pin by commit but by the package contents. Each
+  package should run its test without dependencies. What you state as
+  pinned is the commit they were created from I suspect." Yes: a
+  package's report certifies its contents by hash; `template.commit`
+  records only where its copies came from; a template change changes no
+  package.
+- **A family's specification** (the human): "for self containment
+  reasons: the package specification should go with each 'family' of
+  packages. We are currently building in base. All packages in base
+  follow the base package docs. When we switch to another family, there
+  may be breaking changes." So the template becomes
+  **`base-docs-package`** ("so it should be base-docs-package, yes"),
+  and the documentation packages carry the family: `base-docs-hdlc`,
+  `base-docs-xpath`, `base-docs-haicc`. A new family brings its own.
+- **URI within XPath** (the human): "I would put URI within the XPath
+  docs package." Then, on where XPath's code belongs: "it will be used
+  everywhere because of its internal use, but haicc is the one that
+  does the hops (externally) We have a similar thing with URI. As far as
+  use is concerned, part of XPath, as far as meaning is concerned an
+  independent unit." So: **`base-docs-xpath`** documents the URI as a
+  unit of its own within it, and the query; XPath within one mrepo is
+  internal, used everywhere (the runtime's); across mrepos, the hops,
+  it is `haicc`'s (phase 2 of `xpath.md` built in `mrepo-base-haicc`).
+- **The list**: `base-docs-package` (renamed, `package-docs-mrepo` merged
+  in), `base-docs-hdlc`, `base-docs-xpath` (the URI within it),
+  `base-docs-haicc` (the overview and our terms). The repositories by
+  the human.
