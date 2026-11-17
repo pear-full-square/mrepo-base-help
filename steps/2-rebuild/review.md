@@ -797,3 +797,11 @@ where it takes any, Returns, Errors, Design); the config in
   outside. The runtime: a command of three parts, `protocol/<protocol>/<action>`,
   sent to the package's function directly, the action's own gate and
   arguments. To confirm.
+- **Settled** (the human): "yes, record it as settled, but we don't need
+  internal/external constraint at the moment. Let commandline open to
+  target the protocol version as well." So: a component replaces a
+  protocol action's mapping with a script
+  (`mrepo/runtime/actions/<protocol>.<action>.json`); `boot/teardown` the
+  action as mapped, `protocol/boot/teardown` the protocol's own
+  implementation, open to the command line too, no constraint. A code
+  change, after the review (`review-code`, `tasks.md`).

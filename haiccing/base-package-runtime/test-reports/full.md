@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-runtime
 
-The package passed its `full` set: all 22 units, 307 of 307 tests and 1988 of 1988 asserts.
+The package passed its `full` set: all 22 units, 309 of 309 tests and 1997 of 1997 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 22 units, 307 of 307 tests and 1988 of 19
 | Set | `full` |
 | Result | passed |
 | Units | 22 of 22 passed |
-| Tests | 307 of 307 passed |
-| Asserts | 1988 of 1988 passed |
-| Run | 2026-11-17 04:48 UTC |
+| Tests | 309 of 309 passed |
+| Asserts | 1997 of 1997 passed |
+| Run | 2026-11-17 05:42 UTC |
 | Bare | v1.36.0 |
-| Content | `1e21c613f11d57eb1421e5f8d958d7c06e3dfab1468419654ccde29b13fd8648` |
+| Content | `ea098657560ceb524d89319b413fc72319d7e3aff30c54ea1a1d53c62bee5957` |
 
 ## Units
 
@@ -25,7 +25,7 @@ The package passed its `full` set: all 22 units, 307 of 307 tests and 1988 of 19
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 93 of 93 |
-| `/test/modules/pear-full-square/mrepo-base-info` | passed | 7 of 7 | 52 of 52 |
+| `/test/modules/pear-full-square/mrepo-base-info` | passed | 7 of 7 | 53 of 53 |
 | `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 10 of 10 |
 | `/test/modules/pear-full-square/mrepo-base-request` | passed | 16 of 16 | 187 of 187 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 122 of 122 |
@@ -39,6 +39,6 @@ The package passed its `full` set: all 22 units, 307 of 307 tests and 1988 of 19
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 17 of 17 | 46 of 46 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 19 of 19 | 54 of 54 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.
