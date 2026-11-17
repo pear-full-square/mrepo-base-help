@@ -632,3 +632,18 @@ On our three small points (the human):
   `base-docs-haicc` the platform (what it is, its levels, our terms);
   the command line, as typed and as built, in `base-linux-haicc` and
   `base-app-haicc`; the hops, `haicc/goto`, in `base-package-haicc`.
+- **A roadmap, for self-containment** (the human): "It completes the
+  whole package, and haiccing as an org is self-contained."; "don't
+  forget that haicci will generate future work requests, and then there
+  is planning and such. Our aim is that AI autonomous mode may do items
+  of the HDLC on its own."; "Then I favour splitting in three: vision,
+  scheduled work, the delivery lifecycle (how work is done)". So:
+  `base-docs-vision` (directions, not settled), scheduled work (data:
+  requests from `haici` and people, plans, items and their states; in
+  `tasks.md` until the HDLC protocol gives it an mrepo of its own; ours,
+  not answered), `base-docs-hdlc` (how work is done).
+- **Offload the development repository** (the human): "I propose to
+  offload as much as we can from this dev-env repo into those docs
+  containers." The repositories to create: `base-docs-package` (the
+  rename), `base-docs-hdlc`, `base-docs-vision`, `base-docs-uri`,
+  `base-docs-xpath`, `base-docs-haicc`.
