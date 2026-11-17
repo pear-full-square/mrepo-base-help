@@ -70,7 +70,7 @@ container. Without a daemon those tests fail, they do not skip.
 
 ## Right now
 
-**Latest (2026-11-16, a new session after part 82)**: the structure of
+**Latest (2026-11-17, part 83: the template renamed `package-docs-package`, validated, phase 1 done; phase 2, its rules, in discussion: the links a menu, a label each, no one-liner; the included packages linked on the README)**. Before it (2026-11-16): the structure of
 `info` and the template settled with the human, nothing built:
 `review.md`, "The structure of `info`, settled". Keywords made by the
 README links tables (jumps, link text, categories, sections), each

@@ -10,7 +10,7 @@
     "haiccing/base-package-haicc",
     "haiccing/base-package-crud",
     "haiccing/package-docs-mrepo",
-    "haiccing/package-docs-template",
+    "haiccing/package-docs-package",
     "haiccing/base-component-boot"
   ]
 }

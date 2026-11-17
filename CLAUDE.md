@@ -36,7 +36,7 @@ the work reaches it.
   mrepo's inbox); `base-linux-haicc` (the first step on Linux, sh scripts,
   no bundle: a folder linked, Bare put in place, the `haicc` that starts
   the app); and the
-  documentation packages `package-docs-template` (the package structure,
+  documentation packages `package-docs-package` (the package structure,
   the README rules, modules and methods, tests; the template a package
   starts from: its `test/` holds the generic tests, a folder each) and
   `package-docs-mrepo` (the mrepo, layer by layer).
@@ -80,7 +80,7 @@ the work reaches it.
   record.
 - **The rules are checked**, not remembered: the README rules, the code
   rules and a package's structure (among it: a package tests what it
-  provides) are in `package-docs-template` and run as tests.
+  provides) are in `package-docs-package` and run as tests.
 
 ## Validation, before every commit
 

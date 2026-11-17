@@ -1,5 +1,5 @@
 {
-  "name": "package-docs-template",
+  "name": "package-docs-package",
   "description": "Documentation package: the haiccing package structure, documented in place.",
   "private": true,
   "license": "MIT",

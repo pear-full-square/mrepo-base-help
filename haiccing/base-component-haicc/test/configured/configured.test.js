@@ -33,7 +33,7 @@ const LIST = [
   'haiccing/base-package-crud',
   'haiccing/base-package-container',
   'haiccing/package-docs-mrepo',
-  'haiccing/package-docs-template',
+  'haiccing/package-docs-package',
   'haiccing/base-component-haicc'
 ]
 // Each hook named here with its command: what the haicc mrepo offers from
