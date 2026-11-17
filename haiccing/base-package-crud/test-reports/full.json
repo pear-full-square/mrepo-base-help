@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-package-crud",
-  "content": "5a3659ac85f836784cdaf3ed1ffe3771b57785ed7d920de178b551d2c71c9c4f",
+  "content": "2af21813f4cb9ed8f16e0c36009bce191284c65f73e7919e395decec74afcede",
   "bare": "v1.36.0",
-  "date": "2026-11-17T01:43:32.715Z",
+  "date": "2026-11-17T04:46:22.346Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -20,7 +20,7 @@
       "failures": []
     },
     {
-      "unit": "/test/help",
+      "unit": "/test/info",
       "ok": true,
       "tests": {
         "passed": 1,
@@ -75,25 +75,25 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-crud",
       "ok": true,
       "tests": {
-        "passed": 9,
-        "total": 9
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 82,
-        "total": 82
+        "passed": 76,
+        "total": 76
       },
       "failures": []
     },
     {
-      "unit": "/test/modules/pear-full-square/mrepo-base-help",
+      "unit": "/test/modules/pear-full-square/mrepo-base-info",
       "ok": true,
       "tests": {
-        "passed": 5,
-        "total": 5
+        "passed": 7,
+        "total": 7
       },
       "asserts": {
-        "passed": 27,
-        "total": 27
+        "passed": 52,
+        "total": 52
       },
       "failures": []
     },

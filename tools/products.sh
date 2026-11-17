@@ -1,5 +1,5 @@
 #!/bin/sh
-# A module's product repository kept updated from here (rules.md: once
+# A module's product repository kept updated from here (base-docs-hdlc, "Products": once
 # validated, its folder's history split and plain-merged into the product
 # repository's main, never force-pushed, the commit messages linking the
 # two commits; product repositories created by the human).

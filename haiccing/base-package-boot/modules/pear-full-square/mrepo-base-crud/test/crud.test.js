@@ -1,7 +1,7 @@
 // The crud actions on an execution written here: its files by path, read
 // and selected as a repository would, its writes applied at once.
 import test from 'brittle'
-import { create, read, remove, place, CONFIG, NODE } from '../index.js'
+import { create, read, remove, place, NODE } from '../index.js'
 
 const B = v => Buffer.from(JSON.stringify(v))
 const J = b => JSON.parse(b.toString())
@@ -170,9 +170,3 @@ test('another layer, for the mrepo\'s own requests: the same, the layer first', 
   t.alike((await create(exec, { uri: own('runtime/host/x') })).map(x => x.outcome), ['created', 'created'], 'shortcuts are main\'s: nothing in the way elsewhere')
 })
 
-test('the config: create, read and delete, anywhere in main; no update', (t) => {
-  t.alike(Object.keys(CONFIG.actions).sort(), ['create', 'delete', 'read'], 'no update: not there at all')
-  for (const a of Object.values(CONFIG.actions)) t.alike(a.uris, ['**'])
-  t.alike([CONFIG.actions.create.target, CONFIG.actions.delete.target, CONFIG.actions.read.target], [true, true, undefined], 'create and delete need a target; read takes the root too')
-  t.alike([CONFIG.actions.create.args, CONFIG.actions.delete.args], [['value?'], ['recurse?']])
-})

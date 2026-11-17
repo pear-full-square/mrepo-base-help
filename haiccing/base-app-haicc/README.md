@@ -10,11 +10,11 @@ app from its bundle; on Linux that is `haiccing/base-linux-haicc`.
 bare base-app-haicc.bundle /run <argument>...
 ```
 
-| | |
-|---|---|
-| [test/](test/) | its tests: the command line run as a program, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
+
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
 ## Commands
 
@@ -24,7 +24,7 @@ haicc . boot/deploy host base-component-haicc
 haicc host service/initialise
 haicc host service/start
 haicc host boot/deploy node-1 base-package-runtime
-haicc host haicc node-1 help/get
+haicc host haicc node-1 info/get
 haicc host boot/teardown node-1
 haicc . boot/teardown host
 haicc boot/teardown

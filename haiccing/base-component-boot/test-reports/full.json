@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-component-boot",
-  "content": "d1ad626144cf743afd82fe552eaaddab07803014ab6f400d96a2b71d743fc15f",
+  "content": "b9f666577b3b02994978977ce65c17a6d2df79be35318502fb1fd1a3263be10a",
   "bare": "v1.36.0",
-  "date": "2026-11-17T01:38:31.530Z",
+  "date": "2026-11-17T04:40:48.894Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -14,13 +14,13 @@
         "total": 2
       },
       "asserts": {
-        "passed": 125,
-        "total": 125
+        "passed": 121,
+        "total": 121
       },
       "failures": []
     },
     {
-      "unit": "/test/help",
+      "unit": "/test/info",
       "ok": true,
       "tests": {
         "passed": 1,
@@ -88,12 +88,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-crud",
       "ok": true,
       "tests": {
-        "passed": 9,
-        "total": 9
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 82,
-        "total": 82
+        "passed": 76,
+        "total": 76
       },
       "failures": []
     },
@@ -111,15 +111,15 @@
       "failures": []
     },
     {
-      "unit": "/test/modules/pear-full-square/mrepo-base-help",
+      "unit": "/test/modules/pear-full-square/mrepo-base-info",
       "ok": true,
       "tests": {
-        "passed": 5,
-        "total": 5
+        "passed": 7,
+        "total": 7
       },
       "asserts": {
-        "passed": 27,
-        "total": 27
+        "passed": 52,
+        "total": 52
       },
       "failures": []
     },
@@ -131,8 +131,8 @@
         "total": 3
       },
       "asserts": {
-        "passed": 13,
-        "total": 13
+        "passed": 10,
+        "total": 10
       },
       "failures": []
     },
@@ -166,12 +166,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-service",
       "ok": true,
       "tests": {
-        "passed": 3,
-        "total": 3
+        "passed": 2,
+        "total": 2
       },
       "asserts": {
-        "passed": 15,
-        "total": 15
+        "passed": 11,
+        "total": 11
       },
       "failures": []
     },

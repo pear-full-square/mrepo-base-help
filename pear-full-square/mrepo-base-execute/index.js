@@ -76,7 +76,7 @@ const causesOf = err => { const out = []; for (let c = err?.cause; c && out.leng
 
 // The targets an action writes, those the mrepo has: main, runtime, help,
 // protocols, links.
-export const TARGETS = ['main', 'runtime', 'help', 'howto', 'info', 'protocols', 'links']
+export const TARGETS = ['main', 'runtime', 'info', 'protocols', 'links']
 
 // A path as the execution reads and writes by, given either way: relative
 // from the mrepo's root (runtime/service.json), or slash-led

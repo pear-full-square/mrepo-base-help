@@ -2,10 +2,10 @@
 
 The component's part of the structure: the list of the packages the haicc mrepo is made of, and its runtime config.
 
-- **Its packages** (`packages/layer.json`): the runtime, the help
-  protocol, the howto protocol, the info protocol, the protocol protocol, the boot protocol, the service
+- **Its packages** (`packages/layer.json`): the runtime, the info
+  protocol, the protocol protocol, the boot protocol, the service
   protocol, the haicc protocol, the crud protocol, the container
-  protocol, the documentation packages, and this component last.
+  protocol, and this component last.
 - **Its runtime config**: the service state and the hooks, below.
 - **Nothing else**: no protocol, no data. `main` stays empty.
 
@@ -13,9 +13,9 @@ The component's part of the structure: the list of the packages the haicc mrepo 
 
 - **`runtime/service.json`**: the service state, `booted`: the haicc
   mrepo is service managed.
-- **At `boot`**: `haicc`, `help`, `howto`, `info`, `runtime` and `service` activated. A
+- **At `boot`**: `haicc`, `info`, `runtime` and `service` activated. A
   closed haicc mrepo can be addressed, inspected and tested.
-- **At `initialise`**: its help extracted, its how-tos and its info.
+- **At `initialise`**: its info extracted.
 - **At `start`**: `boot`, `crud` and `container` activated. Deploying
   mrepos, making structure in `main` and making its replica in a
   container are what sits behind its door.

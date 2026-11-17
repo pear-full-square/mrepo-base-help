@@ -31,7 +31,7 @@ haicc host info/extract
   with its one-liner. A keyword with several meanings answers each, a
   choice.
 - `info/extract`: the info layer written again from the linked packages,
-  with its problems. Run by a hook, where the help is extracted.
+  with its problems. Run by a hook as the mrepo is made ready.
 
 ## Config
 

@@ -24,8 +24,6 @@ for (const t of readdirSync(hooksDir).sort()) for (const f of readdirSync(join(h
 
 const LIST = [
   'haiccing/base-package-runtime',
-  'haiccing/base-package-help',
-  'haiccing/base-package-howto',
   'haiccing/base-package-info',
   'haiccing/base-package-protocol',
   'haiccing/base-package-boot',
@@ -33,8 +31,6 @@ const LIST = [
   'haiccing/base-package-haicc',
   'haiccing/base-package-crud',
   'haiccing/base-package-container',
-  'haiccing/package-docs-mrepo',
-  'haiccing/package-docs-package',
   'haiccing/base-component-haicc'
 ]
 // Each hook named here with its command: what the haicc mrepo offers from
@@ -42,13 +38,9 @@ const LIST = [
 // closes: the boot protocol, the crud protocol and the container protocol.
 const HOOKS = {
   'boot/activate-haicc': ['protocol/activate', '.', 'haicc'],
-  'boot/activate-help': ['protocol/activate', '.', 'help'],
-  'boot/activate-howto': ['protocol/activate', '.', 'howto'],
   'boot/activate-info': ['protocol/activate', '.', 'info'],
   'boot/activate-runtime': ['protocol/activate', '.', 'runtime'],
   'boot/activate-service': ['protocol/activate', '.', 'service'],
-  'initialise/help-extract': ['help/extract'],
-  'initialise/howto-extract': ['howto/extract'],
   'initialise/info-extract': ['info/extract'],
   'start/activate-boot': ['protocol/activate', '.', 'boot'],
   'start/activate-container': ['protocol/activate', '.', 'container'],
@@ -59,7 +51,7 @@ const HOOKS = {
 }
 
 test('its list of packages, in deploy order, itself last', (t) => {
-  t.alike(json('mrepo', 'packages', 'layer.json').packages, LIST, 'the runtime, help, howto, info, the protocol protocol, boot, service, haicc, crud, container, the documentation, the component')
+  t.alike(json('mrepo', 'packages', 'layer.json').packages, LIST, 'the runtime, info, the protocol protocol, boot, service, haicc, crud, container, the component')
 })
 
 test('its hooks, file by file, and the state it starts in', (t) => {
@@ -91,13 +83,11 @@ test('the packages it lists: each in the sources, the protocols they provide', (
     container: 'haiccing/base-package-container',
     crud: 'haiccing/base-package-crud',
     haicc: 'haiccing/base-package-haicc',
-    help: 'haiccing/base-package-help',
-    howto: 'haiccing/base-package-howto',
     info: 'haiccing/base-package-info',
     protocol: 'haiccing/base-package-protocol',
     runtime: 'haiccing/base-package-runtime',
     service: 'haiccing/base-package-service'
-  }, 'ten protocols, one a package; the documentation and the component provide none')
+  }, 'eight protocols, one a package; the component provides none')
 })
 
 test('every hook names a protocol and an action a listed package provides', (t) => {
@@ -141,22 +131,22 @@ function world () {
 }
 const of = transition => Object.keys(brought).filter(n => n.startsWith(`${transition}/`)).sort()
 
-test('what its hooks do: the boot opens haicc, help, howto, info, runtime and service; the service\'s start opens boot, container and crud, its stop closes them', async (t) => {
+test('what its hooks do: the boot opens haicc, info, runtime and service; the service\'s start opens boot, container and crud, its stop closes them', async (t) => {
   const w = world()
   // the boot: the runtime places these as its own, in name order
   for (const name of of('boot')) await w.exec.run(brought[name])
-  t.alike(w.active(), ['haicc', 'help', 'howto', 'info', 'runtime', 'service'], 'after the boot: what a haicc mrepo always offers')
+  t.alike(w.active(), ['haicc', 'info', 'runtime', 'service'], 'after the boot: what a haicc mrepo always offers')
   t.absent(w.active().includes('boot') || w.active().includes('crud') || w.active().includes('container'), 'the boot protocol, the crud protocol and the container protocol are behind the service\'s door')
   t.absent(w.active().includes('protocol'), 'the protocol protocol is never opened: activating is the hooks\' business')
   t.alike(await w.exec.run(['service/initialise']), { service: 'initialised', state: 'initialised' })
-  t.ok(w.commands.includes('help/extract') && w.commands.includes('howto/extract') && w.commands.includes('info/extract'), 'initialise: the help extracted, the how-tos, the info, by their hooks')
-  t.alike(w.active(), ['haicc', 'help', 'howto', 'info', 'runtime', 'service'], 'initialised: the same protocols open')
+  t.ok(w.commands.includes('info/extract'), 'initialise: the info extracted, by its hook')
+  t.alike(w.active(), ['haicc', 'info', 'runtime', 'service'], 'initialised: the same protocols open')
   t.alike(await w.exec.run(['service/start']), { service: 'started', state: 'started' })
-  t.alike(w.active(), ['boot', 'container', 'crud', 'haicc', 'help', 'howto', 'info', 'runtime', 'service'], 'started: the door open, boot, container and crud with the others')
+  t.alike(w.active(), ['boot', 'container', 'crud', 'haicc', 'info', 'runtime', 'service'], 'started: the door open, boot, container and crud with the others')
   t.alike(await w.exec.run(['service/stop']), { service: 'stopped', state: 'initialised' })
-  t.alike(w.active(), ['haicc', 'help', 'howto', 'info', 'runtime', 'service'], 'stopped: the door closed again, exactly what start opened')
+  t.alike(w.active(), ['haicc', 'info', 'runtime', 'service'], 'stopped: the door closed again, exactly what start opened')
   t.alike(await w.exec.run(['service/shutdown']), { service: 'shut down', state: 'booted' })
-  t.alike([w.state(), w.active()], ['booted', ['haicc', 'help', 'howto', 'info', 'runtime', 'service']], 'shut down: booted, as after the boot')
+  t.alike([w.state(), w.active()], ['booted', ['haicc', 'info', 'runtime', 'service']], 'shut down: booted, as after the boot')
   // every hook file ran: its command among those executed
   const ran = Object.entries(brought).filter(([, c]) => w.commands.includes(c.join(' '))).map(([n]) => n).sort()
   t.alike(ran, Object.keys(brought).sort(), 'every hook the component brings was run here: one added without its place in this walk fails this')

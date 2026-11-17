@@ -4353,3 +4353,104 @@ a section, a module, `third-party`, a keyword's choices, one not there,
 `info/extract`), three times (the second and third after a restart of
 the session's container cut the second short). Nothing left running,
 no container left.
+
+## 86. The offload, and the target state: documentation packages, the docs mrepo, info everywhere, help and howto's static side gone (2026-11-17)
+
+The human: "I renamed and created all repos, please go ahead with the
+restructure (offload)"; then, while it was being validated: "forget
+about what exists, put changes in place where we want to be. I consider
+the system 'under maintenance' until that is done. So don't feel
+constrained by existing, focus on the new." (`review.md`, "The
+documentation packages").
+
+- **The documentation packages**, the base family's:
+  - `base-docs-package` (`package-docs-package` renamed): compile time,
+    and run time with `package-docs-mrepo` merged in, each layer a page
+    in `mrepo/`; records and topics there; the README rules now with
+    info's (the label the keyword, jumps, categories, sections, every
+    page reached), checked by the generic `info` test.
+  - `base-docs-hdlc` (`CLAUDE.md`'s and `rules.md`'s practised rules,
+    today's tooling), `base-docs-vision` (`vision.md`, `rules.md`'s
+    unbuilt proposals), `base-docs-uri` (URIs, data names),
+    `base-docs-xpath` (the query, shortcuts, hops), `base-docs-haicc`
+    (the platform, its levels, our terms). `rules.md` and `vision.md`
+    gone; `CLAUDE.md` the entry point, "read first" `base-docs-hdlc`.
+- **The docs mrepo**, `base-component-docs`: the runtime, the protocol
+  protocol, `info`, the six documentation packages; no service, `info`
+  activated and extracted at `boot`; deployed in the boot mrepo
+  (`haicc . boot/deploy docs base-component-docs`), read with `haicc docs
+  info/get <keywords>`. The documentation packages in no other list.
+- **help and howto's static side gone**: `base-package-help`,
+  `base-package-howto`, `mrepo-base-help`, `mrepo-base-howto` removed
+  (their repositories stay, for `help/annotate`, `howto/explore` and
+  `howto/plan`); the `help` and `howto` layers out of `mycelium-git` and
+  `mrepo-base-execute`; their hooks out of every component; the
+  runtime's, the service's and Splectral's mrepos take `info`.
+- **info everywhere**: the generic tests `info` and `info-in-situ`
+  (`mrepo-base-info`'s `validate/`) replace `help` and `help-in-situ`;
+  the runtime hands the in-situ tests the info layer; `pkgm-base-check`,
+  the dispatcher and `tools/package-template.sh` name them;
+  `tools/info-extract.js` replaces `help-extract.js`: each component's
+  mrepo extracted, and `--files`.
+- **Every package and README in the new form**: every package brought
+  to the template (`d6d99cf`); every README a menu, `## Links`, a label
+  each (converted by script; a table of links or a list of links to the
+  folders below); `modules/README.md` generated as a menu. The boot
+  mrepo, a host and the docs mrepo each extract with no problem.
+- **Each protocol's config in its package**: `crud`, `container`,
+  `haicc`, `protocol`, `service`, `splectral`: the config in
+  `protocol.js`, its "Config" section in the package's README; the
+  modules' config tests gone, the packages' `mounted` tests check it.
+- **The tests on info**: the boot test, the `haicc` test (how-tos read
+  as pages, `info/get howto/deploy/steps`), the components' and
+  packages' tests, the container test's replica answering `info/get`.
+
+**Decided while building** (ours, said here)
+
+- **A package alone is its own top**: the generic `info` test extracts
+  the package with `alone`, its included packages not there not a
+  problem, its list still checked against its README.
+- **A link up is a reference**: a README without a menu is the old form
+  only when it links to what is below it; a sibling layer linked in
+  prose (`../links/`) is not.
+- **How-tos are pages**: a package's `howto/` folder, each how-to a page
+  and its steps a section; the `Activity:` line gone with
+  `howto/extract`.
+- **The template's leftover layer folders gone**, and its `help` setting:
+  info has no root of documentation, each mrepo's top is its own
+  package.
+
+**The offload finished** (the human: "If you have a satisfactory place to
+put the leftovers, then offload them. It means that documentation is
+distributed across the new structure."):
+
+- **The collaboration rules** (the handover's "How the human works with
+  us") into `base-docs-hdlc`, "Collaboration"; what is this repository's
+  and its tools' into `CLAUDE.md`, "Working here"; one line dropped as no
+  longer true ("this development repository stays as it is, its
+  `rules.md`"). The handover points to both.
+- **`xpath.md`'s settled and built parts** into `base-docs-xpath`:
+  standard only, a leaf and `@name`, a filter's names by the URI's
+  rules, commands over nodes, the routing URI a query. The design in
+  discussion and the phases to come stay in `xpath.md`.
+- **`mycelium-uri`'s "Design"** no longer states the rules (the
+  branch-rooted URIs of before): it points to `base-docs-uri` and keeps
+  how they are kept.
+- **`tools/info-view.js`**: every package's and mrepo's info in one page
+  browsed by keywords, as `info/get` answers, the command shown, the
+  problems per view (`sources/info-view.html`); published for the human
+  to evaluate the work with.
+
+**Validated**: the full run: every package's pre-release, the boot's
+`validate` three times, the `haicc` test 288 of 288 three times (the
+docs mrepo deployed and read, the how-tos as pages, `info` on the boot
+mrepo, the host and a node), nothing left running, no container left;
+two pre-releases failing in it (the runtime's `start` test still on
+`help`'s hooks, fixed; `base-component-boot`'s boot test once, the race
+it is run several times for: it passed in the boot's three runs and in
+the next run). Then, the offload's last documentation changed (the
+human: "don't do full rebuilds, partial enough to continue is fine"),
+the partial run: every pre-release passing, `tools/bare
+tools/release.js --strict` exit 0, `tools/bare tools/info-extract.js`
+(the boot mrepo, a host, the docs mrepo: no problem) and `--files`, and
+`tools/bare tools/code-check.js`: no problems.

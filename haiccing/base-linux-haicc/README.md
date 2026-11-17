@@ -8,10 +8,10 @@ is here, in plain POSIX sh: the installer, linking a sources folder,
 putting Bare in place. From then on `haicc` starts the app for
 everything else.
 
-| | |
-|---|---|
-| [bin/](bin/) | the scripts |
-| [test/](test/) | its test: the whole flow, from the installer to a started host |
+## Links
+
+- [bin](bin/)
+- [test](test/)
 
 ## Install
 

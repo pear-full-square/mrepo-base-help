@@ -2,7 +2,6 @@
 
 Gives a swarm's node its replica in a container, and brings the replica into service.
 
-Activity: container
 
 ## Steps
 

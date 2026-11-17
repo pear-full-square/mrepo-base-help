@@ -9,9 +9,10 @@ SPLectrum: mycelium repositories on a swarm, on the HAICC platform.
 - [tools/](tools/): assembling, bundling and testing packages, bringing
   one to the package template, the release into the local sources, the
   product repositories, the checks.
-- `rules.md`: how to work in this repository (branches, layers, commits,
-  URIs, records and topics, data names).
-- `vision.md`: directions that are not settled, for information.
+- The documentation is in the documentation packages, `haiccing/base-docs-*`:
+  how work is done (`base-docs-hdlc`), the platform (`base-docs-haicc`),
+  a package and its mrepo (`base-docs-package`), URIs (`base-docs-uri`),
+  queries (`base-docs-xpath`), the vision (`base-docs-vision`).
 - `steps/`: the records of the work; where it stands:
   `steps/2-rebuild/readme.md`.
 

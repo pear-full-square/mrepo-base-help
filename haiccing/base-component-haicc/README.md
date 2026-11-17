@@ -21,8 +21,6 @@ created.
 ## Included packages
 
 - [base-package-runtime](../base-package-runtime/)
-- [base-package-help](../base-package-help/)
-- [base-package-howto](../base-package-howto/)
 - [base-package-info](../base-package-info/)
 - [base-package-protocol](../base-package-protocol/)
 - [base-package-boot](../base-package-boot/)
@@ -30,14 +28,12 @@ created.
 - [base-package-haicc](../base-package-haicc/)
 - [base-package-crud](../base-package-crud/)
 - [base-package-container](../base-package-container/)
-- [package-docs-mrepo](../package-docs-mrepo/)
-- [package-docs-package](../package-docs-package/)
 
 ## Deploying
 
 By the boot mrepo, with a command at the root. The mrepo starts `booted`:
 its boot protocol, its crud protocol and its container protocol are
-behind the service's door, activated by hooks on `start`. Its help, its how-tos and its info are extracted by hooks on `initialise`. Each service
+behind the service's door, activated by hooks on `start`. Its info is extracted by a hook on `initialise`. Each service
 command answers what was done and the state now.
 
 ```

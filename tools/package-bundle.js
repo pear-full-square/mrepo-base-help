@@ -1,5 +1,5 @@
 // A package written as a Bare bundle into a sources folder, by organisation
-// (haiccing/package-docs-package; sources/ here, gitignored):
+// (haiccing/base-docs-package; sources/ here, gitignored):
 //   <out>/<org>/<repo>.bundle     the package: its dispatcher (main.js, written
 //                                 into the package's folder with test/run.js:
 //                                 tools/lib/dispatcher.js) and what it reaches:

@@ -17,9 +17,8 @@ value, then against the packages listed, read from the sources.
 - **Every hook names what exists**: a protocol and an action a listed
   package provides; the protocol it opens or closes is provided too.
 - **What its hooks do**: run with the listed packages' own actions, on a
-  minimal execution in memory. After the boot `haicc`, `help`, `howto`,
-  `info`, `runtime` and `service` are open; `initialise` extracts the
-  help, the how-tos and the info; `start` opens
+  minimal execution in memory. After the boot `haicc`, `info`, `runtime`
+  and `service` are open; `initialise` extracts the info; `start` opens
   `boot`, `container` and `crud`, `stop` closes them again, `shutdown` returns to booted. Every
   hook file must have run in that walk.
 - **Nothing left closed by forgetting**: every protocol the listed

@@ -9,7 +9,7 @@
 //   test/run.js   a test set's command line: bare test/run.js [<set>], through
 //                 main.js (each unit its own process, bare <package> /test/...,
 //                 its results read from brittle's summary)
-// docs: haiccing/package-docs-package (test/README.md).
+// docs: haiccing/base-docs-package (test/README.md).
 import { readFileSync, writeFileSync, readdirSync, existsSync, statSync, mkdirSync } from 'bare-fs'
 import { join, dirname } from 'bare-path'
 
@@ -30,11 +30,11 @@ function unitsOf (folder) {
       if (n !== 'modules' && existsSync(join(test, n, 'run.js'))) units[`/test/${n}`] = [`./test/${n}/run.js`]
     }
   }
-  // The help tests, every package that carries mrepo-base-help: its help
-  // extracted from its own files (/test/help), or as a running mrepo's
-  // runtime extracted it (/test/help-in-situ: MREPO, PACKAGE).
-  const validate = join(folder, 'modules', 'pear-full-square', 'mrepo-base-help', 'validate')
-  for (const n of ['help', 'help-in-situ']) if (!units[`/test/${n}`] && existsSync(join(validate, `${n}.test.js`))) units[`/test/${n}`] = [`./modules/pear-full-square/mrepo-base-help/validate/${n}.test.js`]
+  // The info tests, every package that carries mrepo-base-info: its info
+  // extracted from its own files (/test/info), or as a running mrepo's
+  // runtime extracted it (/test/info-in-situ: MREPO, PACKAGE, SITU).
+  const validate = join(folder, 'modules', 'pear-full-square', 'mrepo-base-info', 'validate')
+  for (const n of ['info', 'info-in-situ']) if (!units[`/test/${n}`] && existsSync(join(validate, `${n}.test.js`))) units[`/test/${n}`] = [`./modules/pear-full-square/mrepo-base-info/validate/${n}.test.js`]
   // The code test, every package that carries pkgm-base-check: its modules
   // and its own code against the code rules (/test/code).
   // and its mrepo side: on its own (/test/mrepo), and as a running mrepo
@@ -79,7 +79,7 @@ function main (folder) {
     '// run(target, { dryRun }): every entry, by path. Started as the program',
     '// (bare <package>.bundle [target] ..., or bare main.js from its folder):',
     '// the target (a known path; else /run, every argument run.js\'s). Imported:',
-    '// nothing runs. Docs: haiccing/package-docs-package, test/README.md.',
+    '// nothing runs. Docs: haiccing/base-docs-package, test/README.md.',
     "import os from './modules/node_modules/bare-os/index.js'",
     "import { URL } from './modules/node_modules/bare-url/index.js'",
     "import { spawn } from './modules/node_modules/bare-subprocess/index.js'",
@@ -216,7 +216,7 @@ function main (folder) {
 }
 
 const RUNNER = `// The package's test runner (generated: tools/lib/dispatcher.js; docs:
-// haiccing/package-docs-package, test/README.md). A test set, from this
+// haiccing/base-docs-package, test/README.md). A test set, from this
 // point the whole lifecycle, through the package's dispatcher (main.js:
 // each unit its own process, its results read from brittle's summary).
 //   bare test/run.js [<set>]   a set (validate by default): each unit's report

@@ -1,4 +1,4 @@
-// A package's modules assembled into its folder (haiccing/package-docs-package,
+// A package's modules assembled into its folder (haiccing/base-docs-package,
 // "What a package is": modules/ once, at the package's top): from the
 // modules its package.json names (`modules`), what they run on, all the way
 // down (pkgm-base-manager's closure):
@@ -102,12 +102,9 @@ const record = set.third.map(t => {
   return { name: t, version: pj.version, license: pj.license || e.license || null, resolved: e.resolved || null, integrity: e.integrity || null }
 })
 writeFileSync(join(out, 'third-party.json'), JSON.stringify({ platform: platform(), omitted: omit, modules: record }, null, 2) + '\n')
-// Its README, linking down to each of ours (READMEs cascade:
-// haiccing/package-docs-package).
-const row = p => {
-  const d = (readJson(join(out, p, 'package.json')).description || '').replace(/\|/g, '\\|')
-  return existsSync(join(out, p, 'README.md')) ? `| [${p}/](${p}/) | ${d} |` : `| \`${p}/\` | ${d} |`
-}
+// Its README: a menu, a link to each of ours (READMEs cascade:
+// haiccing/base-docs-package, "READMEs"), each by its name.
+const item = p => existsSync(join(out, p, 'README.md')) ? `- [${p.split('/').pop()}](${p}/)` : null
 writeFileSync(join(out, 'README.md'), [
   '# modules/',
   '',
@@ -115,15 +112,14 @@ writeFileSync(join(out, 'README.md'), [
   '',
   'Assembled from the modules `package.json` names, all the way down; never',
   'edited by hand. Each of ours carries its own tests, run by the package\'s',
-  'modules test, `/test/modules`.',
+  `modules test, \`/test/modules\`. The third-party code: \`node_modules/\`, ${record.length}`,
+  `modules for ${platform()}, each with its version, licence and source in`,
+  '`third-party.json`. Our modules find each other by name through',
+  '`node_modules/`, links.',
   '',
-  '| ours | |',
-  '|---|---|',
-  ...[...set.ours].sort().map(row),
+  '## Links',
   '',
-  `The third-party code: \`node_modules/\`, ${record.length} modules for ${platform()}, each`,
-  'with its version, licence and source in [third-party.json](third-party.json).',
-  'Our modules find each other by name through `node_modules/` (links).',
+  ...[...set.ours].sort().map(item).filter(Boolean),
   ''
 ].join('\n'))
 // Its dispatcher and test runner, from what it now has (tools/lib/dispatcher.js).

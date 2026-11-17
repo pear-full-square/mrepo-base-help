@@ -13,7 +13,7 @@
 // Beside it the same report to read, test-reports/full.md: a sentence, an
 // overview table, a table of the units, the failures when there are any;
 // written from the JSON (render), never by hand.
-// docs: haiccing/package-docs-package (test-reports/README.md).
+// docs: haiccing/base-docs-package (test-reports/README.md).
 import { readFileSync, existsSync } from 'bare-fs'
 import { join } from 'bare-path'
 

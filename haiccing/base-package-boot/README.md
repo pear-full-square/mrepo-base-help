@@ -11,12 +11,12 @@ layer, which the package brings. The first mrepo of a host, the boot mrepo,
 is put in place by `haiccing/base-component-boot`, which links this
 package.
 
-| | |
-|---|---|
-| [mrepo/](mrepo/) | its part of an mrepo's structure: the links layer |
-| [test/](test/) | its tests: its protocol as mounted, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
+
+- [mrepo](mrepo/)
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
 ## Commands
 

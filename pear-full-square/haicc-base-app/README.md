@@ -8,10 +8,10 @@ level (`boot/deploy`, `boot/teardown`), or writes the command as a record
 into the root mrepo's inbox folder and prints the response. Offered by
 `haiccing/base-app-haicc`, whose `run.js` calls `main`.
 
-| | |
-|---|---|
-| [internal/](internal/) | the command line and what it is made of |
-| [test/](test/) | its tests |
+## Links
+
+- [internal](internal/)
+- [test](test/)
 
 ## Config
 

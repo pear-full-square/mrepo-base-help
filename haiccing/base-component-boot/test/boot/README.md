@@ -17,8 +17,8 @@ the tests: `boot.test.js`. It leaves nothing running.
      put in place); nothing deployed by it;
    - its boot hooks, placed by its runtime as its own requests as it
      started, in name order: its protocols activated (not the `protocol`
-     protocol itself, which stays closed to the outside), its help
-     extracted, its how-tos and its info;
+     protocol itself, which stays closed to the outside), its info
+     extracted;
    - the host deployed by a command at the root, `boot/deploy host
      <package>`: placed by its unique URI beside the boot mrepo (`mrepos/local/host/`), its runtime
      running, its node and its shortcut in `main`
@@ -27,7 +27,7 @@ the tests: `boot.test.js`. It leaves nothing running.
    - requests posted to the boot mrepo's inbox: `boot redeploy host` (the
      old runtime stopped, a new one), `boot teardown host` (its runtime
      ended, its folder and shortcut gone), `boot deploy host` again;
-   - `haicc`, commands as typed: `haicc host help/get . packages` sent to
+   - `haicc`, commands as typed: `haicc host info/get` sent to
      the boot mrepo goes to the shortcut, the command that follows is sent
      on to the host unchanged, the request waits and is completed with the
      host's response; `haicc . ...` is executed here; a URI running through
@@ -37,9 +37,9 @@ the tests: `boot.test.js`. It leaves nothing running.
      of `test/full` (what it would run), a run of `test/validate` (passed,
      in a floating instance, a line a unit in its log), `/run` refused;
    - an mrepo with a service, deployed from `base-package-service`: its
-     state booted, its protocols active by its boot hooks, no help yet;
+     state booted, its protocols active by its boot hooks, no info yet;
      the service's actions each in its state; `initialise` running its
-     hook, its help extracted in the same request; a protocol it does not
+     hook, its info extracted in the same request; a protocol it does not
      link said so; the package validated in situ; torn down;
    - the haicc component, deployed from `base-component-haicc` (named
      without its organisation): its packages layer the component's list,

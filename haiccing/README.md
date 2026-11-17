@@ -2,11 +2,10 @@
 
 The `haiccing` organisation's repositories, as they are developed here,
 each at `haiccing/<repo>`, in the package structure
-(`package-docs-package/`):
+(`base-docs-package/`):
 
 - Packages, each one protocol: `base-package-runtime/`, the runtime;
   `base-package-protocol/`, the activation of protocols;
-  `base-package-help/`, help; `base-package-howto/`, how-tos by activity;
   `base-package-info/`, an mrepo's pages by keywords; `base-package-boot/`, the boot protocol;
   `base-package-service/`, the service; `base-package-haicc/`, haicc;
   `base-package-crud/`, structure in `main`; `base-package-container/`,
@@ -19,8 +18,10 @@ each at `haiccing/<repo>`, in the package structure
 - `base-app-haicc/`: the `haicc` command, an app run with Bare.
 - `base-linux-haicc/`: the first step on Linux, sh scripts: Bare put in
   place and the `haicc` that starts the app.
-- `package-docs-package/`, `package-docs-mrepo/`: the documentation
-  packages.
+- `base-docs-package/`, `base-docs-hdlc/`, `base-docs-vision/`,
+  `base-docs-uri/`, `base-docs-xpath/`, `base-docs-haicc/`: the
+  documentation packages; `base-component-docs/`, the mrepo they are
+  read from.
 
 Their `modules/` are assembled by `tools/package-assemble.js`, their
 bundles written into `sources/` by `tools/package-bundle.js`; all of it

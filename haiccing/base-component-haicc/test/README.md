@@ -2,21 +2,21 @@
 
 The haicc component's tests: one of its own, `configured`, and the generic ones, a folder each.
 
-| | |
-|---|---|
-| [configured/](configured/) | its own: its list and its hooks, value by value, against the packages it lists, and what the hooks do |
-| [help/](help/) | generic: the READMEs against the README rules |
-| [code/](code/) | generic: the code against the code rules |
-| [mrepo/](mrepo/) | generic: the integrity of the mrepo side |
-| [package/](package/) | generic: the package against the template's structure |
-| [modules/](modules/) | generic: every carried module's own tests |
-| [help-in-situ/](help-in-situ/) | generic: the help where it is deployed |
-| [mrepo-in-situ/](mrepo-in-situ/) | generic: the package as a running mrepo holds it |
+## Links
+
+- [configured](configured/)
+- [info](info/)
+- [code](code/)
+- [mrepo](mrepo/)
+- [package](package/)
+- [modules](modules/)
+- [info-in-situ](info-in-situ/)
+- [mrepo-in-situ](mrepo-in-situ/)
 
 ## Sets
 
 | set | tests |
 |---|---|
-| `validate` | `configured`, `help`, `code`, `mrepo`, `package` |
-| `validate-in-situ` | `help-in-situ`, `mrepo-in-situ`: run in a running mrepo with `runtime run` |
-| `full` | `configured`, `help`, `code`, `mrepo`, `package`, `modules` |
+| `validate` | `configured`, `info`, `code`, `mrepo`, `package` |
+| `validate-in-situ` | `info-in-situ`, `mrepo-in-situ`: run in a running mrepo with `runtime run` |
+| `full` | `configured`, `info`, `code`, `mrepo`, `package`, `modules` |

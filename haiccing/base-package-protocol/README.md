@@ -9,18 +9,18 @@ active, and nothing is active by default. `protocol/activate` opens one,
 mrepo's status transitions, which the package that defines the mrepo drops
 into its runtime layer.
 
-| | |
-|---|---|
-| [test/](test/) | its tests: its protocol as mounted, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
+
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
 ## Hooks
 
 A hook is a file holding one command, its parts:
 
 ```
-/runtime/hooks/boot/activate-help.json       ["protocol/activate", ".", "help"]
+/runtime/hooks/boot/activate-info.json       ["protocol/activate", ".", "info"]
 /runtime/hooks/start/activate-boot.json      ["protocol/activate", ".", "boot"]
 /runtime/hooks/stop/deactivate-boot.json     ["protocol/deactivate", ".", "boot"]
 ```
@@ -35,6 +35,11 @@ The active set is the `protocols` layer: one file a protocol,
 `/protocols/<protocol>.json`, holding its config. The `protocol` protocol
 itself is not activated by default: opening and closing protocols is the
 hooks' business, not a request from outside.
+
+## Config
+
+In `protocol.js`, the package's: both actions at `.`, the mrepo itself,
+their argument the protocol's name.
 
 ## Package
 

@@ -1783,3 +1783,85 @@ overtaken by the line above for the how-tos that are run)
   (its module, its methods, its package); a package's own test, the
   "nothing to test" decision included; a package brought to a newer
   template; a release (the pre-release, then strict).
+
+## `splectral-docs`: a Splectral browser on the docs mrepo
+
+The human (2026-11-17): "We have a SPLectral install - I want a
+SPLectral component that navigates the docs repository the same way that
+commandline does. That way human UI experience is in step with AI
+commandline experience."; "SPLectral components will have to follow the
+haiccing self-contained approach but on the SPLectral side. By starting
+to build SPLectral components we can start to put structure on that side
+as well."; "Splectral family yes, record the scope in tasks. Feel free to
+start with a simple POC while we work on reviewing / completing the
+haiccing packages. But it would be nice to have an early view."
+
+**Settled**: a Splectral family of its own, its packages in the
+`splectral` organisation, self-contained as haiccing's are.
+
+**The scope** (ours, put to the human):
+
+1. **A Splectral component, a view package**: a package in Splectral's
+   list bringing a view, its entry `view.js`: `{ name, routes, page }`.
+   The server loads the views of its linked packages as the runtime
+   loads protocols; the page it has today (the install, its commands)
+   becomes the first view, moved out of `splectral-server`.
+2. **Splectral asking**: a request record written into the boot mrepo's
+   inbox folder as the `haicc` command writes one (`mrepo-base-request`),
+   addressed back to a topic of Splectral's, its answer matched by key
+   in the outbox it follows. `GET /docs/api/hdlc/validation` is
+   `["haicc", "docs", "info/get", "hdlc/validation"]`: the same request
+   as the command line, gated, recorded.
+3. **The docs view**: `/docs/<keywords>` the page, `/docs/api/<keywords>`
+   the answer; the page's markdown rendered (headings, paragraphs,
+   lists, code, tables), its keywords below as links with their
+   one-liners, a keyword's choices each a section. The address bar the
+   keyword path.
+4. **Tests**: the renderer and the asking (a stand-in inbox and outbox);
+   the view package as mounted; end to end, the docs mrepo and Splectral
+   deployed, a page answered, a screenshot.
+
+**Proposed names** (ours, not answered): `splectral/base-view-docs` and
+its module `pear-full-square/splectral-view-docs`;
+`splectral/base-view-install` for today's page; the family's
+specification `splectral/base-docs-package`. The repositories by the
+human.
+
+**Order**: after the restructure's validation and push; a POC first
+(the human: "an early view"), the family's structure with it.
+
+## The order after the restructure (the human, 2026-11-17)
+
+"I propose the review one repo at the time with html page 'validation'.
+Afterwards we need to start creating the base-solution-haicc package that
+kicks in with a haicc boot installing host, docs and splectral. Then we
+do the docs viewer component. Because we have all mrepos in the install
+registry, we can create info views on all mrepos."
+
+1. **`package-review`, one repository at a time**: its documentation
+   completed (the protocol's page, its config explained, each action's
+   Signature, Arguments, Returns, Errors, the menu's jumps to its
+   actions, its how-tos), validated by the human in the info view
+   (`tools/info-view.js`, republished at the same link); a commit and a
+   partial validation a package.
+2. **`base-solution-haicc`**: a solution, a new kind beside package and
+   component: the mrepos an install is made of, as a script run by the
+   continuation: the host, the docs mrepo, Splectral, deployed and
+   started; `haicc boot/deploy` with it a whole install. How the boot
+   names it: to settle then.
+3. **The Splectral viewer** (`splectral-docs`, above).
+4. **Info views on every mrepo**: the boot mrepo's registry lists them;
+   each answers `info/get` about itself. **Settled** (the human: "yes,
+   general info viewer with docs as default"): the viewer general from
+   the start, the install's mrepos to choose from, the docs mrepo its
+   default (`splectral/base-view-info`).
+
+**A new pattern, a how-to** (the human, 2026-11-17: "When we implement a
+pattern that we haven't done before we should create a howto. Do a poc,
+save it as howto and do the required implementation."; ours: agreed):
+recorded in `base-docs-hdlc`, "Work"; the how-to in the package the
+pattern belongs to. The patterns of parts 85 and 86 written as how-tos
+(ours, put to the human): a new package, a new protocol package, a new
+documentation package, a new component (`base-docs-package`); a
+module's config moved into its package, a package brought to the new
+form (`base-docs-hdlc`).

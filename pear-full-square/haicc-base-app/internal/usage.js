@@ -49,7 +49,7 @@ haicc sources https | no-https                  https as the backup, or not
   haicc host service/initialise
   haicc host service/start
   haicc host boot/deploy node-1 base-package-runtime
-  haicc host haicc node-1 help/get
+  haicc host haicc node-1 info/get
   haicc host crud/read . --flags log=verbose
   haicc host --flags log=debug -- haicc node-1 crud/read .
   haicc . crud/read "done/*[value/value/protocol='boot']" --flags layer=request
@@ -62,4 +62,5 @@ A URI is relative, without a leading slash: . is the local root, host the
 position host in it. A position named like a command of haicc itself is
 written with ./ in front: ./sources, ./boot, ./output.
 
-Help in an mrepo: haicc . help/get, haicc host help/get . packages`
+An mrepo answers about itself: haicc host info/get, haicc host info/get boot;
+the platform's documentation: haicc docs info/get, haicc docs info/get hdlc`

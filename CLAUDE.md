@@ -3,126 +3,94 @@
 How to work in this repository, for AI use. Keep this file up to date as
 the landscape changes: it describes what is here now.
 
+**Read first**, before any work: `haiccing/base-docs-hdlc/README.md`, how
+work is done (autonomy, single concern, documentation, validation,
+branches, products, scheduled work), and `haiccing/base-docs-haicc/README.md`,
+the platform and our terms. They are the rules; this file is what is
+only this repository's.
+
 - **The aim:** full AI autonomy, from a need to running software that
-  satisfies it. KISS, consistent rules and self-containment make it
-  possible.
-- **Autonomy first.** Collaboration only where required — meaning, missing
-  or inaccessible information, any exception that halts the work — and
-  collaboration is discussion: discuss first, write what has settled.
-  Structure and design are decided with the human, not alone. Natural
-  language; KISS.
-- **Proposals, not decisions:** the rules are proposals to be tested. When
-  practice shows a rule is wrong, raise it.
+  satisfies it. Structure and design are decided with the human, not
+  alone; discuss first, write what has settled.
 
 ## What is here
 
 Only what is in use. What nothing uses is removed (it stays in the
-history, and each module has its own repository) and brought back when
-the work reaches it.
+history, and each package and module has its own repository).
 
 - `haiccing/`: the packages, each at the path of its repository:
-  `base-package-runtime`, `base-package-protocol`, `base-package-help`,
-  `base-package-howto`, `base-package-info`,
-  `base-package-boot`, `base-package-service`, `base-package-haicc`,
-  `base-package-crud`, `base-package-container`,
-  `base-package-splectral` (one package, one protocol; the last also
-  defines an mrepo of its own, Splectral's, deployed beside the host); the components `base-component-boot` (the
-  initial boot mrepo and the program that puts it in place) and
-  `base-component-haicc`
-  (several packages deployed together, `main` empty; a list ends with its
-  own package, which states the mrepo's runtime config);
-  `base-app-haicc` (the `haicc` command, an app run with Bare from its
-  bundle: the machine level, the sources, a command put in the boot
-  mrepo's inbox); `base-linux-haicc` (the first step on Linux, sh scripts,
-  no bundle: a folder linked or the packages downloaded from their
-  releases, Bare put in place, the `haicc` that starts the app); and the
-  documentation packages `package-docs-package` (the package structure,
-  the README rules, modules and methods, tests; the template a package
-  starts from: its `test/` holds the generic tests, a folder each) and
-  `package-docs-mrepo` (the mrepo, layer by layer).
+  `base-package-runtime`, `-protocol`, `-help`, `-howto`, `-info`,
+  `-boot`, `-service`, `-haicc`, `-crud`, `-container`, `-splectral`
+  (one package, one protocol); the components `base-component-boot` (the
+  boot mrepo and the program that puts it in place), `base-component-haicc`
+  (the haicc mrepo, a host or a node) and `base-component-docs` (the docs
+  mrepo); `base-app-haicc` (the `haicc` command, an app run with Bare)
+  and `base-linux-haicc` (the first step on Linux, sh scripts); the
+  documentation packages `base-docs-package` (the package specification,
+  compile time and run time; the template a package is brought to, its
+  `test/` the generic tests), `base-docs-hdlc`, `base-docs-haicc`,
+  `base-docs-uri`, `base-docs-xpath`, `base-docs-vision`.
 - `pear-full-square/`: the modules those packages carry, and
-  `pkgm-base-manager`, which the tools use. A documented method is a
-  directory, under `external/` (protocol actions) or `internal/`.
-- `tools/`: the dependencies replayed from the lockfile (`install.sh`),
-  assembling and bundling a package (`package-assemble.js`,
-  `package-bundle.js`), the release into the sources (`release.js`: every
-  package, Bare's tarball, the `haicc` installer; it says each package's
-  test report against the bundle built), a package's pre-release
-  (`package-test.js`: built, its `full` set run from the bundle unless its
-  report is current, the report written into `test-reports/` and bundled
-  with it), a package brought to the template (`package-template.sh`: the
-  generic tests' folders and `test-reports/` copied from the template's
-  repository, the package pinned to that commit), the product
-  repositories (`products.sh` for the modules, `packages.sh` for the
-  packages), the checks (`help-extract.js`, `code-check.js`), the commits
-  measured (`commit-bench.js`), Docker's daemon made sure to answer
-  (`docker.sh`). `sources/`
+  `pkgm-base-manager`, which the tools use.
+- `tools/`: today's HDLC tooling (`base-docs-hdlc`, "Tooling"). `sources/`
   and `node_modules/` are ignored by git: a fresh clone needs
   `sh tools/install.sh`, then `tools/bare tools/release.js`.
-- `rules.md`: this repository's own rules (branches, layers, commits,
-  URIs, records, data names). `vision.md`: directions to take into
-  account, not settled.
 - `steps/`: the records. Where work stands: `steps/2-rebuild/readme.md`
   and, after a context reset, `steps/2-rebuild/handover-next.md`: how the
-  human works with us, what is done, what is open, the roadmap. Tasks
-  discussed and waiting to be built: `steps/2-rebuild/tasks.md`. Designs
-  in discussion: `steps/2-rebuild/xpath.md` (XPath),
-  `steps/2-rebuild/help.md` (help, howto, haici). The package review's
-  findings: `steps/2-rebuild/review.md`.
+  human works with us, what is done, what is open. Scheduled work:
+  `steps/2-rebuild/tasks.md`. Designs in discussion:
+  `steps/2-rebuild/xpath.md`, `steps/2-rebuild/help.md`. The package
+  review: `steps/2-rebuild/review.md`.
 
-## Documentation
+## Validation, the commands
 
-- **It follows the implementation:** it says what was built, nothing more.
-- **A fact lives once, beside what it documents:** a README in every
-  folder, linked from the one above (they cascade from the root). The
-  generic lives in the documentation packages; a package or a module
-  documents only what is its own. A decision and its reason: the step's
-  record.
-- **The rules are checked**, not remembered: the README rules, the code
-  rules and a package's structure (among it: a package tests what it
-  provides) are in `package-docs-package` and run as tests.
+The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
 
-## Validation, before every commit
-
-- **A package that changed: its pre-release**, one command:
-  `tools/bare tools/package-test.js haiccing/<package>`. It rebuilds the
-  package, runs its `full` set from the bundle when its content changed,
-  and writes the report (`test-reports/`) that is committed with it.
-  Nothing changed: nothing run, the same bundle. A module that changed:
-  the pre-release of every package that carries it.
-- **Everything**: `tools/bare tools/release.js --strict`: every package
-  rebuilt, and it refuses unless every package's report is current.
-- `tools/bare tools/help-extract.js` (and `--files`) and
-  `tools/bare tools/code-check.js`: no problems. The second also checks
-  every package against the package structure.
-- When the runtime or the repository code changed, the boot's test
-  several times: a race shows one run in a few
-  (`SOURCES=$PWD/sources tools/bare sources/haiccing/base-component-boot.bundle /test/validate`).
-  Nothing left running after (`pgrep -fa "bin/bare"`).
-- The `haicc` command end to end, when anything it touches changed (the
-  app, the scripts, the boot, the component, the request form):
-  `sh haiccing/base-linux-haicc/test/run.sh`.
-- **Docker**, for what makes containers (the container protocol's
-  tests, the cluster in the `haicc` test): a daemon that answers. In a
-  cloud session none runs when it starts: `sh tools/docker.sh`. Those
-  tests fail without it; no container is left after
+- A package's pre-release: `tools/bare tools/package-test.js haiccing/<package>`.
+- Everything: `tools/bare tools/release.js --strict`.
+- The checks: `tools/bare tools/info-extract.js` (and `--files`),
+  `tools/bare tools/code-check.js`.
+- The boot's test, several times:
+  `SOURCES=$PWD/sources tools/bare sources/haiccing/base-component-boot.bundle /test/validate`;
+  nothing left running after (`pgrep -fa "bin/bare"`).
+- The `haicc` command end to end: `sh haiccing/base-linux-haicc/test/run.sh`.
+- Docker, for what makes containers: in a cloud session no daemon runs
+  when it starts: `sh tools/docker.sh`; no container left after
   (`docker ps -a --filter label=haicc.folder`).
-- **A package tests what it provides**, in a test of its own, a folder in
-  its `test/`; where nothing is specific to it, a dummy that says so, an
-  explicit decision. A test that runs nothing by accident fails. A new
-  package starts from the template (`sh tools/package-template.sh`) and
-  fails its own validation until that question is answered.
+- A new package: the template's "A new package" (`base-docs-package`).
+
+## Working here
+
+The collaboration rules are `base-docs-hdlc`'s; here, what is this
+repository's and its tools'.
+
+- **A module added or removed**: written into `package.json`
+  (workspaces) and `package-lock.json` (its workspace entry, its link
+  entry) by hand, its link made in `node_modules/`; no npm run.
+- **Bare only**: npm only to change dependencies (`npm install
+  --ignore-scripts`, then `chmod +x node_modules/bare-runtime-linux-x64/bin/bare`).
+  A module's tests: `../../tools/bare ../../node_modules/brittle/cmd.js test/*.test.js`.
+- **A long run in the background**, its output to a file in the
+  scratchpad, waited for; no commit while it builds over the tree. One
+  run at a time on `sources/`: a `haicc` test started while bundles are
+  rebuilt hangs.
+- **Before a long run**: `tools/bare tools/release.js`, then each changed
+  package's own test from its folder: a slip is found in seconds.
+- **A test waits for a runtime's process to end** (`kill -0`), not only
+  for it to stop answering.
+- **A removal by a variable is refused** by a safety check: write it as
+  `"${VAR:?}"`, or make a fresh folder with `mktemp -d`.
+- **What it all looks like**: `tools/bare tools/info-view.js` writes every
+  package's and mrepo's info into one page, `sources/info-view.html`.
 
 ## Execution
 
-- **It can be repeated exactly:** record units so they can be rerun;
-  metrics and audit only at the boundary.
-- **Product repositories:** a session can attach other repositories and
-  push to them. After a change, each module's repository is updated
-  (`sh tools/products.sh <module>...`, from `main`) and each package's
-  (`sh tools/packages.sh -m "<what changed>" <package>...`). New
-  repositories are created by the human.
+- **Product repositories:** a session attaches them and pushes: each
+  module's (`sh tools/products.sh <module>...`, from `main`) and each
+  package's (`sh tools/packages.sh -m "<what changed>" <package>...`).
+  New repositories are created by the human.
 - **Planning:** the phase's request comes from `splectrum/roadmap-1`; the
   work is planned here, as it goes, and its outcome reported back.
 - In a Claude Code cloud session, execution runs on `execute/main`, merged
-  into `main` with a plain merge, both pushed.
+  into `main` with a plain merge, both pushed. No commit while a build
+  runs over the tree.

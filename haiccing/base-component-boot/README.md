@@ -23,15 +23,11 @@ bare base-component-boot.bundle --work=<folder> --sources=folder:<sources>
 ## Included packages
 
 - [base-package-runtime](../base-package-runtime/)
-- [base-package-help](../base-package-help/)
-- [base-package-howto](../base-package-howto/)
 - [base-package-info](../base-package-info/)
 - [base-package-protocol](../base-package-protocol/)
 - [base-package-boot](../base-package-boot/)
 - [base-package-haicc](../base-package-haicc/)
 - [base-package-crud](../base-package-crud/)
-- [package-docs-mrepo](../package-docs-mrepo/)
-- [package-docs-package](../package-docs-package/)
 
 ## Steps
 
@@ -68,8 +64,7 @@ command as typed and a GUID. Each step's outcome is logged in it.
   to it, and it passes on those for the mrepos linked in it.
 - No `service`: it is not service managed. Its `boot` hooks, fired by its
   runtime each time it starts, activate its protocols, extract its
-  help, its how-tos and its info, and make sure the node `registry` is in
-  its `main`.
+  info, and make sure the node `registry` is in its `main`.
 - **It keeps the mrepo registry**: the mrepos of the install, a node
   each by its unique URI under `registry` in its `main`
   (`registry/local/host`), written by `boot/deploy` and `boot/teardown`:

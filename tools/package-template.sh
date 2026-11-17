@@ -1,6 +1,6 @@
 #!/bin/sh
 # A package brought to the package template: an explicit step, a package
-# at a time (haiccing/package-docs-package, "From the template"). From the
+# at a time (haiccing/base-docs-package, "From the template"). From the
 # template's own repository, at the commit it is at:
 #   - the generic tests' folders, into the package's test/ (written over);
 #   - test-reports/README.md (the package's reports stay its own);
@@ -17,17 +17,17 @@ set -eu
 dev=$(cd "$(dirname "$0")/.." && pwd)
 [ $# -ge 1 ] || { echo 'sh tools/package-template.sh <package>...' >&2; exit 2; }
 home=${PACKAGES:-$(dirname "$dev")}
-repo=haiccing/package-docs-package
-tpl=$home/package-docs-package
+repo=haiccing/base-docs-package
+tpl=$home/base-docs-package
 [ -d "$tpl/.git" ] || git clone -q --depth 1 "https://github.com/$repo" "$tpl"
 git -C "$tpl" pull -q --ff-only origin main 2>/dev/null || true
 [ -z "$(git -C "$tpl" status --porcelain)" ] || { echo "the template's clone has changes of its own: $tpl" >&2; exit 2; }
 commit=$(git -C "$tpl" rev-parse HEAD)
-generic="help code mrepo package modules help-in-situ mrepo-in-situ"
+generic="info code mrepo package modules info-in-situ mrepo-in-situ"
 for p in "$@"; do
   dir=$dev/haiccing/$p
   [ -f "$dir/package.json" ] || { echo "$p: no package here" >&2; exit 2; }
-  [ "$p" != package-docs-package ] || { echo "$p: the template itself" >&2; exit 2; }
+  [ "$p" != base-docs-package ] || { echo "$p: the template itself" >&2; exit 2; }
   mkdir -p "$dir/test" "$dir/test-reports"
   for t in $generic; do
     rm -rf "${dir:?}/test/$t"

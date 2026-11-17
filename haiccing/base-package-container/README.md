@@ -8,11 +8,11 @@ unique URI the mrepo's with `container` behind it. The mrepo on the host is the 
 its replica at the position `container` and reaches it as any linked
 mrepo. This is how a swarm node gets its container.
 
-| | |
-|---|---|
-| [test/](test/) | its tests: its protocol as mounted, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
+
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
 ## Commands
 
@@ -74,6 +74,10 @@ haicc host boot/teardown swarms/swarm-1/node-1
 
 Docker, its daemon running, on Linux. Without it every action but a
 `status` of an mrepo without a replica fails: `no Docker`.
+
+## Config
+
+In `protocol.js`, the package's: the five actions at the mrepo itself.
 
 ## Package
 

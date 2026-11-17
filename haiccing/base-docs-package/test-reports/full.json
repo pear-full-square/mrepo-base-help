@@ -1,0 +1,101 @@
+{
+  "package": "haiccing/base-docs-package",
+  "content": "3ab59d62d9fbdbf013ccea464aa047699a3960ae1c7471dd080e0dedb1ed1cec",
+  "bare": "v1.36.0",
+  "date": "2026-11-17T04:41:17.632Z",
+  "set": "full",
+  "ok": true,
+  "units": [
+    {
+      "unit": "/test/info",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 2,
+        "total": 2
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/code",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 2,
+        "total": 2
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/mrepo",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 1,
+        "total": 1
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/package",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 1,
+        "total": 1
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/mrepo-base-info",
+      "ok": true,
+      "tests": {
+        "passed": 7,
+        "total": 7
+      },
+      "asserts": {
+        "passed": 52,
+        "total": 52
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/mycelium-uri",
+      "ok": true,
+      "tests": {
+        "passed": 21,
+        "total": 21
+      },
+      "asserts": {
+        "passed": 195,
+        "total": 195
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/pkgm-base-check",
+      "ok": true,
+      "tests": {
+        "passed": 17,
+        "total": 17
+      },
+      "asserts": {
+        "passed": 46,
+        "total": 46
+      },
+      "failures": []
+    }
+  ]
+}
