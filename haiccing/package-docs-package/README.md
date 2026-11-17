@@ -72,11 +72,11 @@ where `help get` serves it at three levels. Its shape:
 
 ## Links
 
-- [<label>](<folder>/)
+<a list of links, one a folder below>
 
 ## Included packages
 
-- [<package>](../<package>/)
+<a list of links, one a package of its list>
 
 ## <section>
 ```
@@ -94,13 +94,14 @@ where `help get` serves it at three levels. Its shape:
    "Design"), at most three words, or a file's name, so a section can be
    asked for by name.
 6. **The menu, `## Links`**, the first section: a list of links to the
-   folders below, one each, a label and nothing more: what each is, its
-   own README's one-liner says, once. The label is the folder's name. A
-   README with no folder below has no menu.
+   folders below, one each, a label and nothing more (`- [test](test/)`):
+   what each is, its own README's one-liner says, once. The label is the
+   folder's name. A README with no folder below has no menu.
 7. **Included packages, `## Included packages`**, after the menu, in the
    README of a package that defines an mrepo only: the packages of its
    list (`mrepo/packages/layer.json`) but itself, in deploy order, each a
-   link to its sibling (`../<package>/`), as they stand beside each other
+   link to its sibling, its name the label and `../<package>/` the
+   target, as they stand beside each other
    here and in an mrepo's `packages/<org>/`.
 
 `tools/help-extract.js` in the development repository checks them (the
