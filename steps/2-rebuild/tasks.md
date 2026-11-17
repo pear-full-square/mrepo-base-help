@@ -1830,6 +1830,17 @@ human.
 **Order**: after the restructure's validation and push; a POC first
 (the human: "an early view"), the family's structure with it.
 
+**A design session to come** (the human, 2026-11-17: "for splectral we
+need to do a design session for the server 'proper' and the
+components. However, if we basically run haicc commands and bind them to
+UI components then that could be a simple setup"). Ours, the proposal
+for it ("Splectral: the server and its components", a doc): the server a
+gateway (one command endpoint into the boot mrepo's inbox, one record
+stream, the renderers); a view a command bound to a renderer, declared
+as data in a package (`views/<name>.json`); six generic renderers
+(page, tree, document, table, log, buttons); seven questions for the
+session.
+
 ## The order after the restructure (the human, 2026-11-17)
 
 "I propose the review one repo at the time with html page 'validation'.
