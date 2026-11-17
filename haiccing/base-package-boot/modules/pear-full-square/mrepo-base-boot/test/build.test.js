@@ -19,8 +19,8 @@ for (const l of ['main', 'runtime', 'protocols', 'inbox', 'outbox', 'packages', 
   writeFileSync(join(BOOT, l, 'layer.json'), JSON.stringify({ mode: l.startsWith('request') || l.endsWith('box') ? 'non-atomic' : 'atomic', description: l }))
 }
 // a boot hook, as a defining package would drop it: crud active from boot
-mkdirSync(join(BOOT, 'runtime', 'hooks', 'boot'), { recursive: true })
-writeFileSync(join(BOOT, 'runtime', 'hooks', 'boot', 'activate-crud.json'), JSON.stringify(['protocol/activate', '.', 'crud']))
+mkdirSync(join(BOOT, 'runtime', 'hooks'), { recursive: true })
+writeFileSync(join(BOOT, 'runtime', 'hooks', 'boot.haicc'), 'protocol/activate . crud\n')
 const preloaded = { api: 'boot', protocol: 'boot', action: 'deploy', uri: ['main', 'host'], args: ['haiccing/base-package-runtime'] }
 writeFileSync(join(BOOT, 'request', 'pending', 'default', `${PRELOADED}.json`), JSON.stringify({ topic: '/request/pending/default', key: PRELOADED, timestamp: '2026-11-11T00:00:00.000Z', headers: {}, value: { topic: null, key: PRELOADED, timestamp: '2026-11-11T00:00:00.000Z', headers: {}, value: preloaded } }))
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
@@ -41,7 +41,7 @@ test('the boot mrepo: built from its folder, the same twice', async (t) => {
     const r = await open(a)
     const repo = openRepo(r.backend)
     t.is(JSON.parse((await repo.read('/runtime/layer.json')).toString()).mode, 'atomic', 'layer.json committed with its layer')
-    t.alike(JSON.parse((await repo.read('/runtime/hooks/boot/activate-crud.json')).toString()), ['protocol/activate', '.', 'crud'], 'a hook dropped into the runtime layer: committed with it')
+    t.is((await repo.read('/runtime/hooks/boot.haicc')).toString(), 'protocol/activate . crud\n', 'a hook file dropped into the runtime layer: committed with it')
     t.is((await repo.select(`/request/pending/default/${PRELOADED}.json`)).length, 1, 'the request preloaded')
     await t.exception(build({ from: BOOT, work: a, name: 'boot' }), /exists/, 'never over an existing one')
   } finally {

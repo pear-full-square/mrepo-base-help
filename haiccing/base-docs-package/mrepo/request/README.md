@@ -98,15 +98,15 @@ A command may answer, beside its output, with a script to go on with:
 
 ```json
 { "output": { "deployed": "host" },
-  "continuation": { "at": "host", "commands": [["service/initialise"], ["service/start"]] } }
+  "continuation": { "at": "host", "script": "set -e\nhaicc \"$HAICC_AT\" service/initialise\n..." } }
 ```
 
-- **`commands`**: each its parts, as a request's command; at most 100.
-  **`at`**: the position they are written from.
-- **The terminal runs it**, not an mrepo: the `haicc` command sends each
-  one from that position, after the response of the one before, and
-  ends at the first that fails. A simple script: a continuation
-  answered inside one is not run.
+- **`script`**: shell text calling `haicc`; at most 64 KiB. **`at`**:
+  the position it is run for, from the root.
+- **The terminal runs it**, not an mrepo: the `haicc` command runs it
+  with `sh`, `HAICC_AT` the position, `haicc` on the `PATH`; where it
+  stops with another exit code, the command fails. A script's own
+  commands may answer with continuations: their `haicc` runs them.
 - **Through a shortcut** it comes back with the response, its position
   behind the one the command was sent on at.
 - **Who answers with one**: an action, when it has something to go on

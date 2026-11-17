@@ -1830,6 +1830,30 @@ human.
 **Order**: after the restructure's validation and push; a POC first
 (the human: "an early view"), the family's structure with it.
 
+**A design session to come** (the human, 2026-11-17: "for splectral we
+need to do a design session for the server 'proper' and the
+components. However, if we basically run haicc commands and bind them to
+UI components then that could be a simple setup"). Ours, the proposal
+for it ("Splectral: the server and its components", a doc): the server a
+gateway (one command endpoint into the boot mrepo's inbox, one record
+stream, the renderers); a view a command bound to a renderer, declared
+as data in a package (`views/<name>.json`); six generic renderers
+(page, tree, document, table, log, buttons); seven questions for the
+session.
+**Settled** (the human: "The splectral components (basically commands,
+UI elements, info, ...) have to be self-contained the same as haiccing
+packages. That means that it includes the UI element sets and create a
+page or pages with it."): a Splectral component carries its commands,
+its UI element set (by copy, as a package carries its modules), its
+info, and makes its own page or pages; the server carries no UI
+elements of its own. The proposal updated (question 2 settled). And
+(the human: "the splectral server is in a sense the data layer, managing
+the commands. That may later involve caching etc."): the server is the
+data layer, managing the commands the pages run; later caching there
+(an answer per `(at, command)`, dropped when the record stream shows a
+change touching it; one request for the same command from several
+pages), not for base.
+
 ## The order after the restructure (the human, 2026-11-17)
 
 "I propose the review one repo at the time with html page 'validation'.
@@ -1877,6 +1901,67 @@ registry, we can create info views on all mrepos."
    internally or externally; the different routes (an internal inbox and
    such) later. Built with the solution install, a proof of concept and
    its how-to first; the tests that check "in the same request" change.
+   **Built so far** (2026-11-17, on `execute/solution`): continuations
+   shell (`{ at, script }`, run by the terminal with `sh`, `HAICC_AT`);
+   the three scripts shell. **The hooks' proof of concept**: a hook
+   reaches its own mrepo straight into its inbox (`HAICC_MREPO`, agreed);
+   a transition waits for its shell hooks (agreed): `exec.wait(job)`, a
+   request parked on an outside job, resumed with its result
+   (`form.resumed`), the runtime free meanwhile; the host's `initialise`
+   hook `info-extract.sh`: `service/initialise` answers once the info is
+   extracted (some 2.8 s over the extraction: sh, Bare, the hook's haicc
+   polling). The how-to `hooks` in its shell form. To follow: every hook
+   shell, boot hooks run by the runtime, the JSON hooks and their runner
+   gone, requests tagged by trigger.
+   **Settled** (the human, 2026-11-17), replacing shell for base: a
+   `haicc` per command costs a Bare start (~410 ms) and a request (~400
+   ms), measured; a kept-open terminal saves only `sh`'s 3 ms; a
+   resident server belongs with AVRO RPC ("once we have avro we can use
+   the rpc server for this"). So: "for base we only allow simple
+   commands and launch once", and "haicc on it own is haicc/goto. Now we
+   add haicc/file and haicc/script": `haicc <URI> haicc/script '<lines>'`
+   (a shell multi-line string, or a heredoc on stdin: "could we do like
+   a shell multiline?"), `haicc <URI> haicc/file <file>`; a line a simple
+   command; "the script is executed where the initial haicc is
+   pointing": each line as if typed at that position (`haicc host
+   haicc/script` runs `service/initialise` as `haicc host
+   service/initialise`); the first that fails stops it. No `$HAICC_AT`.
+   Ours, to settle while building: each line sent through the mrepo's
+   own inbox, tagged internal, the script's request waiting
+   (`exec.wait`); `haicc/file` a file in the mrepo (a hook file, a
+   package's script), a local file sent with the heredoc form; hooks one
+   file a transition, run by the runtime with `haicc/file`;
+   continuations a package's script run with `haicc/script` where it was
+   deployed.
+   **Settled** (the human: "What this does is give any repo access to
+   the whole haicc setup. Unless we apply a fixed prefix. In fact we
+   could execute it through the registry reference (so a mrepo must know
+   its local or swarm URI)"; "yes, park the container, keep registry/ and
+   build it"): an mrepo's own commands carry a fixed prefix, its registry
+   reference, `registry/<swarm>/<name>`: `goto` at a registry node sends
+   the command on to the mrepo it records, as at a shortcut; forward
+   only from there. `HAICC_MREPO` goes. **Parked**: the container's
+   replica ("the container needs its own haicc install - a partial one
+   to dispatch commands. We look at that further down the line.").
+   **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
+   folder: "I propose we have a fixed folder within the haicc install for
+   script files, called scripts, next to work"; "if we do a script
+   install then we give the scripts folder the same structure as always:
+   [org]/[package]"; on input variables, ours: not for base, the
+   position is the input, a script written relative to where it runs
+   (`cluster` at the swarm's node: run at `host/swarms/swarm-2`, it
+   builds that swarm); positional arguments (`$1`...) later, when a
+   script needs one ("yes, record it and build it after the
+   validation"). So: `<home>/scripts/<name>.haicc` (the user's) and
+   `<home>/scripts/<org>/<package>/<name>.haicc` (a package's, installed);
+   `haicc <URI> haicc/file <name>` the terminal's: it reads the file and
+   sends its lines on as `haicc/script`; a name, no path; no mrepo reads
+   a file of the machine: the mrepo's `haicc/file` action goes. `haicc
+   scripts` lists them. Package scripts stay continuations in the
+   bundles; installing them into `scripts/` later.
+   **To measure**: the execution time, old build against new (the
+   boot, a host's initialise and start, a script of five lines against
+   five calls).
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the

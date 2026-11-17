@@ -319,10 +319,11 @@ script to go on with, run by the terminal). What was said is stated as it is; no
 - Earlier, on its reach: "any command may return with a continuation,
   i.e. now continue executing this script. It is a bit like an JIT
   pipeline."
-- What is built is the simple case: a fixed script, answered by a
-  deploy, run by the terminal, no nesting, at most 100 commands. Open
-  from here: a continuation written on the fly from the request's state;
-  one driven inside an mrepo, not through the inbox; nesting; a script
+- What is built: a fixed script, shell calling `haicc`, answered by a
+  deploy, run by the terminal with `sh`; nesting by a script's own
+  deploys. Open from here: a continuation written on the fly from the
+  request's state; one driven inside an mrepo, not through the inbox; a
+  script
   used from elsewhere through the registry ("that functionality will be
   added later, not now").
 - Settled for base, 2026-11-17, to build with the solution install:
