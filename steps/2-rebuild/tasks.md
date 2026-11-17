@@ -2070,6 +2070,14 @@ registry, we can create info views on all mrepos."
    the install's own `bin/` (the command would replace the script it
    starts and start itself for ever). The node's container in the pair
    deploy is made this way.
+   **Simplified** (the human, 2026-11-17): "the only thing we need is a
+   second haicc install in the container to run the container side -
+   that in itself represents write". No replication and no primary and
+   replica for the container: its own install writes the node's data,
+   the host shares the node's folder through the mount. This replaces
+   "full replication", the layers' configuration and the response as
+   replicated data above, for the container; replicating commits comes
+   with a node on another machine. The design: `pair.md`.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script
