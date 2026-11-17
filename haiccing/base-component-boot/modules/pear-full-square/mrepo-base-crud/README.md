@@ -40,4 +40,4 @@ haicc . crud/delete swarms recurse
 
 ## Tests
 
-- `npm test`: the actions on an execution written for them.
+- `brittle-bare test/*.test.js`: the actions on an execution written for them.
