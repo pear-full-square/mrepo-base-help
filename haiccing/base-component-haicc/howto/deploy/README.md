@@ -1,23 +1,26 @@
 # deploy
 
-Deploys a node of a swarm in this host and brings it into service.
+Deploys a node of a swarm in the host and brings it into service.
 
+The host is deployed and started (the boot component's how-to
+`deploy`). A swarm's place is a node below `swarms` in the host's
+`main`; a node deployed below it is that swarm's: its position names its
+swarm, `swarm-1/node-1`.
 
 ## Steps
 
 ```sh
-# the swarm's place in this mrepo's main: a node below swarms
-haicc . crud/create swarms/swarm-1
-# the node: an mrepo of its own, built from the haicc component; its position names its swarm, so it is swarm-1/node-1
-haicc . boot/deploy swarms/swarm-1/node-1 base-component-haicc
-# made ready: its info extracted
-haicc swarms/swarm-1/node-1 service/initialise
-# its door opened
-haicc swarms/swarm-1/node-1 service/start
+# the swarm's place in the host's main
+haicc host crud/create swarms/swarm-1
+# the node: an mrepo of its own, built from the haicc component
+haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc
+# made ready, its info extracted; its door opened (at the host's position, then on at the node's shortcut)
+haicc host haicc swarms/swarm-1/node-1 service/initialise
+haicc host haicc swarms/swarm-1/node-1 service/start
 # the check: the node answers with its root
-haicc swarms/swarm-1/node-1 crud/read .
+haicc host haicc swarms/swarm-1/node-1 crud/read .
 ```
 
 ## Then
 
-A node can be given its replica in a container: `container/replica`.
+The node can be given its replica in a container: the how-to `replica`.

@@ -936,3 +936,33 @@ command line (today in `base-component-boot`'s boot test, by its
 inbox); `container` without Docker (`no Docker`, each action) and
 `status` `gone`; `splectral` on a taken port, started again; examples:
 a node in its container, Splectral watching a cluster deployed.
+
+### base-component-haicc, base-component-docs
+
+Sound: each its list and its hooks, checked value by value and walked
+by its own test, `configured`, against the packages listed.
+
+**Documentation, done** (2026-11-17):
+
+- `base-component-haicc`'s how-tos addressed the boot mrepo (`haicc .
+  crud/create swarms/swarm-1`, `haicc swarms/swarm-1/node-1 ...`) while
+  saying "in this host", and named keywords of before (`container/replica`,
+  `node/deploy`): rewritten at the host (`haicc host ...`, `haicc host
+  haicc swarms/swarm-1/node-1 ...`), the replica removed before its node
+  in `replica`; a third how-to, `cluster`: the host and a swarm of two
+  nodes in containers by the script `cluster`, read, taken down.
+- `base-component-docs`'s `mrepo/` page: `documents: sources`, every
+  other package documented.
+
+**Settled design, to build**: `cluster` and `start` shell scripts with
+the scripts' building; `swarms/` parked for the solution.
+
+**Code, later** (`review-code`): `documents: sources` reads the folder
+sources only (`available`, `mrepo-base-boot`): an install from
+`github:<org>` gets a docs mrepo documenting its list alone. The
+github source's manifest read as well.
+
+**Tests and examples, later** (`install-tests`): the cluster taken down
+(each replica removed, the nodes, the host); the docs mrepo from a
+github source; examples: a host with one node step by step (`deploy`,
+`replica`), the cluster.
