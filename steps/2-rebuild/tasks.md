@@ -2023,3 +2023,13 @@ package by package and lists here what needs code, built after it.
   install deploys comes from a folder; `haicc sources download` fetches
   into haicc's own sources folder and registers it, `folder:<path>`. An
   install from GitHub documents all.
+- **module tests**, **done** (2026-11-17): the human: "I had a look at
+  the modules info, and it says unit tests but gives no further info".
+  Each module's "Tests" line says what its tests cover and points to its
+  `test/` page, which lists each test by its name. pkgm-base-check's
+  `checkTestPage` (`internal/tests`) holds the page to the tests: a
+  section a file that declares tests, every test by its name, nothing
+  else; a template name a pattern. `tools/code-check.js` runs it over
+  every module; the drift it found fixed (the hooks, scripts, registry
+  and documents tests), a page for pkgm-base-manager, a section for
+  mrepo-base-info.

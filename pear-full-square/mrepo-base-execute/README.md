@@ -71,7 +71,9 @@ mrepo's root (`runtime/service.json`) or slash-led, the same.
 
 ## Tests
 
-- `brittle-bare test/*.test.js` (Bare installed): the unit tests
+- `brittle-bare test/*.test.js` (Bare installed): the execution of a request: its branches from their targets and their squash, the context the action reads through, local and global commit and rollback, the log and its steps, an error at the boundary, and `exec.run`, `exec.continuation`, `exec.forward` and `exec.wait`; each test by its name in [test/](test/).
+
+## The context
 
 The action's context (`exec`): `read`, `select` (overlaid: a target read
 from its execution branch), `find` (as `read`, for a file that may not be
