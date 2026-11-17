@@ -57,16 +57,17 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
       if (print === 'output') io.out(JSON.stringify(o.output))
       return o
     }
-    // haicc/script with no lines after it: the lines from stdin (a heredoc)
-    const parts = c.parts.at(-1) === 'haicc/script' && io.stdin ? [...c.parts, await io.stdin()] : c.parts
+    // haicc/script and its URI, no lines after them: the lines from stdin (a heredoc)
+    const parts = c.parts.at(-2) === 'haicc/script' && io.stdin ? [...c.parts, await io.stdin()] : c.parts
     const o = await send(parts)
     // A continuation: the response says what to go on with, a script, its
-    // lines simple commands: sent on as one command, haicc/script, where it
-    // was answered for (the position it names); its outcome printed.
+    // lines simple commands: sent on as one command, haicc/script at the
+    // mrepo it was answered for (the position it names), its URI `.` there;
+    // its outcome printed.
     if (o.continuation) {
       const { at, script } = o.continuation
-      if (print === 'record') io.out(`haicc ${at} haicc/script ...`)
-      await send(isRoot(at) ? ['haicc/script', script] : ['haicc', at, 'haicc/script', script])
+      if (print === 'record') io.out(`haicc ${at} haicc/script . ...`)
+      await send(isRoot(at) ? ['haicc/script', '.', script] : ['haicc', at, 'haicc/script', '.', script])
     }
     return 0
   } catch (err) {

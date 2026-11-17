@@ -2,14 +2,17 @@
 
 Executes a script's lines, each a simple command, where the URI points, one after the other.
 
-`haicc <URI> haicc/script '<lines>'`: the lines as one argument, a shell
-multi-line string, or, with none, from stdin (a heredoc). Each line is
-executed as if typed at that position: `haicc host haicc/script` runs
-`service/initialise` as `haicc host service/initialise`.
+`haicc <URI> haicc/script <URI> '<lines>'`: a command like any, its URI
+where the lines run (`.` where the `haicc` points), the lines one
+argument, a shell multi-line string, or, with none, from stdin (a
+heredoc). Each line is executed as if typed at that position: `haicc
+host haicc/script . '...'` runs `service/initialise` as `haicc host
+service/initialise`; `haicc host haicc/script swarms/swarm-1 '...'` runs
+its lines at `swarms/swarm-1` in the host.
 
 ## Signature
 
-`script(exec, { uri, args })`: requested as `haicc/script <lines>`.
+`script(exec, { uri, args })`: requested as `haicc/script <URI> <lines>`.
 
 ## Arguments
 

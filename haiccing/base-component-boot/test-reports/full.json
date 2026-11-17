@@ -1,25 +1,23 @@
 {
   "package": "haiccing/base-component-boot",
-  "content": "27241c0a8351843b93fa353217b921646a3695d808699a5e600b0a3082aaf0f0",
+  "content": "cb7ce851244cdce56b80813ffbb8339f53798e4fc647b31c2feafddf4f680eb1",
   "bare": "v1.36.0",
-  "date": "2026-11-17T12:24:44.623Z",
+  "date": "2026-11-17T12:53:57.302Z",
   "set": "full",
-  "ok": false,
+  "ok": true,
   "units": [
     {
       "unit": "/test/boot",
-      "ok": false,
+      "ok": true,
       "tests": {
-        "passed": 1,
+        "passed": 2,
         "total": 2
       },
       "asserts": {
-        "passed": 120,
+        "passed": 121,
         "total": 121
       },
-      "failures": [
-        "the boot: put in place, its runtime started, nothing deployed; the host deployed, redeployed, torn down, deployed again by commands; haicc; run again"
-      ]
+      "failures": []
     },
     {
       "unit": "/test/info",
@@ -142,12 +140,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-request",
       "ok": true,
       "tests": {
-        "passed": 16,
-        "total": 16
+        "passed": 17,
+        "total": 17
       },
       "asserts": {
-        "passed": 187,
-        "total": 187
+        "passed": 188,
+        "total": 188
       },
       "failures": []
     },

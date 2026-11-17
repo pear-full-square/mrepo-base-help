@@ -298,11 +298,12 @@ has "$out" '"uri":["main","registry/local","host"]' "haicc registry/local crud/r
 has "$out" '"uri":"local/host","at":"host","how":"deployed","folder":"../local/host","package":"haiccing/base-component-haicc"' "what the install knows of it: which mrepo, linked where, how it came, where it is, what it came from"
 is "$(haicc --output host crud/read registry 2>&1)" '[]' "no registry in the host: the boot mrepo keeps it"
 # a continuation: a deploy asked for a script of its package answers with
-# it, and the haicc command sends it on, haicc/script, to the deployed
-# mrepo: its lines executed there, each after the one before
+# it, and the haicc command sends it on to the root, haicc/script with the
+# deployed mrepo as its URI: its lines executed there, each after the one
+# before
 out=$(haicc . boot/deploy demo base-component-haicc --flags continuation=start 2>&1); is $? 0 "haicc . boot/deploy demo base-component-haicc --flags continuation=start: the deploy, then its script, each command done"
 has "$out" '"continuation": {' "the deploy's response: its continuation, the script"
-has "$out" 'haicc demo haicc/script .' "the script sent on as one command, to the deployed mrepo, its URI . there"
+has "$out" 'haicc . haicc/script demo' "the script sent on as one command to the root, its URI the deployed mrepo"
 has "$out" '"line": "service/initialise"' "its lines executed there, each with what it answered"
 has "$out" '"line": "service/start"' "in order"
 is "$(haicc --output demo crud/read . 2>&1)" '[{"uri":["main","."],"value":{},"children":[]}]' "the mrepo brought into service by it: its crud answering"
