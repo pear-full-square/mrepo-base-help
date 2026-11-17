@@ -16,8 +16,9 @@ everything else.
 ## Install
 
 ```sh
+curl -fsSLO https://github.com/haiccing/base-linux-haicc/releases/latest/download/haicc-install.sh
 sh haicc-install.sh
-haicc sources link <folder>
+haicc sources download bare haiccing
 haicc prereq
 haicc boot/deploy
 haicc . boot/deploy host base-component-haicc
@@ -27,8 +28,11 @@ haicc host service/start
 
 `haicc-install.sh` carries the scripts and the pins, nothing else.
 `--home=<folder>` is haicc's own folder, `~/.haicc` by default;
-`--bin=<folder>` is where the command is registered. The first three
-lines are answered here; from `haicc boot/deploy` on, by the app.
+`--bin=<folder>` is where the command is registered. The first four
+lines are answered here; from `haicc boot/deploy` on, by the app. Instead
+of the download, a sources folder can be linked: `haicc sources link
+<folder>` (the development repository's `sources/`, built by
+`tools/release.js`).
 
 ## Commands
 
@@ -36,6 +40,7 @@ lines are answered here; from `haicc boot/deploy` on, by the app.
 |---|---|
 | `haicc sources link <folder>` | a local folder linked as a source, not copied: Bare's runtime and the packages come from it |
 | `haicc sources download bare` | Bare's runtime fetched over https into haicc's own sources folder, checked against its pin |
+| `haicc sources download haiccing` | the packages fetched over https into the same folder: the manifest from `base-linux-haicc`'s latest release, then each package's bundle and addons from its own release (`r-<commit>`), each checked against the manifest (sha256); the manifest written last. `HAICC_RELEASES` names another base than `https://github.com/haiccing` |
 | `haicc prereq [--check]` | what the command needs to start, checked: the platform, the tools, a source holding the app, Bare; Bare unpacked from the sources |
 | `haicc --help` | these, then the app's when it can be started |
 
@@ -51,7 +56,7 @@ exits 3.
   bin/            the scripts
   pins            the pinned Bare, the organisation, the app's package
   sources.list    the sources registered, the app's list too
-  sources/        what haicc sources download bare fetched
+  sources/        what haicc sources download fetched: Bare, the packages
   bare/           Bare, unpacked by haicc prereq
   work/           the app's work folder
 ```

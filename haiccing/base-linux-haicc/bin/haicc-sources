@@ -1,7 +1,7 @@
 #!/bin/sh
 # haicc sources, the part that has to work before Bare is on the machine:
 # where Bare's runtime and the app come from. The other actions (the list,
-# unlink, https, no-https, the download of packages) are the app's.
+# unlink, https, no-https) are the app's.
 #   haicc sources link <folder>       a local folder linked as a source (not
 #                                     copied): our packages (<org>/<package>
 #                                     .bundle, <org>/manifest.json, addons/)
@@ -10,6 +10,14 @@
 #                                     haicc's own sources folder, checked
 #                                     against its pin; that folder linked
 #                                     (third-party: the same)
+#   haicc sources download <org>      our packages fetched over https from
+#                                     their releases into the same folder:
+#                                     the organisation's manifest (an asset
+#                                     of base-linux-haicc's latest release),
+#                                     then each package's bundle and addons
+#                                     from its own release (r-<commit>),
+#                                     each checked against the manifest
+#                                     (sha256); the manifest written last
 # The list is the app's too: $HAICC_HOME/sources.list, a line a source,
 # folder:<path> or github:<org>. This is the only script that reaches the
 # network.
@@ -34,6 +42,66 @@ download_bare () {
   echo "bare: downloaded, as pinned ($BARE_VERSION)"
 }
 
+# Where our releases are: $HAICC_RELEASES/<package>/releases/download/<tag>/
+# <file>, as on GitHub (another base, a file:// one, for a test).
+releases=${HAICC_RELEASES:-https://github.com/$HAICC_ORG}
+fetch () { curl -fsSL --retry 3 --connect-timeout 20 -o "$2" "$1"; }
+sha256_of () { sha256sum "$1" | cut -d' ' -f1; }
+
+# The manifest, as tools/release.js writes it (two spaces a level): a line
+# a package (P <name> <file> <sha256> <commit>), then a line an addon
+# (A <sha256>).
+entries () {
+  awk '
+    /^    "[^"]+": \{$/ { split($0, q, "\""); name = q[2]; file = ""; sha = ""; commit = ""; inadd = 0; next }
+    inadd && /^      \]/ { inadd = 0; next }
+    inadd { split($0, q, "\""); adds = adds " " q[2]; next }
+    /^      "file": / { split($0, q, "\""); file = q[4] }
+    /^      "sha256": / { split($0, q, "\""); sha = q[4] }
+    /^      "commit": / { split($0, q, "\""); commit = q[4] }
+    /^      "addons": \[$/ { inadd = 1; adds = "" }
+    /^    \}/ { print "P", name, file, sha, commit; n = split(adds, a, " "); for (i = 1; i <= n; i++) print "A", a[i]; adds = "" }
+  ' "$1"
+}
+
+download_org () {
+  command -v curl >/dev/null 2>&1 || fail "curl is needed to download" 3
+  command -v sha256sum >/dev/null 2>&1 || fail "sha256sum is needed to download" 3
+  tmp=$own/$HAICC_ORG.part
+  rm -rf "$tmp"; mkdir -p "$tmp" "$own/$HAICC_ORG" "$own/addons"
+  url=$releases/base-linux-haicc/releases/latest/download/manifest.json
+  echo "$HAICC_ORG: fetching its manifest, $url"
+  fetch "$url" "$tmp/manifest.json" || { rm -rf "$tmp"; fail "could not fetch the manifest: $url" 3; }
+  entries "$tmp/manifest.json" > "$tmp/entries"
+  grep -q '^P ' "$tmp/entries" || { rm -rf "$tmp"; fail "the manifest names no package: $url" 3; }
+  name=; tar_=
+  while read -r kind a b c d; do
+    if [ "$kind" = P ]; then
+      name=$a; pkg=${a#*/}; to=$own/$b; tag=r-$(printf '%.7s' "$d"); base=$releases/$pkg/releases/download/$tag
+      if [ -f "$to" ] && [ "$(sha256_of "$to")" = "$c" ]; then echo "$name: there"
+      else
+        fetch "$base/$pkg.bundle" "$to.part" || { rm -rf "$tmp" "$to.part"; fail "could not fetch $name: $base/$pkg.bundle" 3; }
+        [ "$(sha256_of "$to.part")" = "$c" ] || { rm -rf "$tmp" "$to.part"; fail "$name: not as the manifest says (sha256): $base/$pkg.bundle" 3; }
+        mv "$to.part" "$to"; echo "$name: fetched ($tag)"
+      fi
+      tar_=$base/$pkg-addons.tar; got=no
+    else
+      [ -f "$own/addons/$a" ] && [ "$(sha256_of "$own/addons/$a")" = "$a" ] && continue
+      if [ "$got" = no ]; then
+        fetch "$tar_" "$tmp/addons.tar" || { rm -rf "$tmp"; fail "could not fetch $name's addons: $tar_" 3; }
+        mkdir -p "$tmp/x"; tar -xf "$tmp/addons.tar" -C "$tmp/x" --no-same-owner || { rm -rf "$tmp"; fail "$name's addons could not be unpacked: $tar_" 3; }
+        got=yes
+      fi
+      [ -f "$tmp/x/addons/$a" ] && [ "$(sha256_of "$tmp/x/addons/$a")" = "$a" ] || { rm -rf "$tmp"; fail "$name: an addon missing or not as named (sha256): $a in $tar_" 3; }
+      cp "$tmp/x/addons/$a" "$own/addons/$a.part" && mv "$own/addons/$a.part" "$own/addons/$a"
+    fi
+    [ "$kind" = P ] && rm -rf "$tmp/x"
+  done < "$tmp/entries"
+  mv "$tmp/manifest.json" "$own/$HAICC_ORG/manifest.json"
+  rm -rf "$tmp"
+  echo "$HAICC_ORG: downloaded, as its manifest says"
+}
+
 cmd=${1:-}
 [ $# -gt 0 ] && shift
 case "$cmd" in
@@ -43,14 +111,20 @@ case "$cmd" in
     register "folder:$(cd "$1" && pwd)"
     sources ;;
   download)
-    [ $# -gt 0 ] || fail "haicc sources download bare" 2
+    [ $# -gt 0 ] || fail "haicc sources download bare|$HAICC_ORG" 2
     for what in "$@"; do
       case "$what" in
-        bare|third-party) ;;
-        *) fail "haicc sources download bare" 2 ;;
+        bare|third-party|"$HAICC_ORG") ;;
+        *) fail "haicc sources download bare|$HAICC_ORG" 2 ;;
       esac
     done
-    download_bare; register "folder:$own" ;;
+    for what in "$@"; do
+      case "$what" in
+        bare|third-party) download_bare ;;
+        "$HAICC_ORG") download_org ;;
+      esac
+    done
+    register "folder:$own" ;;
   *)
-    fail "haicc sources link <folder>, haicc sources download bare" 2 ;;
+    fail "haicc sources link <folder>, haicc sources download bare|$HAICC_ORG" 2 ;;
 esac

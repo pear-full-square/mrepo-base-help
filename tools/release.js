@@ -5,7 +5,7 @@
 //                                       its modules): assembled, then bundled
 //                                       (tools/package-assemble.js,
 //                                       tools/package-bundle.js), in
-//   sources/haiccing/manifest.json      their manifest
+//   sources/haiccing/manifest.json      their manifest: these packages only
 //   sources/addons/<sha256>             their native addons
 //   sources/holepunchto/<tarball>       Bare's runtime, third party: the
 //                                       tarball this repository's lockfile
@@ -28,7 +28,7 @@
 import process from 'bare-process'
 import os from 'bare-os'
 import crypto from 'bare-crypto'
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync } from 'bare-fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, unlinkSync } from 'bare-fs'
 import { join, resolve, dirname } from 'bare-path'
 import { fileURLToPath } from 'bare-url'
 import { spawnSync } from 'bare-subprocess'
@@ -49,6 +49,22 @@ const packages = readdirSync(join(dev, 'haiccing')).sort().filter(p => {
 for (const p of packages) {
   tool(join(dev, 'tools', 'package-assemble.js'), join(dev, 'haiccing', p))
   tool(join(dev, 'tools', 'package-bundle.js'), join(dev, 'haiccing', p), `--out=${out}`)
+}
+// The manifest names these packages only: one no longer here (removed,
+// renamed) taken out, its bundle too. It is published as it is (an asset
+// of base-linux-haicc's release, what haicc sources download haiccing
+// reads), so it names the release, nothing else.
+{
+  const mf = join(out, 'haiccing', 'manifest.json')
+  const m = JSON.parse(readFileSync(mf, 'utf8'))
+  const keep = new Set(packages.map(p => `haiccing/${p}`))
+  const gone = Object.keys(m.packages).filter(k => !keep.has(k))
+  for (const k of gone) {
+    const f = join(out, m.packages[k].file)
+    if (existsSync(f)) unlinkSync(f)
+    delete m.packages[k]
+  }
+  if (gone.length) writeFileSync(mf, JSON.stringify(m, null, 2) + '\n')
 }
 
 // 2. Bare's runtime, as the lockfile pins it: its tarball, by its
