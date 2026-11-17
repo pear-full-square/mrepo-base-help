@@ -770,3 +770,19 @@ where it takes any, Returns, Errors, Design); the config in
   from the request and the steps before; one override an action an
   mrepo, by the package that defines it, as runtime config is. In place
   of the before and after hooks.
+- The human: "the override would be a script. It would mean that the
+  component replace protocol action mapping with a script". Our reading,
+  put back: the runtime maps each protocol action to its implementation
+  (today the package's `protocol.js`); the package defining an mrepo may
+  replace an entry with a script, `mrepo/runtime/actions/<protocol>.<action>.json`,
+  laid into the runtime layer as hooks are; only the implementation
+  changes, the interface (where offered, what it takes, the gate) stays
+  the protocol's; inside the script the action is the original; one
+  mapping an mrepo. To settle while building: the parameters
+  (`{target}`, `{package}`, a step's output), the script's answer (the
+  original action's output). Built as its own part: the mapping
+  overridable in the runtime, a `registry` protocol (the registry's
+  logic out of `mrepo-base-boot`), the boot component's scripts
+  (`teardown` with the cascade, `deploy`), boot offered anywhere below
+  `main`, the unique URI from the structure's documents; a proof of
+  concept and its how-to first.
