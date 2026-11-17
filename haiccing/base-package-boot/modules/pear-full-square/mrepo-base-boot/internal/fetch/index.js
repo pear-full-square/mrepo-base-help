@@ -1,5 +1,5 @@
-// fetch: a package into the store, checked; also structureOf, put, parseSource (README.md beside it).
-import { existsSync, readFileSync, writeFileSync, mkdirSync, rmSync, linkSync, copyFileSync } from 'bare-fs'
+// fetch: a package into the store, checked; also available, structureOf, put, parseSource (README.md beside it).
+import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync, rmSync, linkSync, copyFileSync } from 'bare-fs'
 import { join, dirname } from 'bare-path'
 import crypto from 'bare-crypto'
 import Bundle from 'bare-bundle'
@@ -17,6 +17,21 @@ function find (sources, pkg) {
     if (entry && existsSync(join(s.path, entry.file))) return { source: s.path, entry }
   }
   return null
+}
+
+// Every package the sources offer, each once, the first source's first:
+// the packages in each folder source's <org>/manifest.json, sorted.
+export function available (sources) {
+  const out = new Set()
+  for (const s of sources) {
+    if (s.kind !== 'folder' || !existsSync(s.path)) continue
+    for (const org of readdirSync(s.path).sort()) {
+      const mf = join(s.path, org, 'manifest.json')
+      if (!existsSync(mf)) continue
+      for (const pkg of Object.keys(JSON.parse(readFileSync(mf, 'utf8')).packages ?? {})) out.add(pkg)
+    }
+  }
+  return [...out].sort()
 }
 
 export function fetch ({ store, sources, pkg }) {

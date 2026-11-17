@@ -164,6 +164,7 @@ HDLC is a protocol of its own:
   its generic tests copied, its pin recorded.
 - `products.sh <module>`, `packages.sh -m <what> <package>`: the
   product repositories updated.
-- `info-extract.js`, `code-check.js`: the checks; `info-view.js`: every
-  package's and mrepo's info in one page, browsed by keywords.
+- `info-extract.js`, `code-check.js`: the checks; `info-view.js`: the docs
+  view, the docs mrepo of a transient install (every package the sources
+  offer) in one page, browsed by keywords.
 - `docker.sh`: a Docker daemon made sure to answer.

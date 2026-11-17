@@ -8,12 +8,14 @@ only what is registered for it.
 
 ## Signature
 
-`place({ dir, store, sources, list })`: `sources` as `parseSource`
-returns them; `list` the packages, `<org>/<package>`.
+`place({ dir, store, sources, list, documented })`: `sources` as
+`parseSource` returns them; `list` the packages, `<org>/<package>`;
+`documented` those documented only (default none): each its bundle, no
+addon, marked `documented` with no entry: nothing of it runs.
 
 ## Returns
 
-`{ packages: { <org>/<package>: { sha256, id, entries, addons } }, committed }`.
+`{ packages: { <org>/<package>: { sha256, id, entries, addons, documented? } }, committed }`.
 `committed` is false when the manifest is unchanged.
 
 ## Errors

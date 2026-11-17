@@ -832,3 +832,21 @@ with it; the cascade is the boot component's override (`review-code`).
   protocols, custom versions scripts in a component's script library;
   tried with the solution install (`base-solution-haicc`, `tasks.md`).
   Open: how scripts run.
+- **How scripts run, settled** (the human): "can we create the scripts
+  as shell scripts?"; ours: yes, outside a request (a script inside one
+  calling its own mrepo would wait on itself). The human: "if we submit
+  all request to inbox for base then we can use a single gateway for
+  launching commands. ... I saw an internal script with another
+  implementation and I don't think it is helpful to have two
+  languages." Ours: three ways of launching today (the command line,
+  boot hooks placed by the runtime, service hooks run inside the
+  transition's request) and the continuation's command lists run by the
+  terminal; one gateway, one language, put back with its consequences.
+  The human: "let's lift the restrictions for base. We'll solve the
+  different routes later, can be done with internal inbox and such, but
+  KISS and leave it for now. In base haicc and sh will be present (linux
+  pc and container). If we do mobile we do browser stuff. continuations
+  and hook are put in request response and handled by terminal to submit
+  automatically. Although we have lifted access restrictions, we can
+  still tag requests and internally or externally triggered." Recorded
+  in `tasks.md`, `base-solution-haicc`.

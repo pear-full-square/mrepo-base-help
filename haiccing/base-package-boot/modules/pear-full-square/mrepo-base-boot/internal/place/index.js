@@ -6,7 +6,7 @@ import { fetch, put } from '../fetch/index.js'
 
 const author = { name: 'mrepo-boot', email: 'mrepo-boot@localhost' }
 
-export async function place ({ dir, store, sources, list }) {
+export async function place ({ dir, store, sources, list, documented = [] }) {
   const mine = join(dir, 'packages')
   const packages = {}
   for (const pkg of list) {
@@ -15,6 +15,13 @@ export async function place ({ dir, store, sources, list }) {
     put(join(store, `${pkg}.bundle`), join(mine, `${pkg}.bundle`))
     for (const a of entry.addons) put(join(store, 'addons', a), join(mine, 'addons', a))
     packages[pkg] = { sha256: entry.sha256, id: entry.id, entries: entry.entries ?? [], addons: entry.addons }
+  }
+  // Documented only: the bundle, for its pages; no entry, no addon: nothing
+  // of it runs here.
+  for (const pkg of documented) {
+    const entry = fetch({ store, sources, pkg })
+    put(join(store, `${pkg}.bundle`), join(mine, `${pkg}.bundle`))
+    packages[pkg] = { sha256: entry.sha256, id: entry.id, entries: [], addons: [], documented: true }
   }
   // The packages layer: the list and the hashes (not the bytes), the sources
   // used and the store (unchanged: no commit).

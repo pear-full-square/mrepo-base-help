@@ -3,10 +3,11 @@
 The docs component: the docs mrepo, the platform's documentation, deployed in the boot mrepo and read with info.
 
 The docs mrepo holds the documentation packages and the `info` protocol,
-nothing else. It is deployed in the boot mrepo, at `docs`, as part of
-the boot install; its runtime extracts its pages as it starts. Every
-other mrepo answers about what is deployed in it; the platform's
-documentation is read here.
+and documents every other package the sources offer: the install's
+manual. It is deployed in the boot mrepo, at `docs`, as part of the boot
+install; its runtime extracts its pages as it starts. Every other mrepo
+answers about itself, what is deployed in it; the whole platform is read
+here.
 
 ## Links
 
@@ -26,6 +27,14 @@ documentation is read here.
 - [base-docs-uri](../base-docs-uri/)
 - [base-docs-xpath](../base-docs-xpath/)
 - [base-docs-vision](../base-docs-vision/)
+
+## Documented
+
+Beyond its list, `"documents": "sources"`: every package the sources
+offer, placed as documentation only (its bundle; nothing laid in, nothing
+run), each at its keyword below the top: `haicc docs info/get boot`.
+What is installed is what is documented; later the solution's list
+names them.
 
 ## Deploying
 

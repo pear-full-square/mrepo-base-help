@@ -13,7 +13,7 @@ import { record, wrap, guid } from 'mrepo-base-request'
 import { ask } from 'mrepo-base-runtime'
 import { spawn, spawnSync } from 'bare-subprocess'
 import process from 'bare-process'
-import { build, deploy, teardown, redeploy, place, parseSource } from '../index.js'
+import { build, deploy, teardown, redeploy, place, parseSource, lay } from '../index.js'
 
 const lj = (dir, mode) => { mkdirSync(dir, { recursive: true }); writeFileSync(join(dir, 'layer.json'), JSON.stringify({ mode, description: 'test' })) }
 const sha256 = b => crypto.createHash('sha256').update(b).digest('hex')
@@ -83,6 +83,34 @@ function context (dir, backend, work) {
   }
   return { exec, commit, repo }
 }
+
+test('documents: sources: every package the sources offer beyond the list placed, documented only: no structure laid in, no entry, no addon', async (t) => {
+  const pkgs = mkdtempSync(join(tmpdir(), 'documents-src-'))
+  const into = mkdtempSync(join(tmpdir(), 'documents-into-'))
+  const dir = mkdtempSync(join(tmpdir(), 'documents-dir-'))
+  const store = mkdtempSync(join(tmpdir(), 'documents-store-'))
+  try {
+    source(pkgs, {
+      'haiccing/base': { 'runtime/layer.json': { mode: 'atomic' } },
+      'haiccing/other': { 'other/layer.json': { mode: 'atomic' }, 'runtime/hooks/boot/x.json': ['x/y'] },
+      'haiccing/docs': { 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/base', 'haiccing/docs'], documents: 'sources' } },
+      'haiccing/plain': { 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/plain'] } },
+      'haiccing/odd': { 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/odd'], documents: 'all' } }
+    })
+    const sources = [parseSource(`folder:${pkgs}`)]
+    const { list, documented } = lay({ store, sources, target: 'haiccing/docs', into })
+    t.alike([list, documented], [['haiccing/base', 'haiccing/docs'], ['haiccing/odd', 'haiccing/other', 'haiccing/plain']], 'the list, and every other package the sources offer, sorted')
+    t.absent(existsSync(join(into, 'other')), 'a documented package lays nothing in')
+    t.alike(lay({ store, sources, target: 'haiccing/plain', into: mkdtempSync(join(tmpdir(), 'documents-plain-')) }).documented, [], 'no documents: nothing beyond the list')
+    t.exception(() => lay({ store, sources, target: 'haiccing/odd', into }), /haiccing\/odd: documents what\? all \(sources\)/, 'documents anything but sources: refused')
+    lj(join(dir, 'packages'), 'replicated')
+    const { dir: built } = await build({ from: dir, work: store, name: 'docs' })
+    const { packages } = await place({ dir: built, store, sources, list, documented })
+    t.alike(Object.keys(packages), [...list, ...documented], 'all placed, the list first')
+    t.alike([packages['haiccing/other'].documented, packages['haiccing/other'].entries, packages['haiccing/base'].documented], [true, [], undefined], 'the documented marked, no entry: nothing of it runs')
+    t.ok(existsSync(join(built, 'packages', 'haiccing', 'other.bundle')), 'its bundle there, for its pages')
+  } finally { for (const d of [pkgs, into, dir, store]) rmSync(d, { recursive: true, force: true }) }
+})
 
 test('deploy from a target package\'s list, placed by its unique URI, its link recorded; redeploy; teardown; a script answered as a continuation; the mrepo registry, several torn down; a swarm\'s node', async (t) => {
   const work = mkdtempSync(join(tmpdir(), 'deploy-'))

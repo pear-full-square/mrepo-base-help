@@ -364,6 +364,7 @@ has "$out" '{"keyword":"vision","oneliner":"' "vision"
 has "$(haicc --output docs info/get hdlc/validation 2>&1)" '"title":"Validation"' "haicc docs info/get hdlc/validation: a section of how work is done"
 has "$(haicc --output docs info/get package/mrepo/request 2>&1)" '"title":"/request"' "package/mrepo/request: a layer at run time, in the package specification"
 has "$(haicc --output docs info/get info/get 2>&1)" '"title":"get"' "info/get: the info protocol's action, documented there too"
+has "$(haicc --output docs info/get boot/deploy 2>&1)" '"title":"deploy"' "boot/deploy: a package the docs mrepo does not run, documented (documents: sources)"
 is "$(haicc --output . boot/teardown docs 2>&1)" '{"tornDown":"docs"}' "haicc . boot/teardown docs: torn down again"
 
 # 10. torn down: the node; the service stopped and shut down; the host

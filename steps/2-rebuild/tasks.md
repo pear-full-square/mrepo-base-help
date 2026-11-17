@@ -1855,8 +1855,27 @@ registry, we can create info views on all mrepos."
    versions scripts, in the base family; scripts will be able to
    replace protocols. Not on `boot/deploy`: `service/initialise`, say,
    run differently for each type. Tried out with the solution install.
-   **Open, to discuss**: how scripts run ("all command run as haicc
-   (the external commands) but we need some more discussion on this").
+   **Settled** (the human, 2026-11-17), how scripts run, for base,
+   KISS: (a) **one gateway**, the inbox: every command submitted there,
+   from a person, the AI, a script, a hook ("if we submit all request to
+   inbox for base then we can use a single gateway for launching
+   commands"); (b) **one language**, shell calling `haicc` ("I don't
+   think it is helpful to have two languages"): a component's scripts and
+   its hooks alike; `haicc` and `sh` present wherever base runs, a Linux
+   machine and a container; mobile later, browser stuff; (c)
+   **continuations and hooks put in the request's response** and handled
+   by the terminal, the `haicc` command, which submits them
+   automatically: the in-request hook runner (the service's) and the
+   runtime's own boot-hook placing go, the terminal the one runner; (d)
+   **the access restrictions lifted** for base (the protocol protocol,
+   internal against external): requests still tagged, triggered
+   internally or externally; the different routes (an internal inbox and
+   such) later. Built with the solution install, a proof of concept and
+   its how-to first; the tests that check "in the same request" change.
+   **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
+   bundle, so the docs mrepo cannot document it; a documentation-only
+   form of it with the solution, the solution's list naming what the
+   docs mrepo documents in place of `documents: sources`.
 3. **The Splectral viewer** (`splectral-docs`, above).
 4. **Info views on every mrepo**: the boot mrepo's registry lists them;
    each answers `info/get` about itself. **Settled** (the human: "yes,

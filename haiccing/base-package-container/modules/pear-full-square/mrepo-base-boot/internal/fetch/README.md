@@ -21,6 +21,8 @@ The package's manifest entry: `{ file, id, sha256, entries, addons, ... }`.
 
 ## Also exported
 
+- `available(sources)`: every package the folder sources offer, from
+  each `<org>/manifest.json`, each once, sorted.
 - `structureOf({ store, pkg })`: a package's `mrepo/` part, read from its
   bundle in the store: `{ <path inside mrepo/>: bytes }`.
 - `put(from, to)`: a file into place, hard linked where it shares a disk,

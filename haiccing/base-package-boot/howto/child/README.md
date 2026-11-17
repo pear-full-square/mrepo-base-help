@@ -27,3 +27,5 @@ haicc . boot/teardown host
 
 - **Tear down from the inside out**: a child's own children are not
   torn down with it.
+- **What the boot mrepo deployed**, listed and torn down by a query: the
+  boot component's how-to `registry`.

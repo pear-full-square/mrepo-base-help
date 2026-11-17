@@ -4454,3 +4454,46 @@ the partial run: every pre-release passing, `tools/bare
 tools/release.js --strict` exit 0, `tools/bare tools/info-extract.js`
 (the boot mrepo, a host, the docs mrepo: no problem) and `--files`, and
 `tools/bare tools/code-check.js`: no problems.
+
+## 87. The review of boot; scripts in place of the override; the docs mrepo the install's manual, the docs view from a transient install (2026-11-17)
+
+**The review of `base-package-boot`** (`review.md`): the menu jumps to
+its three actions, "Config" a table of where each is offered and what
+it takes, "Commands" and "How to" three how-tos (`howto/child`,
+`howto/swarm-node`, `howto/registry`), `teardown`'s page its three URI
+forms, the cascade claim removed (not what the action does).
+
+**The override replaced** (the human): no override for base; base
+operations are protocols, custom versions scripts in a component's
+script library, in the base family; base on one boot component in three
+versions (host, node, container node), by `service/initialise` say, not
+`boot/deploy`; tried with the solution install. How scripts run: open,
+to discuss (`tasks.md`, `base-solution-haicc`).
+
+**The docs view** (the human: "if we build it as the haicc docs view then
+it should only contain the docs from the packages from the base solution
+that we have in sources"; our five points, agreed: the docs mrepo the
+solution's manual, each mrepo its own page; the list generated, not
+kept by hand; one view; the view from a deployed docs mrepo;
+`base-linux-haicc` documented later, with the solution):
+
+- **`documents: sources`** in a list (`mrepo/packages/layer.json`), a new
+  pattern, its how-to (`base-docs-package/howto/documents`): every package
+  the sources offer beyond the list placed in the mrepo as documentation
+  only, its bundle, no structure, no addon, marked `documented` with no
+  entry in the packages manifest; the runtime loads no protocol of it and
+  `runtime/run` refuses it; `info/extract` walks it at its keyword below
+  the top, the mrepo's own still the last of its list. In
+  `mrepo-base-boot` (`available`, `lay`, `place`), `mrepo-base-info`,
+  `mrepo-base-runtime`; the implementation validation's pattern
+  `documents`.
+- **The docs mrepo**: `base-component-docs` documents the sources: its
+  list (runtime, protocol, info, the six documentation packages), and the
+  nine others documented: `haicc docs info/get boot/deploy`.
+- **`tools/info-view.js`**: the docs view only, from a transient install
+  as `run.sh` makes one (installed in a temporary folder, the sources
+  linked, the boot, `docs` deployed, its info layer read, torn down,
+  removed): 19 packages, 9 documented, 1065 keywords, 400 pages, no
+  problem, in some 20 seconds, nothing left running. The page the same
+  template, its selector hidden with one view; more views (each mrepo of
+  an install) later.

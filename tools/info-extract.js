@@ -40,23 +40,30 @@ if (args.includes('--files')) {
 const sources = resolve(flag('sources', join(dev, 'sources')))
 let components = args.filter(a => !a.startsWith('--'))
 if (!components.length) components = ['haiccing/base-component-boot', 'haiccing/base-component-haicc', 'haiccing/base-component-docs']
+// a package's bundle, what extraction reads of it
+const read = (pkg, documented = false) => {
+  const b = Bundle.from(readFileSync(join(sources, `${pkg}.bundle`)))
+  const wanted = {}
+  for (const k of Object.keys(b.files)) if (WANTED(k)) wanted[k] = b.read(k)
+  return { pkg, files: wanted, paths: Object.keys(b.files), documented }
+}
+// every package the sources offer: each org's manifest
+const offered = () => readdirSync(sources).filter(o => existsSync(join(sources, o, 'manifest.json'))).flatMap(o => Object.keys(JSON.parse(readFileSync(join(sources, o, 'manifest.json'))).packages ?? {})).sort()
 let all = 0
 for (const c of components) {
-  const list = JSON.parse(readFileSync(join(dev, c, 'mrepo', 'packages', 'layer.json'))).packages
+  const def = JSON.parse(readFileSync(join(dev, c, 'mrepo', 'packages', 'layer.json')))
+  const list = def.packages
+  // documents: sources: every other package the sources offer, documented only
+  const documented = def.documents === 'sources' ? offered().filter(p => !list.includes(p)) : []
   const out = resolve(flag('out', join(dev, 'sources', 'info')), c.split('/').pop())
-  const files = extract(list.map(pkg => {
-    const b = Bundle.from(readFileSync(join(sources, `${pkg}.bundle`)))
-    const wanted = {}
-    for (const k of Object.keys(b.files)) if (WANTED(k)) wanted[k] = b.read(k)
-    return { pkg, files: wanted, paths: Object.keys(b.files) }
-  }))
+  const files = extract([...list.map(pkg => read(pkg)), ...documented.map(pkg => read(pkg, true))])
   if (existsSync(out)) rmSync(out, { recursive: true })
   for (const [p, bytes] of Object.entries(files)) { mkdirSync(dirname(join(out, p)), { recursive: true }); writeFileSync(join(out, p), bytes) }
   const problems = JSON.parse(files['/problems.json'].toString())
   const byCheck = {}
   for (const p of problems) byCheck[p.check] = (byCheck[p.check] ?? 0) + 1
   for (const p of problems) console.log(`${c}\t${p.page ?? p.keyword}\t${p.check}\t${p.detail}`)
-  console.log(JSON.stringify({ component: c, out, packages: list.length, keywords: Object.keys(JSON.parse(files['/index.json'].toString())).length, problems: problems.length, byCheck }))
+  console.log(JSON.stringify({ component: c, out, packages: list.length, documented: documented.length, keywords: Object.keys(JSON.parse(files['/index.json'].toString())).length, problems: problems.length, byCheck }))
   all += problems.length
 }
 process.exit(all ? 1 : 0)

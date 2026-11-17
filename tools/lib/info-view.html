@@ -1,4 +1,4 @@
-<title>haicc info view</title>
+<title>haicc docs view</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -76,7 +76,7 @@ aside h2 { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing
 
 <div class="wrap">
   <header>
-    <h1>haicc info <span>· by keywords, as info/get answers</span></h1>
+    <h1>haicc docs <span>· the install's documentation, by keywords, as info/get answers</span></h1>
     <div class="note" id="made"></div>
   </header>
   <div class="bar">
@@ -208,6 +208,7 @@ function route () { const r = parse(location.hash); if (r.t !== T || index !== t
 window.addEventListener('hashchange', route)
 const sel = document.getElementById('target')
 sel.innerHTML = `<optgroup label="An mrepo, its packages together">${targets.map((t, i) => t.kind === 'mrepo' ? `<option value="${i}">${t.at === '.' ? 'boot mrepo' : t.at + ' mrepo'}: ${esc(slug(t))}</option>` : '').join('')}</optgroup><optgroup label="A package on its own">${targets.map((t, i) => t.kind === 'package' ? `<option value="${i}">${esc(slug(t))}${t.problems.length ? ' (' + t.problems.length + ')' : ''}</option>` : '').join('')}</optgroup>`
+sel.hidden = targets.length < 2
 sel.addEventListener('change', () => { T = Number(sel.value); index = targets[T].index; location.hash = hashOf(TOP) })
 document.getElementById('pb').addEventListener('click', () => { const P = document.getElementById('problems'); P.hidden = !P.hidden })
 document.getElementById('made').textContent = 'Extracted ' + DATA.made.slice(0, 16).replace('T', ' ') + ' UTC, from the sources'
