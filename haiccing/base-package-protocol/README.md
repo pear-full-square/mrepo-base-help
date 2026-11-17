@@ -19,24 +19,26 @@ into its runtime layer.
 
 ## Hooks
 
-A hook is a file holding one command, its parts:
+The protocols are opened and closed by the hooks' lines, a file a
+transition (`mrepo/runtime/hooks/<transition>.haicc`):
 
 ```
-/runtime/hooks/boot/activate-info.json       ["protocol/activate", ".", "info"]
-/runtime/hooks/start/activate-boot.json      ["protocol/activate", ".", "boot"]
-/runtime/hooks/stop/deactivate-boot.json     ["protocol/deactivate", ".", "boot"]
+boot.haicc     protocol/activate . info
+start.haicc    protocol/activate . boot
+stop.haicc     protocol/deactivate . boot
 ```
 
-- `boot`: what the mrepo always offers. Fired by the runtime as it starts.
-- `start` and `stop`: what sits behind the service's door. Fired by the
+- `boot`: what the mrepo always offers, run by the runtime as it starts.
+- `start` and `stop`: what sits behind the service's door, run by the
   service.
 
 ## Active protocols
 
 The active set is the `protocols` layer: one file a protocol,
 `/protocols/<protocol>.json`, holding its config. The `protocol` protocol
-itself is not activated by default: opening and closing protocols is the
-hooks' business, not a request from outside.
+itself is opened by the runtime as it starts; for base it is open to
+the outside too (the restrictions lifted), each request tagged by its
+trigger.
 
 ## Config
 

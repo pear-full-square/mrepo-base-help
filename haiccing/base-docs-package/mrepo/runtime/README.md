@@ -28,25 +28,26 @@ that allow each are that protocol's config.
 
 ## Hooks
 
-The commands the mrepo runs on a status transition: files, one folder a
-transition, each holding one command, its parts.
+What the mrepo runs on a status transition: a file a transition, its
+lines simple commands, standing at `main`.
 
 ```
-/runtime/hooks/boot/activate-info.json        ["protocol/activate", ".", "info"]
-/runtime/hooks/initialise/info-extract.json   ["info/extract"]
-/runtime/hooks/start/activate-boot.json       ["protocol/activate", ".", "boot"]
-/runtime/hooks/stop/deactivate-boot.json      ["protocol/deactivate", ".", "boot"]
+/runtime/hooks/boot.haicc         protocol/activate . info
+                                  info/extract
+/runtime/hooks/initialise.haicc   info/extract
+/runtime/hooks/start.haicc        protocol/activate . boot
+/runtime/hooks/stop.haicc         protocol/deactivate . boot
 ```
 
-- `boot`: fired by the runtime as it starts, every time. Each hook is
-  placed as a request of the mrepo's own, in name order; nothing is taken
-  from the inbox until they are done.
-- `initialise`, `start`, `stop`, `shutdown`: fired by the service. The
-  action runs its transition's hooks in its own execution, then moves the
-  state. A hook that fails fails the transition, and nothing of it stays.
-- No config is written or merged: a file there is a hook. Only the
-  package that defines the mrepo drops them in.
-- Hooks run as the mrepo's own: not held at the door.
+- `boot`: run by the runtime as it starts, every time, after it has
+  opened the protocol protocol itself; nothing else is taken from the
+  inbox until its lines are done.
+- `initialise`, `start`, `stop`, `shutdown`: run by the service; the
+  transition waits for its lines, then moves the state. A line that
+  fails fails the transition: the state stays.
+- Each line a request of the mrepo's own, internal, recorded; the first
+  that fails ends the file. Only the package that defines the mrepo
+  drops them in.
 
 ## Process
 
