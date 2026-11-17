@@ -647,3 +647,22 @@ On our three small points (the human):
   containers." The repositories to create: `base-docs-package` (the
   rename), `base-docs-hdlc`, `base-docs-vision`, `base-docs-uri`,
   `base-docs-xpath`, `base-docs-haicc`.
+- **Where an AI expects the static documentation** (the human, on our
+  answer of files in the development repository: "you get it wrong
+  here. You will be working on haic, slowly all the repositiories will
+  be within the platform. For the linux host there is a commandline
+  entry point to an install. The install consists of local mrepos, of
+  swarms and nodes. You can request info from any of the mrepos in the
+  structure. However, your access is through the linux commandline. In
+  that sense it is not relevant to include the docs packages in all
+  mrepos because they are about static data, but we can if you prefer
+  to have it at hand everywhere.") Ours: once, at the root.
+- **A docs mrepo** (the human): "what about creating a docs mrepo in the
+  boot mrepo? Boot itself only has the boot and crud protocols really,
+  it is minimal."; "command would be haicc docs info/get ...". So
+  `base-component-docs`: the runtime, the protocol protocol, `info`, the
+  documentation packages, the component last; no service, `info`
+  activated and extracted at `boot`; deployed in the boot mrepo at
+  `docs`; read with `haicc docs info/get <keywords>`. The documentation
+  packages leave every other list; an mrepo's own `info` is about what
+  is deployed in it. Deployed by the install (ours, not answered).
