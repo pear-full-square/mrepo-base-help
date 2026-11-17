@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-vision",
-  "content": "738464e1595a77c8f121de6e0d545bfb3b8a0caf7bb61d4e3dfec5a9d9b65112",
+  "content": "bc8c35d5d246f6a6f0e301faacb2bbbcbb884f59e3bb80106b23ffec57121bc4",
   "bare": "v1.36.0",
-  "date": "2026-11-17T13:35:45.514Z",
+  "date": "2026-11-17T23:26:39.393Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -101,12 +101,12 @@
       "unit": "/test/modules/pear-full-square/pkgm-base-check",
       "ok": true,
       "tests": {
-        "passed": 19,
-        "total": 19
+        "passed": 23,
+        "total": 23
       },
       "asserts": {
-        "passed": 54,
-        "total": 54
+        "passed": 62,
+        "total": 62
       },
       "failures": []
     }

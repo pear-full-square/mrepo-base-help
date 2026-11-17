@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-runtime
 
-The package passed its `full` set: all 22 units, 311 of 311 tests and 2011 of 2011 asserts.
+The package passed its `full` set: all 22 units, 315 of 315 tests and 2019 of 2019 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 22 units, 311 of 311 tests and 2011 of 20
 | Set | `full` |
 | Result | passed |
 | Units | 22 of 22 passed |
-| Tests | 311 of 311 passed |
-| Asserts | 2011 of 2011 passed |
-| Run | 2026-11-17 22:07 UTC |
+| Tests | 315 of 315 passed |
+| Asserts | 2019 of 2019 passed |
+| Run | 2026-11-17 23:33 UTC |
 | Bare | v1.36.0 |
-| Content | `74e96729ec2968dc42c0ecb8cd68d9c70e9932b16e6d05bbdc486ad5e14736ac` |
+| Content | `aedcda5bafe088b91f02b3f1484fd87fd9984c33f0adf79ccdf929df7154dd01` |
 
 ## Units
 
@@ -39,6 +39,6 @@ The package passed its `full` set: all 22 units, 311 of 311 tests and 2011 of 20
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 19 of 19 | 54 of 54 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 62 of 62 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.
