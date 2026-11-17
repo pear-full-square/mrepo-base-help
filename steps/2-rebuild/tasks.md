@@ -1846,7 +1846,13 @@ packages. That means that it includes the UI element sets and create a
 page or pages with it."): a Splectral component carries its commands,
 its UI element set (by copy, as a package carries its modules), its
 info, and makes its own page or pages; the server carries no UI
-elements of its own. The proposal updated (question 2 settled).
+elements of its own. The proposal updated (question 2 settled). And
+(the human: "the splectral server is in a sense the data layer, managing
+the commands. That may later involve caching etc."): the server is the
+data layer, managing the commands the pages run; later caching there
+(an answer per `(at, command)`, dropped when the record stream shows a
+change touching it; one request for the same command from several
+pages), not for base.
 
 ## The order after the restructure (the human, 2026-11-17)
 
