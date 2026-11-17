@@ -26,8 +26,8 @@ in, in that order, and the child is built at `<parent>/main/<name>/`.
 
 Asked for a script of the package (the request's flag,
 `continuation=<script>`), it answers with it as its continuation: the
-script's commands, read from the package's bundle (`scripts/<script>.json`),
-written from the deployed mrepo's own place. A script the package has
+script, shell text, read from the package's bundle (`scripts/<script>.sh`),
+run for the deployed mrepo's position (`HAICC_AT`). A script the package has
 not is refused before anything is built, with those it has.
 
 What it writes in the parent:

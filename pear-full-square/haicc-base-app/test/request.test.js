@@ -43,7 +43,7 @@ test('request: the record written, value by value; its response read as stored',
     t.alike(Object.keys(core), ['topic', 'key', 'timestamp', 'headers', 'value'], 'its value the core: a record')
     t.is(core.topic, '/haicc/terminal', 'the core addressed back: where the completed form is to arrive')
     t.is(core.key, r.key, 'the same key')
-    t.alike(core.headers, {}, 'its headers empty')
+    t.alike(core.headers, { trigger: 'external' }, 'its headers: triggered from outside, a terminal')
     t.alike(core.value, ['boot/deploy', 'host', 'a "b" c'], 'its value the command: the parts as given, unnamed')
     t.is(r.text, readFileSync(join(m.root, 'outbox', `${r.key}.json`), 'utf8'), 'the response: the document in the outbox folder under the same key, as stored')
     t.alike(JSON.parse(r.text).value.value.output, { ok: 1 })

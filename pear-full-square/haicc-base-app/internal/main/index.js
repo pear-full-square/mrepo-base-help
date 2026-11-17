@@ -3,8 +3,8 @@ import { existsSync } from 'bare-fs'
 import { join } from 'bare-path'
 import os from 'bare-os'
 import process from 'bare-process'
-import { viewOf, CEILING } from 'mrepo-base-request'
-import { command, isRoot } from '../command/index.js'
+import { viewOf } from 'mrepo-base-request'
+import { command } from '../command/index.js'
 import { request } from '../request/index.js'
 import { unpack } from '../unpack/index.js'
 import { outcome } from '../outcome/index.js'
@@ -17,7 +17,9 @@ import { USAGE } from '../usage.js'
 
 // console: the command line's own output: what the user asked for, and what went wrong
 // (columns: the terminal's width now, null when the output is none)
-const CONSOLE = { out: line => console.log(line), err: line => console.error(line), stdio: 'inherit', columns: () => (process.stdout.isTTY ? process.stdout.columns : null) }
+const CONSOLE = { out: line => console.log(line), err: line => console.error(line), stdio: 'inherit', columns: () => (process.stdout.isTTY ? process.stdout.columns : null), stdin: () => readStdin() }
+// stdin whole, as text: a heredoc's lines
+const readStdin = () => new Promise(resolve => { if (process.stdin.isTTY) return resolve(''); let text = ''; process.stdin.on('data', d => { text += d.toString() }); process.stdin.on('end', () => resolve(text)) })
 
 export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE } = {}) {
   const home = env.HAICC_HOME || join(os.homedir(), '.haicc')
@@ -55,19 +57,18 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
       if (print === 'output') io.out(JSON.stringify(o.output))
       return o
     }
-    const o = await send(c.parts)
-    // A continuation: the response says what to go on with, a script: each
-    // command sent from the position it is written at, after the response
-    // of the one before; the first that fails ends it. A simple script: a
-    // continuation answered inside one is not run. At most CEILING commands.
+    // haicc/script and its URI, no lines after them: the lines from stdin (a heredoc)
+    const parts = c.parts.at(-2) === 'haicc/script' && io.stdin ? [...c.parts, await io.stdin()] : c.parts
+    const o = await send(parts)
+    // A continuation: the response says what to go on with, a script, its
+    // lines simple commands: sent on as one command to the root, which has
+    // the haicc protocol, haicc/script with the position it was answered for
+    // as its URI: each line run there, as if typed at it; its outcome
+    // printed. (The mrepo it is for need not link the haicc protocol.)
     if (o.continuation) {
-      const { at, commands } = o.continuation
-      if (commands.length > CEILING) throw new Failure(`a continuation of ${commands.length} commands: not run (at most ${CEILING})`, 1)
-      for (const parts of commands) {
-        // (said as it would be typed, where records are printed for reading)
-        if (print === 'record') io.out(`haicc ${at} ${parts.join(' ')}`)
-        await send(isRoot(at) ? parts : ['haicc', at, ...parts])
-      }
+      const { at, script } = o.continuation
+      if (print === 'record') io.out(`haicc . haicc/script ${at} ...`)
+      await send(['haicc/script', at, script])
     }
     return 0
   } catch (err) {

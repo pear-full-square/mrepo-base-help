@@ -23,9 +23,8 @@ haicc <URI> --flags <flag>... -- <command>      flags after a URI: that
                                                 continuation=<script>, a
                                                 script to go on with, where
                                                 a command has some (a deploy:
-                                                its package's): run here, a
-                                                command after the response of
-                                                the one before
+                                                its package's): run here with
+                                                sh, HAICC_AT its position
 haicc <URI> <command> <URI> --flags <flag>...   after the last command's URI:
                                                 that command's, closed by the
                                                 end of the line

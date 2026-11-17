@@ -67,7 +67,7 @@ function context (dir, backend, work) {
     log: function (level, event, data = {}) { (this.entries ??= []).push({ level, event, ...data }) },
     step: async function (event, data, fn, level = 'verbose') { const r = await fn(); (this.entries ??= []).push({ level, event, ...(typeof data === 'function' ? data(r) : data) }); return r },
     // (a continuation answered with: kept)
-    continuation: function (commands, at) { this.continued = { at, commands } },
+    continuation: function (script, at) { this.continued = { at, script } },
     put: (uri, bytes) => edits.push(['put', abs(uri), bytes]),
     remove: uri => edits.push(['remove', abs(uri)]),
     commit: () => commit()
@@ -118,7 +118,7 @@ test('deploy from a target package\'s list, placed by its unique URI, its link r
   try {
     source(pkgs, {
       'haiccing/base': { 'runtime/layer.json': { mode: 'atomic' }, 'runtime/kind.json': { kind: 'base' }, 'runtime/hooks/boot/base.json': ['x/y'], 'inbox/layer.json': { mode: 'non-atomic' } },
-      'haiccing/target': { '/scripts/start.json': [['service/initialise'], ['service/start']], '/scripts/broken.json': '{not json', 'main/layer.json': { mode: 'atomic' }, 'runtime/kind.json': { kind: 'target' }, 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/base', 'haiccing/target'] } }
+      'haiccing/target': { '/scripts/start.haicc': 'service/initialise\nservice/start\n', '/scripts/broken.haicc': '# nothing\n', 'main/layer.json': { mode: 'atomic' }, 'runtime/kind.json': { kind: 'target' }, 'packages/layer.json': { mode: 'replicated', packages: ['haiccing/base', 'haiccing/target'] } }
     })
     const dir = await parent(work, [parseSource(`folder:${pkgs}`)])
     const backend = p2pgitBackend(join(dir, '.git'), { fs })
@@ -182,11 +182,11 @@ test('deploy from a target package\'s list, placed by its unique URI, its link r
     // a continuation asked for: a script of the package deployed, answered with the deploy
     await t.exception(deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'nope' } }), /no script: nope \(haiccing\/target has broken, start\)/, 'a script the package has not: refused, with those it has')
     t.absent(existsSync(join(work, 'mrepos', 'local', 'scripted')), 'before anything is built')
-    await t.exception(deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'broken' } }), /not a script: haiccing\/target broken/)
+    await t.exception(deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'broken' } }), /not a script: haiccing\/target broken \(no command in it\)/)
     exec.continued = null
     await deploy(exec, { uri: ['main', 'scripted'], args: ['haiccing/target'], flags: { continuation: 'start' } })
     await commit()
-    t.alike(exec.continued, { at: 'scripted', commands: [['service/initialise'], ['service/start']] }, 'deploy with continuation=start: the package\'s script of that name answered as its continuation, written from the deployed mrepo\'s place')
+    t.alike(exec.continued, { at: 'scripted', script: 'service/initialise\nservice/start\n' }, 'deploy with continuation=start: the package\'s script of that name answered as its continuation, run for the deployed mrepo\'s position')
     exec.continued = null
     await redeploy(exec, { uri: ['main', 'scripted'] })
     await commit()
