@@ -36,7 +36,8 @@ deployed or torn down.
 What a position means its documents say, not this config: the nearest
 node above it whose document is `{"kind":"swarm"}` makes the child that
 swarm's node (`<swarm>/<name>`); none, it is in its parent's swarm
-(`local/host`). The node above it is there first; a position below a
+(`local/host`). `kind` names the type of a node's data structure; a
+schema's name, later. The node above it is there first; a position below a
 shortcut is another mrepo's, refused. A child's own children
 are not torn down with it: only the machine's `haicc boot/teardown`
 stops every runtime of the install.
