@@ -626,3 +626,9 @@ On our three small points (the human):
   `base-docs-xpath` links to it where a query is a URI. The list:
   `base-docs-package`, `base-docs-hdlc`, `base-docs-uri`,
   `base-docs-xpath`, `base-docs-haicc`.
+- **haicc by meaning** (the human: "ok, haicc info in different places
+  depending on meaning and docs haicc is the platform, linux haicc and
+  app haicc commandline, and then the protocol package haicc"):
+  `base-docs-haicc` the platform (what it is, its levels, our terms);
+  the command line, as typed and as built, in `base-linux-haicc` and
+  `base-app-haicc`; the hops, `haicc/goto`, in `base-package-haicc`.
