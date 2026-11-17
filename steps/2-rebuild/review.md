@@ -746,3 +746,15 @@ where it takes any, Returns, Errors, Design); the config in
   deploy recorded, after teardown removed, before teardown what the
   child deployed torn down: the cascade). Parked for the solution:
   `swarms/`, the cluster, the mrepos of an install.
+- The human: "what about actions that need to run before the command
+  (teardown)". Ours, put to the human: two points an action,
+  `<protocol>.<action>.before/` and `.after/`, run in the same request's
+  execution, in name order. A before hook prepares or refuses: one that
+  fails fails the request, the action not run (a guard too). An after
+  hook records: one that fails fails the request, the action's effects
+  outside the repository staying: bookkeeping that cannot fail goes
+  after, what can fail before. The cascade a before hook
+  (`boot.teardown.before`: what the child deployed torn down first), each
+  teardown running its own before hooks, as deep as the tree; which
+  mrepos the child deployed the `registry` protocol's to answer.
+  Parameters: the action's form before, its output too after.
