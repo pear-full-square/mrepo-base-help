@@ -1851,6 +1851,17 @@ registry, we can create info views on all mrepos."
    names it: to settle then.
 3. **The Splectral viewer** (`splectral-docs`, above).
 4. **Info views on every mrepo**: the boot mrepo's registry lists them;
-   each answers `info/get` about itself. Ours, put to the human: the
-   viewer general from the start, the install's mrepos to choose from,
-   the docs mrepo its default (`splectral/base-view-info`).
+   each answers `info/get` about itself. **Settled** (the human: "yes,
+   general info viewer with docs as default"): the viewer general from
+   the start, the install's mrepos to choose from, the docs mrepo its
+   default (`splectral/base-view-info`).
+
+**A new pattern, a how-to** (the human, 2026-11-17: "When we implement a
+pattern that we haven't done before we should create a howto. Do a poc,
+save it as howto and do the required implementation."; ours: agreed):
+recorded in `base-docs-hdlc`, "Work"; the how-to in the package the
+pattern belongs to. The patterns of parts 85 and 86 written as how-tos
+(ours, put to the human): a new package, a new protocol package, a new
+documentation package, a new component (`base-docs-package`); a
+module's config moved into its package, a package brought to the new
+form (`base-docs-hdlc`).
