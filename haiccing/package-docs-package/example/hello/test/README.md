@@ -7,6 +7,6 @@ The example's tests: `bare test/run.js [<set>]`.
 | `validate` | `start` |
 | `full` | `start` |
 
-| | |
-|---|---|
-| [start/](start/) | the package's entry runs and ends well |
+## Links
+
+- [start](start/)

@@ -1,23 +1,25 @@
 {
   "package": "haiccing/package-docs-package",
-  "content": "da6826d11925a32b1026cc620264f30a8bcdbd660d9ade15ae70edc0a14c1fc4",
+  "content": "a4d5104786e6162809fec0bf5d3a83b55e390f3ab022f4bdbf6a7e16929737b2",
   "bare": "v1.36.0",
-  "date": "2026-11-17T00:01:01.259Z",
+  "date": "2026-11-17T01:05:06.223Z",
   "set": "full",
-  "ok": true,
+  "ok": false,
   "units": [
     {
       "unit": "/test/help",
-      "ok": true,
+      "ok": false,
       "tests": {
-        "passed": 1,
+        "passed": 0,
         "total": 1
       },
       "asserts": {
-        "passed": 2,
+        "passed": 1,
         "total": 2
       },
-      "failures": []
+      "failures": [
+        "its help: every README extracted, none against the rules"
+      ]
     },
     {
       "unit": "/test/code",

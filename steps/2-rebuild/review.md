@@ -534,3 +534,26 @@ On our three small points (the human):
    `howto/get` removed. `base-package-info` written the new way.
 4. The review, package by package: the documentation complete, in the
    keyword structure; the config moved into the package.
+
+### The menu and the included packages (2026-11-17)
+
+- **The links a menu, a label each** (the human): "is duplication of the
+  one-liner necessary, I would say avoid it. Shouldn't a link + label be
+  enough in the table? You could treat the links nearly as navigation
+  structure / menu." A one-liner lives once, in its own README.
+- **The included packages on the README** (the human): "the included
+  packages are known and I think these should be on the readme, if not as
+  link then as enumeration." Ours: links, checked against the list in
+  deploy order. "yes to both, go ahead with the template rules".
+- **Siblings, named** (the human): "The package readme list the
+  linked-in packages with a relative URI (i,.e sibling). On extraction
+  they get changed to child links. What about calling the first set of
+  links the package links and the included packages dependencies (or
+  Included Packages)?"
+- **Keywords later** (the human): "Don't worry about keywords too much,
+  currently we set up the folder structure (and the keywords that come
+  from it) before we go into detail on categorisation."
+- Built (part 84): the template's rules, `## Links` (the menu, every
+  README with a folder below) and `## Included packages` (a package that
+  defines an mrepo, `../<package>/`); "A new package", the clone
+  candidate and its steps; the template's own READMEs as menus.
