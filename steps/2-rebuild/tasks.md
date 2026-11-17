@@ -1829,3 +1829,28 @@ human.
 
 **Order**: after the restructure's validation and push; a POC first
 (the human: "an early view"), the family's structure with it.
+
+## The order after the restructure (the human, 2026-11-17)
+
+"I propose the review one repo at the time with html page 'validation'.
+Afterwards we need to start creating the base-solution-haicc package that
+kicks in with a haicc boot installing host, docs and splectral. Then we
+do the docs viewer component. Because we have all mrepos in the install
+registry, we can create info views on all mrepos."
+
+1. **`package-review`, one repository at a time**: its documentation
+   completed (the protocol's page, its config explained, each action's
+   Signature, Arguments, Returns, Errors, the menu's jumps to its
+   actions, its how-tos), validated by the human in the info view
+   (`tools/info-view.js`, republished at the same link); a commit and a
+   partial validation a package.
+2. **`base-solution-haicc`**: a solution, a new kind beside package and
+   component: the mrepos an install is made of, as a script run by the
+   continuation: the host, the docs mrepo, Splectral, deployed and
+   started; `haicc boot/deploy` with it a whole install. How the boot
+   names it: to settle then.
+3. **The Splectral viewer** (`splectral-docs`, above).
+4. **Info views on every mrepo**: the boot mrepo's registry lists them;
+   each answers `info/get` about itself. Ours, put to the human: the
+   viewer general from the start, the install's mrepos to choose from,
+   the docs mrepo its default (`splectral/base-view-info`).
