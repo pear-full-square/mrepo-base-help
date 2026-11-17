@@ -230,13 +230,27 @@ register () {
   printf '%s\n' "$1" >> "$HAICC_LIST"
 }
 
+# A file fetched over https: tried up to five times, each try going on from
+# what the one before got (-C -), since a connection reset in the middle of
+# a large file is not one of curl's own retries; checked by the caller.
+fetch () {
+  rm -f "$2"
+  _i=1
+  while :; do
+    curl -fsSL --retry 3 --connect-timeout 20 -C - -o "$2" "$1" && return 0
+    [ "$_i" -ge 5 ] && return 1
+    echo "  retrying ($_i): $1" >&2
+    _i=$((_i + 1)); sleep 2
+  done
+}
+
 download_bare () {
   command -v curl >/dev/null 2>&1 || fail "curl is needed to download" 3
   to=$own/$BARE_FILE
   if [ -f "$to" ] && [ "$(sha512_of "$to")" = "$BARE_SHA512" ]; then echo "bare: there, as pinned ($BARE_VERSION)"; return 0; fi
   mkdir -p "$(dirname "$to")"
   echo "bare: fetching $BARE_URL"
-  curl -fsSL --retry 3 --connect-timeout 20 -o "$to.part" "$BARE_URL" || { rm -f "$to.part"; fail "could not fetch Bare's runtime: $BARE_URL" 3; }
+  fetch "$BARE_URL" "$to.part" || { rm -f "$to.part"; fail "could not fetch Bare's runtime: $BARE_URL" 3; }
   [ "$(sha512_of "$to.part")" = "$BARE_SHA512" ] || { rm -f "$to.part"; fail "Bare's runtime is not as pinned (sha512): $BARE_URL" 3; }
   mv "$to.part" "$to"
   echo "bare: downloaded, as pinned ($BARE_VERSION)"
@@ -245,7 +259,6 @@ download_bare () {
 # Where our releases are: $HAICC_RELEASES/<package>/releases/download/<tag>/
 # <file>, as on GitHub (another base, a file:// one, for a test).
 releases=${HAICC_RELEASES:-https://github.com/$HAICC_ORG}
-fetch () { curl -fsSL --retry 3 --connect-timeout 20 -o "$2" "$1"; }
 sha256_of () { sha256sum "$1" | cut -d' ' -f1; }
 
 # The manifest, as tools/release.js writes it (two spaces a level): a line
@@ -318,13 +331,15 @@ case "$cmd" in
         *) fail "haicc sources download bare|$HAICC_ORG" 2 ;;
       esac
     done
+    # the folder registered after each download, so what one fetched is
+    # there even when the next fails
     for what in "$@"; do
       case "$what" in
         bare|third-party) download_bare ;;
         "$HAICC_ORG") download_org ;;
       esac
-    done
-    register "folder:$own" ;;
+      register "folder:$own"
+    done ;;
   *)
     fail "haicc sources link <folder>, haicc sources download bare|$HAICC_ORG" 2 ;;
 esac
