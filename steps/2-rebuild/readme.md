@@ -4197,3 +4197,30 @@ an activity's how-tos; one how-to, its steps, their why, the check,
 where its README is in the help, and read there; an activity that is
 none, answered; `howto/extract`, no how-to against its form). Nothing
 left running, no container left.
+
+## 83. `package-docs-template` renamed `package-docs-package` (2026-11-17)
+
+The first phase of `review.md`, "The structure of `info`, settled": the
+human, "The docs mrepo is about the mrepo, should docs template not be
+called docs package then?"; the repository renamed by the human.
+
+- **Renamed everywhere outside the records**: the folder, the thirteen
+  pins (`package.json`'s `template.repository`), the five package lists
+  that include it (`base-component-boot`, `base-component-haicc`,
+  `base-package-runtime`, `-service`, `-splectral`), the tests that name
+  those lists, `pkgm-base-check` (its `TEMPLATE`, its test) and
+  `mrepo-base-help` (a reference), the generated dispatchers, `tools/`,
+  `rules.md`, `CLAUDE.md`. The records in `steps/` keep the name they
+  were written with.
+- **Its role unchanged**: still the template a package is brought to and
+  pinned at (`tools/package-template.sh`, now cloning
+  `haiccing/package-docs-package`); the pinned commits are the
+  repository's, unchanged by the rename.
+
+**Validated**: the pre-release of all fifteen packages, each passing;
+`tools/bare tools/release.js --strict`: exit 0, every report current.
+The help extract (546 READMEs, 10 packages) and the READMEs as files
+(316): no problems; `tools/bare tools/code-check.js` (23 modules, 16
+packages): no problems. The boot's `validate` three times, passing. The
+`haicc` test, 261 of 261, three times. Nothing left running, no
+container left.
