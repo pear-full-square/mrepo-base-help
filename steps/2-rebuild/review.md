@@ -814,3 +814,21 @@ with it; the cascade is the boot component's override (`review-code`).
   action as mapped, `protocol/boot/teardown` the protocol's own
   implementation, open to the command line too, no constraint. A code
   change, after the review (`review-code`, `tasks.md`).
+- **Replaced** (the human, thinking the override through): "I don't
+  think we should implement it for base. It would be nice that we can
+  run base on one boot component and we need to three versions of them
+  (host, node and container node). I propose we use script and implement
+  script actions of the form script/deploy-node." Ours, put back: a
+  `script` protocol, its actions the scripts the mrepo's packages bring.
+  The human: "we have a component and a script library within that we
+  can then use to do custom versions of functionality. boot/deploy what
+  probably a bad idea, better is service/initialise that would run
+  differently for each type for instance. We try it out when we do the
+  solution install stuff."; "all command run as haicc (the external
+  commands) but we need some more discussion on this."; "scripts will be
+  able to replace protocols, my take would be that base operations are
+  protocols and custom versions are expressed as scripts (in the base
+  family)." **Settled**: no override for base; base operations
+  protocols, custom versions scripts in a component's script library;
+  tried with the solution install (`base-solution-haicc`, `tasks.md`).
+  Open: how scripts run.
