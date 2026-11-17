@@ -364,7 +364,7 @@ test('exec.run: a command executed here; exec.continuation: a script answered wi
         // the command that follows: executed here
         here: (exec, { args }) => exec.run(args),
         // answered with a continuation: a script for who asked to go on with
-        go: (exec, { args = [] }) => { exec.continuation([['service/start'], ['crud/read', 'x']], 'x'); if (args[0] === 'twice') exec.continuation([['a/b']]); if (args[0] === 'fail') throw new Error('failed after'); return { ok: 1 } },
+        go: (exec, { args = [] }) => { exec.continuation('haicc "$HAICC_AT" service/start\n', 'x'); if (args[0] === 'twice') exec.continuation('true\n'); if (args[0] === 'fail') throw new Error('failed after'); return { ok: 1 } },
         // sent on, after a write that must not stay
         there: (exec, { args }) => { exec.put('/main/dropped.json', Buffer.from('1')); return exec.forward(to, args) }
       } }
@@ -381,7 +381,7 @@ test('exec.run: a command executed here; exec.continuation: a script answered wi
       t.is((await done(await one({ protocol: 'crud', action: 'here', uri: ['.'], args: ['crud/update', 'main/x'] }))).error, 'no action: crud update (create, delete, go, here, read, there)', 'checked as the request is (internal: no API gate), and its action looked up')
 
       const gone = await done(await one({ protocol: 'crud', action: 'go', uri: ['.'] }))
-      t.alike([gone.output, gone.continuation], [{ ok: 1 }, { at: 'x', commands: [['service/start'], ['crud/read', 'x']] }], 'exec.continuation: answered beside the output: the commands, and the position they are written from')
+      t.alike([gone.output, gone.continuation], [{ ok: 1 }, { at: 'x', script: 'haicc "$HAICC_AT" service/start\n' }], 'exec.continuation: answered beside the output: the script, and the position it is run for')
       t.alike(Object.keys(await done(await one({ protocol: 'crud', action: 'go', uri: ['.'], args: ['fail'] }))).includes('continuation'), false, 'a request that fails answers with none')
       t.is((await done(await one({ protocol: 'crud', action: 'go', uri: ['.'], args: ['twice'] }))).error, 'a continuation already', 'one a request')
 
@@ -394,11 +394,11 @@ test('exec.run: a command executed here; exec.continuation: a script answered wi
       t.alike([sent.topic, sent.value.topic, sent.value.value, sent.key], ['/local/other/inbox', `/local/host/execute/${name}`, ['service/start'], p.waits], 'in the linked mrepo\'s inbox folder: addressed to it by its unique URI, the command unchanged, its core addressed back to this request\'s branch')
       // the linked mrepo's response, in its outbox folder: collected, added to
       // the branch, the principal returned with it
-      writeFileSync(join(other, 'outbox', `${p.waits}.json`), JSON.stringify(wrap('/outbox', complete({ ...sent.value, value: { command: sent.value.value, protocol: 'service', action: 'start', uri: ['.'], args: [] } }, { ok: true, continuation: { at: '.', commands: [['info/get']] }, value: { service: 'started' } }))))
+      writeFileSync(join(other, 'outbox', `${p.waits}.json`), JSON.stringify(wrap('/outbox', complete({ ...sent.value, value: { command: sent.value.value, protocol: 'service', action: 'start', uri: ['.'], args: [] } }, { ok: true, continuation: { at: '.', script: 'haicc "$HAICC_AT" info/get\n' }, value: { service: 'started' } }))))
       for (let i = 0; i < 4; i++) { await request(ctx2); await execute(ctx2, { actions: acts }) }
       const back = (await json(ctx2.repo, `/request/done/${name}.json`)).value.value
       t.alike(back.output, { service: 'started' }, 'returned with the response: a response is not checked as a request (service start is not allowed here now, the service being started)')
-      t.alike(back.continuation, { at: 'other', commands: [['info/get']] }, 'the linked mrepo\'s continuation comes back with its response, its position seen from here: behind the one the command was sent on at')
+      t.alike(back.continuation, { at: 'other', script: 'haicc "$HAICC_AT" info/get\n' }, 'the linked mrepo\'s continuation comes back with its response, its position seen from here: behind the one the command was sent on at')
       t.alike((await principals(ctx2)).length, 0, 'its branch removed')
     })
   } finally { rmSync(work, { recursive: true, force: true }) }

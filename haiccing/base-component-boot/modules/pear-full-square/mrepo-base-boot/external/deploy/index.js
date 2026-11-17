@@ -21,12 +21,12 @@ export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept
   const { store, sources } = await origin(exec)
   // A continuation asked for (the flag: continuation=<script>): a script
   // of the package deployed, by its name, answered with the deploy for
-  // who asked to go on with, its commands written from the mrepo's own
-  // place. One that is not there: refused, before anything is built.
+  // who asked to go on with, run for the deployed mrepo (HAICC_AT, its
+  // position). One that is not there: refused, before anything is built.
   const script = typeof flags.continuation === 'string' ? flags.continuation : null
   if (script) fetch({ store, sources, pkg: target })
-  const commands = script ? scriptOf({ store, pkg: target, name: script }) : null
-  if (script && commands === null) throw new Error(`no script: ${script} (${target} has ${scriptsOf({ store, pkg: target }).join(', ') || 'none'})`)
+  const text = script ? scriptOf({ store, pkg: target, name: script }) : null
+  if (script && text === null) throw new Error(`no script: ${script} (${target} has ${scriptsOf({ store, pkg: target }).join(', ') || 'none'})`)
   // The target's list laid in, built at its own place, by its unique URI,
   // its packages placed.
   const record = await install(exec, { store, sources, target, dir: c.dir, uri: c.mrepo })
@@ -53,7 +53,7 @@ export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept
     if (await exec.find(c.swarm) === null) exec.put(c.swarm, Buffer.from('{}\n'))
     exec.put(c.registry, Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
   }
-  if (commands) { exec.continuation(commands, c.at); exec.log('verbose', 'continuation', { script, commands: commands.length }) }
+  if (text) { exec.continuation(text, c.at); exec.log('verbose', 'continuation', { script, bytes: Buffer.byteLength(text) }) }
   exec.log('info', 'deployed', { at: c.at, mrepo: c.mrepo, package: target })
   return { deployed: c.at, mrepo: c.mrepo, ...record }
 }
