@@ -105,10 +105,21 @@ two installs:
    `stop({ repo, pid })`: asked over its socket, then signalled by the
    pid it recorded. The node's pid is the container's: on the host it is
    another process, or none, and `SIGTERM`, `SIGKILL` would go to it.
-   **Rule**: the host never starts, stops or signals a container-run
-   mrepo; its boot actions refuse one; it is torn down through the
-   container (the container's own `haicc boot/teardown`, then the
-   container removed).
+   **Rule** (the human, 2026-11-17: "the haicc platform commands for
+   container nodes need to be executed by the container haicc platform.
+   I think it should only affect the boot protocol - or in general
+   protocols executed by the haicc platform that act on the container
+   mrepo"): the host never starts, stops or signals a container-run
+   mrepo. A platform command on it, the boot protocol's (`deploy`,
+   `teardown`, `redeploy` at a position linked `how: 'container'`), is
+   not executed by the host's platform: it is sent to the container's,
+   its boot mrepo, whose inbox and outbox are in the mount, and executed
+   there, on the container's own registry and runtimes; its answer is
+   the host's action's answer, as through a shortcut. The node's own
+   protocols (service, crud, info, haicc, the boot protocol it executes
+   for the mrepos it deploys) are the node's, sent to it as to any
+   linked mrepo. Only the container's lifecycle (made, started,
+   stopped, removed) is the host's, through Docker.
 2. **The socket is not shared.** `runtime.sock` is in the mrepo's folder
    when the path is short enough for a Unix socket, else in the
    temporary folder by the path's hash. Inside the container the path
@@ -156,7 +167,8 @@ two installs:
 **run by another install**, here a container's: `how: 'container'`
 (today's meaning, a replica, goes with today's actions), with the
 container's name and image, the pair's folder (the container's home, as
-the host sees it), and the node's folder in it. Every action that would
+the host sees it), the node's folder in it, and the container's boot
+mrepo's folder in it, where the platform commands for the node go. Every action that would
 act on a linked mrepo's runtime or folder (the boot protocol's
 teardown and redeploy, the machine's teardown, a status) reads `how`
 first.
@@ -171,8 +183,11 @@ first.
   and `pair.haicc` written, the container made and started, the shell
   recorded. The `replica` how-to and the component's `cluster` script
   change with them.
-- **`mrepo-base-boot`**: teardown and redeploy refuse a link whose
-  `how` is `container` (rule 1).
+- **`mrepo-base-boot`**: at a position linked `how: 'container'`,
+  `deploy`, `teardown` and `redeploy` are sent to the container's boot
+  mrepo and its answer taken in (rule 1), as a command sent on through
+  a shortcut is (`mrepo-base-execute`'s `lib/remote.js`), not executed
+  here.
 - **`haicc-base-app`**: the machine's teardown finds the containers by
   the pair's folder (rule 5).
 - **`base-linux-haicc`**: nothing; its installer is what `start.sh` runs.
@@ -193,5 +208,6 @@ first.
    Fine as it is, or a sources folder of the pair's own.
 4. **What is mounted**: the container's whole haicc home (as tested,
    the simplest; it survives the container removed) or only `start.sh`,
-   the node's script and the node's own folder (the container's install
-   kept apart from the host).
+   the node's script, the node's own folder and the container's boot
+   mrepo's (rule 1: the platform commands go there); the rest of the
+   container's install kept apart from the host.
