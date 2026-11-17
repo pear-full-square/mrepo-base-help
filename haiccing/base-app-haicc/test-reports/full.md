@@ -10,9 +10,9 @@ The package passed its `full` set: all 23 units, 331 of 331 tests and 2216 of 22
 | Units | 23 of 23 passed |
 | Tests | 331 of 331 passed |
 | Asserts | 2216 of 2216 passed |
-| Run | 2026-11-16 23:48 UTC |
+| Run | 2026-11-17 01:33 UTC |
 | Bare | v1.36.0 |
-| Content | `d40ab93fd2baf750bf6f8885fcf1366e39ec314f0bbc35162149b574d2e6d65f` |
+| Content | `7bb59b22af57518a86acbfe1ed8d5e61d0bfe8a37c5a2bba9c2211a40fe29bf0` |
 
 ## Units
 

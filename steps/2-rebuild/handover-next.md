@@ -70,16 +70,16 @@ container. Without a daemon those tests fail, they do not skip.
 
 ## Right now
 
-**Latest (2026-11-17, parts 83 and 84: the template renamed `package-docs-package`; its rules: `## Links` a menu, a label each, `## Included packages` siblings, "A new package" a clone of the best candidate; phases 1 and 2 done; next phase 3, `info`)**. Before it (2026-11-16): the structure of
-`info` and the template settled with the human, nothing built:
-`review.md`, "The structure of `info`, settled". Keywords made by the
-README links tables (jumps, link text, categories, sections), each
-included package its section by its name without the prefix, a module's
-pages once (`modules`), one `third-party` page. The phases there: 1.
-`package-docs-template` renamed `package-docs-package` (the human
-renames the repository); 2. its rules for `info` and the new package
-as a clone of the best candidate; 3. `info`; 4. the review. The three
-open points at the end of "Where the design stands" are left for later.
+**Latest (2026-11-17, parts 83 to 85)**: the template renamed
+`package-docs-package`; its rules (`## Links` a menu, a label each;
+`## Included packages` siblings; "A new package" a clone of the best
+candidate); the `info` protocol built (`mrepo-base-info`,
+`base-package-info`), beside `help` and `howto`, in both components.
+Phases 1 to 3 of `review.md` done. Next, phase 4, the review: each
+package brought to the new form, its documentation complete; a host's
+`info/extract` problems (74, all the old form) its list; then `help`
+and `howto`'s static side removed. Keywords are a later concern (the
+human): the structure first.
 
 
 **READ THIS FIRST (2026-11-16, written at a full context, after part
