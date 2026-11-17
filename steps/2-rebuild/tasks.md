@@ -1943,6 +1943,57 @@ registry, we can create info views on all mrepos."
    only from there. `HAICC_MREPO` goes. **Parked**: the container's
    replica ("the container needs its own haicc install - a partial one
    to dispatch commands. We look at that further down the line.").
+   **Revised** (the human, 2026-11-17): "I think it might be full but
+   different configuration. The setup on the host and within the
+   container (for a node) should be identical, except that one is master
+   and the other slave." So: one install, the same on the host and in a
+   node's container; its configuration says master or slave. The human:
+   "master slave means: master issues command, or receives it. This gets
+   replicated to the slave and the slave executes it. This master slave
+   setup can be used to manage the container-internal node on a swarm,
+   but the other way around the container internal node can send
+   commands to the host install for execution on the host." So master
+   and slave is a direction, not a rank: the side a command starts at is
+   its master, the side it is replicated to and executed at its slave.
+   The host is master for what it sends into the container's node; the
+   node is master for what it sends out to the host. Only between those
+   two haicc installs, the host and the node in its container: "it
+   doesn't cover communication within the swarm". Revised (the human,
+   2026-11-17): "Probably the easiest is that all request are shipped
+   from host to container (I think I have the master slave the wrong way
+   around), executed there and the data changes are synced back to
+   host." So the node in the container is the master of its data: it
+   executes; the host holds a replica of it, the slave, read only.
+   **The proposal** ("yes, record it as the proposal for the
+   container"), the Holepunch way, nothing of it built:
+   - **No discovery**: `corestore.replicate(stream)` runs over any
+     duplex stream, Noise-encrypted (secret-stream); Hyperswarm and
+     HyperDHT only find a peer and punch a hole to get one. Here the
+     other side is known: a direct stream, through p2p-replicate (its
+     test already replicates over one). Airgapped: no DHT bootstrap.
+   - **The stream**: a Unix socket in the folder the container mounts
+     (bare-pipe), the host listening, the node connecting: no port, no
+     Docker network set up, only what reaches the folder connects.
+     Reliable on Linux, base's target; TCP on the Docker bridge
+     (bare-net) the alternative.
+   - **Requests, host to node**: a Hypercore the host alone writes, a
+     request an entry; the node follows it live
+     (`createReadStream({ live: true })`), each entry into its own
+     inbox, tagged replicated, through its pipeline as any request.
+   - **Data, node to host**: the node's mrepo on the p2p layer
+     (p2p-mrepo), its changes replicated back; on the host a replica by
+     key, read only, read lazily (p2p-mrepo's replica). What the host
+     reads of the node it may read from the replica, without crossing.
+   - **Keys at deploy**: the host, making the container, writes its
+     request core's key into the node's configuration and reads the
+     node's keys back through the mounted folder; replication limited
+     to those keys (p2p-replicate's policy, "not yet", in its simplest
+     form).
+   - **Open**: the response, whether in the replicated data (the
+     node's outbox layer is on disk, not in the store, today) or an
+     entry on a core of the node's; and the node's own commands to the
+     host, the reverse way, said earlier, whether they stay.
+   Designed when the container comes back.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script
@@ -1971,7 +2022,9 @@ registry, we can create info views on all mrepos."
    **Later, (2)**: a request costs about 1 s, every command alike (the
    inbox, pending, execute, done, the outbox, each a commit in the
    mrepo's layers): fewer commits a request (pending, execute and done
-   moves merged), measured the same way.
+   moves merged), measured the same way. **Moved back** (the human,
+   2026-11-17): "probably won't be done within this base iteration of
+   packages, or maybe near the end".
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the
@@ -2023,3 +2076,13 @@ package by package and lists here what needs code, built after it.
   install deploys comes from a folder; `haicc sources download` fetches
   into haicc's own sources folder and registers it, `folder:<path>`. An
   install from GitHub documents all.
+- **module tests**, **done** (2026-11-17): the human: "I had a look at
+  the modules info, and it says unit tests but gives no further info".
+  Each module's "Tests" line says what its tests cover and points to its
+  `test/` page, which lists each test by its name. pkgm-base-check's
+  `checkTestPage` (`internal/tests`) holds the page to the tests: a
+  section a file that declares tests, every test by its name, nothing
+  else; a template name a pattern. `tools/code-check.js` runs it over
+  every module; the drift it found fixed (the hooks, scripts, registry
+  and documents tests), a page for pkgm-base-manager, a section for
+  mrepo-base-info.

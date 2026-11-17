@@ -271,7 +271,7 @@ crud/read notes/s' 2>&1); is $? 0 "haicc host haicc/script . '<lines>': two line
 has "$out" '"line":"crud/read notes/s"' "each line with what it answered"
 has "$out" '"uri":["main","notes/s"]' "the second saw what the first made: one after the other"
 out=$(printf 'crud/read notes/s\n' | haicc --output host haicc/script . 2>&1); has "$out" '"line":"crud/read notes/s"' "haicc host haicc/script . with a heredoc: the lines from stdin"
-out=$(haicc --output host haicc/script notes 'crud/read s' 2>&1); has "$out" '"uri":["main","notes/s"]' "haicc host haicc/script notes '...': its lines run at notes in the host"
+out=$(haicc --output host haicc/script notes 'crud/read s' 2>&1); has "$out" '"uri":["main","notes","s"]' "haicc host haicc/script notes '...': its lines run at notes in the host (the position its own segment)"
 is "$(haicc scripts 2>&1)" "" "haicc scripts: none kept yet"
 mkdir -p "$T/home/scripts"; printf '# a check\ncrud/read notes/s\n' > "$T/home/scripts/check.haicc"
 is "$(haicc scripts 2>&1)" "check" "haicc scripts: the install's scripts, by name"

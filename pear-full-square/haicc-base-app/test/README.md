@@ -27,9 +27,10 @@ The tests of haicc-base-app, a section per file, each test by its name.
 
 ## `main.test.js`
 
-- a continuation: the response says what to go on with; each command sent after the response of the one before; the first that fails ends it
+- a continuation: the response says what to go on with, a script: sent on as haicc/script where it was answered for; its outcome printed
 - the usage; not a command: exit 2, said on stderr
 - nothing booted: an mrepo command and the teardown say so, exit 3; a deploy without the boot component in the sources
 - haicc sources: printed a line a source
 - a command for the mrepos: its response printed unpacked, as stored, or its output alone; an error, exit 1; no completed form, exit 5; none in time, exit 4
 - boot/teardown: what boot/deploy put in place removed, nothing else; no runtime running: none stopped
+- the install's scripts: haicc scripts lists them; haicc/file <URI> <name> reads one here and sends it as haicc/script
