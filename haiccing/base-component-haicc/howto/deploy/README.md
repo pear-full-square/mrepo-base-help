@@ -3,15 +3,15 @@
 Deploys a node of a swarm in the host and brings it into service.
 
 The host is deployed and started (the boot component's how-to
-`deploy`). A swarm's place is a node below `swarms` in the host's
-`main`; a node deployed below it is that swarm's: its position names its
-swarm, `swarm-1/node-1`.
+`deploy`). A swarm is a node in the host's `main` whose document says
+so, `{"kind":"swarm"}`; a node deployed below it is that swarm's, by the
+swarm node's name: `swarm-1/node-1`.
 
 ## Steps
 
 ```sh
-# the swarm's place in the host's main
-haicc host crud/create swarms/swarm-1
+# the swarm: a node in the host's main, its document saying it is one
+haicc host crud/create swarms/swarm-1 '{"kind":"swarm"}'
 # the node: an mrepo of its own, built from the haicc component
 haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc
 # made ready, its info extracted; its door opened (at the host's position, then on at the node's shortcut)

@@ -14,7 +14,7 @@ haicc . boot/deploy host base-component-haicc --flags continuation=start
 | script | |
 |---|---|
 | `start.json` | the mrepo brought into service: `service/initialise`, then `service/start` |
-| `cluster.json` | a host with a swarm of two nodes, each with its container: the mrepo brought into service, `swarms/swarm-1` created in its `main`; `node-1` and `node-2` deployed below it from this component (`swarm-1/node-1`, `swarm-1/node-2`), each brought into service, its replica made in a container and started, and the replica brought into service through its node; then the swarm's nodes read |
+| `cluster.json` | a host with a swarm of two nodes, each with its container: the mrepo brought into service, `swarms/swarm-1` created in its `main`, its document saying it is a swarm; `node-1` and `node-2` deployed below it from this component (`swarm-1/node-1`, `swarm-1/node-2`), each brought into service, its replica made in a container and started, and the replica brought into service through its node; then the swarm's nodes read |
 
 ## Cluster
 

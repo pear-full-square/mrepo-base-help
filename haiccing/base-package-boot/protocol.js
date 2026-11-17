@@ -8,16 +8,17 @@
 import { deploy, teardown, redeploy } from './modules/pear-full-square/mrepo-base-boot/index.js'
 
 // A target is needed: / is the mrepo itself, which one cannot deploy or
-// tear down. One name below main, or a swarm's node.
-const CHILD = { uris: ['<name>', 'swarms/<swarm>/<name>'], target: true }
+// tear down. Any position below main: what a position means (a swarm) its
+// documents say, not this config.
+const CHILD = { uris: ['**'], target: true }
 
 export const protocols = {
   boot: {
     package: 'haiccing/base-package-boot',
     description: 'Deploys and tears down child mrepos; executed by the parent.',
     actions: {
-      deploy: { ...CHILD, args: ['package'], description: 'A child mrepo built from a target package, one name below main or a swarm\'s node (swarms/<swarm>/<name>), placed by its unique URI, its packages linked, its runtime started, its shortcut and its link recorded; its argument the package.' },
-      teardown: { uris: ['<name>', 'swarms/<swarm>/<name>', 'registry/<swarm>/<name>'], target: true, description: 'The child\'s runtime stopped, the child and its records removed. A URI into the mrepo registry (registry/local/*, the boot mrepo\'s) selects mrepos there: each torn down.' },
+      deploy: { ...CHILD, args: ['package'], description: 'A child mrepo built from a target package at a position below main, placed by its unique URI (in the swarm of the nearest node above it whose document says it is one), its packages linked, its runtime started, its shortcut and its link recorded; its argument the package.' },
+      teardown: { ...CHILD, description: 'The child\'s runtime stopped, the child and its records removed. A URI into the mrepo registry (registry/local/*, the boot mrepo\'s) selects mrepos there: each torn down.' },
       redeploy: { ...CHILD, args: ['package?'], description: 'Teardown, then deploy.' }
     }
   }

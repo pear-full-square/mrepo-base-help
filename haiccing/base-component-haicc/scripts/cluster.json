@@ -1,7 +1,7 @@
 [
   ["service/initialise"],
   ["service/start"],
-  ["crud/create", "swarms/swarm-1"],
+  ["crud/create", "swarms/swarm-1", "{\"kind\":\"swarm\"}"],
   ["boot/deploy", "swarms/swarm-1/node-1", "base-component-haicc"],
   ["haicc", "swarms/swarm-1/node-1", "service/initialise"],
   ["haicc", "swarms/swarm-1/node-1", "service/start"],

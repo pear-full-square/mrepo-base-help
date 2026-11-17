@@ -62,14 +62,14 @@ test('what it provides: one protocol, boot, its config and its actions', (t) => 
   t.alike(Object.keys(mounted.actions.boot).sort(), Object.keys(mounted.protocols.boot.actions).sort(), 'a function for every action configured, and no other')
 })
 
-test('its config, value by value: each action at a child\'s name, a target needed', (t) => {
+test('its config, value by value: each action at any position below main, a target needed', (t) => {
   const cfg = mounted.protocols.boot
   t.is(cfg.package, 'haiccing/base-package-boot', 'the package that brings it')
   t.ok(cfg.description, 'its description')
   t.alike(Object.keys(cfg).sort(), ['actions', 'description', 'package'], 'nothing else: no default action')
   t.alike(Object.keys(cfg.actions).sort(), ['deploy', 'redeploy', 'teardown'])
   for (const [name, a] of Object.entries(cfg.actions)) {
-    t.alike(a.uris, name === 'teardown' ? ['<name>', 'swarms/<swarm>/<name>', 'registry/<swarm>/<name>'] : ['<name>', 'swarms/<swarm>/<name>'], `${name}: at one name below the mrepo, the child's, or a swarm's node${name === 'teardown' ? '; and into the mrepo registry, by a unique URI: several at once' : ''}`)
+    t.alike(a.uris, ['**'], `${name}: at any position below main: what a position means, its documents say`)
     t.is(a.target, true, `${name}: a target is needed, the mrepo itself is none`)
     t.ok(a.description, `${name}: its description`)
     t.absent(a.states, `${name}: no state of its own: behind a door only where a hook puts it there`)
@@ -89,10 +89,9 @@ test('its config in effect: a request checked: the target, the argument, the URI
   t.is(ask('redeploy', 'main/host', []), null, 'redeploy without a package: allowed')
   t.is(ask('teardown', 'main/host'), null, 'teardown: allowed')
   t.is(ask('teardown', 'main'), 'missing argument: target', 'teardown of the mrepo itself: no')
-  t.is(ask('deploy', 'main/swarms/host', ['p']), 'not offered: boot deploy at swarms/host', 'deeper than one name: not offered')
-  t.is(ask('deploy', 'main/swarms/swarm-1/node-1', ['p']), null, 'a swarm\'s node, swarms/<swarm>/<name>: allowed')
+  t.is(ask('deploy', 'main/swarms/swarm-1/node-1', ['p']), null, 'deeper below main: offered')
   t.is(ask('teardown', 'main/swarms/swarm-1/node-1'), null, 'and torn down there')
-  t.is(ask('deploy', 'main/other/swarm-1/node-1', ['p']), 'not offered: boot deploy at other/swarm-1/node-1', 'three names that are no swarm\'s node: not offered')
+  t.is(ask('teardown', 'main/registry/local/*'), null, 'a query into the registry: offered')
   t.is(check({ protocol: 'boot', action: 'deploy', uri: ['main', 'host'], args: ['p'] }, { ...data, active: {} }), 'not now: boot deploy (boot is not active)', 'not activated: refused')
 })
 
@@ -103,10 +102,11 @@ test('deploy: each refusal, before anything is built', async (t) => {
     await t.exception(act('deploy', execution(dir, store).exec, form('main', 'p')), /missing argument: target/, 'the mrepo itself')
     await t.exception(act('deploy', execution(dir, store).exec, form('.', 'p')), /missing argument: target/, 'nor its root')
     await t.exception(act('deploy', execution(dir, store).exec, form('main/Host', 'p')), /not canonical: Host \(host\)/, 'a URI that is not canonical')
-    await t.exception(act('deploy', execution(dir, store).exec, form('main/1host', 'p')), /not a position for an mrepo: 1host \(<name>, or swarms\/<swarm>\/<name>/, 'not a name: lowercase letters, digits, hyphens, a letter first')
-    await t.exception(act('deploy', execution(dir, store).exec, form('main/swarms/host', 'p')), /not a position for an mrepo: swarms\/host/, 'deeper than one name, and no swarm\'s node')
-    await t.exception(act('deploy', execution(dir, store).exec, form('main/swarms/local/node-1', 'p')), /not a swarm: local/, 'local: the swarm of what is in none')
-    await t.exception(act('deploy', execution(dir, store).exec, form('main/swarms/swarm-1/node-1', 'p')), /no node there: swarms\/swarm-1 \(crud\/create swarms\/swarm-1\)/, 'a swarm\'s node: its swarm\'s node is there first')
+    await t.exception(act('deploy', execution(dir, store).exec, form('main/1host', 'p')), /not a position for an mrepo: 1host \(names of lowercase letters, digits, hyphens\)/, 'not a name: lowercase letters, digits, hyphens, a letter first')
+    await t.exception(act('deploy', execution(dir, store).exec, form('main/swarms/swarm-1/node-1', 'p')), /no node there: swarms\/swarm-1 \(crud\/create swarms\/swarm-1\)/, 'deeper: the node above it is there first')
+    const swarm = { '/main/swarms/.node.json': B({}), '/main/swarms/local/.node.json': B({ kind: 'swarm' }) }
+    await t.exception(act('deploy', execution(dir, { ...store, ...swarm }).exec, form('main/swarms/local/node-1', 'p')), /not a swarm: local/, 'local: the swarm of what is in none, no swarm\'s name')
+    await t.exception(act('deploy', execution(dir, { ...store, ...LINKED }).exec, form('main/host/node-1', 'p')), /host is a shortcut: a URI does not run through it/, 'below a shortcut: another mrepo\'s position')
     await t.exception(act('deploy', execution(dir, store).exec, form('host', 'p')), /not a position in main: host \(main\/<name>\)/, 'not in main: from the root the layer comes first')
     await t.exception(act('deploy', execution(dir, { ...store, ...LINKED }).exec, form('main/host', 'p')), /deployed already: host/, 'a child linked there already')
     await t.exception(act('deploy', execution(dir, { ...store, '/main/host/data.json': B({}) }).exec, form('main/host', 'p')), /host exists locally: the boot protocol cannot target it/, 'data in main at that position: not a target')
