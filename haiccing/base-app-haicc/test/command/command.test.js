@@ -81,7 +81,7 @@ test('nothing booted: said, exit 3, nothing written', async (t) => {
   t.alike([r.code, r.out, r.err], [3, '', `haicc: no boot mrepo at ${work} (nothing to tear down)\n`], 'haicc boot/teardown')
   r = asked('boot/deploy', await haicc(['boot/deploy']))
   t.alike([r.code, r.out, r.err], [3, '', `haicc: no ${CONFIG.org}/${CONFIG.boot}.bundle in the sources (haicc sources link <folder>)\n`], 'haicc boot/deploy, no source holding the boot component')
-  r = await haicc(['.', 'help/get'], { env: { HAICC_WORK: join(home, 'elsewhere') } })
+  r = await haicc(['.', 'info/get'], { env: { HAICC_WORK: join(home, 'elsewhere') } })
   t.alike([r.code, r.err], [3, `haicc: no boot mrepo at ${join(home, 'elsewhere')} (haicc boot/deploy)\n`], 'HAICC_WORK: another work folder')
   t.alike(readdirSync(home), [], 'nothing written')
 })
@@ -119,9 +119,9 @@ test('a command for the mrepos: its record in the root\'s inbox, value by value'
   t.alike(readdirSync(join(root, 'inbox')), [file], 'nothing half written left beside it')
 
   a = answer({ output: 1 })
-  r = await haicc(['--output', 'host', 'haicc', 'node-1', 'help/get', '.', 'packages', 'no "such" section'])
+  r = await haicc(['--output', 'host', 'haicc', 'node-1', 'info/get', '.', 'packages', 'no "such" section'])
   ;({ envelope } = await a)
-  t.alike(envelope.value.value, ['haicc', 'host', 'haicc', 'node-1', 'help/get', '.', 'packages', 'no "such" section'], 'anywhere else the haicc command as it is: chained, an argument with spaces and quotes one part')
+  t.alike(envelope.value.value, ['haicc', 'host', 'haicc', 'node-1', 'info/get', '.', 'packages', 'no "such" section'], 'anywhere else the haicc command as it is: chained, an argument with spaces and quotes one part')
 
   a = answer({ output: 1 })
   r = await haicc(['/run', 'service/start'], { env: { HAICC_OUTPUT: '1' } })
@@ -149,19 +149,19 @@ test('its response: the record unpacked, as stored, or the output alone; the exi
   a = answer({ output })
   r = asked('output', await haicc(['output', '1000']))
   t.alike([r.code, r.out], [0, '1000 (set: haicc output auto for the terminal\'s width)\n'], 'haicc output 1000: the width set, kept in haicc\'s own folder')
-  r = await haicc(['.', 'help/get'])
+  r = await haicc(['.', 'info/get'])
   ;({ text } = await a)
   t.is(r.out, text, 'a record that fits the width set: left on one line')
   r = await haicc(['output', 'auto'])
   t.alike([r.code, r.out], [0, 'auto: 80 (the output is no terminal)\n'], 'haicc output auto: back to the default')
 
-  for (const [args, env] of [[['--raw', '.', 'help/get'], {}], [['.', 'help/get'], { HAICC_RAW: '1' }]]) {
+  for (const [args, env] of [[['--raw', '.', 'info/get'], {}], [['.', 'info/get'], { HAICC_RAW: '1' }]]) {
     a = answer({ output })
     r = await haicc(args, { env })
     ;({ text } = await a)
     t.alike([r.code, r.out], [0, text], `${args[0] === '--raw' ? '--raw' : 'HAICC_RAW=1'}: the record as stored, one line`)
   }
-  for (const [args, env] of [[['--output', '.', 'help/get'], {}], [['.', 'help/get'], { HAICC_OUTPUT: '1', HAICC_RAW: '1' }]]) {
+  for (const [args, env] of [[['--output', '.', 'info/get'], {}], [['.', 'info/get'], { HAICC_OUTPUT: '1', HAICC_RAW: '1' }]]) {
     a = answer({ output: { service: 'started', state: 'started' } })
     r = await haicc(args, { env }); await a
     t.alike([r.code, r.out], [0, '{"service":"started","state":"started"}\n'], `${args[0] === '--output' ? '--output' : 'HAICC_OUTPUT=1, before HAICC_RAW'}: the output alone`)
@@ -177,10 +177,10 @@ test('its response: the record unpacked, as stored, or the output alone; the exi
   t.alike([r.code, r.out, r.err], [1, '', 'haicc: deployed already: /host\n'], '--output: the error alone')
 
   a = answer(null)
-  r = await haicc(['--output', '.', 'help/get']); await a
+  r = await haicc(['--output', '.', 'info/get']); await a
   t.alike([r.code, r.out, r.err], [5, '', 'haicc: the response holds no completed form\n'], 'a response whose form is not completed: exit 5')
 
-  r = await haicc(['.', 'help/get'], { env: { HAICC_TIMEOUT: '0.5' } })
+  r = await haicc(['.', 'info/get'], { env: { HAICC_TIMEOUT: '0.5' } })
   t.is(r.code, 4, 'HAICC_TIMEOUT: no response in time, exit 4')
   t.ok(/^haicc: no response in 0\.5 s \(the request stays: [0-9a-f-]{36}\)\n$/.test(r.err), 'said, with the request\'s key')
 })

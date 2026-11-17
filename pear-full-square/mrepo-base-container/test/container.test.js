@@ -12,7 +12,7 @@ import { openRepo, writer, p2pgitBackend } from 'mycelium-git'
 import { record, wrap, guid } from 'mrepo-base-request'
 import { ask } from 'mrepo-base-runtime'
 import { build, place, parseSource } from 'mrepo-base-boot'
-import { create, start, stop, remove, status, replica, docker, available, imageOf, stateOf, CONFIG, AT, CONTAINERS, MOUNT, IMAGE } from '../index.js'
+import { create, start, stop, remove, status, replica, docker, available, imageOf, stateOf, AT, CONTAINERS, MOUNT, IMAGE } from '../index.js'
 
 const json = b => JSON.parse(b.toString())
 const lj = (dir, mode) => { mkdirSync(dir, { recursive: true }); writeFileSync(join(dir, 'layer.json'), JSON.stringify({ mode, description: 'test' })) }
@@ -71,15 +71,6 @@ function context (dir, work, uri = 'swarm-1/node-1') {
   }
   return { exec, commit, repo }
 }
-
-test('the config: the five actions, each at the mrepo itself', (t) => {
-  t.alike(Object.keys(CONFIG.actions), ['create', 'start', 'stop', 'remove', 'status'], 'create, start, stop, remove, status')
-  for (const [name, a] of Object.entries(CONFIG.actions)) {
-    t.alike(a.uris, ['.'], `${name}: at the mrepo itself, the one whose replica it is about`)
-    t.ok(a.description, `${name}: described`)
-  }
-  t.ok(CONFIG.description, 'the protocol described')
-})
 
 test('the replica an action is about: by the mrepo\'s unique URI, beside the mrepos; its container\'s name', (t) => {
   const exec = { runtime: { dir: '/w/mrepos/swarm-1/node-1', work: '/w', uri: 'swarm-1/node-1' }, log: () => {} }
@@ -147,11 +138,11 @@ test('a replica made, started, reached, stopped, started again and removed: a re
     const s = await ask({ repo: placed, op: 'status' })
     t.alike([s?.pid, s?.repository.uri], [1, 'swarm-1/node-1/container'], 'its runtime answering on its socket in the mapped folder: process 1 of its container')
     // a request into its inbox folder, as the bridgehead reaches it: answered
-    const core = record('/test', ['help/get', '.', 'oneliner'], guid())
+    const core = record('/test', ['info/get'], guid())
     writeFileSync(join(placed, 'inbox', `${core.key}.json`), JSON.stringify(wrap('/swarm-1/node-1/container/inbox', core)))
     let back = null
     for (let i = 0; i < 150 && !back; i++) { back = existsSync(join(placed, 'outbox', `${core.key}.json`)) ? JSON.parse(readFileSync(join(placed, 'outbox', `${core.key}.json`))) : null; if (!back) await new Promise(resolve => setTimeout(resolve, 100)) }
-    t.ok(back?.value.value.output?.oneliner, `its inbox operational: a request dropped into the mapped folder answered in its outbox folder ${back?.value.value.error ?? ''}`)
+    t.ok(back?.value.value.output?.choices?.[0]?.title, `its inbox operational: a request dropped into the mapped folder answered in its outbox folder ${back?.value.value.error ?? ''}`)
     t.alike(await start(exec), { started: 'container', container: name, state: 'running' }, 'start again: running already, left as it is')
     t.is((await status(exec)).state, 'running', 'status: running')
 

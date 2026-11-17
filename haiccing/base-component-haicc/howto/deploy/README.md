@@ -2,7 +2,6 @@
 
 Deploys a node of a swarm in this host and brings it into service.
 
-Activity: node
 
 ## Steps
 
@@ -11,7 +10,7 @@ Activity: node
 haicc . crud/create swarms/swarm-1
 # the node: an mrepo of its own, built from the haicc component; its position names its swarm, so it is swarm-1/node-1
 haicc . boot/deploy swarms/swarm-1/node-1 base-component-haicc
-# made ready: its help and its how-tos extracted
+# made ready: its info extracted
 haicc swarms/swarm-1/node-1 service/initialise
 # its door opened
 haicc swarms/swarm-1/node-1 service/start

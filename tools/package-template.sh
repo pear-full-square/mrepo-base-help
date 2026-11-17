@@ -23,7 +23,7 @@ tpl=$home/base-docs-package
 git -C "$tpl" pull -q --ff-only origin main 2>/dev/null || true
 [ -z "$(git -C "$tpl" status --porcelain)" ] || { echo "the template's clone has changes of its own: $tpl" >&2; exit 2; }
 commit=$(git -C "$tpl" rev-parse HEAD)
-generic="help code mrepo package modules help-in-situ mrepo-in-situ"
+generic="info code mrepo package modules info-in-situ mrepo-in-situ"
 for p in "$@"; do
   dir=$dev/haiccing/$p
   [ -f "$dir/package.json" ] || { echo "$p: no package here" >&2; exit 2; }

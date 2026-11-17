@@ -31,12 +31,12 @@ is for.
 | `modules/`, `package.json` | carries its own dependencies |
 | `mrepo/` | comes with an mrepo, by layers |
 | `scripts/` | has scripts: lists of commands to go on with after it is deployed, a file each (`<name>.json`), answered as the deploy's continuation when asked for by name |
-| `howto/` | has how-tos: what can be done with it, a folder each (`<name>/`), its README the how-to: its activity and its steps as typed commands, each with why; extracted into an mrepo's `howto` layer (`base-package-howto`) |
+| `howto/` | has how-tos: what can be done with it, a folder each (`<name>/`), its README the how-to: what it does and its steps as typed commands, each with why; pages of the package, read with `info` |
 | `test/` | has tests and test sets |
 | `test-reports/` | holds the proof that its tests passed: the report of its last pre-release |
 | `<name>/` | holds a further unit, by its URI part name |
 | `example/` | has examples |
-| `README.md` | says what it is; extracted into an mrepo's help layer |
+| `README.md` | says what it is; a page of an mrepo's info |
 
 ## The rules
 
@@ -44,7 +44,7 @@ is for.
   examples, tests.
 - A package depends only on packages.
 - A documentation package is marked `"docs": true` in its `package.json`:
-  it brings no structure at deploy; its READMEs go to the help layer. Its
+  it brings no structure at deploy; its READMEs are pages of the info. Its
   dispatcher exposes its tests.
 - Entry points, each optional: `run.js` (executed on its own),
   `deploy.js` (deployment only), `protocol.js` (protocol actions).
@@ -66,8 +66,8 @@ is for.
 
 ## READMEs
 
-Every README is read by people and extracted into an mrepo's help layer,
-where `help get` serves it at three levels. Its shape:
+Every README is read by people and is a page of an mrepo's info, read
+with `info/get` by its keywords. Its shape:
 
 ```markdown
 # <name>
@@ -110,9 +110,17 @@ where `help get` serves it at three levels. Its shape:
    target, as they stand beside each other
    here and in an mrepo's `packages/<org>/`.
 
-`tools/help-extract.js` in the development repository checks them (the
-menu's place and form, and the included packages against the list, come
-with `info`).
+8. **The keywords come from the menus**: the label is the keyword, in
+   its URI form; a link may jump over folders, to a page further down (a
+   package to its module's action: `[deploy](modules/<org>/<module>/external/deploy/)`).
+   A category is a page whose menu groups what is below it. Each `##`
+   section is a keyword below its page. A keyword may reach several
+   pages: each a choice.
+9. **Every page is reached** by a menu from the top; a link leads to a
+   README; a README without a menu is the old form.
+
+The generic `info` test checks them in every package
+(`mrepo-base-info`).
 
 ## Modules
 

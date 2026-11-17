@@ -9,6 +9,13 @@ local connection.
 bare <dir>/packages/haiccing/base-package-runtime.bundle <dir>
 ```
 
+## Links
+
+- [mrepo](mrepo/)
+- [modules](modules/)
+- [test](test/)
+- [test-reports](test-reports/)
+
 ## Usage
 
 The mrepo at `<dir>` (on the filesystem storage), started from its own
@@ -21,14 +28,10 @@ mrepo a work folder's setting names, as the p2p host.)
 
 ## The package
 
-- [mrepo/](mrepo/): the runtime's part of every mrepo's structure.
 - `main.js`: the dispatcher, the bundle's main (generated): every entry and
   test by path, `run(target, { dryRun })`.
 - `run.js`: the entry, the runtime's process.
 - `protocol.js`: its protocol, `runtime` (run), its action and config
   passed to the runtime by `run.js`.
-- [modules/](modules/): the code, assembled: ours and the third-party code.
-- [test/](test/): its tests.
-- [test-reports/](test-reports/): the report of its last pre-release.
 
 Written from [splectrum/splectrum-dev-env-3-mycelium](https://github.com/splectrum/splectrum-dev-env-3-mycelium).

@@ -4,7 +4,7 @@ No test of the package's own: nothing specific to it needs testing.
 
 The question was asked for this package: is there anything package
 specific that needs testing? No. It is documentation, READMEs in place,
-and the generic help test checks every one of them. It brings no protocol,
+and the generic info test checks every one of them. It brings no protocol,
 no program, no hooks and no mrepo of its own.
 
 This entry makes the answer explicit, and it shows in the report as 0 of

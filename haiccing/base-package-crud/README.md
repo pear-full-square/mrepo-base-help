@@ -7,11 +7,11 @@ folder with its document. `crud/create` makes a node and every node above
 it; `crud/read` answers with the nodes a URI selects; `crud/delete`
 removes them. There is no update.
 
-| | |
-|---|---|
-| [test/](test/) | its tests: its protocol as mounted, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
+
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
 ## Commands
 
@@ -40,6 +40,12 @@ A node is a folder in `main` holding its document under a hidden name:
 `swarms/swarm-1/.node.json`. A shortcut is a node too: its sources are
 beside its document, in `.shortcuts.json`. Deleting it removes the link,
 not the mrepo it leads to.
+
+## Config
+
+In `protocol.js`, the package's: the three actions anywhere in `main`;
+`create` and `delete` need a target, the layer itself is neither made nor
+removed.
 
 ## Package
 

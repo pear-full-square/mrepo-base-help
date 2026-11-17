@@ -8,7 +8,7 @@
   "modules": [
     "pear-full-square/mrepo-base-boot",
     "pear-full-square/mrepo-base-runtime",
-    "pear-full-square/mrepo-base-help",
+    "pear-full-square/mrepo-base-info",
     "pear-full-square/pkgm-base-check"
   ],
   "template": {

@@ -2,24 +2,24 @@
 
 The docs component's tests: one of its own, `configured`, and the generic ones, a folder each.
 
-The generic ones come with the template: `help`, `code`, `mrepo`,
-`package`, `modules`, `help-in-situ`, `mrepo-in-situ`.
+The generic ones come with the template: `info`, `code`, `mrepo`,
+`package`, `modules`, `info-in-situ`, `mrepo-in-situ`.
 
 ## Links
 
 - [configured](configured/)
-- [help](help/)
+- [info](info/)
 - [code](code/)
 - [mrepo](mrepo/)
 - [package](package/)
 - [modules](modules/)
-- [help-in-situ](help-in-situ/)
+- [info-in-situ](info-in-situ/)
 - [mrepo-in-situ](mrepo-in-situ/)
 
 ## Sets
 
 | set | tests |
 |---|---|
-| `validate` | `configured`, `help`, `code`, `mrepo`, `package` |
-| `validate-in-situ` | `help-in-situ`, `mrepo-in-situ`: run in a running mrepo with `runtime run` |
-| `full` | `configured`, `help`, `code`, `mrepo`, `package`, `modules` |
+| `validate` | `configured`, `info`, `code`, `mrepo`, `package` |
+| `validate-in-situ` | `info-in-situ`, `mrepo-in-situ`: run in a running mrepo with `runtime run` |
+| `full` | `configured`, `info`, `code`, `mrepo`, `package`, `modules` |

@@ -1,7 +1,7 @@
 {
-  "description": "The package on its own, in a floating instance: its help, its code and its mrepo side check without problems.",
+  "description": "The package on its own, in a floating instance: its info, its code and its mrepo side check without problems.",
   "tests": [
-    "help",
+    "info",
     "code",
     "mrepo",
     "package"

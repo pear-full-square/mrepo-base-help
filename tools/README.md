@@ -31,7 +31,7 @@ another can use it.
 |---|---|
 | `release.js` | every package assembled and bundled into the sources, Bare's tarball, the `haicc` installer; each package's test report stated |
 | `code-check.js` | the code rules over the carried modules; each package against the package structure |
-| `help-extract.js` | the help tree extracted from the bundles; the README rules on it, and on the source READMEs |
+| `info-extract.js` | each component's info extracted from the bundles, with its problems; the README rules on the source READMEs (`--files`) |
 
 ## Measuring
 

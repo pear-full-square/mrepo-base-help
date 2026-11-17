@@ -14,8 +14,6 @@ folder documents a layer.
 - [runtime](runtime/)
 - [packages](packages/)
 - [protocols](protocols/)
-- [help](help/)
-- [howto](howto/)
 - [info](info/)
 - [links](links/)
 - [inbox](inbox/)
@@ -60,7 +58,7 @@ Each layer has a mode, in its `layer.json`:
 
 | mode | written | layers |
 |---|---|---|
-| atomic | one commit at a time, by the runtime | `main`, `runtime`, `protocols`, `help`, `howto`, `info` |
+| atomic | one commit at a time, by the runtime | `main`, `runtime`, `protocols`, `info` |
 | replicated | as atomic, also copied out as files | `packages` |
 | non-atomic | its own writers, in parallel | `inbox`, `outbox`, `request/*`, `execute/*` |
 
@@ -191,14 +189,13 @@ given; `./x` is `x`.
   `main/host`. The outside reaches `main` and nothing else.
 - **The mrepo itself**, a hook or a request of its own, stands at its
   root, above the layers, and names the layer first: `protocol/activate .
-  help`.
+  info`.
 
 Inside, in the form, a URI is an array of segments: the prefix where
 its writer stands, then the URI as written. From outside that is the
 prefix `main` and one segment: `["main", "host"]`, `["main", "."]`.
 Outside, a URI is one segment, as it is written. What an action is
-about, when that is not where it is executed, is an argument: `help/get .
-packages`, `runtime/run . packages/<org>/<package>/test/validate`.
+about, when that is not where it is executed, is an argument: `runtime/run . packages/<org>/<package>/test/validate`.
 
 Its way: `inbox` → `request/pending/default` → `request/execute` →
 `request/done`, and back through the `outbox`. Order is the commit chain.

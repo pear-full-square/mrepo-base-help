@@ -32,7 +32,7 @@ its manifest records each one's hash and entry points.
   layer, is laid in from that last package only. A protocol package's own
   counts only when it is itself the one deployed.
 - **Documentation packages**, marked `docs` in their `package.json`, bring no structure,
-  only READMEs, which the runtime extracts into the help layer.
+  only READMEs, pages of the info; they are deployed in the docs mrepo.
 - **Put in place by `boot deploy`**, the parent's, and for the initial
   boot mrepo by the boot component's program, the same way. Changing them
   is a `redeploy`.
@@ -43,7 +43,7 @@ its manifest records each one's hash and entry points.
   in a floating instance; the result is the request's output.
 - **What each package contributes**: `base-package-runtime` the engine,
   in every mrepo; `base-package-protocol` the activation of protocols;
-  `base-package-help` the help; `base-package-boot` the `boot` protocol, in an mrepo that
+  `base-package-info` the info; `base-package-boot` the `boot` protocol, in an mrepo that
   deploys others; a component, such as `base-component-boot`, the list
-  and the runtime config of the mrepo it defines; `package-docs-mrepo` and `base-docs-package` the
-  help; an application's package its `main` and its protocol.
+  and the runtime config of the mrepo it defines; the `base-docs-*`
+  packages the documentation; an application's package its `main` and its protocol.

@@ -25,6 +25,6 @@ action run on a minimal execution.
 
 ## Not here
 
-The pages in a running mrepo: extracted by a hook where the help is,
+The pages in a running mrepo: extracted by a hook as the mrepo is made ready,
 and read with commands through the inbox. That is the `haicc` command's
 end to end test.

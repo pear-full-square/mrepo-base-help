@@ -89,7 +89,7 @@ passes one handler into `pending/default`; the inbox itself checks nothing.
   for the service to be started. The service's own actions stay under its
   state machine, whoever asks.
 - **Before the mrepo is operational**, the runtime takes nothing from the
-  inbox: its own requests come first, such as `help/extract`. The
+  inbox: its own requests come first, such as `info/extract`. The
   inbox's records wait.
 
 ## A continuation
@@ -139,9 +139,9 @@ there, and that mrepo's response becomes the request's result.
   interpreted and checked where it lands.
 
 ```json
-{ "command": ["haicc", "host", "help/get", ".", "packages"],
+{ "command": ["haicc", "host", "info/get", "boot"],
   "protocol": "haicc", "action": "goto", "uri": ["main", "host"],
-  "args": ["help/get", "/packages"],
+  "args": ["info/get", "boot"],
   "remote": { "at": "host", "folder": "../local/host", "key": "…" },
   "output": { } }
 ```

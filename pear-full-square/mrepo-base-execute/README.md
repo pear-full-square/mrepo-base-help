@@ -9,10 +9,10 @@ overlaid and writes only those branches. It may commit locally as it goes. When 
 branch is squashed into its target, one commit there; a failure resets instead. The runtime,
 `mrepo-base-runtime`, runs it, with the actions the mrepo's packages offer.
 
-| | |
-|---|---|
-| [lib/](lib/) | its parts, a file each |
-| [test/](test/) | its tests, what each checks |
+## Links
+
+- [lib](lib/)
+- [test](test/)
 
 ## Design
 
@@ -59,8 +59,8 @@ hands over a form completed elsewhere the same way (the boot's own request).
 Run by the repository's runtime
 (`mrepo-base-runtime`). It has no actions of its own: they are the
 mrepo's packages'; its tests run it with `crud`. An
-action writes the targets the mrepo has: `main`, `runtime`, `help`,
-`protocols`. A path it reads or writes by is given relative from the
+action writes the targets the mrepo has: `main`, `runtime`, `info`,
+`protocols`, `links`. A path it reads or writes by is given relative from the
 mrepo's root (`runtime/service.json`) or slash-led, the same.
 
 ## Tests

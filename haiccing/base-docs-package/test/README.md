@@ -13,12 +13,12 @@ test/
 
 ## Links
 
-- [help](help/)
+- [info](info/)
 - [code](code/)
 - [mrepo](mrepo/)
 - [package](package/)
 - [modules](modules/)
-- [help-in-situ](help-in-situ/)
+- [info-in-situ](info-in-situ/)
 - [mrepo-in-situ](mrepo-in-situ/)
 - [name](name/)
 
@@ -26,8 +26,8 @@ test/
 
 Every test has its folder here, the generic ones too: nothing runs that
 has no folder. The generic tests are the same in every package and come
-with this template (`help`, `code`, `mrepo`, `package`, `modules`,
-`help-in-situ`, `mrepo-in-situ`); a test of the package's own is named as
+with this template (`info`, `code`, `mrepo`, `package`, `modules`,
+`info-in-situ`, `mrepo-in-situ`); a test of the package's own is named as
 the package likes (`name` here). Run through the package's dispatcher (`main.js`, its bundle's
 main), every one by path.
 
@@ -41,8 +41,8 @@ README.
 | `/test/<name>` | a test folder: its `run.js` |
 | `/test/modules/<org>/<module>` | a carried module's own tests (`modules/<org>/<module>/test/*.test.js`) |
 | `/test/modules` | the generic modules test: every carried module's own tests |
-| `/test/help` | the package's help, extracted from its own files, checked against the README rules |
-| `/test/help-in-situ` | the package's help as a running mrepo's runtime extracted it, checked |
+| `/test/info` | the package's info, extracted from its own files, every page reached and checked against the README rules |
+| `/test/info-in-situ` | the package's info as a running mrepo's runtime extracted it, checked |
 | `/test/code` | the package's code, its modules and its own, checked against the code rules |
 | `/test/mrepo` | the integrity of its mrepo side: its structure, its protocols, what it carries |
 | `/test/mrepo-in-situ` | the package as a running mrepo holds it: linked, its bundle, its layers |
@@ -62,8 +62,8 @@ Each a unit, each unit its own process. Beside them the entry points,
 ```
 
 Every package has `validate` (the package on its own, in a floating
-instance: its own tests, `help`, `code`, `mrepo` and `package`),
-`validate-in-situ` (where it is deployed: `help-in-situ` and
+instance: its own tests, `info`, `code`, `mrepo` and `package`),
+`validate-in-situ` (where it is deployed: `info-in-situ` and
 `mrepo-in-situ`, run with `runtime run`, which names the mrepo and the
 package) and `full` (everything: also `modules`). More sets as needed.
 

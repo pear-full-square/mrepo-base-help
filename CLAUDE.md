@@ -48,7 +48,7 @@ The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
 
 - A package's pre-release: `tools/bare tools/package-test.js haiccing/<package>`.
 - Everything: `tools/bare tools/release.js --strict`.
-- The checks: `tools/bare tools/help-extract.js` (and `--files`),
+- The checks: `tools/bare tools/info-extract.js` (and `--files`),
   `tools/bare tools/code-check.js`.
 - The boot's test, several times:
   `SOURCES=$PWD/sources tools/bare sources/haiccing/base-component-boot.bundle /test/validate`;

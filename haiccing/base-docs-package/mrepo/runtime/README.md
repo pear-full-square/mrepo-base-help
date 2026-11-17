@@ -32,8 +32,8 @@ The commands the mrepo runs on a status transition: files, one folder a
 transition, each holding one command, its parts.
 
 ```
-/runtime/hooks/boot/activate-help.json        ["protocol/activate", ".", "help"]
-/runtime/hooks/initialise/help-extract.json   ["help/extract"]
+/runtime/hooks/boot/activate-info.json        ["protocol/activate", ".", "info"]
+/runtime/hooks/initialise/info-extract.json   ["info/extract"]
 /runtime/hooks/start/activate-boot.json       ["protocol/activate", ".", "boot"]
 /runtime/hooks/stop/deactivate-boot.json      ["protocol/deactivate", ".", "boot"]
 ```

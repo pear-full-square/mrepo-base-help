@@ -32,7 +32,7 @@ inspect. One line a check, the count last; exit 0 passed, 1 failed.
    lines by default, as stored with `--raw`; a record printed, packed
    again, is the record as stored in the outbox; deployed
    again, an error on stderr; its boot protocol behind the service's door,
-   not active; its help not extracted yet;
+   not active; its info not extracted yet;
    `service/initialise` and `service/start` passed through to it, each
    answering what was done and the state now (`--output`).
 8. **What is missing is said**: a target, a package, a command; a

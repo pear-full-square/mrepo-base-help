@@ -17,7 +17,7 @@ and the `info` protocol.
 ## Usage
 
 - **Written by `info/extract`**, an ordinary action, run by a hook where
-  the help is extracted: at `boot` where the mrepo has no service, at
+  the mrepo is made ready: at `boot` where the mrepo has no service, at
   the service's `initialise` where it has one.
 - **Read with `info`**, or `info/get [<keywords>]`: the top page, the
   README of the mrepo's own package, and the keywords below it; a

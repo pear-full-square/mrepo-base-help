@@ -39,7 +39,7 @@ docs mrepo: `haicc docs info/get <keywords>`.
 - **mrepo**: a repository that runs; its data in layers, git branches;
   a runtime executing the requests posted to its inbox.
 - **layer**: one branch of an mrepo, with a mode: `main` its data,
-  `runtime`, `packages`, `protocols`, `links`, `help`, `howto`, `info`,
+  `runtime`, `packages`, `protocols`, `links`, `info`,
   the inbox, the outbox, the request layers.
 - **request**: a form, `{ protocol, action, uri, args }`, or a command
   as typed; executed, recorded, answered through the outbox.

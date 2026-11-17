@@ -6,7 +6,7 @@
   "type": "module",
   "main": "main.js",
   "modules": [
-    "pear-full-square/mrepo-base-help",
+    "pear-full-square/mrepo-base-info",
     "pear-full-square/pkgm-base-check"
   ],
   "template": {

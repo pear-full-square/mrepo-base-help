@@ -30,11 +30,11 @@ function unitsOf (folder) {
       if (n !== 'modules' && existsSync(join(test, n, 'run.js'))) units[`/test/${n}`] = [`./test/${n}/run.js`]
     }
   }
-  // The help tests, every package that carries mrepo-base-help: its help
-  // extracted from its own files (/test/help), or as a running mrepo's
-  // runtime extracted it (/test/help-in-situ: MREPO, PACKAGE).
-  const validate = join(folder, 'modules', 'pear-full-square', 'mrepo-base-help', 'validate')
-  for (const n of ['help', 'help-in-situ']) if (!units[`/test/${n}`] && existsSync(join(validate, `${n}.test.js`))) units[`/test/${n}`] = [`./modules/pear-full-square/mrepo-base-help/validate/${n}.test.js`]
+  // The info tests, every package that carries mrepo-base-info: its info
+  // extracted from its own files (/test/info), or as a running mrepo's
+  // runtime extracted it (/test/info-in-situ: MREPO, PACKAGE, SITU).
+  const validate = join(folder, 'modules', 'pear-full-square', 'mrepo-base-info', 'validate')
+  for (const n of ['info', 'info-in-situ']) if (!units[`/test/${n}`] && existsSync(join(validate, `${n}.test.js`))) units[`/test/${n}`] = [`./modules/pear-full-square/mrepo-base-info/validate/${n}.test.js`]
   // The code test, every package that carries pkgm-base-check: its modules
   // and its own code against the code rules (/test/code).
   // and its mrepo side: on its own (/test/mrepo), and as a running mrepo

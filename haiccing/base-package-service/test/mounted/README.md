@@ -18,8 +18,8 @@ hooks.
   not offered anywhere but the mrepo itself; refused when not activated.
 - **Its structure**: the state an mrepo that links it starts in,
   `booted`; its list of packages, itself last.
-- **Its hooks, file by file**: at boot `help`, `runtime` and `service`
-  activated; on `initialise` the help extracted; none on the other
+- **Its hooks, file by file**: at boot `info`, `runtime` and `service`
+  activated; on `initialise` the info extracted; none on the other
   transitions. A hook file that is not named in the test fails it.
 - **Its actions**: `initialise` runs the package's own hook first, as the
   mrepo's own, then moves the state; `start`, `stop` and `shutdown` move

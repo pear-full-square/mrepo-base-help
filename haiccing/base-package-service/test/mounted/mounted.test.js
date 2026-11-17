@@ -88,19 +88,19 @@ test('its config in effect: a request checked on each state, allowed only where 
 test('its structure: the state it starts in, and its list of packages', (t) => {
   t.alike(json('mrepo', 'runtime', 'service.json'), { state: 'booted' }, 'an mrepo that links it starts booted')
   const list = json('mrepo', 'packages', 'layer.json').packages
-  t.alike(list, ['haiccing/base-package-runtime', 'haiccing/base-package-help', 'haiccing/base-package-protocol', 'haiccing/base-docs-package', 'haiccing/base-package-service'], 'deployed alone: the runtime, help, the protocol protocol, the documentation, itself last')
+  t.alike(list, ['haiccing/base-package-runtime', 'haiccing/base-package-info', 'haiccing/base-package-protocol', 'haiccing/base-package-service'], 'deployed alone: the runtime, info, the protocol protocol, itself last')
 })
 
 // The hooks it brings, each named here with its command: deployed alone,
 // what the mrepo offers from its boot, and what its initialise does.
 const HOOKS = {
-  'boot/activate-help': ['protocol/activate', '.', 'help'],
+  'boot/activate-info': ['protocol/activate', '.', 'info'],
   'boot/activate-runtime': ['protocol/activate', '.', 'runtime'],
   'boot/activate-service': ['protocol/activate', '.', 'service'],
-  'initialise/help-extract': ['help/extract']
+  'initialise/info-extract': ['info/extract']
 }
 
-test('its hooks, file by file: at boot help, runtime and service activated; on initialise the help extracted', (t) => {
+test('its hooks, file by file: at boot info, runtime and service activated; on initialise the info extracted', (t) => {
   t.alike(brought, HOOKS, 'each hook file, its transition and its command; none that is not named here')
   t.absent(Object.keys(brought).some(n => /^(start|stop|shutdown)\//.test(n)), 'none on start, stop or shutdown: deployed alone it has no door to open')
 })
@@ -108,7 +108,7 @@ test('its hooks, file by file: at boot help, runtime and service activated; on i
 test('initialise: its hook run first, as the mrepo\'s own, then the state moved', async (t) => {
   const { exec, commands, writes, now } = execution('booted')
   t.alike(await act('initialise', exec), { service: 'initialised', state: 'initialised' }, 'what it returns: what was done, the state now')
-  t.alike(commands, [['help/extract', { own: true }]], 'the package\'s own initialise hook, run in the execution as the mrepo\'s own; the boot hooks are not its to run')
+  t.alike(commands, [['info/extract', { own: true }]], 'the package\'s own initialise hook, run in the execution as the mrepo\'s own; the boot hooks are not its to run')
   t.alike([now(), writes], ['initialised', ['/runtime/service.json']], 'one write: the state')
 })
 

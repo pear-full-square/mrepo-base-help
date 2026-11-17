@@ -20,7 +20,7 @@ A document by the link's own key:
   "how": "deployed",
   "folder": "../local/host",
   "package": "haiccing/base-component-haicc",
-  "packages": ["haiccing/base-package-help", "..."],
+  "packages": ["haiccing/base-package-info", "..."],
   "layers": { "main": "...", "...": "..." },
   "runtime": { "pid": 4242 }
 }

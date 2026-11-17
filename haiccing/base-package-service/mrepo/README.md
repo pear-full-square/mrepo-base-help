@@ -4,10 +4,10 @@ The service protocol's part of an mrepo's structure: the service state, booted, 
 
 - **`runtime/service.json`**: `{ "state": "booted" }`. An mrepo that has
   it is service managed.
-- **Its hooks** (`runtime/hooks/`): at `boot`, `service`, `help` and
-  `runtime` activated; at `initialise`, its help extracted.
-- **Its packages** (`packages/layer.json`): the runtime, the help
-  protocol, the protocol protocol, the documentation packages, and this
+- **Its hooks** (`runtime/hooks/`): at `boot`, `service`, `info` and
+  `runtime` activated; at `initialise`, its info extracted.
+- **Its packages** (`packages/layer.json`): the runtime, the info
+  protocol, the protocol protocol, and this
   package last.
 
 ## Runtime config

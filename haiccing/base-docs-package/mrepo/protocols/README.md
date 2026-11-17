@@ -64,7 +64,7 @@ defines the mrepo drops into its runtime layer (`/runtime`):
   offers everything it does this way.
 - at the service's `start` and `stop`: what sits behind its door.
 
-So a closed mrepo can still be inspected and tested: `runtime` and `help`
+So a closed mrepo can still be inspected and tested: `runtime` and `info`
 are activated at boot. The `protocol` protocol itself is not activated:
 opening and closing is the hooks' business, not a request from outside.
 

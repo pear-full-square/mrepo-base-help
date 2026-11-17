@@ -9,12 +9,12 @@ runs the hooks of its transition, then moves the state. The door is two
 hooks: one on `start` that activates what sits behind it, one on `stop`
 that deactivates it again.
 
-| | |
-|---|---|
-| [mrepo/](mrepo/) | its part of the structure: the service state |
-| [test/](test/) | its tests: its protocol as mounted, and the generic ones |
-| [test-reports/](test-reports/) | the report of its last pre-release |
-| [modules/](modules/) | its code, assembled: ours and the third-party code |
+## Links
+
+- [mrepo](mrepo/)
+- [test](test/)
+- [test-reports](test-reports/)
+- [modules](modules/)
 
 ## States
 
@@ -26,6 +26,12 @@ that deactivates it again.
 
 Each action answers what was done and the state the service is in now:
 `service/stop` answers `{ "service": "stopped", "state": "initialised" }`.
+
+## Config
+
+In `protocol.js`, the package's: each action at the mrepo itself, `.`, with the states that
+allow it. The runtime's check reads it: the state machine is configuration,
+not code.
 
 ## Package
 
