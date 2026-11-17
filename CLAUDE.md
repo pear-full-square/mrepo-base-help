@@ -59,6 +59,30 @@ The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
   (`docker ps -a --filter label=haicc.folder`).
 - A new package: the template's "A new package" (`base-docs-package`).
 
+## Working here
+
+The collaboration rules are `base-docs-hdlc`'s; here, what is this
+repository's and its tools'.
+
+- **A module added or removed**: written into `package.json`
+  (workspaces) and `package-lock.json` (its workspace entry, its link
+  entry) by hand, its link made in `node_modules/`; no npm run.
+- **Bare only**: npm only to change dependencies (`npm install
+  --ignore-scripts`, then `chmod +x node_modules/bare-runtime-linux-x64/bin/bare`).
+  A module's tests: `../../tools/bare ../../node_modules/brittle/cmd.js test/*.test.js`.
+- **A long run in the background**, its output to a file in the
+  scratchpad, waited for; no commit while it builds over the tree. One
+  run at a time on `sources/`: a `haicc` test started while bundles are
+  rebuilt hangs.
+- **Before a long run**: `tools/bare tools/release.js`, then each changed
+  package's own test from its folder: a slip is found in seconds.
+- **A test waits for a runtime's process to end** (`kill -0`), not only
+  for it to stop answering.
+- **A removal by a variable is refused** by a safety check: write it as
+  `"${VAR:?}"`, or make a fresh folder with `mktemp -d`.
+- **What it all looks like**: `tools/bare tools/info-view.js` writes every
+  package's and mrepo's info into one page, `sources/info-view.html`.
+
 ## Execution
 
 - **Product repositories:** a session attaches them and pushes: each

@@ -4419,3 +4419,24 @@ documentation packages").
 - **The template's leftover layer folders gone**, and its `help` setting:
   info has no root of documentation, each mrepo's top is its own
   package.
+
+**The offload finished** (the human: "If you have a satisfactory place to
+put the leftovers, then offload them. It means that documentation is
+distributed across the new structure."):
+
+- **The collaboration rules** (the handover's "How the human works with
+  us") into `base-docs-hdlc`, "Collaboration"; what is this repository's
+  and its tools' into `CLAUDE.md`, "Working here"; one line dropped as no
+  longer true ("this development repository stays as it is, its
+  `rules.md`"). The handover points to both.
+- **`xpath.md`'s settled and built parts** into `base-docs-xpath`:
+  standard only, a leaf and `@name`, a filter's names by the URI's
+  rules, commands over nodes, the routing URI a query. The design in
+  discussion and the phases to come stay in `xpath.md`.
+- **`mycelium-uri`'s "Design"** no longer states the rules (the
+  branch-rooted URIs of before): it points to `base-docs-uri` and keeps
+  how they are kept.
+- **`tools/info-view.js`**: every package's and mrepo's info in one page
+  browsed by keywords, as `info/get` answers, the command shown, the
+  problems per view (`sources/info-view.html`); published for the human
+  to evaluate the work with.

@@ -4,6 +4,11 @@ In discussion with the human, started 2026-11-14. A design: nothing of
 it is built. It grows as the discussion goes; what is built leaves this
 file and becomes a part in `readme.md`.
 
+What is built and settled is offloaded (part 86) into the base
+family's XPath documentation, `haiccing/base-docs-xpath`: the query of
+phase 1, its meaning, standard only, commands over nodes, shortcuts and
+hops. What stays here is the design in discussion and the phases to come.
+
 Read as a task in `tasks.md` is read: **Settled** is what the human said
 or confirmed; **Proposed** is ours, put to the human and not yet
 answered; **To settle** is open. The syntax in the examples is

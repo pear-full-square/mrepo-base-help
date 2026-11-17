@@ -530,102 +530,10 @@ with the human first, unless the task says it is ours ("Left to us").
 
 ## How the human works with us
 
-- **A team, on equal terms** (2026-11-15: "it is not my terms or your
-  terms, but our terms: we are a team. It is not human or AI, it is us.
-  We are equal team members. Just remember. We discuss and decide, on
-  equal terms."). What is settled is ours, not one side's: say "we",
-  "our terms", "our order of work". Bring an opinion and a
-  recommendation, not only questions; a decision is made together, in
-  discussion. Who said what is still recorded, in the words used.
-
-- **Finish the discussion before building**: a reading of what the human
-  said is confirmed by the human before any of it is built ("go"). Building
-  on an unconfirmed reading, even a mostly right one, costs changes after.
-- **Ask point by point, briefly**: one question at a time, short; no walls
-  of text. Discuss first; build what has settled; structure and design are
-  decided with the human.
-- **A new repository asked for**: its description alone, in a block to
-  copy (2026-11-16: "description only to copy is enough"); its owner
-  and name in a line of text. Created with a licence, so `main` has a
-  first commit.
-- **Check yourself before asking** (GitHub: `gh api -X GET search/repositories
-  -f q='<name> in:name org:<org>'`; the code; the docs).
-- **Few pushes** (GitHub suspended us once): one commit and one push per
-  part; when a part is done, merge `execute/main` into `main` (a plain
-  merge, `git merge --no-ff`) and push both at once; then the product
-  repositories (`sh tools/products.sh <module>...` and
-  `sh tools/packages.sh -m "..." <package>...`, from `main`).
-- **Say in a few words what you are doing** when a step takes long; report
-  after each step of a build, plainly, with what passed and what did not.
-- **Record what settled**, in `readme.md` as a part, and keep this file and
-  `CLAUDE.md` current: a context reset loses everything else.
-- **The lock file by hand**: a module added or removed is written into
-  `package.json` (workspaces) and `package-lock.json` (its workspace entry,
-  its link entry) directly, its link made in `node_modules/`; no npm run.
-- **Bare only**: npm only to change dependencies (`npm install
-  --ignore-scripts`; then `chmod +x node_modules/bare-runtime-linux-x64/bin/bare`,
-  npm drops its exec bit). The repo's Bare:
-  `node_modules/bare-runtime-linux-x64/bin/bare` (tests:
-  `bare ../../node_modules/brittle/cmd.js test/*.test.js` in a module).
-- **This development repository stays as it is** (its `rules.md`,
-  `pending/default`, `capability/*`): behind in structure, not to be
-  migrated; the new model is for mycelium repositories.
-- **The headers stay empty** until their use is planned with the human.
-- **Only what is in use is here** (2026-11-11): the modules no package
-  carries, the old haiccing folders, `splectral/`, `notes/`, `docs/` were
-  removed (the history has them; each module has its repository). Bringing
-  one back: copy it from its repository, then bring it to the rules first
-  (READMEs cascading, `external/`/`internal/` methods, the code rules), as
-  the checks will demand. `CLAUDE.md` describes the repository as it is:
-  keep it so.
-- **A test waits for a runtime's process to end** (signal 0, `kill -0`), not
-  only for it to stop answering.
-- **Long stretches of planning, then a batch built** (2026-11-13): the
-  human prefers to discuss and plan in longer stretches; what settles is
-  stacked in `tasks.md` and built when the human says so, then worked
-  through to the end without stopping at each step ("I trust we have the
-  tests in place").
-- **A package tests what it provides** (the human, firmly, 2026-11-13: it
-  had been skipped, "very disappointing"): a test of its own in every
-  package for its functionality; never left to another package's test.
-  Tests that fail when something is forgotten, so we are reminded early:
-  the platform is so flexible that without full coverage it becomes
-  hell; with everything checked by default one can be relaxed.
-- **A dummy test is a decision, not a default**: a package with nothing
-  of its own to test says so with a dummy (0 of 0), written for it after
-  asking: is there anything package specific that needs testing? Never
-  copied, never in the template.
-- **Naming is local** apart from the generic tests. Every test has a
-  named folder in the package's `test/`.
-- **Self-contained and pinned**: a package is pinned to a commit of the
-  template and upgraded explicitly, one at a time; blanket changes are
-  avoided as expensive. (For now modules are still blanket: a module
-  that changes means the pre-release of every package carrying it.)
-- **The tools are kept well structured** (`tools/README.md`): they are to
-  become packages running on the haicc platform.
-- **Short answers, read literally** (2026-11-14): the human answers in a
-  line ("Yes with default", "Request form one segment per command"). Say
-  the reading back in a few lines with one example, ask only what is
-  still open, one question; record what was said, in its words, in
-  `tasks.md` before building. When a batch is done and the next task has
-  proposals never answered, list them compactly and ask for a go.
-- **A long run in the background, the turn kept open** (2026-11-14): the
-  pre-releases take up to an hour; a turn that ends while they write
-  files is made to commit and push what is half done. Start them in the
-  background and wait in the foreground for the process to end (`timeout
-  590 tail -f --pid=<pid> /dev/null`, again until it has); a foreground
-  `sleep` is refused. Before a long run: `tools/bare tools/release.js`
-  (every bundle current: some tests read the others' bundles), then each
-  changed package's own test from its folder (`bare test/<name>/run.js`):
-  a slip in a test is found in seconds, not after forty minutes.
-- **When a test fails after a change, look at whose mistake it is**: in
-  parts 60 to 64 every failure but one was a test still in the old form;
-  the one that was not (the race of part 64) showed only one run in four:
-  run the `haicc` test several times after anything that touches the
-  request layers.
-- **A file removal by variable is refused here**: `rm -rf "$VAR/..."`
-  is blocked by a safety check; make a fresh folder with `mktemp -d`
-  instead of clearing one.
+Offloaded (part 86): the collaboration rules are `base-docs-hdlc`'s
+"Collaboration" (`haiccing/base-docs-hdlc/README.md`); what is this
+repository's and its tools', `CLAUDE.md`'s "Working here". The words the
+human used are in the parts of `readme.md` and in `tasks.md`.
 
 ## What is built (`readme.md`, parts 13 to 59)
 

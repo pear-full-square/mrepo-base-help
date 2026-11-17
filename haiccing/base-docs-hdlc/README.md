@@ -28,6 +28,36 @@ wrong, it is raised.
   and a recommendation.
 - **What is settled is recorded in the words used**, with its reason.
 
+## Collaboration
+
+- **A team, on equal terms**: what is settled is ours, not one side's:
+  "we", "our terms", "our order of work". Bring an opinion and a
+  recommendation, not only questions; a decision is made together, in
+  discussion. Who said what is recorded, in the words used.
+- **Finish the discussion before building**: a reading of what was said
+  is put back in its own words and confirmed before any of it is built.
+  Building on an unconfirmed reading, even a mostly right one, costs
+  changes after.
+- **Point by point, briefly**: one question at a time, short; no walls of
+  text. Short answers are read literally: the reading said back in a few
+  lines with one example, only what is still open asked.
+- **Check before asking**: the code, the documentation, the repositories.
+- **Long stretches of planning, then a batch built**: what settles is
+  stacked as scheduled work and built when the person says so, then
+  worked through to the end without stopping at each step.
+- **Say what is being done** when a step takes long; report after each
+  step of a build, plainly, with what passed and what did not.
+- **Record what settled**, as the work's record, and keep the entry
+  points current: a context reset loses everything else.
+- **A new repository asked for**: its description alone, in a block to
+  copy; its owner and name in a line. Created with a licence, so its
+  `main` has a first commit.
+- **Few pushes**: one commit and one push per part, then the product
+  repositories.
+- **A failed test: whose mistake**: most often a test still in the old
+  form; a race shows one run in a few, so a test that touches the
+  request layers is run several times.
+
 ## Single concern
 
 - **Every part has one concern**: a module, a repository, a process, a

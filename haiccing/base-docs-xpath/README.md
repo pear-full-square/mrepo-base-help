@@ -50,6 +50,28 @@ out (`::`), a filter inside a filter, the other functions. The parent
 - **A position** is the n-th of the nodes the step selected under the
   same parent, in the order they came.
 
+## Standard only
+
+- **XPath 1.0's forward part**, in phases; nothing that looks back or up.
+  A form outside the standard is not built: `starts-with()` and
+  `contains()` say what a wildcard in a value would.
+- **A leaf in a filter** is a child holding a value: a document's key
+  with a value under it. `@name` is accepted and means the same as
+  `name`.
+- **A name in a filter is a URI's**: lowercase, by the URI's rules; a
+  document's key in its URI form, `[owner/public-key='k1']`.
+
+## Commands over nodes
+
+- **Every command is a map over the nodes its URI selects**: one node,
+  none or many alike. `crud/read swarms/*` reads each node selected.
+- **The routing URI is a query too**: `haicc <query> <command>` executes
+  the command at each position the query selects, and sends it on with
+  what is left of the URI where it reaches a shortcut.
+- **What a request answers is the action's own**, any data: what a URI
+  resolves to is always an array of nodes; a command run at several
+  nodes answers with what each gave, listed.
+
 ## Shortcuts
 
 - **A shortcut** is a node in `main` whose data comes from another
