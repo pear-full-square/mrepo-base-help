@@ -725,3 +725,24 @@ where it takes any, Returns, Errors, Design); the config in
   so; the unique URI from the nearest swarm node above, else `local`);
   `teardown` a query, whatever it selects torn down, the registry's
   layout not the action's. A design change: decided before code.
+- **Settled** (the human): "yes, structure documents give positions their
+  meaning. Meaning is set by components or solution. We are going to
+  create the solution package later, stuff that should go there can be
+  parked. In this case the structure goes into the boot component. And
+  the component needs to supply the 'management logic' that comes with
+  the (simple) deploy and teardown. Now, shouldn't that be an override
+  of the boot protocol actions? How do you see that working?"
+- Ours, put to the human: an extension, not an override (two
+  implementations of one protocol, which runs depending on the list's
+  order; a component carrying code). The protocol does the simple thing,
+  offered anywhere below `main`, the unique URI from the nearest swarm
+  node's document, else `local`. **Action hooks**, beside the
+  transition hooks: `mrepo/runtime/hooks/boot.deploy/`,
+  `boot.teardown/`, run after the action as the mrepo's own, a hook
+  naming values of the action it follows (`registry/{uri}`): the one new
+  mechanism. Logic that needs code a protocol of its own (`registry`:
+  record, remove, list), listed by the boot component, called by its
+  hooks. The boot component: the registry's structure, its hooks (after
+  deploy recorded, after teardown removed, before teardown what the
+  child deployed torn down: the cascade). Parked for the solution:
+  `swarms/`, the cluster, the mrepos of an install.
