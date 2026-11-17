@@ -1,6 +1,6 @@
 # Test report: haiccing/base-component-boot
 
-The package passed its `full` set: all 23 units, 318 of 318 tests and 2224 of 2224 asserts.
+The package passed its `full` set: all 23 units, 322 of 322 tests and 2232 of 2232 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 23 units, 318 of 318 tests and 2224 of 22
 | Set | `full` |
 | Result | passed |
 | Units | 23 of 23 passed |
-| Tests | 318 of 318 passed |
-| Asserts | 2224 of 2224 passed |
-| Run | 2026-11-17 21:59 UTC |
+| Tests | 322 of 322 passed |
+| Asserts | 2232 of 2232 passed |
+| Run | 2026-11-17 23:25 UTC |
 | Bare | v1.36.0 |
-| Content | `6addfdb69e4ed8bec98685d4f9de93733a55358d125e624115bbaa5c02c5db40` |
+| Content | `bc2516e20c107787e2ec6085cc427d686b0a024e7f2b4210662c238c25a9f888` |
 
 ## Units
 
@@ -40,6 +40,6 @@ The package passed its `full` set: all 23 units, 318 of 318 tests and 2224 of 22
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 19 of 19 | 54 of 54 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 62 of 62 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.
