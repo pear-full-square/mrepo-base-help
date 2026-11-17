@@ -758,3 +758,15 @@ where it takes any, Returns, Errors, Design); the config in
   teardown running its own before hooks, as deep as the tree; which
   mrepos the child deployed the `registry` protocol's to answer.
   Parameters: the action's form before, its output too after.
+- The human: "yes, but that would be as good as replacing the original
+  action with some override, don't you think so?" Ours: functionally
+  yes; hooks scatter the flow (before, the action, after) and their
+  order between packages is a question of its own. So, put to the human:
+  **an override as a script**: the component redefines an action,
+  `mrepo/runtime/actions/<protocol>.<action>.json`, a list of commands
+  as a continuation script is; inside it the protocol's action is the
+  original, outside (a request, a hook) the override; one request, one
+  execution, one record, a failing command stopping it there; parameters
+  from the request and the steps before; one override an action an
+  mrepo, by the package that defines it, as runtime config is. In place
+  of the before and after hooks.
