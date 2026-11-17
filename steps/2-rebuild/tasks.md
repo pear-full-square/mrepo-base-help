@@ -1947,8 +1947,17 @@ registry, we can create info views on all mrepos."
    different configuration. The setup on the host and within the
    container (for a node) should be identical, except that one is master
    and the other slave." So: one install, the same on the host and in a
-   node's container; its configuration says master or slave. Designed
-   when the container comes back.
+   node's container; its configuration says master or slave. The human:
+   "master slave means: master issues command, or receives it. This gets
+   replicated to the slave and the slave executes it. This master slave
+   setup can be used to manage the container-internal node on a swarm,
+   but the other way around the container internal node can send
+   commands to the host install for execution on the host." So master
+   and slave is a direction, not a rank: the side a command starts at is
+   its master, the side it is replicated to and executed at its slave.
+   The host is master for what it sends into the container's node; the
+   node is master for what it sends out to the host. Designed when the
+   container comes back.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script
