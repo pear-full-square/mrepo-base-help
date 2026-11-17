@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-xpath",
-  "content": "7283f4560a2c0350fc8adf2bc38af178fa1530f627448e108a5ec60b2d715c23",
+  "content": "cef93c9066dfe96d61e04b15f1b0d5c39929487a375a53c7cd23a51241e73f07",
   "bare": "v1.36.0",
-  "date": "2026-11-17T13:35:51.133Z",
+  "date": "2026-11-17T23:26:44.780Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -101,12 +101,12 @@
       "unit": "/test/modules/pear-full-square/pkgm-base-check",
       "ok": true,
       "tests": {
-        "passed": 19,
-        "total": 19
+        "passed": 23,
+        "total": 23
       },
       "asserts": {
-        "passed": 54,
-        "total": 54
+        "passed": 62,
+        "total": 62
       },
       "failures": []
     }
