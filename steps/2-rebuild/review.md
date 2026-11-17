@@ -912,3 +912,27 @@ running mrepo through the inbox (today the `haicc` command's end to end
 test); `goto` at a query's positions (several nodes selected); `service`
 in each state refusing the others; examples: a host's lifecycle, a
 chain of hops.
+
+### base-package-runtime, -container, -splectral
+
+Sound in all three: each action its page in its module; the config in
+`protocol.js`; their own tests.
+
+**Documentation, done** (2026-11-17): the menus jump to the actions;
+"Config" a table in each (`container`'s and `splectral`'s "Commands"
+folded into it); how-tos: `runtime` `howto/test-in-situ` (a set's dry
+run, the in-situ set, one module's tests, in a running mrepo),
+`container` `howto/node` (its "How to": a swarm's node given its
+container, reached, removed before its teardown), `splectral`
+`howto/watch` (its "How to": the install's commands seen in a browser).
+
+**Settled design, to build** (`base-solution-haicc`): `splectral`'s
+script `start` and the haicc component's `cluster` are JSON command
+lists answered as continuations: shell scripts with the scripts'
+building.
+
+**Tests and examples, later** (`install-tests`): `runtime/run` from the
+command line (today in `base-component-boot`'s boot test, by its
+inbox); `container` without Docker (`no Docker`, each action) and
+`status` `gone`; `splectral` on a taken port, started again; examples:
+a node in its container, Splectral watching a cluster deployed.

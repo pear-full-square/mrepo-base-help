@@ -10,65 +10,15 @@ mrepo. This is how a swarm node gets its container.
 
 ## Links
 
+- [create](modules/pear-full-square/mrepo-base-container/external/create/)
+- [start](modules/pear-full-square/mrepo-base-container/external/start/)
+- [status](modules/pear-full-square/mrepo-base-container/external/status/)
+- [stop](modules/pear-full-square/mrepo-base-container/external/stop/)
+- [remove](modules/pear-full-square/mrepo-base-container/external/remove/)
+- [howto](howto/)
 - [test](test/)
 - [test-reports](test-reports/)
 - [modules](modules/)
-
-## Commands
-
-```
-haicc host haicc swarms/swarm-1/node-1 container/create
-haicc host haicc swarms/swarm-1/node-1 container/start
-haicc host haicc swarms/swarm-1/node-1 container/status
-haicc host haicc swarms/swarm-1/node-1 haicc container service/initialise
-haicc host haicc swarms/swarm-1/node-1 container/stop
-haicc host haicc swarms/swarm-1/node-1 container/remove
-```
-
-- `container/create`: the replica built beside the mrepos, under the
-  work folder's `containers/`, and its container made, not started. The
-  first one on a machine builds the image, for which Docker pulls its
-  base.
-- `container/start`: the container started; answered when the replica's
-  runtime runs in it.
-- `container/status`: `none`, `created`, `running`, `exited`; `gone`
-  when the container was removed outside this protocol.
-- `container/stop`: the container stopped; it can be started again.
-- `container/remove`: the container, the replica's folder and its link
-  removed, whether it runs or not.
-
-Every action is requested at the mrepo itself: the one whose replica it
-is about. `start`, `stop` and `status` can be repeated.
-
-## How to
-
-Give a swarm's node its container, and reach the mrepo in it. The host
-is in service and has the swarm's node in its `main`.
-
-```
-haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc
-haicc host haicc swarms/swarm-1/node-1 service/initialise
-haicc host haicc swarms/swarm-1/node-1 service/start
-haicc host haicc swarms/swarm-1/node-1 container/create
-haicc host haicc swarms/swarm-1/node-1 container/start
-haicc host haicc swarms/swarm-1/node-1 haicc container service/initialise
-haicc host haicc swarms/swarm-1/node-1 haicc container service/start
-haicc host haicc swarms/swarm-1/node-1 haicc container crud/read .
-```
-
-The node is the bridgehead: a standard mrepo on the host. Started, its
-`container` protocol is open. `container/create` and `container/start`
-make its replica and run it; from then on `haicc container` at the node
-sends a command on into the container, as it would to any linked mrepo.
-`base-component-haicc`'s script `cluster` does this for two nodes.
-
-Before the node is torn down, its replica is removed: `boot/teardown`
-does not know of containers.
-
-```
-haicc host haicc swarms/swarm-1/node-1 container/remove
-haicc host boot/teardown swarms/swarm-1/node-1
-```
 
 ## Needs
 
@@ -77,7 +27,16 @@ Docker, its daemon running, on Linux. Without it every action but a
 
 ## Config
 
-In `protocol.js`, the package's: the five actions at the mrepo itself.
+The `container` protocol's, in `protocol.js`: every action at the mrepo
+itself, `.`, the one whose replica it is about; no arguments.
+
+| action | what it does | repeated |
+|---|---|---|
+| `create` | the replica built beside the mrepos (the work folder's `containers/`), its container made, not started; the first on a machine builds the image | no |
+| `start` | the container started, answered when the replica's runtime runs in it | yes |
+| `status` | `none`, `created`, `running`, `exited`; `gone` when removed outside this protocol | yes |
+| `stop` | the container stopped; it can be started again | yes |
+| `remove` | the container, the replica's folder and its link removed, running or not | |
 
 ## Package
 

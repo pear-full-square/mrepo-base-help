@@ -11,6 +11,8 @@ bare <dir>/packages/haiccing/base-package-runtime.bundle <dir>
 
 ## Links
 
+- [run](modules/pear-full-square/mrepo-base-runtime/external/run/)
+- [howto](howto/)
 - [mrepo](mrepo/)
 - [modules](modules/)
 - [test](test/)
@@ -30,6 +32,14 @@ packages offer and fires its `boot` hooks; it names no protocol itself. Stopped 
 a short path in the temporary folder when that is too long), by SIGTERM or
 SIGINT; it runs until then. (`--work=<folder>`: the
 mrepo a work folder's setting names, as the p2p host.)
+
+## Config
+
+The `runtime` protocol's, in `protocol.js`; no state.
+
+| action | offered at | arguments |
+|---|---|---|
+| `run` | `.`, the mrepo itself | a linked package's entry, `packages/<org>/<package><target>`; `dry-run`, optional |
 
 ## The package
 
