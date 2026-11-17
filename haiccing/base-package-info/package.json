@@ -11,7 +11,7 @@
     "pear-full-square/pkgm-base-check"
   ],
   "template": {
-    "repository": "haiccing/package-docs-package",
+    "repository": "haiccing/base-docs-package",
     "commit": "ccd2bd154c56aa32320dc544ac2c3093404abadd"
   },
   "scripts": {

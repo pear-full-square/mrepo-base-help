@@ -1,6 +1,6 @@
 // The help layer as the runtime extracts it, from bundles, into a folder to
 // browse, with its problems: the documentation checked against the rules
-// (haiccing/package-docs-package, "READMEs"). The extraction and the rules
+// (haiccing/base-docs-package, "READMEs"). The extraction and the rules
 // are mrepo-base-help's: the same here.
 //   tools/bare tools/help-extract.js [<org>/<package>...] [--sources=<folder>] [--out=<folder>]
 //   tools/bare tools/help-extract.js --files

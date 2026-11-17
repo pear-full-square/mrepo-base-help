@@ -4,8 +4,7 @@
   "packages": [
     "haiccing/base-package-help",
     "haiccing/base-package-protocol",
-    "haiccing/package-docs-mrepo",
-    "haiccing/package-docs-package",
+    "haiccing/base-docs-package",
     "haiccing/base-package-runtime"
   ]
 }

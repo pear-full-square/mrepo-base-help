@@ -30,8 +30,7 @@ created.
 - [base-package-haicc](../base-package-haicc/)
 - [base-package-crud](../base-package-crud/)
 - [base-package-container](../base-package-container/)
-- [package-docs-mrepo](../package-docs-mrepo/)
-- [package-docs-package](../package-docs-package/)
+- [base-docs-package](../base-docs-package/)
 
 ## Deploying
 

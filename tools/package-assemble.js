@@ -1,4 +1,4 @@
-// A package's modules assembled into its folder (haiccing/package-docs-package,
+// A package's modules assembled into its folder (haiccing/base-docs-package,
 // "What a package is": modules/ once, at the package's top): from the
 // modules its package.json names (`modules`), what they run on, all the way
 // down (pkgm-base-manager's closure):
@@ -103,7 +103,7 @@ const record = set.third.map(t => {
 })
 writeFileSync(join(out, 'third-party.json'), JSON.stringify({ platform: platform(), omitted: omit, modules: record }, null, 2) + '\n')
 // Its README, linking down to each of ours (READMEs cascade:
-// haiccing/package-docs-package).
+// haiccing/base-docs-package).
 const row = p => {
   const d = (readJson(join(out, p, 'package.json')).description || '').replace(/\|/g, '\\|')
   return existsSync(join(out, p, 'README.md')) ? `| [${p}/](${p}/) | ${d} |` : `| \`${p}/\` | ${d} |`

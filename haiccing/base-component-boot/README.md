@@ -30,8 +30,7 @@ bare base-component-boot.bundle --work=<folder> --sources=folder:<sources>
 - [base-package-boot](../base-package-boot/)
 - [base-package-haicc](../base-package-haicc/)
 - [base-package-crud](../base-package-crud/)
-- [package-docs-mrepo](../package-docs-mrepo/)
-- [package-docs-package](../package-docs-package/)
+- [base-docs-package](../base-docs-package/)
 
 ## Steps
 

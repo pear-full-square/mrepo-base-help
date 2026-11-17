@@ -70,7 +70,7 @@ export function parse (text) {
   return { title, oneliner, summary, sections: sections.filter(s => s.title !== MENU && s.title !== INCLUDED), menu, included, table, first: sections[0]?.title ?? null }
 }
 
-// The rules on one README's text (haiccing/package-docs-package,
+// The rules on one README's text (haiccing/base-docs-package,
 // "READMEs"): [[check, detail]...]. Its shape, its length, its references,
 // its menu's form; where the menus point is the extraction's to check.
 export function check (text) {

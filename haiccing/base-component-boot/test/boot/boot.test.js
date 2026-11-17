@@ -24,7 +24,7 @@ const wait = ms => new Promise(resolve => setTimeout(resolve, ms))
 const STARTS = ['boot deploy boot', 'crud create main/registry', 'help extract .', 'howto extract .', 'info extract .', 'protocol activate .', 'protocol activate .', 'protocol activate .', 'protocol activate .', 'protocol activate .', 'protocol activate .', 'protocol activate .']
 const alive = pid => spawnSync('kill', ['-0', String(pid)], { stdio: 'ignore' }).status === 0
 const SOURCES = resolve(process.env.SOURCES || join(pkg, '..', '..', 'sources'))
-const have = ['base-package-runtime', 'base-package-help', 'base-package-protocol', 'base-package-boot', 'base-package-service', 'base-package-haicc', 'base-component-boot', 'base-component-haicc', 'package-docs-mrepo', 'package-docs-package'].every(p => existsSync(join(SOURCES, 'haiccing', `${p}.bundle`)))
+const have = ['base-package-runtime', 'base-package-help', 'base-package-protocol', 'base-package-boot', 'base-package-service', 'base-package-haicc', 'base-component-boot', 'base-component-haicc', 'base-docs-package'].every(p => existsSync(join(SOURCES, 'haiccing', `${p}.bundle`)))
 
 // A run of the boot, on the Bare running this test: its exit code and what
 // it printed (one record a line).
@@ -64,7 +64,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     t.is(statSync(store).ino, statSync(mine).ino, 'hard linked: one file')
     const repo = openRepo(p2pgitBackend(gitdirOf(work, 'boot'), { fs }))
     const listed = JSON.parse((await repo.read('/packages/manifest.json')).toString()).packages
-    t.alike(Object.keys(listed), ['haiccing/base-package-runtime', 'haiccing/base-package-help', 'haiccing/base-package-howto', 'haiccing/base-package-info', 'haiccing/base-package-protocol', 'haiccing/base-package-boot', 'haiccing/base-package-haicc', 'haiccing/base-package-crud', 'haiccing/package-docs-mrepo', 'haiccing/package-docs-package', 'haiccing/base-component-boot'], 'the packages layer: the component\'s list (the runtime, the help protocol, the howto protocol, the info protocol, the protocol protocol, the boot protocol, the haicc protocol, the documentation packages, the component itself last)')
+    t.alike(Object.keys(listed), ['haiccing/base-package-runtime', 'haiccing/base-package-help', 'haiccing/base-package-howto', 'haiccing/base-package-info', 'haiccing/base-package-protocol', 'haiccing/base-package-boot', 'haiccing/base-package-haicc', 'haiccing/base-package-crud', 'haiccing/base-docs-package', 'haiccing/base-component-boot'], 'the packages layer: the component\'s list (the runtime, the help protocol, the howto protocol, the info protocol, the protocol protocol, the boot protocol, the haicc protocol, the documentation packages, the component itself last)')
     t.is(listed['haiccing/base-package-runtime'].sha256, logged[1].packages['haiccing/base-package-runtime'].sha256, 'and the hashes')
     t.absent((await repo.select('/packages/haiccing')).length, 'not the bytes')
     // the runtime: from the boot mrepo's own packages, on the Bare that ran the boot
@@ -94,7 +94,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     // (its shortcut merged into main when the action ends, after the host is up)
     let node = null
     for (let i = 0; i < 100 && !node; i++) { node = await repo.read('/main/registry/local/host/.node.json').then(b => JSON.parse(b.toString()), () => null); if (!node) await wait(100) }
-    t.alike([node.package, node.packages], ['haiccing/base-package-runtime', ['haiccing/base-package-help', 'haiccing/base-package-protocol', 'haiccing/package-docs-mrepo', 'haiccing/package-docs-package', 'haiccing/base-package-runtime']], 'what is local to this machine about it, in the runtime layer: the package it was deployed from, the packages placed')
+    t.alike([node.package, node.packages], ['haiccing/base-package-runtime', ['haiccing/base-package-help', 'haiccing/base-package-protocol', 'haiccing/base-docs-package', 'haiccing/base-package-runtime']], 'what is local to this machine about it, in the runtime layer: the package it was deployed from, the packages placed')
     const [shortcut] = JSON.parse((await repo.read('/main/host/.shortcuts.json')).toString())
     t.alike([shortcut.mrepo, shortcut.link, Object.keys(shortcut)], ['local/host', node.key, ['mrepo', 'link']], 'its shortcut, in main: the mrepo linked there by its unique URI, and its link\'s key: what is needed to show it')
     t.alike(JSON.parse((await repo.read(`/links/${shortcut.link}.json`)).toString()), node, 'its link\'s record, in the links layer by that key: the same as its node in the registry')
@@ -204,13 +204,13 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     const root = await sent({ protocol: 'help', action: 'get', uri: '.' })
     t.ok(!root?.error && root?.output?.oneliner && root.output.links.some(l => l.uri === 'packages'), `help get: the mrepo's, its links with their one-liners ${root?.error ?? ''}`)
     const pk = await sent({ protocol: 'help', action: 'get', uri: '.', args: ['packages', 'oneliner'] })
-    t.alike(['haiccing/base-package-runtime', 'haiccing/base-package-help', 'haiccing/base-package-protocol', 'haiccing/base-package-boot', 'haiccing/base-package-haicc', 'haiccing/base-package-crud', 'haiccing/base-component-boot', 'haiccing/package-docs-mrepo', 'haiccing/package-docs-package'].map(p => pk?.output?.links?.some(l => l.uri === `packages/${p}`)), [true, true, true, true, true, true, true, true, true], 'help get . packages: each package it links')
+    t.alike(['haiccing/base-package-runtime', 'haiccing/base-package-help', 'haiccing/base-package-protocol', 'haiccing/base-package-boot', 'haiccing/base-package-haicc', 'haiccing/base-package-crud', 'haiccing/base-component-boot', 'haiccing/base-docs-package'].map(p => pk?.output?.links?.some(l => l.uri === `packages/${p}`)), [true, true, true, true, true, true, true, true, true], 'help get . packages: each package it links')
     const tb = await sent({ protocol: 'help', action: 'get', uri: '.', args: ['packages/haiccing/base-component-boot/test/boot', 'detail'] })
     t.ok(!tb?.error && tb?.output?.title === 'boot/' && tb.output.summary, `help get on this very test: its README ${tb?.error ?? ''}`)
     const hostHelp = await openRepo(p2pgitBackend(join(host, '.git'), { fs })).read('/help/index.json').then(b => JSON.parse(b.toString()), () => null)
     t.ok(hostHelp?.['/packages/haiccing/base-package-runtime'], 'the host\'s help: extracted by its own runtime, from its own packages')
     // each package checks, in situ, what this mrepo's runtime made of its help
-    for (const p of ['base-component-boot', 'base-package-boot', 'base-package-runtime', 'base-package-help', 'base-package-protocol', 'base-package-haicc', 'package-docs-mrepo', 'package-docs-package']) {
+    for (const p of ['base-component-boot', 'base-package-boot', 'base-package-runtime', 'base-package-help', 'base-package-protocol', 'base-package-haicc', 'base-docs-package']) {
       const v = await sent({ protocol: 'runtime', action: 'run', uri: '.', args: [`packages/haiccing/${p}/test/validate-in-situ`] }, 1200)
       t.alike([v?.error, v?.output?.ok, v?.output?.units?.map(u => [u.unit, u.asserts.passed > 0 && u.asserts.passed === u.asserts.total])], [undefined, true, [['/test/help-in-situ', true], ['/test/mrepo-in-situ', true]]], `${p}: validate-in-situ, its help and itself as this mrepo holds it ${v?.error ?? JSON.stringify(v?.output?.units?.map(u => u.failures) ?? '')}`)
     }
