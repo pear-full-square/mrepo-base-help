@@ -854,3 +854,29 @@ with it; the cascade is the boot component's override (`review-code`).
   a console command?" Ours: yes, `sh <hook>`, not waited for, `haicc`
   and `sh` being everywhere in base; hooks the runtime's always,
   continuations the terminal's. The human: "hooks run by the runtime".
+
+### base-package-crud
+
+Sound: three actions, each its page in the module (Signature, Arguments
+where it takes any, Returns, Errors, Design for `delete`); the config in
+`protocol.js`, no `update`; `mounted`, the config value by value, each
+action and each refusal, nothing written by a refused one.
+
+**Documentation, done** (2026-11-17): the menu jumps to `create`,
+`read`, `delete`; "Config" a table (where offered, the target, the
+arguments; no `update`); "Commands" two how-tos, `howto/structure`
+(nodes created, read, removed, repeated) and `howto/query` (every child,
+a filter, a value inside a document, another layer's records, a
+selection removed).
+
+**Tests and examples, later** (`install-tests`): the protocol in a
+running mrepo, through the inbox (today the `haicc` command's end to end
+test only, as `mounted` says); a selection removed by a filter
+(`crud/delete "swarms/*[size<2]"`, read's path, not tested itself);
+examples: a swarm's structure built, queried, removed.
+
+**Across the modules, for later** (ours, put to the human): every
+module's README says `npm test`, and its `package.json` runs
+`bare ../../node_modules/brittle/cmd.js`, a path of this development
+repository: in the module's own repository neither holds. Bare only, and
+self-contained: the module's test command its own.
