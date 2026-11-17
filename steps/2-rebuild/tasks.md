@@ -1943,6 +1943,12 @@ registry, we can create info views on all mrepos."
    only from there. `HAICC_MREPO` goes. **Parked**: the container's
    replica ("the container needs its own haicc install - a partial one
    to dispatch commands. We look at that further down the line.").
+   **Revised** (the human, 2026-11-17): "I think it might be full but
+   different configuration. The setup on the host and within the
+   container (for a node) should be identical, except that one is master
+   and the other slave." So: one install, the same on the host and in a
+   node's container; its configuration says master or slave. Designed
+   when the container comes back.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script
@@ -1971,7 +1977,9 @@ registry, we can create info views on all mrepos."
    **Later, (2)**: a request costs about 1 s, every command alike (the
    inbox, pending, execute, done, the outbox, each a commit in the
    mrepo's layers): fewer commits a request (pending, execute and done
-   moves merged), measured the same way.
+   moves merged), measured the same way. **Moved back** (the human,
+   2026-11-17): "probably won't be done within this base iteration of
+   packages, or maybe near the end".
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the
