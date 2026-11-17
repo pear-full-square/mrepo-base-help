@@ -14,6 +14,7 @@ brought to.
 - [test-reports](test-reports/)
 - [name](name/)
 - [example](example/)
+- [howto](howto/)
 - [modules](modules/)
 
 ## A structure unit
@@ -31,7 +32,7 @@ is for.
 | `modules/`, `package.json` | carries its own dependencies |
 | `mrepo/` | comes with an mrepo, by layers |
 | `scripts/` | has scripts: lists of commands to go on with after it is deployed, a file each (`<name>.json`), answered as the deploy's continuation when asked for by name |
-| `howto/` | has how-tos: what can be done with it, a folder each (`<name>/`), its README the how-to: what it does and its steps as typed commands, each with why; pages of the package, read with `info` |
+| `howto/` | has how-tos: what can be done with it, a folder each (`<name>/`), its README the how-to: what it does and its steps as typed commands, each with why; a pattern's how-to names it, `Pattern: <name>`; pages of the package, read with `info` |
 | `test/` | has tests and test sets |
 | `test-reports/` | holds the proof that its tests passed: the report of its last pre-release |
 | `<name>/` | holds a further unit, by its URI part name |
@@ -209,39 +210,9 @@ the template", below).
 
 ## A new package
 
-A new package is a clone of the best candidate among the packages there
-are, not built from nothing: a package that runs and passes is the
-closest start.
-
-The candidate:
-
-1. **The same kind**: a protocol (`protocol.js` and its module), a
-   component (a list, `main` empty), a documentation package (`"docs":
-   true`), an app (`run.js`, run from its bundle).
-2. **The same parts**: `mrepo/`, `scripts/`, `howto/`, `deploy.js`, a
-   service, a unit of its own.
-3. **The most recent**: the newest template pin, a current report.
-
-The steps, from the development repository:
-
-```sh
-# the candidate copied, its report not: the new package has none yet
-cp -a haiccing/<candidate> haiccing/<new> && rm -f haiccing/<new>/test-reports/full.*
-# brought to the current template: the generic tests, test-reports/, the pin
-sh tools/package-template.sh <new>
-# then by hand: package.json's name, description and modules; the README; for a
-# protocol its module cloned the same way (pear-full-square/<module>), its name
-# in protocol.js and the config; the candidate's own test replaced by one of
-# the new package's; what the candidate had and the new one does not, removed
-# its pre-release: built, its full set run, its report written
-tools/bare tools/package-test.js haiccing/<new>
-```
-
-A protocol that brings a layer of its own: the layer's name added to
-`mycelium-git`'s lists (`LAYERS`, `SOLO`) and `mrepo-base-execute`'s
-`TARGETS`, or the boot refuses it (`not a layer`). The package's and the
-module's repositories are created by the human; deployed, the package is
-added to a component's list.
+A clone of the best candidate among the packages there are, brought to
+the template and renamed: the `package` how-to (`howto/package/`), and
+the how-to of each pattern the new package implements (`howto/`).
 
 ## From the template
 

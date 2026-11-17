@@ -57,7 +57,9 @@ The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
 - Docker, for what makes containers: in a cloud session no daemon runs
   when it starts: `sh tools/docker.sh`; no container left after
   (`docker ps -a --filter label=haicc.folder`).
-- A new package: the template's "A new package" (`base-docs-package`).
+- A new package: the how-to `package` (`haiccing/base-docs-package/howto/package/`),
+  and the how-to of each pattern it implements; the code check fails on a
+  pattern with no how-to.
 
 ## Working here
 

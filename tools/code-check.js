@@ -1,14 +1,15 @@
 // The code rules (pkgm-base-check) on this repository's code: the modules the
 // haiccing packages carry and the packages' own code; and each package
 // against the structure it is to have (its files, its sets, its tests, a
-// test of its own for what it provides). One line a problem; exit 1 when
-// there is one.
+// test of its own for what it provides); and the implementation
+// validation: every pattern implemented has a how-to. One line a problem;
+// exit 1 when there is one.
 //   tools/bare tools/code-check.js
 import process from 'bare-process'
 import { readFileSync, readdirSync, existsSync } from 'bare-fs'
 import { join, resolve, dirname } from 'bare-path'
 import { fileURLToPath } from 'bare-url'
-import { checkModule, checkPackage, checkOwn } from '../pear-full-square/pkgm-base-check/index.js'
+import { checkModule, checkPackage, checkOwn, checkPatterns } from '../pear-full-square/pkgm-base-check/index.js'
 
 const dev = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 // every package here: a folder of haiccing/ with a package.json
@@ -28,5 +29,7 @@ for (const p of packages) {
   if (!existsSync(join(dev, 'haiccing', p, 'main.js'))) continue
   for (const q of await checkOwn(join(dev, 'haiccing', p))) { n++; console.log(`haiccing/${p}\t${q.check}\t${q.detail}`) }
 }
+// the implementation validation: every pattern implemented has a how-to
+for (const q of checkPatterns(packages.map(p => join(dev, 'haiccing', p)))) { n++; console.log(`haiccing\t${q.check}\t${q.detail}`) }
 console.log(`${carried.size} modules, ${packages.length} packages: ${n} problems`)
 process.exit(n ? 1 : 0)
