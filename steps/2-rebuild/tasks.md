@@ -2025,6 +2025,32 @@ registry, we can create info views on all mrepos."
      airgapped), and the link between them; the teardown of both;
      the container down: the shell's inbox waits, its replica as it
      was.
+   **Settled** (the human, 2026-11-17): "which layers to replicate: a
+   config. I'd like to start with full. This pattern should be
+   implemented in the simplest way". So: the layers replicated are a
+   configuration of the pair, every layer to start with; the simplest
+   implementation that works.
+   **Proposed** (ours, 2026-11-17, not yet settled):
+   - **The response as replicated data**: it comes back in the node's
+     commits, its outbox layer; its arrival on the host says the
+     replica is up to date with it, a read after a write never stale,
+     no channel of its own.
+   - **The shell hardly a shell**: the node's inbox and outbox folders
+     the host's, through the mount: nothing forwarded; on the host a
+     registry entry and the replica, no runtime.
+   - **The replica a plain git repository** that mycelium-git reads,
+     the commits imported forward only, rather than a p2p-mrepo replica,
+     until replication goes over the network.
+   - **It reverses today's container**: today the node runs on the host
+     and its replica in the container; the container actions, the
+     `replica` how-to and the `cluster` script change: a rework, not an
+     addition.
+   - **The node not running**: `haicc` says so, not a timeout; the
+     commands wait in the inbox, the replica as it was.
+   - **The names**: primary (the side that executes) and replica (the
+     host's copy), not master and slave: replica is already our word
+     (p2p-mrepo, the how-tos), and which side was which was mistaken
+     once.
    Designed when the container comes back.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
