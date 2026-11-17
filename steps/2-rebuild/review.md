@@ -849,4 +849,8 @@ with it; the cascade is the boot component's override (`review-code`).
   and hook are put in request response and handled by terminal to submit
   automatically. Although we have lifted access restrictions, we can
   still tag requests and internally or externally triggered." Recorded
-  in `tasks.md`, `base-solution-haicc`.
+  in `tasks.md`, `base-solution-haicc`. Ours: a runtime restarting by itself
+  has no terminal for its boot hooks. The human: "can't the runtime issue
+  a console command?" Ours: yes, `sh <hook>`, not waited for, `haicc`
+  and `sh` being everywhere in base; hooks the runtime's always,
+  continuations the terminal's. The human: "hooks run by the runtime".

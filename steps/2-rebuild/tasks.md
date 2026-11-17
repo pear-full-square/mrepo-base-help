@@ -1863,10 +1863,15 @@ registry, we can create info views on all mrepos."
    think it is helpful to have two languages"): a component's scripts and
    its hooks alike; `haicc` and `sh` present wherever base runs, a Linux
    machine and a container; mobile later, browser stuff; (c)
-   **continuations and hooks put in the request's response** and handled
-   by the terminal, the `haicc` command, which submits them
-   automatically: the in-request hook runner (the service's) and the
-   runtime's own boot-hook placing go, the terminal the one runner; (d)
+   **continuations put in the request's response** and handled by the
+   terminal, the `haicc` command, which submits them automatically;
+   **hooks run by the runtime**, as console commands (the human: "can't
+   the runtime issue a console command?"; "hooks run by the runtime"):
+   `sh <hook>` started, not waited for, its `haicc` calls submitted to
+   the inbox like any other, its own mrepo named by what the runtime
+   hands it (`HAICC_AT`, say: to settle while building); so a runtime
+   that restarts by itself runs its boot hooks the same way. The
+   in-request hook runner (the service's) goes; (d)
    **the access restrictions lifted** for base (the protocol protocol,
    internal against external): requests still tagged, triggered
    internally or externally; the different routes (an internal inbox and
