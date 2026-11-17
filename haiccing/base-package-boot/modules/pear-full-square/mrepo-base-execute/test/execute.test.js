@@ -365,10 +365,17 @@ test('exec.run: a command executed here; exec.continuation: a script answered wi
         here: (exec, { args }) => exec.run(args),
         // answered with a continuation: a script for who asked to go on with
         go: (exec, { args = [] }) => { exec.continuation('haicc "$HAICC_AT" service/start\n', 'x'); if (args[0] === 'twice') exec.continuation('true\n'); if (args[0] === 'fail') throw new Error('failed after'); return { ok: 1 } },
+        // a job waited for, then executed again with its result
+        later: async (exec, form) => {
+          if (!form.resumed) { exec.put('/main/early.json', Buffer.from('1')); return exec.wait(async () => { if (form.args?.[0] === 'fail') throw new Error('the job failed'); return 42 }) }
+          if (form.resumed.error) throw new Error(`resumed with: ${form.resumed.error}`)
+          exec.put('/main/late.json', Buffer.from(JSON.stringify(form.resumed.output)))
+          return { resumed: form.resumed }
+        },
         // sent on, after a write that must not stay
         there: (exec, { args }) => { exec.put('/main/dropped.json', Buffer.from('1')); return exec.forward(to, args) }
       } }
-      const ctx2 = { ...ctx, dir: work, uri: 'local/host', protocols: { ...PROTOCOLS, crud: { actions: { ...PROTOCOLS.crud.actions, here: any, there: any, go: any } } } }
+      const ctx2 = { ...ctx, dir: work, uri: 'local/host', protocols: { ...PROTOCOLS, crud: { actions: { ...PROTOCOLS.crud.actions, here: any, there: any, go: any, later: any } } } }
       const one = async (form) => {
         const name = guid()
         await begin(ctx2, name, record(null, form, name))
@@ -378,12 +385,25 @@ test('exec.run: a command executed here; exec.continuation: a script answered wi
       const done = async name => (await json(ctx2.repo, `/${EXECUTE}/${name}.json`)).value.value
       const ran = await done(await one({ protocol: 'crud', action: 'here', uri: ['.'], args: ['crud/read', 'main/x'] }))
       t.alike(ran.output, [{ uri: ['main/x'], value: { n: 1 }, children: [] }], 'exec.run: the command interpreted and its action run in the same execution, its value returned')
-      t.is((await done(await one({ protocol: 'crud', action: 'here', uri: ['.'], args: ['crud/update', 'main/x'] }))).error, 'no action: crud update (create, delete, go, here, read, there)', 'checked as the request is (internal: no API gate), and its action looked up')
+      t.is((await done(await one({ protocol: 'crud', action: 'here', uri: ['.'], args: ['crud/update', 'main/x'] }))).error, 'no action: crud update (create, delete, go, here, later, read, there)', 'checked as the request is (internal: no API gate), and its action looked up')
 
       const gone = await done(await one({ protocol: 'crud', action: 'go', uri: ['.'] }))
       t.alike([gone.output, gone.continuation], [{ ok: 1 }, { at: 'x', script: 'haicc "$HAICC_AT" service/start\n' }], 'exec.continuation: answered beside the output: the script, and the position it is run for')
       t.alike(Object.keys(await done(await one({ protocol: 'crud', action: 'go', uri: ['.'], args: ['fail'] }))).includes('continuation'), false, 'a request that fails answers with none')
       t.is((await done(await one({ protocol: 'crud', action: 'go', uri: ['.'], args: ['twice'] }))).error, 'a continuation already', 'one a request')
+
+      // exec.wait: parked, the runtime free; the job's result collected; executed again with it
+      const waiting = await one({ protocol: 'crud', action: 'later', uri: ['.'] })
+      const [w1] = (await principals(ctx2)).filter(x => x.id === waiting)
+      t.alike([w1.core.value.remote?.folder, w1.core.value.remote?.resume, Boolean(w1.waits)], ['waiting', true, true], 'exec.wait: the request parked, waiting for its job')
+      t.absent((await ctx2.repo.select('/main/early.json')).length, 'its writes before it waits: dropped')
+      for (let i = 0; i < 20 && !(await ctx2.repo.find(`/request/done/${waiting}.json`)); i++) { await new Promise(resolve => setTimeout(resolve, 20)); await request(ctx2); await execute(ctx2, { actions: acts }) }
+      const resumed = (await json(ctx2.repo, `/request/done/${waiting}.json`)).value.value
+      t.alike(resumed.output, { resumed: { output: 42 } }, 'executed again with the job\'s result, form.resumed')
+      t.is((await ctx2.repo.read('/main/late.json')).toString(), '42', 'its writes then: kept')
+      const failing = await one({ protocol: 'crud', action: 'later', uri: ['.'], args: ['fail'] })
+      for (let i = 0; i < 20 && !(await ctx2.repo.find(`/request/done/${failing}.json`)); i++) { await new Promise(resolve => setTimeout(resolve, 20)); await request(ctx2); await execute(ctx2, { actions: acts }) }
+      t.is((await json(ctx2.repo, `/request/done/${failing}.json`)).value.value.error, 'resumed with: the job failed', 'a job that fails: resumed with its error, the action says what to do with it')
 
       const name = await one({ protocol: 'crud', action: 'there', uri: ['main', 'other'], args: ['service/start'] })
       const [p] = (await principals(ctx2)).filter(x => x.id === name)

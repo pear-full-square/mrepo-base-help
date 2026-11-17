@@ -20,7 +20,10 @@ const json = (...p) => JSON.parse(readFileSync(join(pkg, ...p), 'utf8'))
 // <transition>/<name>, each its command.
 const hooksDir = join(pkg, 'mrepo', 'runtime', 'hooks')
 const brought = {}
-for (const t of readdirSync(hooksDir).sort()) for (const f of readdirSync(join(hooksDir, t)).sort()) brought[`${t}/${f.slice(0, -5)}`] = json('mrepo', 'runtime', 'hooks', t, f)
+// (a shell hook, <name>.sh: the command its haicc sends to its own mrepo,
+// `haicc . <command>`, one a hook; run here as the command it sends)
+const shell = text => { const lines = text.split('\n').filter(l => /^haicc \. /.test(l)); return lines.length === 1 ? lines[0].slice('haicc . '.length).split(' ') : null }
+for (const t of readdirSync(hooksDir).sort()) for (const f of readdirSync(join(hooksDir, t)).sort()) brought[`${t}/${f.replace(/\.(json|sh)$/, '')}`] = f.endsWith('.sh') ? shell(readFileSync(join(hooksDir, t, f), 'utf8')) : json('mrepo', 'runtime', 'hooks', t, f)
 
 const LIST = [
   'haiccing/base-package-runtime',

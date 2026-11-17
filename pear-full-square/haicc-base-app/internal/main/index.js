@@ -23,7 +23,11 @@ const CONSOLE = { out: line => console.log(line), err: line => console.error(lin
 export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE } = {}) {
   const home = env.HAICC_HOME || join(os.homedir(), '.haicc')
   const work = env.HAICC_WORK || join(home, 'work')
-  const root = viewOf(work, CONFIG.root.name)
+  // the mrepo commands go to: the root, the boot mrepo; or, from a hook,
+  // the mrepo that runs it (HAICC_MREPO, its folder; HAICC_MREPO_URI, its
+  // unique URI): its own inbox
+  const own = env.HAICC_MREPO ? { dir: env.HAICC_MREPO, uri: env.HAICC_MREPO_URI || CONFIG.root.uri } : null
+  const root = own ? own.dir : viewOf(work, CONFIG.root.name)
   try {
     const c = command(argv)
     if (c.kind === 'usage') { io.out(USAGE); return 0 }
@@ -42,12 +46,12 @@ export async function main (argv, { env = {}, bare = os.execPath(), io = CONSOLE
       return 0
     }
     // a command for the mrepos: into the root mrepo's inbox, its response printed
-    if (!existsSync(join(root, 'inbox'))) throw new Failure(`no boot mrepo at ${work} (haicc boot/deploy)`, 3)
+    if (!existsSync(join(root, 'inbox'))) throw new Failure(own ? `no mrepo at ${root} (HAICC_MREPO)` : `no boot mrepo at ${work} (haicc boot/deploy)`, 3)
     const timeout = Number(env.HAICC_TIMEOUT) > 0 ? Number(env.HAICC_TIMEOUT) : 120
     const print = c.print ?? (env.HAICC_OUTPUT === '1' ? 'output' : env.HAICC_RAW === '1' ? 'raw' : 'record')
     // one command sent, its response printed; -> its outcome
     const send = async parts => {
-      const { text } = await request(root, parts, { uri: CONFIG.root.uri, reply: CONFIG.reply, timeout })
+      const { text } = await request(root, parts, { uri: own ? own.uri : CONFIG.root.uri, reply: CONFIG.reply, timeout })
       if (print === 'raw') io.out(text.replace(/\n$/, ''))
       if (print === 'record') io.out(unpack(text, widthOf(home, io.columns?.() ?? null).width))
       const o = outcome(text)

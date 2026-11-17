@@ -1877,6 +1877,18 @@ registry, we can create info views on all mrepos."
    internally or externally; the different routes (an internal inbox and
    such) later. Built with the solution install, a proof of concept and
    its how-to first; the tests that check "in the same request" change.
+   **Built so far** (2026-11-17, on `execute/solution`): continuations
+   shell (`{ at, script }`, run by the terminal with `sh`, `HAICC_AT`);
+   the three scripts shell. **The hooks' proof of concept**: a hook
+   reaches its own mrepo straight into its inbox (`HAICC_MREPO`, agreed);
+   a transition waits for its shell hooks (agreed): `exec.wait(job)`, a
+   request parked on an outside job, resumed with its result
+   (`form.resumed`), the runtime free meanwhile; the host's `initialise`
+   hook `info-extract.sh`: `service/initialise` answers once the info is
+   extracted (some 2.8 s over the extraction: sh, Bare, the hook's haicc
+   polling). The how-to `hooks` in its shell form. To follow: every hook
+   shell, boot hooks run by the runtime, the JSON hooks and their runner
+   gone, requests tagged by trigger.
    **`base-linux-haicc` documented** (agreed, 2026-11-17): it has no
    bundle, so the docs mrepo cannot document it; a documentation-only
    form of it with the solution, the solution's list naming what the

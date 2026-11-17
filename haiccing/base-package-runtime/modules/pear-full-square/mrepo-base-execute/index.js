@@ -67,6 +67,7 @@
 import { wrap, complete, continuationOf, isComplete, logger, sorted, AUTHOR, EXECUTE, check, runtimeData, isInternal, principals, formOf, joined, slashed, OUTSIDE, OWN } from 'mrepo-base-request'
 import { from, ROOT } from 'mycelium-uri'
 import { pass } from './lib/remote.js'
+import { park } from './lib/wait.js'
 import { changes } from './lib/changes.js'
 
 // What a request's audit lists of one target at most: beyond it, a count.
@@ -170,15 +171,28 @@ export async function execute (ctx, { actions = {} } = {}) {
   // Each request on its own branch of request/execute, its principal the
   // request the branch is named after.
   for (const p of await principals(ctx)) {
-    const { id: name, core } = p
+    const name = p.id
+    let core = p.core
     // completed already (a pass interrupted before the merge): merged now
     if (isComplete(core)) { await w.merge(p.branch, EXECUTE, `Merge ${name}: executed`, { author: AUTHOR }); await close(backend, name, EXECUTE); continue }
-    const form = core.value
     // A wrapped remote command, passed on (lib/remote.js): waiting for its
     // child's response, it is not being processed; the response added to
-    // its branch, the principal is returned with it.
+    // its branch, the principal is returned with it. A job waited for
+    // (lib/wait.js): its result added, the request resumed: executed again
+    // with it (form.resumed), below.
     if (p.waits) {
       if (!p.response || !isComplete(p.response)) continue
+      const r = p.response.value
+      if (core.value.remote?.resume) {
+        const { remote, ...rest } = core.value
+        core = { ...core, value: { ...rest, resumed: 'error' in r ? { error: r.error } : { output: r.output ?? null } } }
+        const c = await w.change(p.branch)
+        await c.put(`/${name}.json`, Buffer.from(JSON.stringify(wrap(`/${EXECUTE}`, core)) + '\n'))
+        await c.commit(`${name}: resumed`, { author: AUTHOR })
+      }
+    }
+    const form = core.value
+    if (p.waits && !core.value.resumed) {
       const r = p.response.value
       // its log: what it logged before it was sent on, then the entries of
       // the request it became, each under its jump
@@ -255,6 +269,8 @@ export async function execute (ctx, { actions = {} } = {}) {
     const internal = await isInternal(ctx, name)
     // what the action sent on, if it did (exec.forward): { to, command }
     let forwarded = null
+    // the job it waits for, if it does (exec.wait): an async function
+    let waited = null
     // the continuation the action answers with, if it does (exec.continuation)
     let continued = null
     const flush = async (what = message) => {
@@ -332,8 +348,18 @@ export async function execute (ctx, { actions = {} } = {}) {
       // The command sent on to the mrepo a shortcut leads to (to: xpath's
       // resolve): this request waits for its response, nothing of it is
       // executed here. The action returns what this returns.
+      // A job waited for: the request parked until the job ends, the
+      // runtime free meanwhile; then the action executed again with its
+      // result, form.resumed ({ output } or { error }). Its writes before
+      // it waits are dropped. One a request, not resumed twice.
+      wait: job => {
+        if (waited || forwarded) throw new Error('waiting already')
+        if (form.resumed) throw new Error('resumed already: no second wait')
+        waited = job
+        return null
+      },
       forward: (to, command) => {
-        if (forwarded) throw new Error('sent on already')
+        if (forwarded || waited) throw new Error('sent on already')
         forwarded = { to, command }
         return null
       },
@@ -368,7 +394,7 @@ export async function execute (ctx, { actions = {} } = {}) {
       if (!fn) throw new Error(unknown(actions, protocol, action))
       result = { ok: true, value: (await fn(exec, form)) ?? null }
       if (continued) result.continuation = continued
-      if (!forwarded) await flush()
+      if (!forwarded && !waited) await flush()
     } catch (err) {
       // The one place an error ends a request: what stopped it, the chain
       // of what caused it, the step the action was at, what is undone.
@@ -376,6 +402,7 @@ export async function execute (ctx, { actions = {} } = {}) {
       const causes = causesOf(err)
       write('error', 'request.failed', { error: err.message, ...(causes.length ? { causes } : {}), at: step, undone: { commits: counted.commits, puts: counted.puts, removes: counted.removes }, ...(level() === 'debug' && err.stack ? { stack: String(err.stack).split('\n').map(l => l.trim()) } : {}) })
       forwarded = null
+      waited = null
       await rollbackAll()
     }
     // the request's metrics: its closing line
@@ -383,6 +410,21 @@ export async function execute (ctx, { actions = {} } = {}) {
     // Sent on (exec.forward): nothing of it executed here, its writes
     // dropped; what it waits for added to its principal on its branch: it
     // stays there, waiting; the branch not being processed any more.
+    if (waited) {
+      await rollbackAll()
+      for (const t of made.keys()) await close(backend, name, t)
+      try {
+        const value = park(ctx, name, core, waited)
+        write('info', 'request.waiting', { key: value.remote.key })
+        metrics(null)
+        const c = await w.change(await open(w, backend, name, EXECUTE))
+        await c.put(`/${name}.json`, Buffer.from(JSON.stringify(wrap(`/${EXECUTE}`, { ...core, value: { ...value, log: entries } })) + '\n'))
+        await c.commit(`${name}: waiting for a job`, { author: AUTHOR })
+      } catch (err) {
+        await executed(ctx, name, wrap(`/${EXECUTE}`, complete(core, { ok: false, error: err.message })))
+      }
+      continue
+    }
     if (forwarded) {
       await rollbackAll()
       for (const t of made.keys()) await close(backend, name, t)
