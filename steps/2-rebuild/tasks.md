@@ -2051,6 +2051,13 @@ registry, we can create info views on all mrepos."
    the outbox. Ours: (1) hook lines as the mrepo's own internal requests,
    (2) a cheaper request pipeline. The human: "do (1) now and note (2)
    for later". (1) built.
+   **Measured again** (2026-11-17, after the merge, twice each, old
+   build against new): the boot until it answers 6.6-8.7 s against
+   7.4-8.8 s; deploy the same (2.2 against 1.9-2.2); initialise 3.7-4.0
+   against 5.7-6.4; start 1.6-1.7 against 3.1-3.8; stop 1.6-2.0 against
+   3.1-4.0; five calls 6.7-7.3 s against 5.9-6.4; the same five as one
+   haicc/script 4.5-5.4 s. The transitions with hook lines still about
+   2 s dearer: the cost of a request, (2), moved back.
    **Later, (2)**: a request costs about 1 s, every command alike (the
    inbox, pending, execute, done, the outbox, each a commit in the
    mrepo's layers): fewer commits a request (pending, execute and done
