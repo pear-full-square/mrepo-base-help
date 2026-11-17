@@ -9,10 +9,10 @@ it stopped is logged.
 ## Signature
 
 `teardown(exec, { uri })`: requested as `boot/teardown <position>`.
-The position is one of three forms:
+The position is one of two forms:
 
-- `<name>`, a child one name below `main`: `uri` is `["main", "<name>"]`.
-- `swarms/<swarm>/<name>`, a swarm's node: `["main", "swarms/<swarm>/<name>"]`.
+- A child's position below `main`, as it was deployed: `uri` is
+  `["main", "<position>"]`.
 - `registry/<swarm>/<name>`, a query into the mrepo registry: below.
 
 Several at once: a URI into the mrepo registry (the boot mrepo's, in
@@ -26,8 +26,7 @@ haicc . boot/teardown "registry/local/*[package='haiccing/base-package-runtime']
 
 ## Returns
 
-`{ tornDown }`: the position as written at `main`, `<name>` or
-`swarms/<swarm>/<name>`. With a URI
+`{ tornDown }`: the position as written at `main`. With a URI
 into the registry: a list of them, empty when nothing is selected.
 
 ## Errors

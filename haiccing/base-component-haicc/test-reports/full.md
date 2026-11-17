@@ -1,6 +1,6 @@
 # Test report: haiccing/base-component-haicc
 
-The package passed its `full` set: all 8 units, 57 of 57 tests and 350 of 350 asserts.
+The package passed its `full` set: all 8 units, 58 of 58 tests and 354 of 354 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 8 units, 57 of 57 tests and 350 of 350 as
 | Set | `full` |
 | Result | passed |
 | Units | 8 of 8 passed |
-| Tests | 57 of 57 passed |
-| Asserts | 350 of 350 passed |
-| Run | 2026-11-17 05:34 UTC |
+| Tests | 58 of 58 passed |
+| Asserts | 354 of 354 passed |
+| Run | 2026-11-17 08:52 UTC |
 | Bare | v1.36.0 |
-| Content | `1349a38c7282367f42b26e762a56969f1b79c90670d68e9a884842c9eb4d6cff` |
+| Content | `8611bdbd40ed9b5c6d0b9169199f853c83a809eed7488efe68632d09d2409cf2` |
 
 ## Units
 
@@ -23,7 +23,7 @@ The package passed its `full` set: all 8 units, 57 of 57 tests and 350 of 350 as
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-info` | passed | 7 of 7 | 53 of 53 |
+| `/test/modules/pear-full-square/mrepo-base-info` | passed | 8 of 8 | 57 of 57 |
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 195 of 195 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 19 of 19 | 54 of 54 |
 

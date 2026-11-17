@@ -11,9 +11,8 @@ in, in that order, and the child is built at `<parent>/main/<name>/`.
 
 `deploy(exec, { uri, args })`: requested as `boot/deploy <name>
 <package>`. `uri` is the child's position as the form holds it,
-`["main", "<name>"]`: one name below `main`; or a swarm's node,
-`["main", "swarms/<swarm>/<name>"]`, below its swarm's node, which is
-there already (`crud/create swarms/<swarm>`).
+`["main", "<position>"]`: any position below `main`, `host` or
+`swarms/swarm-1/node-1`; the node above it there already (`crud/create`).
 
 ## Arguments
 
@@ -23,8 +22,7 @@ there already (`crud/create swarms/<swarm>`).
 ## Returns
 
 `{ deployed, mrepo, package, packages, layers, runtime: { pid } }`;
-`deployed` is the position as written at `main`, `<name>` or
-`swarms/<swarm>/<name>`; `mrepo` is the child's unique URI.
+`deployed` is the position as written at `main`; `mrepo` is the child's unique URI.
 
 Asked for a script of the package (the request's flag,
 `continuation=<script>`), it answers with it as its continuation: the
@@ -56,10 +54,12 @@ nothing of it inside this mrepo's folder.
 - No target, `main` itself or the root: `missing argument: target`. One
   cannot deploy the mrepo itself.
 - A URI that is not in `main`: `not a position in main`.
-- A position that is neither one name nor `swarms/<swarm>/<name>`: `not
-  a position for an mrepo`. The swarm `local`: `not a swarm`.
-- A swarm's node whose swarm has no node yet: `no node there:
-  swarms/<swarm>`.
+- A name that is not lowercase letters, digits and hyphens: `not a
+  position for an mrepo`. A swarm's node named `local`: `not a swarm`.
+- The node above it not there: `no node there: <above> (crud/create
+  <above>)`.
+- A position below a shortcut: `<above> is a shortcut: a URI does not
+  run through it`.
 - No package: `missing argument: package`.
 - The child is deployed already, or its folder is in the way.
 - The position exists locally, as data in `main`: the boot protocol
@@ -75,9 +75,11 @@ nothing of it inside this mrepo's folder.
 - The packages are linked individually into the child's `packages/`.
 - The child has no presence in the parent's `main`: its shortcut is all
   the parent holds of it.
-- The child's unique URI is `<swarm>/<name>`. One name below `main`, it
-  is in its parent's swarm: what the boot mrepo deploys is `local/<name>`.
-  At `swarms/<swarm>/<name>` it is in the swarm its position names:
-  `swarms/swarm-1/node-1` is `swarm-1/node-1`. It is written into the
+- The child's unique URI is `<swarm>/<name>`: in the swarm of the
+  nearest node above it whose document says it is one,
+  `{"kind":"swarm"}`, by that node's name (`swarms/swarm-1`, a swarm:
+  `swarms/swarm-1/node-1` is `swarm-1/node-1`); none, in its parent's
+  swarm: what the boot mrepo deploys is `local/<name>`. A position's
+  meaning is its documents', not the protocol's. It is written into the
   child's own runtime layer, `/runtime/mrepo.json`, where it has one.
 - The runtime is started from the child's own packages, by its directory.
