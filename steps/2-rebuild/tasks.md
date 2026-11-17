@@ -2084,6 +2084,12 @@ registry, we can create info views on all mrepos."
    the registry, and forwards all node commands to it, but it forwards
    the haicc platform commands acting on the container mrepo to the
    container haicc platform." In `pair.md`.
+   **Settled, the open points** (the human, 2026-11-17): no new
+   protocol, a routing directive (`boot/deploy` with a flag); the data
+   read from the node directly; the host's sources at their paths; "only
+   sources and node mrepo is shared, all mrepo downstream from the node
+   mrepo live in the container only". What follows, proposed, in
+   `pair.md`.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script

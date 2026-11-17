@@ -33,6 +33,48 @@ haicc platform."
   the node it forwards to the container's platform.
 - **The host's own**: the container's lifecycle, through Docker.
 
+## Settled: the open points (the human, 2026-11-17)
+
+1. **No new protocol**: "it doesn't warrant a new protocol since it is a
+   routing directive". The node deployed into a container by
+   `boot/deploy` with a flag, its teardown and redeploy routed by the
+   link's type.
+2. **Reading**: "In this mode we read the data from the container node
+   directly": the node answers, as every command for it; no copy on the
+   host, no reading mode of the host's own.
+3. **The sources**: the host's folders, mounted read only at their own
+   paths.
+4. **What is shared**: "only sources and node mrepo is shared, all mrepo
+   downstream from the node mrepo live in the container only". The
+   container's install, its boot mrepo and every mrepo the node deploys
+   stay in the container; the host's folder for the pair is the node's
+   mrepo folder alone.
+
+### What follows, to settle before building
+
+- **The platform commands' route.** The container's boot mrepo is not
+  shared, so the host cannot drop a platform command into its inbox.
+  Proposed: the host's platform runs the container's `haicc` command in
+  it (`docker exec <container> haicc <the command>`), the container's
+  platform's own terminal; its answer the host's action's answer. The
+  same for the first deploy of the node and for its teardown. A routing
+  through Docker, used only for the platform commands; everything else
+  through the node's shared folder.
+- **The first request.** With nothing of the container's home shared,
+  `start.sh` is not a file of the host's: the container's command line
+  itself (`sh -c '<install if not there; boot>'`, the installer copied
+  in or mounted read only beside the sources); the node then deployed by
+  a platform command (`docker exec`, above). Started again, the command
+  line boots again; whether the boot starts the node's runtime again,
+  to check.
+- **A shared folder at the node's place.** The node's folder is mounted
+  where the container's install places it
+  (`/haicc/work/mrepos/<swarm>/<name>`), so the mount point is there
+  before the deploy. Today `boot/deploy` refuses a folder that is there
+  ("in the way") and `boot/teardown` removes the folder, which a mount
+  point cannot be. Proposed: deploy takes an empty folder that is there;
+  teardown empties it and removes it when it can.
+
 ## What it is
 
 A node deployed at a position of the host runs in a Docker container,
