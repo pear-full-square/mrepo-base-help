@@ -6,6 +6,7 @@ import { guid } from 'mrepo-base-request'
 import { fetch, scriptOf, scriptsOf } from '../../internal/fetch/index.js'
 import { install, origin, targetOf } from '../../internal/install/index.js'
 import { child } from '../../internal/child.js'
+import { deployPair } from '../../internal/pair/index.js'
 
 // (link: the key of the link, when it has one already: a redeploy keeps it)
 export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept = null } = {}) {
@@ -14,7 +15,10 @@ export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept
   // a position that exists locally (data in main there): not a target
   await c.refuse()
   await c.above()
-  if (existsSync(c.dir)) throw new Error(`in the way: ${c.dir}`)
+  // into a container (the flag: container): its own haicc install there
+  // runs it, this mrepo links it (internal/pair)
+  const pair = flags.container === true
+  if (!pair && existsSync(c.dir)) throw new Error(`in the way: ${c.dir}`)
   if (!args[0]) throw new Error('missing argument: package')
   const target = targetOf(args[0])
   // The store and the sources: the mapping the parent's packages manifest records.
@@ -27,12 +31,29 @@ export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept
   if (script) fetch({ store, sources, pkg: target })
   const text = script ? scriptOf({ store, pkg: target, name: script }) : null
   if (script && text === null) throw new Error(`no script: ${script} (${target} has ${scriptsOf({ store, pkg: target }).join(', ') || 'none'})`)
+  const link = kept ?? guid()
+  // A pair: the container made, the child deployed in it by its own
+  // platform; here only its link, as below, its folder the one in the
+  // container's home that this host forwards to.
+  if (pair) {
+    const { folder, ...made } = await deployPair(exec, c, { target, sources })
+    const entry = () => ({ key: link, uri: c.mrepo, at: c.at, how: 'container', folder, package: target, ...made })
+    exec.put(c.node, Buffer.from('{}\n'))
+    exec.put(c.links, Buffer.from(JSON.stringify([{ mrepo: c.mrepo, link }], null, 2) + '\n'))
+    exec.put(c.local(link), Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
+    if (await c.registers()) {
+      if (await exec.find(c.swarm) === null) exec.put(c.swarm, Buffer.from('{}\n'))
+      exec.put(c.registry, Buffer.from(JSON.stringify(entry(), null, 2) + '\n'))
+    }
+    if (text) { exec.continuation(text, c.at); exec.log('verbose', 'continuation', { script, bytes: Buffer.byteLength(text) }) }
+    exec.log('info', 'deployed', { at: c.at, mrepo: c.mrepo, package: target, container: made.container.name })
+    return { deployed: c.at, mrepo: c.mrepo, package: target, container: made.container }
+  }
   // The target's list laid in, built at its own place, by its unique URI,
   // its packages placed.
   const record = await install(exec, { store, sources, target, dir: c.dir, uri: c.mrepo })
   // What is local to this machine about it (not in main, which replicates):
   // its link's record says besides which mrepo, linked where, how, placed where.
-  const link = kept ?? guid()
   const entry = () => ({ key: link, uri: c.mrepo, at: c.at, how: 'deployed', folder: c.folder, ...record })
   // Its runtime started, from its own packages/ (its pinned runtime), by
   // its directory: its inbox operational. Not when it has no runtime.
