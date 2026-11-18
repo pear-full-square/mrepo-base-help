@@ -230,14 +230,73 @@ on the roadmap. Open: joins, parallel steps writing the same path, the
 definition's format, the grain (a request costs several commits: a step
 works on a batch, not on one record).
 
+#### The core of `myctrans`
+
+Agreed with the human, 2026-11-18 ("Your idea is spot on"), with the
+distributed applications (below): the pipeline engine is the core of
+`myctrans`, the transformation platform. A `myctrans` component is a
+pipeline; the platform deploys pipelines and runs them, as Splectral
+deploys and runs interaction components. It revises "Its state" and the
+end of a pipeline above: the pipeline's state is no longer a branch of the
+data's `main`.
+
+- **Why** (the human): it offloads the pressure that would otherwise be
+  on the commit pipeline of the data repository; it separates the
+  concerns; and processing state held outside the data repository's
+  request and execution framework is a lot easier to manage.
+- **The two sides.** `myctrans`, the pipeline: steps built from core
+  actions, its definition (the order, the error paths, the execution
+  plan), its processing state. `myctral`, the data repository: it
+  validates, merges and commits; it holds no pipeline's state and runs no
+  pipeline's steps.
+- **Its state, in the pipeline's own repository.** What the pipeline is
+  working on (its progress, its intermediate results, larger data passed
+  between steps by URI) lives in the `myctrans` component's mrepo, on its
+  own request branch there, not in the data repository. The data
+  repository's request pipeline sees one request per proposed change, not
+  a request per step.
+- **Its end, a proposal.** The last step proposes the prepared change to
+  the data repository: puts and removes against the base commit the
+  pipeline read. The repository validates, merges and commits it, or
+  refuses and says why (its current commit with it).
+- **A refusal is the pipeline's error path.** Its definition decides: read
+  again at the repository's commit and prepare the change again, rework
+  it, or report. The negotiation between the data repository and the
+  processing component is this path.
+- **One key, no repeats.** The pipeline's request id, which names its
+  branch, keys its proposal: a proposal sent twice, after an answer lost,
+  is recognised by the repository and applied once. Retries bounded by the
+  definition.
+- **Started by a request, or by a commit.** A pipeline is started by one
+  request from outside (above, "Its start"), or it follows a data
+  repository: each commit there, a change record, starts or feeds the
+  pipelines that follow it. A commit in one repository thus starts the
+  transformation that proposes changes to another: changes flow through an
+  application with no coordinator, the completion of one step placing the
+  next (proposed above) carried across repositories.
+- **A follower keeps its own position** in the stream it follows, as every
+  reader does (one writer, one reader), and takes a change record it has
+  seen already as seen.
+- **The grain**: a run takes a batch of change records, not one (a request
+  costs several commits); the batch's size is the definition's.
+- **Compiled pipelines**, for speed, as above: a generated `myctrans`
+  package.
+
+Open: how a pipeline subscribes to a repository's commits (the channel,
+its transport); joins over two repositories (a pipeline reading both,
+proposing to one); what a pipeline holds when its component is upgraded
+active-passive (its processing state handed over, or rebuilt from the
+stream).
+
 ### A database server
 
 The human: the pipeline engine is a necessity when mycelium is implemented
 as a database server. A reading of how they meet, not designed: a query a
 pipeline, its operators steps on the core actions (CRUD first); the
-execution plan the query plan; the pipeline's branch the transaction (a
-snapshot of `main`, one commit at the end, the branch discarded a
-rollback); AVRO the rows' schema.
+execution plan the query plan; the transaction a pipeline's proposal (a
+snapshot of `main` read, one commit at the end by the data repository, a
+refusal or the pipeline's state discarded a rollback: "The core of
+`myctrans`"); AVRO the rows' schema.
 
 ### Data is local
 
@@ -323,9 +382,10 @@ practicalities are designed when the work reaches them.
 - **To explore: a component deployed in two parts**: haicc creates the
   mrepo and hands it over to the platform, which deploys the component
   on it; the component can then have two runtimes, one writer per layer.
-- **Proposed, ours, not agreed**: the pipeline engine (above) as
-  `myctrans`'s core, a pipeline the transformation that prepares a
-  change, the data repository's commit its last step.
+- **The pipeline engine is `myctrans`'s core** (agreed, 2026-11-18): a
+  `myctrans` component a pipeline, its processing state in its own
+  repository, its end a proposal to the data repository ("Pipelines",
+  "The core of `myctrans`").
 
 The order, not scheduled (each step designed before it is requested as a
 phase; scheduled, it leaves the vision):

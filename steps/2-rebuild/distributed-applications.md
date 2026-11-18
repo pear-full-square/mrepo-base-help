@@ -50,6 +50,18 @@ code: the proof of concept's review, and what comes of it.
 - **A processing component holds processing state, not data** (the
   human: "A processing component holds processing state, not no state").
 
+- **The pipeline engine, `myctrans`'s core** (the human, 2026-11-18, on
+  our idea: "Your idea is spot on and document it in detail. It offloads
+  the pressure that otherwise exist on the commit pipeline of the data
+  repository. Separation of concerns. And by holding processing state
+  outside the request/execution framework of the data repo it becomes a
+  lot easier to manage."). A `myctrans` component a pipeline; its
+  processing state in its own repository; its end a proposal to the data
+  repository, keyed by the pipeline's request id; a refusal its error
+  path, the negotiation; started by a request or by a commit it follows.
+  In detail: the vision (`base-docs-vision`, "Pipelines", "The core of
+  `myctrans`") and the design doc, "Pipelines".
+
 ## Where it is going
 
 The human (2026-11-18): "This give an outline of the direction that the
