@@ -132,20 +132,39 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   nothing changed for the server. What makes it a renderer and not
   another mrepo is its language: what its requests say, the protocols
   it offers.
+- **Splectral an app platform, a component an app, the UI the browser;
+  separate from haiccing, sharing its ways** (the human, 2026-11-18, on
+  our asking whether the renderer takes an mrepo's request form and a
+  Splectral package is a protocol package, haiccing's template with the
+  language's own on top (ours: yes): "Splectral is an app platform in
+  this design, and a component is an app, UI is browser. I think it is
+  justified to treat them separately from haiccing, but make them share
+  haiccing ways of doing."). So not haiccing's forms taken over as they
+  are: our "yes" withdrawn that far. Our reading, put back, to confirm:
+  - the server is the platform: it loads the apps, starts them, routes
+    the browser to them, provides their data;
+  - a component is an app: what is installed on Splectral and opened in
+    the browser at its URI; a list of packages, its own the last, whose
+    program the platform starts (in haiccing an app is a package with a
+    `run.js`, started from the machine, reaching the mrepos as the
+    outside does: `base-docs-package`, `howto/app`; here it is started
+    by the platform and reaches its data through it);
+  - separate: the splectral family has its own specification, its own
+    kinds of package and its own forms (what a request to an app says);
+  - sharing the ways: self-containment; the list, its own package the
+    last; modules by copy; the template and its pin; the generic tests,
+    a test of its own, a report; a README a menu, read with `info`; a
+    how-to a pattern; the inbox and outbox pattern and its record;
+    deploy and teardown, no upgrade in place.
 
 ## Open, one at a time
 
-1. Whether the light renderer already speaks in an mrepo's forms: a
-   request to it `{ protocol, action, uri, args }`, a Splectral package
-   a protocol package (`protocol.js`: an element set a protocol, an
-   element an action; the top package's protocol answering with pages),
-   so the family's template is haiccing's with the language's own on
-   top: put to the human, ours: yes.
-2. How the top package's action asks for an element of a linked
-   package; the minimal execution the renderer runs actions on.
-3. Where the server's package lives, and the Splectral mrepo's list.
+1. The family's kinds of package, for base: an app and an element set:
+   put to the human.
+2. An app's entry and what it is handed; how its program asks for an
+   element of a linked package; what a request to an app says.
+3. How an app is installed on the platform (deployed and torn down);
+   where the platform's package lives.
 4. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-5. The names and the repositories (`splectral/base-docs-package`,
-   `base-view-docs`, `base-view-install`, an element set's), created by
-   the human.
+5. The names and the repositories, created by the human.
