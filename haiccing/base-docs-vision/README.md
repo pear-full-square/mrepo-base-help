@@ -327,6 +327,23 @@ practicalities are designed when the work reaches them.
   `myctrans`'s core, a pipeline the transformation that prepares a
   change, the data repository's commit its last step.
 
+The order, not scheduled (each step designed before it is requested as a
+phase; scheduled, it leaves the vision):
+
+1. **Splectral, the terminal equivalent**: components that issue
+   commands through its server; the proof of concept's findings fixed.
+2. **A component deployed in two parts**: haicc creates the mrepo, the
+   platform deploys the component on it; one install shape for every
+   platform.
+3. **`myctral`, its core**: a data repository that validates, merges and
+   commits mycelium's data structures; the forms of a proposed change
+   and of a refusal; the negotiation.
+4. **`myctrans`, its core**: transformation that prepares changes and
+   manages the processing.
+5. **An application repository** deploying the three platforms.
+6. **Distribution**: components as pairs in containers, then one
+   Hypercore per channel direction for a component on another node.
+
 
 ## Agents
 

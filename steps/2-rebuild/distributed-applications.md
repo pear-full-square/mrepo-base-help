@@ -91,6 +91,16 @@ commit); two runtimes, one concern each. Ours, to settle:
    handover failing halfway (the proof of concept's finding 4), a
    defined way back.
 
+## The vision, not the roadmap
+
+The direction and its order are in the vision (`base-docs-vision`,
+"Distributed applications"), not in the roadmap: the human, 2026-11-18,
+"That means that our roadmap items we discussed are part of the vision as
+they are not yet scheduled" (hdlc, "Documentation": "What is not built is
+the vision's, or scheduled work"). A step goes to the roadmap
+(`splectrum/roadmap-1`) when it is scheduled, as a phase request. The
+roadmap entry drafted for it is withdrawn.
+
 ## The proof of concept reviewed
 
 Reviewed 2026-11-18, at `e34d7d6` (the code that runs: the runtime's new
