@@ -2097,6 +2097,12 @@ registry, we can create info views on all mrepos."
    boot and node manager looks a good pattern to start with and we
    should test it against having everything on host". Agreed; in
    `pair.md`.
+   **Revised again** (the human, 2026-11-18): "it can't be a folder in
+   the host repo - that only links. It is the registry that is affected.
+   mount a container (registry) folder for the shared mrepos (and
+   inbox/outbox would be enough?)": one folder of the container's,
+   mounted, holding the shared mrepos' inboxes and outboxes only; the
+   host's registry says where they are. In `pair.md`.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script
