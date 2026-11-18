@@ -33,17 +33,85 @@ code: the proof of concept's review, and what comes of it.
   components. The mycelium repository will have the full mycelium stack
   built on the streaming layer. Those components are then part of
   myctral. And data commit in a data repo means that the higher level
-  components are accordingly updated (mutable records etc.)" Our reading,
-  to confirm: what a data repository validates and commits is a change
-  record, immutable; the merge into the visible state is `myctrans`
-  components'; a conflict between two changes is resolved where they are
-  merged, not refused at the commit.
+  components are accordingly updated (mutable records etc.)" Our reading
+  (that `myctrans` merges) corrected by the human: "data repo validates
+  and commit the immutable based data structures (of mycelium); the
+  merge is myctral, in the data repository, myctrans transforms,
+  prepares and manages; Conflict is resolved in negotiation between the
+  data repo and the data processor." So: the data repository validates,
+  merges and commits mycelium's data structures, immutable at their
+  base; `myctrans` components transform, prepare the changes and manage
+  the processing; a conflict is negotiated between the two (the
+  repository refuses and says why, the component prepares again).
 - **Splectral starts with the terminal equivalent** (the human): "we
   start on spectral with component that issue commands through the
   server. However, They could also link in data into their mrepo (more
   direct). But we want to start with a terminal equivalent."
 - **A processing component holds processing state, not data** (the
   human: "A processing component holds processing state, not no state").
+
+- **The pipeline engine, `myctrans`'s core** (the human, 2026-11-18, on
+  our idea: "Your idea is spot on and document it in detail. It offloads
+  the pressure that otherwise exist on the commit pipeline of the data
+  repository. Separation of concerns. And by holding processing state
+  outside the request/execution framework of the data repo it becomes a
+  lot easier to manage."). A `myctrans` component a pipeline; its
+  processing state in its own repository; its end a proposal to the data
+  repository, keyed by the pipeline's request id; a refusal its error
+  path, the negotiation; started by a request or by a commit it follows.
+  In detail: the vision (`base-docs-vision`, "Pipelines", "The core of
+  `myctrans`") and the design doc, "Pipelines".
+
+## Where it is going
+
+The human (2026-11-18): "This give an outline of the direction that the
+distributed appications on p2p are going to take, and how the packages
+addressing the different responsibilities will be organised. I suspect
+that a specific distributed application will have a haicc repo at the
+top that deploys the 3 platforms and those deploy the components. But
+realising that pattern will take us some time to achieve." So: an
+application is a haicc repository at the top; it deploys the three
+platforms (`myctral`, `myctrans`, `splectral`), and they deploy the
+components. A direction, not a plan yet: Splectral, its components
+issuing commands through its server, is the first step.
+
+### To explore: a component deployed in two parts
+
+The human (2026-11-18): "I think I will want to explore how to split the
+deployment of a component in two parts: haicc and splectral or myctral.
+haicc creates an mrepo first, hand it over to splectral for component
+deployment. That way we could even have two runtimes." ("yes, record
+it"). The proof of concept has this shape once (`boot/deploy`, then
+`splectral/install`; its renderer a second process); exploring it makes
+it the rule for every platform. haicc owns what every mrepo has
+(creation, the registry entry, the service lifecycle, the management
+commands, the recorded pipeline); the platform owns what is its own
+(Splectral its pages and renderer, `myctral` its validation, merge and
+commit); two runtimes, one concern each. Ours, to settle:
+
+1. One writer per layer: haicc's runtime its management layers, the
+   platform's runtime its own.
+2. The handover: the mrepo's folder, the layers that become the
+   platform's, a record that the mrepo is now that platform's component
+   (a link record, as the pair deploy's).
+3. Lifecycle and order: haicc's service hooks start and stop the
+   platform's runtime; at teardown the platform lets go first, then
+   haicc removes the mrepo.
+4. One install shape for every platform (`splectral/install`,
+   `myctral/install`, `myctrans/install` alike), a pattern with a how-to.
+5. Failure in between: an mrepo created but never taken over, or a
+   handover failing halfway (the proof of concept's finding 4), a
+   defined way back.
+
+## The vision, not the roadmap
+
+The direction and its order are in the vision (`base-docs-vision`,
+"Distributed applications"), not in the roadmap: the human, 2026-11-18,
+"That means that our roadmap items we discussed are part of the vision as
+they are not yet scheduled" (hdlc, "Documentation": "What is not built is
+the vision's, or scheduled work"). A step goes to the roadmap
+(`splectrum/roadmap-1`) when it is scheduled, as a phase request. The
+roadmap entry drafted for it is withdrawn.
 
 ## The proof of concept reviewed
 

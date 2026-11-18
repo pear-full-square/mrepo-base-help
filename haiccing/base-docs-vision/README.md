@@ -112,8 +112,17 @@ depends on nothing outside itself.
 
 - **`pear-full-square`: the p2p infrastructure.** The p2p series, p2p-git,
   mycelium on the p2p layer, the node and its managers, and the Splectral
-  platform (for seeing and working with running systems, the swarm
-  first).
+  platform's engine (`splectral-server`; the platform itself, made with
+  it, is the haiccing package `base-package-splectral`).
+- **`myctral`: data repositories** (the human, 2026-11-18), the data
+  pillar of a distributed application (below, "Distributed
+  applications"): packages made with mycelium's engines that validate,
+  merge and commit its data structures; the mycelium stack, built on the
+  streaming layer, belongs here.
+- **`myctrans`: data transformation** (the human, 2026-11-18), the
+  transformation pillar: packages that transform, prepare changes and
+  manage the processing. Each of the two builds up the core packages of
+  its area, a natural separation of concerns.
 - **`splectral`: (interaction) components on the Splectral platform**, completely
   agnostic of p2p: they work in the platform's abstract world (hosts,
   nodes, resources by URI, activity), as mycelium works with the p2p
@@ -221,14 +230,73 @@ on the roadmap. Open: joins, parallel steps writing the same path, the
 definition's format, the grain (a request costs several commits: a step
 works on a batch, not on one record).
 
+#### The core of `myctrans`
+
+Agreed with the human, 2026-11-18 ("Your idea is spot on"), with the
+distributed applications (below): the pipeline engine is the core of
+`myctrans`, the transformation platform. A `myctrans` component is a
+pipeline; the platform deploys pipelines and runs them, as Splectral
+deploys and runs interaction components. It revises "Its state" and the
+end of a pipeline above: the pipeline's state is no longer a branch of the
+data's `main`.
+
+- **Why** (the human): it offloads the pressure that would otherwise be
+  on the commit pipeline of the data repository; it separates the
+  concerns; and processing state held outside the data repository's
+  request and execution framework is a lot easier to manage.
+- **The two sides.** `myctrans`, the pipeline: steps built from core
+  actions, its definition (the order, the error paths, the execution
+  plan), its processing state. `myctral`, the data repository: it
+  validates, merges and commits; it holds no pipeline's state and runs no
+  pipeline's steps.
+- **Its state, in the pipeline's own repository.** What the pipeline is
+  working on (its progress, its intermediate results, larger data passed
+  between steps by URI) lives in the `myctrans` component's mrepo, on its
+  own request branch there, not in the data repository. The data
+  repository's request pipeline sees one request per proposed change, not
+  a request per step.
+- **Its end, a proposal.** The last step proposes the prepared change to
+  the data repository: puts and removes against the base commit the
+  pipeline read. The repository validates, merges and commits it, or
+  refuses and says why (its current commit with it).
+- **A refusal is the pipeline's error path.** Its definition decides: read
+  again at the repository's commit and prepare the change again, rework
+  it, or report. The negotiation between the data repository and the
+  processing component is this path.
+- **One key, no repeats.** The pipeline's request id, which names its
+  branch, keys its proposal: a proposal sent twice, after an answer lost,
+  is recognised by the repository and applied once. Retries bounded by the
+  definition.
+- **Started by a request, or by a commit.** A pipeline is started by one
+  request from outside (above, "Its start"), or it follows a data
+  repository: each commit there, a change record, starts or feeds the
+  pipelines that follow it. A commit in one repository thus starts the
+  transformation that proposes changes to another: changes flow through an
+  application with no coordinator, the completion of one step placing the
+  next (proposed above) carried across repositories.
+- **A follower keeps its own position** in the stream it follows, as every
+  reader does (one writer, one reader), and takes a change record it has
+  seen already as seen.
+- **The grain**: a run takes a batch of change records, not one (a request
+  costs several commits); the batch's size is the definition's.
+- **Compiled pipelines**, for speed, as above: a generated `myctrans`
+  package.
+
+Open: how a pipeline subscribes to a repository's commits (the channel,
+its transport); joins over two repositories (a pipeline reading both,
+proposing to one); what a pipeline holds when its component is upgraded
+active-passive (its processing state handed over, or rebuilt from the
+stream).
+
 ### A database server
 
 The human: the pipeline engine is a necessity when mycelium is implemented
 as a database server. A reading of how they meet, not designed: a query a
 pipeline, its operators steps on the core actions (CRUD first); the
-execution plan the query plan; the pipeline's branch the transaction (a
-snapshot of `main`, one commit at the end, the branch discarded a
-rollback); AVRO the rows' schema.
+execution plan the query plan; the transaction a pipeline's proposal (a
+snapshot of `main` read, one commit at the end by the data repository, a
+refusal or the pipeline's state discarded a rollback: "The core of
+`myctrans`"); AVRO the rows' schema.
 
 ### Data is local
 
@@ -273,6 +341,68 @@ visible together once all of them are there (or once the one who started
 it records that they are), and a transaction that is not completed is
 simply never shown and can be cleared. It is the pipeline's request
 branch, one commit at the end, across mrepos.
+
+## Distributed applications
+
+Discussed with the human, 2026-11-18, from the Splectral proof of
+concept: the direction distributed applications on p2p take, and how the
+packages for each responsibility are organised. Agreed as direction; the
+practicalities are designed when the work reaches them.
+
+- **Three pillars, haicc on top.** Three component types are enough:
+  data, transformation, interaction. Each pillar is a platform with its
+  standard packages in an organisation of its own: `myctral`, `myctrans`,
+  `splectral`. haicc is one way of working across the three: the same
+  commands and records, install and lifecycle, the registry, routing.
+- **Interaction is the boundary with anything outside**: a person
+  through a UI, an AI agent, another system, a device, a timer.
+  Splectral, the first platform, starts with components that issue
+  commands through its server, the terminal's equivalent.
+- **A central server and self-contained components.** The server
+  installs a component and asks for its lifecycle with the same
+  commands; once installed, a component runs on its own.
+- **Single writer, single reader, both ways.** Each direction between
+  the server and a component is one channel with one writer and one
+  reader; each channel's transport is chosen for it alone (a folder, a
+  Hypercore, an RPC stream), the forms over it unchanged.
+- **Streaming applications.** They work on immutable data change
+  records. The data repository (`myctral`) validates, merges and commits
+  mycelium's data structures, immutable at their base; a commit updates
+  the higher-level components built on them (mutable records and the
+  like). `myctrans` components transform, prepare changes and manage the
+  processing; they hold processing state, not data. A conflict is
+  negotiated between the two: the repository refuses and says why, the
+  component prepares the change again.
+- **Upgrades are active-passive**: a new version deployed beside the
+  old, switched to, rolled back by switching back; deploy and teardown,
+  no upgrade in place.
+- **An application is a haicc repository at the top** that deploys the
+  three platforms; the platforms deploy the components. Realising it
+  takes time.
+- **To explore: a component deployed in two parts**: haicc creates the
+  mrepo and hands it over to the platform, which deploys the component
+  on it; the component can then have two runtimes, one writer per layer.
+- **The pipeline engine is `myctrans`'s core** (agreed, 2026-11-18): a
+  `myctrans` component a pipeline, its processing state in its own
+  repository, its end a proposal to the data repository ("Pipelines",
+  "The core of `myctrans`").
+
+The order, not scheduled (each step designed before it is requested as a
+phase; scheduled, it leaves the vision):
+
+1. **Splectral, the terminal equivalent**: components that issue
+   commands through its server; the proof of concept's findings fixed.
+2. **A component deployed in two parts**: haicc creates the mrepo, the
+   platform deploys the component on it; one install shape for every
+   platform.
+3. **`myctral`, its core**: a data repository that validates, merges and
+   commits mycelium's data structures; the forms of a proposed change
+   and of a refusal; the negotiation.
+4. **`myctrans`, its core**: transformation that prepares changes and
+   manages the processing.
+5. **An application repository** deploying the three platforms.
+6. **Distribution**: components as pairs in containers, then one
+   Hypercore per channel direction for a component on another node.
 
 
 ## Agents

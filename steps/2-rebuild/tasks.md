@@ -118,6 +118,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | | `help-mvp` | the flag unit (a folder a flag), the help and feedback flags, a first `howto` and `haici` | in three steps (2026-11-16): `howto/extract` and `howto/get` with the first how-tos built, part 82; then `package-review`; then the flag unit, `help/annotate`, `haici/feedback`, `explore` and `plan` scoped |
 | | `package-docs-package` | the template renamed, its rules for `info`, a new package as a clone of the best candidate | built, parts 83 and 84 |
 | | `info` | the static side: `extract` (keywords from the links tables, the modules once, `third-party`), `get`; replaces `help/get`, `help/extract`, `howto/get` | built, part 85, beside `help` and `howto` (they go when the review ends) |
+| | `runnable-howtos` | working demos as documentation: every how-to a script the validation runs, an AI its primary user | feedback on the documentation, proposed (2026-11-18), with `install-tests` |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
 How to read a task:
@@ -2177,6 +2178,70 @@ both transient installs - that should be added (later)". Each package's
 review adds its list in `review.md` ("The review, a package at a
 time"); built together, later. A transient install: deployed, exercised,
 torn down, nothing left.
+With it, `runnable-howtos` (below): every how-to a script a transient
+install runs, the same piece of work.
+
+## `runnable-howtos`: working demos as documentation, an AI its primary user
+
+Feedback on the documentation, for the scheduling of work. The human
+(2026-11-18): "I have a question about documentation and AI as primary
+user. How important are working demos as part of the documentation?";
+then: "Can you put this as feedback on documentation in the repo so it
+informs the scheduling of work?"
+
+**Our view, put to the human** (not yet settled): for an AI as the
+primary user, working demos are the most important part of the
+documentation, when they run in the validation; a demo nothing runs is
+prose with code in it, and goes stale as prose does.
+
+- **They cannot drift**: "the documentation follows the implementation"
+  is enforced only by a run. The docs review by an AI agent as their
+  user (2026-11-18, `docs-review-local.md`) found pages that contradicted
+  what the commands do; a demo run by every validation cannot contradict
+  the code without failing.
+- **An AI works from examples**: a command sequence that works, with
+  what it answers, copied and adapted, is more reliable than a
+  description rebuilt into steps. Seen in this session: how a pair
+  deploy is spoken to was learnt from `pair.sh` and `container.sh`, not
+  from the pages; the other session pointed to the same scripts as what
+  is of use.
+- **It can check before it acts**: a demo run first says the install
+  works; one that fails is the diagnosis.
+- **Not enough alone**: a demo shows how, not why. What was settled and
+  its reason, the terms, the design stay prose.
+
+**Where it stands** (found 2026-11-18):
+
+- Settled already, not built: "a package's deployed test is its how-to"
+  (`handover-next.md`, "How a feature is built", 2026-11-14), and
+  `install-tests` above (each package's tests and examples as transient
+  installs).
+- The how-tos are pages with `sh` blocks that nothing runs: those of
+  parts 82 to 88 among them (`program`, `platform`, `element-set`,
+  `splectral-component`, written 2026-11-18).
+- The working demos there are, the end to end tests (`run.sh`,
+  `splectral.sh`, `pair.sh`, `container.sh`, the boot's `validate`), run
+  in the validation, but no how-to and no `info` page leads to them:
+  Splectral's proof of concept is shown working by `splectral.sh` alone.
+
+**Proposed** (ours): every how-to runnable.
+
+1. A how-to's steps a script beside its page (`.haicc` lines, `sh` where
+   the machine level is needed), with what each step answers.
+2. The validation runs every how-to in a transient install (as
+   `install-tests`), a how-to that fails failing it; the implementation
+   validation (a pattern, its how-to) then proves the how-to too.
+3. `info/get <keywords> howto <name>` answers with the page and its
+   script: what the AI reads it can run.
+4. The end to end tests named from the how-tos they prove (`splectral.sh`
+   from `splectral-component` and `platform`), until each is split into
+   how-tos of its own.
+
+**For the scheduling**: with `install-tests` (one piece of work: a
+transient install a test or a how-to alike), after the proof of
+concept's fixes (`distributed-applications.md`, "What comes of it");
+the how-tos written from now on with a script beside them, even before
+the validation runs them.
 
 ## `review-code`: the code changes the review finds, built after it
 
