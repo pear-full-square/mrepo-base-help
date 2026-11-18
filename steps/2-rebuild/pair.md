@@ -87,6 +87,36 @@ we should test it against having everything on host." Agreed:
   nodes deployed on the host, as today, and the nodes as pairs. What
   differs is the pair's: its checks, and its timing beside the other.
 
+### Revised again: a shared folder of the container's, its boxes only (the human, 2026-11-18)
+
+"it can't be a folder in the host repo - that only links. It is the
+registry that is affected. mount a container (registry) folder for the
+shared mrepos (and inbox/outbox would be enough?)"
+
+- **On the host, no folder of the pair's mrepos**: the host links them;
+  its registry entries (the node's, the container's platform's) say
+  where their boxes are. Nothing of them is placed in the host's
+  `mrepos/`.
+- **In the container, one folder for the shared mrepos**, mounted from
+  the host (`/haicc/shared`, the host's
+  `<work>/containers/<swarm>/<name>/`): by each shared mrepo's unique
+  URI, its `inbox/` and `outbox/`, nothing else. The container's install
+  places its mrepos as always, in the container; a shared mrepo's two
+  boxes are in the shared folder (its own `inbox` and `outbox` pointing
+  there), and the container's registry says which mrepos are shared.
+- **The boxes are enough**: the host drops a request into an inbox and
+  collects the response from the outbox; it reads nothing else (no local
+  reading), asks the container's state of Docker, and never needs a
+  socket, a pid or a repository of the container's. The socket, the
+  pid, the paths of rules 1, 2 and 4 below no longer cross.
+- **No mount point at an mrepo's place**: the mount is a folder of its
+  own, so `boot/deploy` and `boot/teardown` in the container place and
+  remove their mrepos as they do now; a shared mrepo's boxes made in,
+  and emptied from, the shared folder.
+- To check in the build: the runtime watching and committing an inbox
+  folder that points elsewhere (a symbolic link, or the folder named in
+  the mrepo's setting), and an outbox the same.
+
 ## What it is
 
 A node deployed at a position of the host runs in a Docker container,
