@@ -36,6 +36,12 @@ container. Without a daemon those tests fail, they do not skip.
   `haiccing/<package>` for a folder of `haiccing/`
   (`sh tools/packages.sh -m "<what changed>" <package>...`). Only those
   that changed.
+- **`haicc` itself**: the cloud environment's setup script (2026-11-18)
+  installs it from its latest release in every fresh session (`haicc` on
+  the PATH, its folder `~/.haicc`, Bare and the haiccing packages
+  downloaded; not booted): `haicc boot/deploy` to start. That is the
+  released haicc; this repository's own build is `sources/`, linked
+  with `haicc sources link "$PWD/sources"` to use it instead.
 - **A browser**: Chromium and Playwright are installed in a cloud
   session (`require('playwright')`, no install), for a page's
   screenshot (Splectral's, the docs view).
