@@ -433,12 +433,49 @@ for its lines: the same way of working, nothing new.
   a component's own package offers one protocol, named as the component
   is, its action `page`; the browser's path below the component is the
   action's URI: `/viewer/hdlc/validation` is `viewer/page hdlc/validation`.
+- **The names, more or less; a Splectral package links no haiccing
+  package, the minimum from the Splectral server; the organisations
+  kept pure** (the human, 2026-11-18, on the names we proposed:
+  `splectral/base-docs-splectral`; `splectral/base-package-ui`, protocol
+  `ui`, its module `pear-full-square/splectral-base-ui`;
+  `splectral/base-package-viewer`, protocol `viewer`, its module
+  `pear-full-square/splectral-base-viewer`; `splectral/base-component-viewer`;
+  the platform staying `haiccing/base-package-splectral`; the `base-view-*`
+  names dropped: "More or less. I would like the splectral packages not
+  to link haiccing packages, but to get the minimum required from
+  spectral server. Probably just a runtime, service. Also we need to
+  deal with the org. But if splectral is pure haiccing and splectral
+  packages or splectral that would make it easy."). Our reading, put
+  back, to confirm:
+  - a component's list names packages of the `splectral` organisation
+    only: its element sets, its own package, itself;
+  - what it needs to run it is given by the platform when it is
+    deployed, not linked by it: the minimum, probably a runtime and the
+    service;
+  - the organisations: `haiccing` the platform, all of it haiccing's;
+    `splectral` what is deployed on it, all of it splectral's; no list
+    names the other's packages, so each organisation is built, released
+    and sourced by itself.
+  Checked: today's tools know one organisation (`tools/release.js`,
+  `package-test.js`, `code-check.js`, `info-extract.js`: the folder
+  `haiccing/`, `sources/haiccing/`, its manifest; `package-bundle.js` has
+  `--org`); and a hook activates its protocols with the protocol
+  protocol (`protocol/activate . info`), so the minimum is likely the
+  runtime, the protocol protocol and the service, and `info` where a
+  component answers about itself.
 
 ## Open, one at a time
 
-1. The names and the repositories, created by the human: put to the
-   human.
-2. Whether a terminal's command for a component still gets there by
+1. How the platform gives the minimum: put to the human, ours: a
+   setting of the platform's package says what its components are
+   given; the deploy lays those in first, from the platform's own
+   placed packages, then the component's list; in the boot protocol,
+   for every platform.
+2. The organisation in the tools and in this repository: a folder
+   `splectral/` beside `haiccing/`, the tools run an organisation at a
+   time; how `boot/deploy` names a package of another organisation.
+3. Whether a terminal's command for a component still gets there by
    haicc's hop through the Splectral mrepo: assumed, not confirmed.
-3. Parameters from the URL beyond the path; a static page's writes
+4. Parameters from the URL beyond the path; a static page's writes
    (buttons).
+5. The repositories' descriptions, for the human to create them.
