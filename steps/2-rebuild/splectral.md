@@ -213,15 +213,33 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   (`base-docs-hdlc`, "Work"). The rule for what follows here: what
   haiccing does already is used as it is; something new only where
   nothing does it.
+- **A pair of linked inbox and outbox with Splectral; only through
+  the Splectral server; watchers at both ends** (the human, 2026-11-18,
+  on our asking whether a component asks its parent for data through
+  its outbox, its request waiting: "I propose that the component keeps
+  a pair of linked Inbox outbox with splectral. So only accessible
+  through the splectral server. And use watchers for notification both
+  ends"). Agreed. Our reading, put back, to confirm:
+  - one pair, the component's own inbox and outbox, linked with
+    Splectral and with nothing else; everything between the two goes
+    over it, both ways: in, a browser's request, a data answer; out, a
+    page, a data request;
+  - nothing else in the install writes its inbox or reads its outbox:
+    a component is reached through Splectral only;
+  - a watcher at each end, nothing looked at on a clock and nothing
+    copied into an inbox of Splectral's: the component's runtime
+    watches its inbox (as every runtime does, `inbox-watcher`), the
+    Splectral server watches the component's outbox (as it watches the
+    boot mrepo's outbox folder today) and answers what it finds there:
+    a page to the browser that waits for it, a data request run and its
+    completed form written into the component's inbox.
 
 ## Open, one at a time
 
-1. How a component gets its data from the platform: put to the human,
-   ours: it asks its parent, a request of its own through its outbox,
-   which Splectral follows (the subscription the outbox's page
-   describes), its page's request waiting meanwhile (`exec.wait`,
-   built); or the data handed down with the browser's request, which
-   needs the platform to read what a component declares.
+1. Whether a terminal's command for a component still gets there by
+   haicc's hop through the Splectral mrepo (`haicc splectral/viewer
+   service/start`: "URI hops remain haicc"), "only through the Splectral
+   server" meaning through Splectral: put to the human, ours: yes.
 2. The family's packages: an element set a protocol package, an element
    an action; the app's own package, answering with pages; the
    component's list. The earlier question, in this light.
