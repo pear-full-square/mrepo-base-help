@@ -2275,6 +2275,28 @@ background task setting the scene". Our reading, put back, to confirm:
   deployed, then a cluster), so preparing one runs the how-tos before
   it, validated on the way.
 
+**Scenes preinstalled, explored as documentation** (the human,
+2026-11-18): "with howtos with unique keys an install for dev can
+preinstall ready to go. That way the 'ready to start' repos can be
+explored as part of the documentation." Our reading, put back, to
+confirm:
+
+- **A how-to has a unique key** (its package and its name,
+  `<org>/<package>/<howto>`, as a package's script is named), and its
+  scene is placed by that key in an install: each scene apart, none in
+  another's way.
+- **A development install preinstalls the scenes**: every how-to's scene
+  prepared ahead, ready to start, not waited for.
+- **The scenes are documentation**: a ready-to-start mrepo can be
+  explored (its structure, its info, its records, in the terminal or in
+  Splectral) before the first step is taken; a how-to then has a page,
+  a script and a place where its starting point can be looked at.
+- Ours, to settle: a scene kept still until it is opened (its runtimes
+  started on use, not all running at once); a scene prepared again when
+  its sources change (a scene from older packages misleads as a stale
+  page does); a scene thrown away and prepared again after it is worked
+  in.
+
 ## `review-code`: the code changes the review finds, built after it
 
 The human (2026-11-17): "Do we list these as code modifications, which
