@@ -49,16 +49,37 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   and runs", put back, to confirm: it loads the packages of its list
   (their files served as they are) and runs the commands their pages
   send (into the boot mrepo's inbox, the completed form back, the
-  records streamed).
+  records streamed). Corrected by the next point: it starts the
+  package, whose code runs on its side.
+- **The server loads a package and starts it; pages built on the
+  server first** (the human, 2026-11-18: "So the server loads the
+  package and starts it. It provides data, but the processing is done by
+  the package, self contained. The component of the package gets a uri
+  in the browser, the server routes browser requests to the right
+  component. The initial implementation is building pages on the server,
+  the further aim is to create browser applications that get their code
+  from the package."). Our question: whether "runs" is only the commands
+  (ours, recommended: a package's code in the browser only): not so. The
+  package's own code runs on the server's side, started by the server;
+  it asks the server for data and does the processing itself; what it
+  offers has a URI in the browser, and the server routes a browser's
+  request to it; to start with it answers with a page it builds there;
+  later a package serves a browser application its code.
+  The earlier scope had this form already (`tasks.md`, "`splectral-docs`",
+  1: a package's entry `view.js`, `{ name, routes, page }`, loaded as the
+  runtime loads protocols).
 
 ## Open, one at a time
 
-1. Whether "runs" is also a package's own code on the server's side, or
-   only the commands: put to the human.
-2. What entity a Splectral package creates (base: one package, one
+1. The term for what a package offers at a URI ("the component of the
+   package"; component is the list): put to the human, ours: a view.
+2. The contract: what a started package is handed (the data: a command
+   run, the records followed) and what it answers a routed request
+   with; its entry file; in the server's process or its own.
+3. What entity a Splectral package creates (base: one package, one
    protocol).
-3. Where the server's package lives, and the Splectral mrepo's list.
-4. The proposal's open questions: parameters from the URL; writes from
+4. Where the server's package lives, and the Splectral mrepo's list.
+5. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-5. The names and the repositories (`splectral/base-docs-package`,
+6. The names and the repositories (`splectral/base-docs-package`,
    `base-view-docs`, `base-view-install`), created by the human.
