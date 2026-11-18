@@ -162,6 +162,36 @@ way, a browser's every request through an mrepo's request layers.
   that does not come from its own pages.
 - **Splectral's own requests tagged** and left out of what it follows.
 
+**The human's answers** (2026-11-18), point by point, in the words
+used, each with our reading:
+
+1. "Not an issue, will be resolved with rpc": the page's speed is the
+   RPC server's to solve, with AVRO; slow until then is accepted;
+   nothing cheaper is built for Splectral meanwhile.
+2. "we will set appropriate commit times": when a layer is committed
+   becomes a setting, so a page read is not a row of commits of its
+   own. Our "request that is not kept" is withdrawn for it.
+3. "Yes, that is on purpose": a component has Splectral's reach, the
+   whole install: apps act on all the parts ("user interaction that
+   sends commands to all the parts", 2026-11-16). Our "a package says
+   what it may ask" is withdrawn. Left, ours to decide and said: the
+   server answers only its own pages (a request from another page open
+   in the same browser refused): who asks the server, not what a
+   component may ask.
+4. "Rules will be implemented": what a component follows and what is
+   left out of it is said by rules; nothing designed now.
+5. "This is static versus dynamic": two kinds, not one replacing the
+   other: a static page, built on the server; a dynamic one, a browser
+   application. The first is not built twice; "written to run in the
+   browser as well" is withdrawn.
+
+So the design stands as written up. What stays of "What we would do":
+the proof of concept first (the rule for a new pattern); Splectral's
+own requests told apart, under 4's rules. And, speed being no issue
+(1), ours: an element is asked for as an action is, a request of the
+component's own, the page's action waiting for it, as a script waits
+for its lines: the same way of working, nothing new.
+
 ## Settled before the session (2026-11-17, `tasks.md`)
 
 - The server is the data layer: it manages the commands the pages run;
@@ -390,15 +420,15 @@ way, a browser's every request through an mrepo's request layers.
 
 ## Open, one at a time
 
-1. Whether a terminal's command for a component still gets there by
-   haicc's hop through the Splectral mrepo (`haicc splectral/viewer
-   service/start`: "URI hops remain haicc"), "only through the Splectral
-   server" meaning through Splectral: put to the human, ours: yes.
-2. The family's packages: an element set a protocol package, an element
-   an action; the app's own package, answering with pages; the
-   component's list. The earlier question, in this light.
-3. What a request a page costs (about 1 s a request through an mrepo's
-   layers, measured; "a cheaper request pipeline" moved back).
-4. The proposal's open questions: parameters from the URL; writes from
-   the UI; live updates; who may ask.
-5. The names and the repositories, created by the human.
+1. The family's template: haiccing's own (`base-docs-package`, a
+   Splectral package brought to it and pinned to it), with a
+   documentation package of the family's for what is its own; an
+   element set a protocol package, an element an action; a component a
+   component package, its list: put to the human, ours: yes, no second
+   template.
+2. Whether a terminal's command for a component still gets there by
+   haicc's hop through the Splectral mrepo: assumed, not confirmed.
+3. What a request to a component says (the page's action, its name,
+   the path its URI); parameters from the URL; a static page's writes
+   (buttons).
+4. The names and the repositories, created by the human.
