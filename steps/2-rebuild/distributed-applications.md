@@ -50,6 +50,19 @@ code: the proof of concept's review, and what comes of it.
 - **A processing component holds processing state, not data** (the
   human: "A processing component holds processing state, not no state").
 
+## Where it is going
+
+The human (2026-11-18): "This give an outline of the direction that the
+distributed appications on p2p are going to take, and how the packages
+addressing the different responsibilities will be organised. I suspect
+that a specific distributed application will have a haicc repo at the
+top that deploys the 3 platforms and those deploy the components. But
+realising that pattern will take us some time to achieve." So: an
+application is a haicc repository at the top; it deploys the three
+platforms (`myctral`, `myctrans`, `splectral`), and they deploy the
+components. A direction, not a plan yet: Splectral, its components
+issuing commands through its server, is the first step.
+
 ## The proof of concept reviewed
 
 Reviewed 2026-11-18, at `e34d7d6` (the code that runs: the runtime's new
