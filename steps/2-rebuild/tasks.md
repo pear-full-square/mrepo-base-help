@@ -1854,6 +1854,9 @@ data layer, managing the commands the pages run; later caching there
 change touching it; one request for the same command from several
 pages), not for base.
 
+**The design session, started** (2026-11-18): `splectral.md` here: what
+settles in it, in the words used, and what is open.
+
 ## The order after the restructure (the human, 2026-11-17)
 
 "I propose the review one repo at the time with html page 'validation'.
