@@ -119,15 +119,30 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   following the server's outbox. So a started component is a process of
   its own, sharing nothing in memory with the server; when the RPC
   server comes, the same forms travel as its messages.
+- **A component starts light, a simple renderer; it could be a simple
+  mrepo, an mrepo with a specific language** (the human, 2026-11-18, on
+  our asking whether a component is a light process or an mrepo:
+  "Component starts light, simple renderer. However, because of the
+  inbox outbox setup and the pattern already in use in haiccing even a
+  renderer could be a simple mrepo. That means it is an mrepo with
+  specific language."). Our reading, put back, to confirm: now a light
+  process, a renderer: a record from its inbox, a page into its outbox,
+  nothing committed. It is kept in an mrepo's shape (the same boxes, the
+  same request record), so that a simple mrepo can take its place with
+  nothing changed for the server. What makes it a renderer and not
+  another mrepo is its language: what its requests say, the protocols
+  it offers.
 
 ## Open, one at a time
 
-1. Whether a component is a light process with an inbox and an outbox
-   folder (the pattern, not the pipeline: nothing committed a page), or
-   an mrepo, its requests through the request layers (about 1 s a
-   request, measured): put to the human, ours: the light process.
-2. The component's entry file; how the top package asks for an element
-   of a linked package.
+1. Whether the light renderer already speaks in an mrepo's forms: a
+   request to it `{ protocol, action, uri, args }`, a Splectral package
+   a protocol package (`protocol.js`: an element set a protocol, an
+   element an action; the top package's protocol answering with pages),
+   so the family's template is haiccing's with the language's own on
+   top: put to the human, ours: yes.
+2. How the top package's action asks for an element of a linked
+   package; the minimal execution the renderer runs actions on.
 3. Where the server's package lives, and the Splectral mrepo's list.
 4. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
