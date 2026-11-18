@@ -68,18 +68,31 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   The earlier scope had this form already (`tasks.md`, "`splectral-docs`",
   1: a package's entry `view.js`, `{ name, routes, page }`, loaded as the
   runtime loads protocols).
+- **A loaded package links to other packages; the top package runs**
+  (the human, 2026-11-18: "When a package is loaded it links to other
+  packages. So the top package runs but functionality of the other
+  packages is instantiated during processing. Same as a haiccing
+  package."). Our question: the term for what a package offers at a URI,
+  "the component of the package" having been said (ours: a view). The
+  answer makes the word unneeded: what has the URI is the component, the
+  list, through its top package, as an mrepo is defined by the last
+  package of its list. Our reading, put back, to confirm: a package has
+  its list, the packages it links to, itself the last; the server loads
+  the list and starts the top package only, at its URI; the others do
+  not run by themselves: what they offer is instantiated when the top
+  package's processing asks for it, as a request instantiates an action
+  of a linked package's protocol.
 
 ## Open, one at a time
 
-1. The term for what a package offers at a URI ("the component of the
-   package"; component is the list): put to the human, ours: a view.
+1. What a linked package offers (base: one package, one protocol, its
+   actions), and whether the UI element set is such a package, linked,
+   rather than a module carried by copy: put to the human.
 2. The contract: what a started package is handed (the data: a command
    run, the records followed) and what it answers a routed request
    with; its entry file; in the server's process or its own.
-3. What entity a Splectral package creates (base: one package, one
-   protocol).
-4. Where the server's package lives, and the Splectral mrepo's list.
-5. The proposal's open questions: parameters from the URL; writes from
+3. Where the server's package lives, and the Splectral mrepo's list.
+4. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-6. The names and the repositories (`splectral/base-docs-package`,
+5. The names and the repositories (`splectral/base-docs-package`,
    `base-view-docs`, `base-view-install`), created by the human.
