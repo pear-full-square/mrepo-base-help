@@ -628,6 +628,21 @@ interaction equivalent to the terminal's command line** (a browser's
 request a `haicc` command, its answer a page). The proof of concept
 proves the two patterns, not the speed.
 
+**The component server pattern, a distributed application** (the human,
+2026-11-18): "I think I will use the component server pattern as a
+traditional distributed application with central server and services in
+distributed components, again with a self contained approach." So the
+pattern is a distributed application's: a central server (the platform,
+routing and providing data) and services in components, each
+self-contained, that need not run where the server does. Ours, said to
+the human: the inbox and outbox are already where a component is, not
+how it is reached, so a component in a container (the pair deploy) or
+on another node takes the same forms; what a distributed form adds,
+each later: where a component runs (the registry), one that does not
+answer (the server says so, a time limit), the forms between server and
+component versioned, and a transport beyond a shared folder (the
+replication over a stream, `tasks.md`).
+
 ## Open, one at a time
 
 1. A proof of concept now, and its scope: put to the human.
