@@ -8,6 +8,74 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-18: Splectral's proof of concept, `e78c495`, tested
+
+"The next run" (below), test only: no release, no product repository.
+
+1. **The clone:** `main` at `e78c495`.
+2. **The dependencies:** `tools/install.sh` exit 0 ("0 fetched, 207
+   kept, 3 linked"): the three splectral modules linked.
+3. **The sources:** `release.js` exit 0, `sources/haiccing/` nineteen
+   bundles, `sources/splectral/` four and its manifest; `git status` no
+   change.
+4. **Splectral's test, three times:** 38/38 `# ok` each (65, 71, 72 s);
+   nothing left (no `bin/bare`, no `/tmp/haicc-splectral.*`); no hang.
+   Timings (ms), runs 1/2/3: boot 1395/1969/1818, docs 6387/8583/8508,
+   splectral 11930/14488/13372, base 2200/2599/2550, install
+   3684/4237/4674, initialise 3896/4697/3746, start 3923/3965/3783, stop
+   3605/3753/3765, teardown 2766/1900/1978, machine 878/983/1192. Pages:
+   a viewer page 1.2–1.5 s each (1191–1478 ms), the not-running and
+   not-deployed answers 8–13 ms.
+5. **The other tests:** `run.sh` 303/303 three times (371, 366, 366 s),
+   nothing left; `container.sh` 18/18 (40 s), no container left; every
+   bundle's `/test/full`, both organisations (23), exit 0, `"ok":true`;
+   `release.js --strict` exit 0, every report `current` (23).
+6. **By hand**, in the human's install (`~/.haicc`; its sources now this
+   clone's `sources/`, the release's `~/.haicc/sources` unlinked, kept):
+   the eight commands every one exit 0 (docs 7.7 s, Splectral 15.9 s,
+   the rest 1.6–5.4 s). **Left running: `http://127.0.0.1:4400`**, the
+   viewer at `/viewer/`. In a browser (Playwright's headless Chromium):
+   `/viewer/`, `/viewer/hdlc/validation`, `/viewer/?at=splectral` drawn,
+   light and dark, a 390 px window wrapping cleanly; every keyword link
+   below `/viewer/` (28), `?at=splectral` (22, `?at` kept) and
+   `/viewer/hdlc` (13) answers 200 with no error. Splectral's page `/`:
+   the tree (boot, docs, splectral, viewer started) and the viewer's
+   data requests among its commands (`haicc docs info/get
+   hdlc/validation`, through `local/docs`). `service/stop`: `/viewer/`
+   503, "not running: viewer (its service not started? haicc
+   splectral/viewer service/start)"; `service/start`: 200 again (0.9 s).
+   Small: the not-running page has no dark style.
+7. **An AI agent as the viewer's user** (Claude Code headless, an empty
+   folder, only `haicc … info/get` and `curl` to the viewer allowed; 157
+   s). Its findings, in its words, shortened:
+   - "Same text on every page compared": ten keyword sets (root, haicc,
+     boot, boot howto, boot howto deploy, hdlc, hdlc validation, hdlc
+     branches, its-files, crud) and `splectral info/get` against
+     `?at=splectral`: body, order of the choices, below and oneliners
+     the same; links to the matching keyword path.
+   - Differences: the viewer adds an `<h1>` from the title where a page
+     has none ("Validation"); the below entries' `choices` count missing
+     in the viewer ("no hint a click opens 3–4 stacked pages"); the
+     request record (log, metrics, `remote`) not shown; the footer's
+     command slash-joined (`hdlc/validation`), which works.
+   - Harder in the browser: "no route from Splectral into the viewer":
+     `/` has no link to `/viewer/`, the viewer none back, another
+     position only by typing `?at=`; keywords in the text (`xpath`,
+     `package howto package`) not links; an error page's nearby keywords
+     not links. Harder on the command line: about 30 lines of JSON
+     around each answer, the page one string with `\n`, tables raw.
+   - Unclear both ways: `haicc/package` three sections all "Package";
+     `haicc/test-reports` the same generic text four times.
+   - **Broken:** bold that begins with a code span not rendered, the
+     `**` shown: `/viewer/haicc` (base-app-haicc, Commands: "**A
+     `<protocol>/<action>` without a URI**", "**`haicc scripts`**", …),
+     `/viewer/hdlc` and `/viewer/hdlc/branches` ("**`main` holds
+     settled state**"). The deploy how-to ends on `haicc host info/get`,
+     no host in this install ("no node there"). No dead link found.
+   Checked by me: the `**` as reported (`/viewer/hdlc/branches`: `<li>**<code>main</code>
+   holds settled state**`); `/` has no link to `/viewer`; an unknown
+   keyword's page answers 200 (as the test expects).
+
 ## 2026-11-18: the next run, `e61e222`, released as `r-6b4d346`
 
 "The next run" (below), step by step.
