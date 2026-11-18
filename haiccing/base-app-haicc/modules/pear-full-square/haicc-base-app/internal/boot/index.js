@@ -51,7 +51,7 @@ function containers (work) {
   // deeper inside it)
   const top = join(work, 'containers')
   if (!existsSync(top)) return 0
-  const found = docker('ps', '-aq', '--filter', 'label=haicc.folder', '--format', '{{.ID}} {{.Label "haicc.folder"}}')
+  const found = docker('ps', '-a', '--filter', 'label=haicc.folder', '--format', '{{.ID}} {{.Label "haicc.folder"}}')
   if (!found.ok) throw new Failure(`Docker does not answer: the containers under ${top} are not removed`, 1)
   for (const line of found.out.split('\n').filter(Boolean)) {
     const [id, folder] = [line.slice(0, line.indexOf(' ')), line.slice(line.indexOf(' ') + 1)]

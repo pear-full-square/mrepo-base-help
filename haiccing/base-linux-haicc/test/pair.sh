@@ -76,7 +76,8 @@ scenario () {
   label=script; step --output $N haicc/script . 'crud/create notes/b
 crud/read notes/b'; has "$out" '"line":"crud/read notes/b"' "$mode: a script's lines at the node"
   label=sub; step --output $N boot/deploy sub base-component-haicc; has "$out" '"deployed":"sub"' "$mode: the node deploys an mrepo of its own"
-  label=sub-start; step --output $N/sub service/initialise; out2=$out; step --output $N/sub service/start; has "$out2$out" '"state":"started"' "$mode: its service started, through the node"
+  label=sub-init; step --output $N/sub service/initialise; out2=$out
+  label=sub-start; step --output $N/sub service/start; has "$out2$out" '"state":"started"' "$mode: its service started, through the node"
   label=sub-read; step --output $N/sub crud/read .; has "$out" '"uri":["main","."]' "$mode: reached through the node"
   if [ "$mode" = pair ]; then
     is "$(ls "$H/work/mrepos/swarm-1" 2>/dev/null)" "" "pair: the node's mrepo is the container's: nothing of it in the host's mrepos"
@@ -97,7 +98,7 @@ scenario host
 scenario pair
 
 echo "# timing (ms): step, the node on the host, the node as a pair"
-for s in boot host swarm deploy initialise start create read script sub sub-start sub-read teardown machine; do
+for s in boot host swarm deploy initialise start create read script sub sub-init sub-start sub-read teardown machine; do
   a=$(sed -n "s/^host $s //p" "$TIMES"); b=$(sed -n "s/^pair $s //p" "$TIMES")
   echo "# $s ${a:--} ${b:--}"
 done
