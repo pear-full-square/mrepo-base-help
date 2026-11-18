@@ -1,0 +1,51 @@
+# Splectral: the server and the package template
+
+A design in discussion (2026-11-18), the design session asked for on
+2026-11-17 ("for splectral we need to do a design session for the server
+'proper' and the components"). What was settled before it is in
+`tasks.md`, "`splectral`" and "`splectral-docs`"; our proposal for it is
+the doc "Splectral: the server and its components"
+(https://claude.ai/artifact/Y3G4CXUHzwUuzZWjAzwLsK). Nothing of it is
+built: what is built is the MVP (`readme.md`, parts 80 and 81).
+
+## Settled before the session (2026-11-17, `tasks.md`)
+
+- The server is the data layer: it manages the commands the pages run;
+  later caching there. It carries no UI elements of its own.
+- The unit on the Splectral side is self-contained as a haiccing package
+  is: its commands, its UI element set (by copy), its info, its own page
+  or pages.
+- A Splectral family of its own, its packages in the `splectral`
+  organisation.
+- One gateway, the inbox: a command from the browser is a `haicc`
+  command, written there as a terminal writes one.
+
+## Settled in the session
+
+- **The unit is a package; component stays the list** (the human,
+  2026-11-18: "package, keep component for the list"). Our question: in
+  our terms a component is a package that is a list of packages, and
+  the Splectral unit carries its own UI elements as a package carries
+  its modules. So: a Splectral package (a view, its UI element set, its
+  pages); a Splectral component a list of them, what is installed
+  together.
+- **The same self-containment rules as haiccing's** (the human,
+  2026-11-18: "It should follow the same self containment rules as
+  haiccing"). Our reading, put back: a Splectral package carries a copy
+  of every module it needs, the UI element set among them, is tested
+  and sealed, runs on its own copies, shares nothing at run time and is
+  replaced as a whole; it follows a package specification of its
+  family (a template it is brought to and pinned to, the generic tests,
+  a test of its own, a report), documents itself (its README a menu,
+  read with `info`), and has a how-to for every pattern it implements.
+
+## Open, one at a time
+
+1. What the server knows of a package: its views, or only its files.
+2. What entity a Splectral package creates (base: one package, one
+   protocol).
+3. Where the server's package lives, and the Splectral mrepo's list.
+4. The proposal's open questions: parameters from the URL; writes from
+   the UI; live updates; who may ask.
+5. The names and the repositories (`splectral/base-docs-package`,
+   `base-view-docs`, `base-view-install`), created by the human.
