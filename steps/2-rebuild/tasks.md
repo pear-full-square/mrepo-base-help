@@ -2215,3 +2215,7 @@ package by package and lists here what needs code, built after it.
   `stuck-replica`). To find before the local run, which runs the test
   three times: a pass that runs too long said in the runtime's log, then
   the cause.
+- **The pair deploy, prototype**, **built** (2026-11-18): `boot/deploy
+  --flags container`; `pair.md`, "Built, the prototype". The runtime says a
+  pass that stalls (`runtime-stall.json`), for the open bug above: no
+  stall in the runs since (one hang in nine).

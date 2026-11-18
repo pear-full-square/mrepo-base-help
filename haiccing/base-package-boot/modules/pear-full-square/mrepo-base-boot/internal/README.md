@@ -11,3 +11,4 @@ The methods the actions and the boot call directly, never requested.
 - [fetch](fetch/)
 - [lay](lay/)
 - [install](install/)
+- [pair](pair/)

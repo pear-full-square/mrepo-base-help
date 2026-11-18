@@ -6,6 +6,12 @@ The runtime is asked to stop over its socket; still running, it gets
 SIGTERM, then SIGKILL, each waited for until the process has ended. How
 it stopped is logged.
 
+A child deployed into a container (its link's record `how: container`)
+is not stopped here: the container's platform tears it down (a
+`boot/teardown` dropped into its boot mrepo's inbox, when the container
+runs), then its container and its folder are removed (`internal/pair`).
+It answers `{ tornDown, container }`.
+
 ## Signature
 
 `teardown(exec, { uri })`: requested as `boot/teardown <position>`.

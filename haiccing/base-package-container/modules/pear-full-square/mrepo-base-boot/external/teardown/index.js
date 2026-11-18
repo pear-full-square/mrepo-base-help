@@ -4,6 +4,7 @@ import { stop } from 'mrepo-base-runtime'
 import { segmented, joined } from 'mycelium-uri'
 import { query, REGISTRY, MAIN } from 'mrepo-base-xpath'
 import { child } from '../../internal/child.js'
+import { teardownPair } from '../../internal/pair/index.js'
 
 // Several at once: a URI into the mrepo registry (main/registry/...: the
 // boot mrepo's) selects mrepos there, by unique URI or by what their
@@ -26,15 +27,19 @@ export async function teardown (exec, { uri }) {
   const c = await child(exec, uri)
   const recorded = await c.recorded()
   if (!recorded) { await c.refuse(); throw new Error(`not deployed: ${c.at}`) }
-  // Its runtime stopped first (when it runs), waited for until its process
-  // has ended (mrepo-base-runtime's stop: asked, then SIGTERM, then SIGKILL).
-  const stopped = await exec.step('runtime', r => ({ pid: recorded.runtime?.pid ?? null, stopped: r ?? null }), () => stop({ repo: c.dir, pid: recorded.runtime?.pid }))
-  await exec.step('folder', { dir: c.dir }, async () => rmSync(c.dir, { recursive: true, force: true }))
+  // A pair: torn down by the container's platform, the container and its
+  // folder removed (internal/pair); this host never stops its runtime.
+  // Else its runtime stopped first (when it runs), waited for until its
+  // process has ended (mrepo-base-runtime's stop: asked, then SIGTERM, then
+  // SIGKILL), and its folder removed.
+  const pair = recorded.how === 'container' ? await teardownPair(exec, c, recorded) : null
+  const stopped = pair ? null : await exec.step('runtime', r => ({ pid: recorded.runtime?.pid ?? null, stopped: r ?? null }), () => stop({ repo: c.dir, pid: recorded.runtime?.pid }))
+  if (!pair) await exec.step('folder', { dir: c.dir }, async () => rmSync(c.dir, { recursive: true, force: true }))
   // its link, the node it was made at, and what was local about it
   exec.remove(c.links)
   exec.remove(c.node)
   if (recorded.link && await exec.find(c.local(recorded.link)) !== null) exec.remove(c.local(recorded.link))
   if (await exec.find(c.registry) !== null) exec.remove(c.registry)
-  exec.log('info', 'torn down', { at: c.at, mrepo: c.mrepo, runtime: stopped ?? null })
-  return { tornDown: c.at }
+  exec.log('info', 'torn down', { at: c.at, mrepo: c.mrepo, runtime: stopped ?? null, ...(pair ? { container: pair.container } : {}) })
+  return pair ? { tornDown: c.at, container: pair.container } : { tornDown: c.at }
 }

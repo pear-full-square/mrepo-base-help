@@ -10,5 +10,7 @@ export async function redeploy (exec, form) {
   const down = await teardown(exec, form)
   await exec.commit('torn down')
   // (the link keeps its key: the same link, its mrepo built again)
-  return { ...down, ...(await deploy(exec, { ...form, args: [form.args?.[0] ?? was?.package] }, { link: was?.link ?? null })) }
+  // (a pair is deployed again as one: into a container)
+  const flags = was?.how === 'container' ? { ...(form.flags ?? {}), container: true } : form.flags
+  return { ...down, ...(await deploy(exec, { ...form, flags, args: [form.args?.[0] ?? was?.package] }, { link: was?.link ?? null })) }
 }

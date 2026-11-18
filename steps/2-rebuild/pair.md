@@ -18,6 +18,29 @@ node on another machine, where there is no shared folder; recorded in
 `tasks.md`, not built now. What is below is the design with that taken
 out.
 
+## Built, the prototype (2026-11-18)
+
+`boot/deploy <position> <package> --flags container`
+(`mrepo-base-boot`'s `internal/pair`): the container's haicc home is the
+pair's folder, `<work>/containers/<swarm>/<name>/`, the whole of it shared
+(the human: "You can share the full folder ... KISS this is prototype
+time"); the host's install (its scripts and pins) copied in; a plain
+`debian:bookworm-slim` container, `--init`, the host's user, the host's
+sources read only at their paths; its command line links them, puts Bare
+in place and boots, every time it starts. The host drops the platform
+commands (the swarm's document, the node's deploy, its teardown) into
+the container's boot mrepo's inbox, with a reply topic, and takes their
+answer from its outbox; its own link `how: container`, its folder the
+node's in the pair's folder: everything else for the node forwarded as to
+any linked mrepo. The machine's teardown finds the containers by the
+folder they are labelled with. Tested against everything on the host:
+`haiccing/base-linux-haicc/test/pair.sh`, 41 checks, twice in the full
+validation. Timing (ms, two runs): the node's deploy 3,100-3,300 on the
+host against 14,200-15,000 as a pair (the container's install and boot);
+every command after it 0-10% dearer; its teardown and the machine's
+cheaper (the container removed). Not yet: the node's runtime brought back
+when the container is started again; the shared folder narrowed.
+
 ## Settled: who executes what (the human, 2026-11-17)
 
 "The container has a haicc registry with the node mrepo registered, and

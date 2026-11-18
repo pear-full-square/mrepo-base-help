@@ -39,20 +39,25 @@ function holding (top) {
   return found
 }
 
-// The replicas of the install: each mrepo under the work folder's
-// containers/ is one, run in a Docker container labelled with its folder
-// (haicc.folder: the container protocol's, mrepo-base-container): each
-// container removed, running or not. -> how many
+// The containers of the install: each labelled with a folder under the
+// work folder's containers/ (haicc.folder): a replica's (the container
+// protocol's, mrepo-base-container) or a pair's (the boot protocol's,
+// mrepo-base-boot): each removed, running or not. -> how many
 function containers (work) {
   const docker = (...args) => { const r = spawnSync('docker', args, { stdio: ['ignore', 'pipe', 'pipe'] }); return { ok: r.status === 0, out: (r.stdout ?? '').toString().trim() } }
   let removed = 0
-  for (const dir of holding(join(work, 'containers'))) {
-    const found = docker('ps', '-aq', '--filter', `label=haicc.folder=${dir}`)
-    if (!found.ok) throw new Failure(`Docker does not answer: the container of ${dir} is not removed`, 1)
-    for (const id of found.out.split('\n').filter(Boolean)) {
-      if (!docker('rm', '-f', id).ok) throw new Failure(`a container under ${work} was not removed: ${id}`, 1)
-      removed++
-    }
+  // each container labelled with a folder under containers/: a replica's
+  // (its folder), a pair's (the container's haicc home, the .git folders
+  // deeper inside it)
+  const top = join(work, 'containers')
+  if (!existsSync(top)) return 0
+  const found = docker('ps', '-a', '--filter', 'label=haicc.folder', '--format', '{{.ID}} {{.Label "haicc.folder"}}')
+  if (!found.ok) throw new Failure(`Docker does not answer: the containers under ${top} are not removed`, 1)
+  for (const line of found.out.split('\n').filter(Boolean)) {
+    const [id, folder] = [line.slice(0, line.indexOf(' ')), line.slice(line.indexOf(' ') + 1)]
+    if (!folder.startsWith(top + '/')) continue
+    if (!docker('rm', '-f', id).ok) throw new Failure(`a container under ${work} was not removed: ${id}`, 1)
+    removed++
   }
   return removed
 }
