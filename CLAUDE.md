@@ -30,6 +30,11 @@ history, and each package and module has its own repository).
   compile time and run time; the template a package is brought to, its
   `test/` the generic tests), `base-docs-hdlc`, `base-docs-haicc`,
   `base-docs-uri`, `base-docs-xpath`, `base-docs-vision`.
+- `splectral/`: the Splectral family's packages, apps on Splectral (a
+  second organisation, built and released by itself): `base-package-renderer`
+  (a component's renderer, its program), `base-package-ui` (the first
+  element set), `base-package-viewer` and `base-component-viewer` (the
+  info viewer, the first component). Brought to haiccing's template.
 - `pear-full-square/`: the modules those packages carry, and
   `pkgm-base-manager`, which the tools use.
 - `tools/`: today's HDLC tooling (`base-docs-hdlc`, "Tooling"). `sources/`
@@ -48,7 +53,7 @@ history, and each package and module has its own repository).
 
 The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
 
-- A package's pre-release: `tools/bare tools/package-test.js haiccing/<package>`.
+- A package's pre-release: `tools/bare tools/package-test.js <org>/<package>` (`haiccing/`, `splectral/`).
 - Everything: `tools/bare tools/release.js --strict`: every report
   `current`. After a commit of generated files (the modules' copies,
   `main.js`), the changed packages' pre-releases again before the work
@@ -60,6 +65,8 @@ The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
   `SOURCES=$PWD/sources tools/bare sources/haiccing/base-component-boot.bundle /test/validate`;
   nothing left running after (`pgrep -fa "bin/bare"`).
 - The `haicc` command end to end: `sh haiccing/base-linux-haicc/test/run.sh`.
+- Splectral as an app platform, a component installed and its pages
+  served: `sh haiccing/base-linux-haicc/test/splectral.sh`.
 - The `haicc` command installed in a container, from the host's sources:
   `sh haiccing/base-linux-haicc/test/container.sh` (Docker).
 - Docker, for what makes containers: in a cloud session no daemon runs

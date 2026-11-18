@@ -4497,3 +4497,112 @@ kept by hand; one view; the view from a deployed docs mrepo;
   problem, in some 20 seconds, nothing left running. The page the same
   template, its selector hidden with one view; more views (each mrepo of
   an install) later.
+
+## 88. Splectral's proof of concept: the app platform, a component in two halves, the info viewer's pages (2026-11-18)
+
+The design session of 2026-11-18 (`splectral.md`, every point in the
+words used) ended with the human's go on our scope: one static page end
+to end, the two halves, the two pairs; then the points still open
+answered by building it ("Go ahead"). What is built:
+
+- **Splectral, an app platform**: `base-package-splectral` links the
+  boot protocol (its components deployed) and the haicc protocol
+  (commands sent on to them), both activated by its boot hook; its
+  protocol has `install`. The server is the data layer: it routes the
+  browser to its components and runs the data requests they make.
+- **A component in two halves** (the dual install): `haicc splectral
+  boot/deploy viewer base-package-service`, a plain service-managed
+  mrepo; then `haicc splectral splectral/install viewer
+  splectral/base-component-viewer`: the component's list placed in that
+  mrepo's folder on Splectral's side (`<folder>/splectral/`: its
+  packages, its Splectral inbox and outbox, `component.json`), its
+  `start` and `stop` hooks laid by the mrepo itself (`haicc viewer
+  runtime/lay . splectral/packages/splectral/base-component-viewer`,
+  sent through Splectral's own inbox, the request waiting: `exec.wait`).
+  Splectral records it (`<its folder>/components/viewer.json`) for the
+  server to route by.
+- **Three generic actions in the runtime protocol**, every mrepo's
+  (`mrepo-base-runtime`, `base-package-runtime`): `runtime/start .
+  <path>` and `runtime/stop . <path>`, a placed package's program
+  started beside the mrepo as its own process (its state
+  `<path>.state.json`, ended with the runtime; `internal/program`), the
+  complement of `runtime/run`, which refuses `/run`; `runtime/lay .
+  <path>`, a placed package's runtime config, its hooks, laid into the
+  runtime layer by the mrepo itself.
+- **The two pipelines**: the component's own inbox and outbox for the
+  commands that manage it, by haicc's hops (`haicc splectral/viewer
+  service/start`), recorded; its Splectral inbox and outbox for pages
+  and data, the server at one end, its renderer at the other, a watcher
+  at each, the forms fixed (`splectral-server`, `internal/components`):
+  `{ request: "page", path, query, base }` and `{ request: "data", at,
+  command }`, each answered under its key with its `output` or `error`.
+  A data request is run as a terminal runs a command, into the boot
+  mrepo's inbox, tagged as from outside, so it is in the install's
+  record (Splectral's page lists them).
+- **The Splectral family**, a second organisation, `splectral/` here:
+  `base-package-renderer` (the renderer, its program: the component's
+  packages loaded as the runtime loads protocols, a page made by the
+  last package of its list with a `page` action, its elements called in
+  this process, its data asked through the outbox; module
+  `splectral-base-renderer`), `base-package-ui` (the first element set,
+  `ui/page`: markdown, the keywords below as links, light and dark, no
+  script; module `splectral-base-ui`), `base-package-viewer` (the info
+  viewer's own, `viewer/page`: the path below the component the keywords
+  of `info/get`, the docs mrepo by default, `?at=<position>` another;
+  module `splectral-base-viewer`), `base-component-viewer` (the list,
+  the `start` and `stop` hooks). Each brought to haiccing's template,
+  pinned to it, the generic tests as they are, a test of its own.
+- **The tools**, a second organisation: `release.js`, `package-test.js`,
+  `package-template.sh`, `code-check.js`, `info-extract.js`; the sources
+  `sources/splectral/` with its own manifest, which `fetch` already read
+  by organisation.
+- **How-tos of the new patterns**: `program` and `platform`
+  (`base-docs-package`), `element-set` (`base-package-ui`),
+  `splectral-component` (`base-component-viewer`); `pkgm-base-check`
+  reads `program` (a hook starting one) and `splectral-component` from
+  the files, the other two named by their how-tos.
+
+**Decided while building** (ours, said here)
+
+- **The component lays its hooks itself** (`runtime/lay`): its runtime is
+  the one writer of its layers (`pair.md`, rule 6); Splectral writes
+  files on its side of the folder only. So the second step is
+  Splectral's action and the mrepo's request together.
+- **Its packages not in the mrepo's `packages` layer**: on Splectral's
+  side of its folder, files of this machine: no haiccing runtime loads
+  them, `runtime/run` does not know them. The pipeline separation down
+  to the packages.
+- **The renderer is a package of the list, the first**; the pages are the
+  last package with a `page` action, as the last of a list defines an
+  mrepo; an element is called, not requested (no record a call).
+- **The boxes are queues**: a record taken is removed by whoever reads
+  that box; nothing on Splectral's side is committed. What a component
+  keeps comes with commit times (the human: "we will set appropriate
+  commit times").
+- **A component at one name at the top of Splectral's `main`**, not one
+  of the server's own paths; of the `splectral` organisation, its list
+  naming no other's.
+- **Not running, said at once**: the server reads the renderer's state
+  (`runtime/start`'s) and answers 503 before waiting; a page not answered
+  in 20 s, 504.
+- **No documentation package of the family yet**: the how-tos are in the
+  packages their patterns belong to; `splectral/base-docs-splectral`
+  next, with what is the family's own (which generic tests apply: the
+  in-situ ones do not, a Splectral package runs in a renderer).
+- **The docs mrepo documents the splectral packages too**: `documents:
+  sources` reads every organisation the sources hold.
+
+**Found on the way**: the generic `info` test named every package
+`haiccing/<name>`: it takes its organisation from the package's own list
+now (`mrepo-base-info`, `validate/info.test.js`).
+
+**Measured** (the cloud session, `splectral.sh`): a page 1.03 to 1.16 s,
+one data request through the boot mrepo to the docs mrepo; the first
+half 2.3 s, the second 4.0 s, `service/start` 3.5 s; an error page or a
+404 8 to 12 ms. The human: speed is the RPC server's, with AVRO.
+
+**Looked at in a browser**: the top page in dark, `hdlc/validation` in
+light, a keyword below followed at a phone's width; no error in the
+page.
+
+**Validated**: below, filled in as it ran.

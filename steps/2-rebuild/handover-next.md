@@ -1,6 +1,6 @@
 # For the next session: where step 2 stands
 
-Kept current by the cloud session (last: 2026-11-16, part 82). Read `CLAUDE.md` first (what is here, how to
+Kept current by the cloud session (last: 2026-11-18, part 88). Read `CLAUDE.md` first (what is here, how to
 validate), then this, then `tasks.md` here (what is planned and waits to
 be built: the next work) and `xpath.md` (a design in discussion), then `readme.md` (each part's record, the
 latest last: 30 to 45 the haicc work; 46 a note on future design; 47 to
@@ -69,6 +69,21 @@ container. Without a daemon those tests fail, they do not skip.
   failed run: `pgrep -fa "bin/bare"`, then stop it by its pid.
 
 ## Right now
+
+**Latest (2026-11-18, part 88): Splectral's proof of concept.** The
+design session is `splectral.md` (every point in the words used, the
+design as it stands at its top, our critical view and the human's
+answers); built: Splectral an app platform, a component in two halves
+(`haicc splectral boot/deploy viewer base-package-service`, then
+`haicc splectral splectral/install viewer splectral/base-component-viewer`),
+`runtime/start`, `stop`, `lay` in every mrepo's runtime protocol, the
+Splectral family in `splectral/` (a second organisation; the tools build
+it), the info viewer at `/viewer/<keywords>`. Its test: `sh
+haiccing/base-linux-haicc/test/splectral.sh`. Next with the human:
+`splectral.md`, "Open". The repositories for the new packages and modules
+are to be created by the human (listed there); nothing pushed to product
+repositories yet. `execute/main` also holds another session's docs
+review (`373194c`, `6be2c60`).
 
 **Latest (2026-11-17, parts 83 to 85)**: the template renamed
 `package-docs-package`; its rules (`## Links` a menu, a label each;

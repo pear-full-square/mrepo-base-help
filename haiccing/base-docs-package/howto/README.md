@@ -19,6 +19,8 @@ implemented with no how-to naming it (`Pattern: <name>`).
 - [service](service/)
 - [continuation-script](continuation-script/)
 - [documents](documents/)
+- [program](program/)
+- [platform](platform/)
 
 ## Written where
 

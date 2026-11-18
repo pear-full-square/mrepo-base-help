@@ -1,0 +1,20 @@
+{
+  "name": "base-package-viewer",
+  "description": "Package: the info viewer, an mrepo's info read by keywords in a browser as the command line reads it: the viewer component's own package.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "main": "main.js",
+  "modules": [
+    "pear-full-square/splectral-base-viewer",
+    "pear-full-square/mrepo-base-info",
+    "pear-full-square/pkgm-base-check"
+  ],
+  "template": {
+    "repository": "haiccing/base-docs-package",
+    "commit": "d6d99cffc82361d9c15ae86fd723045537ba63b3"
+  },
+  "scripts": {
+    "test": "bare test/run.js"
+  }
+}

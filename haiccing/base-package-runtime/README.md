@@ -12,6 +12,9 @@ bare <dir>/packages/haiccing/base-package-runtime.bundle <dir>
 ## Links
 
 - [run](modules/pear-full-square/mrepo-base-runtime/external/run/)
+- [start](modules/pear-full-square/mrepo-base-runtime/external/start/)
+- [stop](modules/pear-full-square/mrepo-base-runtime/external/stop/)
+- [lay](modules/pear-full-square/mrepo-base-runtime/external/lay/)
 - [howto](howto/)
 - [mrepo](mrepo/)
 - [modules](modules/)
@@ -40,11 +43,14 @@ The `runtime` protocol's, in `protocol.js`; no state.
 | action | offered at | arguments |
 |---|---|---|
 | `run` | `.`, the mrepo itself | a linked package's entry, `packages/<org>/<package><target>`; `dry-run`, optional |
+| `start` | `.` | a package placed in the mrepo's folder, its path there: its program started as its own process |
+| `stop` | `.` | the same: its program ended |
+| `lay` | `.` | the same: its runtime config, its hooks, laid into the runtime layer |
 
 ## The package
 
 - `main.js`: the dispatcher, the bundle's main (generated): every entry and
   test by path, `run(target, { dryRun })`.
 - `run.js`: the entry, the runtime's process.
-- `protocol.js`: its protocol, `runtime` (run), its action and config
+- `protocol.js`: its protocol, `runtime` (run, start, stop, lay), its actions and config
   passed to the runtime by `run.js`.

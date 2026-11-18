@@ -25,9 +25,9 @@ const WANTED = k => k.endsWith('/README.md') || k === '/package.json' || k === '
 
 if (args.includes('--files')) {
   // every package here, and every module a package carries
-  const packages = readdirSync(join(dev, 'haiccing')).sort().filter(n => statSync(join(dev, 'haiccing', n)).isDirectory())
-  const carried = new Set(packages.flatMap(p => { const m = join(dev, 'haiccing', p, 'modules', 'pear-full-square'); return existsSync(m) ? readdirSync(m) : [] }))
-  const roots = [...packages.map(p => `haiccing/${p}`), ...[...carried].sort().map(m => `pear-full-square/${m}`)]
+  const packages = ['haiccing', 'splectral'].filter(o => existsSync(join(dev, o))).flatMap(o => readdirSync(join(dev, o)).sort().filter(n => statSync(join(dev, o, n)).isDirectory()).map(n => `${o}/${n}`))
+  const carried = new Set(packages.flatMap(p => { const m = join(dev, p, 'modules', 'pear-full-square'); return existsSync(m) ? readdirSync(m) : [] }))
+  const roots = [...packages, ...[...carried].sort().map(m => `pear-full-square/${m}`)]
   const found = []
   const walk = d => { for (const n of readdirSync(join(dev, d)).sort()) { const p = `${d}/${n}`; if (n === 'node_modules' || n === 'modules' || n === '.git') continue; if (statSync(join(dev, p)).isDirectory()) walk(p); else if (n === 'README.md') found.push(p) } }
   for (const r of roots) walk(r)

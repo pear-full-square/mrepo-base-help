@@ -1,9 +1,10 @@
 # Splectral: the server and the package template
 
-A design in discussion (2026-11-18), the design session asked for on
-2026-11-17 ("for splectral we need to do a design session for the server
-'proper' and the components"). Nothing of it is built: what is built is
-the MVP (`readme.md`, parts 80 and 81). First the design as it stands,
+A design settled in discussion (2026-11-18), the design session asked
+for on 2026-11-17 ("for splectral we need to do a design session for the
+server 'proper' and the components"). Its proof of concept is built
+(`readme.md`, part 88; the human: "Go ahead"); before it, the MVP (parts
+80 and 81). First the design as it stands,
 written up and kept current; then our critical view of an earlier form of it, asked for by the human ("Once
 this is written up, give me your critical view on the design"); then the
 session itself, each point in the words used. The earlier proposal (the
@@ -86,21 +87,23 @@ times a setting; rules for what a component follows; a dynamic
 component, a browser application on code that runs on Bare and in a
 browser.
 
-**To build**
+**Built** (part 88, the proof of concept)
 
-- In haiccing, generic: a program of a placed package started and ended
-  by a command, for a hook to use.
-- In Splectral's package: `base-package-boot` in its list;
-  `splectral/install`; the server routing the browser to its
-  components, writing their Splectral inboxes, watching their Splectral
-  outboxes, running their data requests; answering its own pages only.
+- In haiccing, generic: `runtime/start`, `runtime/stop` (a placed
+  package's program beside the mrepo) and `runtime/lay` (its runtime
+  config laid by the mrepo itself).
+- In Splectral's package: `base-package-boot` and `base-package-haicc` in
+  its list; `splectral/install`; the server routing the browser to its
+  components, running their data requests; a component not running said
+  at once.
 - The splectral family: the renderer; the first element set, `ui`; the
-  first component, the viewer (`info` on every mrepo, the docs mrepo
-  its default); its documentation package; then today's page as a
-  component.
-- The tools and this repository: a second organisation.
-- The how-tos: the application platform; the dual install; an element
-  set; a component.
+  first component, the info viewer, the docs mrepo its default.
+- The tools: a second organisation.
+- The how-tos: `program`, `platform`, `element-set`,
+  `splectral-component`.
+
+Not yet: the family's documentation package; today's page as a
+component; parameters beyond `?at`, buttons, live updates.
 
 ## Our critical view (2026-11-18)
 
@@ -581,13 +584,28 @@ for its lines: the same way of working, nothing new.
   it, and it ends with its runtime; the server starts no process of a
   component's.
 
+- **The proof of concept, built** (the human, 2026-11-18, on our scope:
+  "Go ahead"): `readme.md`, part 88. The second step is
+  `splectral/install`, as we named it. What we decided while building is
+  there, each with its reason; the main ones: the component lays its
+  hooks itself (`runtime/lay`, one writer); its packages on Splectral's
+  side of its folder, not in its `packages` layer; three generic actions
+  in the runtime protocol (`start`, `stop`, `lay`); the boxes queues;
+  no documentation package of the family yet.
+
 ## Open, one at a time
 
-1. A proof of concept now, and its scope: put to the human.
-2. The second step by name, `splectral/install` (ours, not confirmed).
-3. The organisation in the tools and in this repository: a folder
-   `splectral/` beside `haiccing/`, the tools run an organisation at a
-   time.
-4. Parameters from the URL beyond the path; a static page's writes
-   (buttons).
-5. The repositories' descriptions, for the human to create them.
+1. What the proof of concept showed, with the human: the page, the
+   timings (a page about 1.1 s), the decisions made while building.
+2. The family's documentation package, `splectral/base-docs-splectral`:
+   what is the family's own (an element, a page's action, which generic
+   tests apply).
+3. The repositories, created by the human, then pushed:
+   `splectral/base-package-renderer`, `base-package-ui`,
+   `base-package-viewer`, `base-component-viewer`;
+   `pear-full-square/splectral-base-renderer`, `splectral-base-ui`,
+   `splectral-base-viewer`.
+4. Today's page (the install, its commands) as a component; then info
+   views on every mrepo from the registry.
+5. Parameters from the URL beyond the path and `?at`; a static page's
+   writes (buttons); live updates (the rules).
