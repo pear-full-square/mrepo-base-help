@@ -581,6 +581,37 @@ for its lines: the same way of working, nothing new.
   it, and it ends with its runtime; the server starts no process of a
   component's.
 
+## From the other session (2026-11-18): what the proof of concept meets
+
+The session that built the pair deploy (`pair.md`) and fixed the docs
+review's findings, on the human's word ("put the note in splectral.md"),
+for the colleague building the proof of concept:
+
+- **"Pair" is two things.** `pair.md`'s pair deploy is a node in a
+  container on its own haicc install (`boot/deploy --flags container`,
+  `mrepo-base-boot`'s `internal/pair`, built and in `main`). Here a pair
+  is a component's inbox and outbox. One of the two wants another name
+  before either is documented further; ours: "boxes" for the component's.
+- **The boot protocol changed today**, in `main`: `deploy`, `teardown`
+  and `redeploy` route a child linked `how: container`; `internal/pair`
+  is new; `mrepo-base-request`'s flags know `container`. The dual
+  install's second step touches `mrepo-base-boot` (`lay`, `place`):
+  start from `main` as it is.
+- **A runtime that stops taking its inbox in**, once in nine runs of the
+  haicc command's test (`tasks.md`, the open bug): a component that stops
+  answering may be it. The runtime now writes `runtime-stall.json` beside
+  its `.git` with the step a pass stalls at; its presence, and what it
+  says, is what we need to find the cause.
+- **One build at a time on `sources/`**: a haicc test started while
+  bundles are rebuilt hangs. Pushing is fine: what is pushed to
+  `execute/main` is merged before the next push, as today.
+- **Of use to the proof of concept**: `test/container.sh` and
+  `test/pair.sh` in `base-linux-haicc` show an install made and spoken to
+  through inbox and outbox files alone, with a reply topic in each
+  request's record (a request without one is answered to nobody: the
+  pair's first bug); `haicc <URI> haicc/script` runs lines where the URI
+  points, a renderer's hook lines included.
+
 ## Open, one at a time
 
 1. A proof of concept now, and its scope: put to the human.
