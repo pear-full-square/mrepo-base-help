@@ -612,6 +612,22 @@ for the colleague building the proof of concept:
   pair's first bug); `haicc <URI> haicc/script` runs lines where the URI
   points, a renderer's hook lines included.
 
+**The human's answer** (2026-11-18) to the other session's view (its
+doubts: speed, what the base mrepo is for): "The splectral component
+mrepo will be for its own state and caching. Speed doesn't concern me
+because of the additional patterns that can be applied to speed it up.
+Data can even be linked into the repo, there are loads of options. The
+design explores two patterns: an application processing context and an
+equivalent UI interaction to the terminal command line." So: the base
+mrepo is the component's own state and its cache; speed is not a
+concern of the design (patterns for it later: caching in the mrepo,
+data linked into the repository, the RPC server); and what the design
+is for is two patterns: **an application processing context** (a
+component: its mrepo, its renderer, its pipelines) and **a UI
+interaction equivalent to the terminal's command line** (a browser's
+request a `haicc` command, its answer a page). The proof of concept
+proves the two patterns, not the speed.
+
 ## Open, one at a time
 
 1. A proof of concept now, and its scope: put to the human.
