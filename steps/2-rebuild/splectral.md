@@ -2,11 +2,211 @@
 
 A design in discussion (2026-11-18), the design session asked for on
 2026-11-17 ("for splectral we need to do a design session for the server
-'proper' and the components"). What was settled before it is in
-`tasks.md`, "`splectral`" and "`splectral-docs`"; our proposal for it is
-the doc "Splectral: the server and its components"
-(https://claude.ai/artifact/Y3G4CXUHzwUuzZWjAzwLsK). Nothing of it is
-built: what is built is the MVP (`readme.md`, parts 80 and 81).
+'proper' and the components"). Nothing of it is built: what is built is
+the MVP (`readme.md`, parts 80 and 81). First the design as it stands,
+written up and kept current; then our critical view of an earlier form of it, asked for by the human ("Once
+this is written up, give me your critical view on the design"); then the
+session itself, each point in the words used. The earlier proposal (the
+doc "Splectral: the server and its components",
+https://claude.ai/artifact/Y3G4CXUHzwUuzZWjAzwLsK) is replaced by this.
+
+## The design as it stands
+
+Written up 2026-11-18, brought up to date as points settle (last: the
+component starts its own renderer). The form the critical view below
+looked at was an earlier one: one pair of boxes, a page through the
+mrepo's request layers.
+
+**What it is**
+
+- **Splectral is an app platform**: an mrepo of haiccing's, `local/splectral`,
+  deployed by the boot mrepo beside the host, as today, all of it
+  haiccing's. Its server, a process of its own, is the data layer: it
+  routes the browser to the components and provides their data. It
+  carries no UI, interprets nothing of a component's and starts no
+  process of one.
+- **A component is an app, and an mrepo**, made by a dual install:
+  1. haicc's: a plain service-managed mrepo, deployed by Splectral with
+     the boot protocol (`base-package-boot` in Splectral's list) from
+     `base-package-service`: the runtime, `info`, the protocol protocol,
+     the service. The minimum, and the app's own repository.
+  2. Splectral's: the component's packages laid on top by an action of
+     Splectral's own (`splectral/install`, ours, not confirmed by
+     name), a second inbox and outbox made, two hooks laid (`start`,
+     `stop`).
+- **Two pairs of boxes, two pipelines, separate**: haicc's, the mrepo's
+  own, for the commands that manage it, by haicc's hops, through the
+  request layers, recorded; Splectral's, linked with the Splectral
+  server and nothing else, for pages and data, a watcher at each end,
+  what passes over it fixed, the same for every component.
+- **The renderer**: a light process of the Splectral side's own, from
+  the component's packages; it reads Splectral's inbox, calls the
+  elements in its own process, writes Splectral's outbox. Started by
+  the component's `start` hook, ended by its `stop` hook and with its
+  runtime: the lifecycle is the mrepo's service.
+- **The packages**: of the `splectral` organisation only, linking no
+  haiccing package; brought to haiccing's template
+  (`base-docs-package`), one documentation package of the family's on
+  top; an element set a protocol package, an element an action; a
+  component a component package, its list; its own package one
+  protocol, named as it is, its action `page`.
+- **The pattern, an application platform**: an mrepo that manages its
+  components with the boot protocol and adds only what is its own; to
+  be used for other types of application.
+
+**The commands**
+
+```
+haicc splectral boot/deploy viewer base-package-service
+haicc splectral splectral/install viewer splectral/base-component-viewer
+haicc splectral/viewer service/initialise
+haicc splectral/viewer service/start     # the renderer started: pages answer
+haicc splectral/viewer service/stop      # the renderer ended
+haicc splectral boot/teardown viewer
+```
+
+**How a page is made** (the browser asks `/viewer/hdlc/validation`)
+
+1. The server routes by the first segment to the component `viewer` and
+   writes a page request into its Splectral inbox (`viewer/page
+   hdlc/validation`).
+2. The renderer, watching it, runs the action of the component's own
+   package.
+3. The action needs data: the renderer writes a data request into the
+   Splectral outbox (`info/get hdlc/validation` at `docs`).
+4. The server, watching that outbox, runs the command as the data layer
+   (into the boot mrepo's inbox, as a terminal does) and writes its
+   completed form into the Splectral inbox.
+5. The action goes on: it calls the elements it draws with (`ui/page`),
+   builds the page and answers; the page is in the Splectral outbox.
+6. The server's watcher hands it to the browser that waits.
+
+**Later, not designed**: speed, with the RPC server and AVRO; commit
+times a setting; rules for what a component follows; a dynamic
+component, a browser application on code that runs on Bare and in a
+browser.
+
+**To build**
+
+- In haiccing, generic: a program of a placed package started and ended
+  by a command, for a hook to use.
+- In Splectral's package: `base-package-boot` in its list;
+  `splectral/install`; the server routing the browser to its
+  components, writing their Splectral inboxes, watching their Splectral
+  outboxes, running their data requests; answering its own pages only.
+- The splectral family: the renderer; the first element set, `ui`; the
+  first component, the viewer (`info` on every mrepo, the docs mrepo
+  its default); its documentation package; then today's page as a
+  component.
+- The tools and this repository: a second organisation.
+- The how-tos: the application platform; the dual install; an element
+  set; a component.
+
+## Our critical view (2026-11-18)
+
+What is strong: one way of working. A component is deployed, started,
+asked about itself and torn down with the commands already known, by a
+person and by the AI; nothing of the management is new code; every
+exchange is a record that can be read afterwards; the server stays
+small and knows no UI; nothing waits for AVRO. The management of a
+component as an mrepo is right. The doubts are all about the page's
+way, a browser's every request through an mrepo's request layers.
+
+1. **A page will be slow.** From our own measurements (`tasks.md`, the
+   solution's "Measured"): a request costs 0.4 to 1 s in each mrepo it
+   passes, every command alike. A page is at least the page's request
+   in the component and the data command through the boot mrepo and the
+   mrepo asked: two to four seconds a click, more with several data
+   requests, and more again if each element is a request of its own
+   (a hook line, a request of its own, cost about 1 s). Not measured
+   for this flow: an estimate from those figures. A browser wants a
+   tenth of that. "A cheaper request pipeline", moved back, becomes
+   what Splectral's use depends on.
+2. **Every page read is committed.** The inbox removes nothing; a
+   request is five moves, each a commit; the outbox commits what it
+   sends. So every page looked at stays in the component's repository:
+   the request, the data answer copied into its inbox, the whole page
+   in its outbox. Reads with no value as history, growing without end;
+   nothing retires records yet.
+3. **A component can ask for anything.** Its data request is a command
+   at a position, run by the server with a terminal's reach: `boot/teardown`
+   as well as `info/get`. Only Splectral reaches a component, but
+   nothing bounds what a component reaches. And once pages have buttons,
+   the server on `127.0.0.1` with no check of who asks can be made to
+   run commands by any page open in the same browser. What the outside
+   may ask is the open design `external-request-api`: this needs it.
+4. **Live updates turn back on themselves.** Splectral's value today is
+   the commands and the tree as they change. In this design a component
+   following the records is sent a request a record, and its own data
+   requests complete in the boot mrepo's outbox, the stream it follows:
+   it would be told of its own asking, and ask again. Splectral's own
+   requests have to be told apart (requests are tagged by trigger) and
+   left out; and a page built on the server still needs a little code
+   in the browser to renew itself.
+5. **The first implementation may be built twice.** Pages built on the
+   server by actions; later a browser application with its code from
+   the package. Then the processing is in the browser, the elements are
+   browser code, and the runtime in between has little left to do.
+   Unless an element is written once, as plain code that runs in both
+   places.
+6. **Smaller**: a browser's request held open over an exchange of
+   records needs a time limit and an answer when the component is not
+   running, and meets the open bug (a runtime that stops taking its
+   inbox in); an outbox that carries pages and requests both has two
+   meanings where it had one; files a browser application needs (code,
+   styles) cannot each be a request, so a component's files are read
+   past its boxes, or everything is put into the page; a component
+   named as an mrepo of the install is (`docs`) would share its unique
+   URI, `local/docs`; component, app and mrepo are three words for one
+   thing here, and component and app mean something else in haiccing.
+
+**What we would do**
+
+- Keep the design for management as it is.
+- **A proof of concept first, measured**: one component, one page, end
+  to end; the time of a page and what its repository grows by a page.
+  The family's template only after it.
+- **A request that is not kept**, for every mrepo, a flag of the
+  request: executed and answered, nothing committed. One way of
+  working still; it answers 1 and 2, and serves hook lines and the AI's
+  reads too.
+- **Elements called by the action, in the component's own process**,
+  not requests; **written to run in the browser as well**.
+- **A component's package says what it may ask**, the server checking
+  it (checking, not interpreting); reads only until
+  `external-request-api` is designed. The server refusing a request
+  that does not come from its own pages.
+- **Splectral's own requests tagged** and left out of what it follows.
+
+**The human's answers** (2026-11-18), point by point, in the words
+used, each with our reading:
+
+1. "Not an issue, will be resolved with rpc": the page's speed is the
+   RPC server's to solve, with AVRO; slow until then is accepted;
+   nothing cheaper is built for Splectral meanwhile.
+2. "we will set appropriate commit times": when a layer is committed
+   becomes a setting, so a page read is not a row of commits of its
+   own. Our "request that is not kept" is withdrawn for it.
+3. "Yes, that is on purpose": a component has Splectral's reach, the
+   whole install: apps act on all the parts ("user interaction that
+   sends commands to all the parts", 2026-11-16). Our "a package says
+   what it may ask" is withdrawn. Left, ours to decide and said: the
+   server answers only its own pages (a request from another page open
+   in the same browser refused): who asks the server, not what a
+   component may ask.
+4. "Rules will be implemented": what a component follows and what is
+   left out of it is said by rules; nothing designed now.
+5. "This is static versus dynamic": two kinds, not one replacing the
+   other: a static page, built on the server; a dynamic one, a browser
+   application. The first is not built twice; "written to run in the
+   browser as well" is withdrawn.
+
+So the design stands as written up. What stays of "What we would do":
+the proof of concept first (the rule for a new pattern); Splectral's
+own requests told apart, under 4's rules. And, speed being no issue
+(1), ours: an element is asked for as an action is, a request of the
+component's own, the page's action waiting for it, as a script waits
+for its lines: the same way of working, nothing new.
 
 ## Settled before the session (2026-11-17, `tasks.md`)
 
@@ -170,23 +370,255 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   `boot/teardown`, the service's), sent to Splectral, which executes
   them its own way; a command gets to Splectral by haicc's hops, as to
   any mrepo, and a component is a position in Splectral's `main`, not a
-  hop:
+  hop (corrected by the next point: a component is an mrepo, a hop
+  to it haicc's):
 
   ```
   haicc splectral boot/deploy docs <package>
   haicc splectral/docs service/start
   haicc splectral boot/teardown docs
   ```
+- **A component is an mrepo, deployed by Splectral** (the human,
+  2026-11-18, on our reading "a component is no mrepo" and our asking
+  whether the commands are the same to the letter: "Component is mrepo
+  deployed by splectral"). Our reading above corrected: "not haicc
+  mrepo" said who manages it, not what it is. So: a component is an
+  mrepo, a child of the Splectral mrepo, deployed by it as the host
+  deploys a node; a hop to it is haicc's, through its shortcut in
+  Splectral's `main`:
+
+  ```
+  haicc splectral boot/deploy viewer <package>
+  haicc splectral/viewer service/start
+  haicc splectral boot/teardown viewer
+  ```
+
+  With what was said before: a simple mrepo, light, a renderer to start
+  with; "an mrepo with specific language", the language its packages
+  offer, those of the splectral family, made in haiccing's ways.
+- **Splectral gets the boot protocol to manage its components; a
+  pattern for other types of application; the same way of working, no
+  duplication** (the human, 2026-11-18, on our asking whether the deploy
+  is `base-package-boot` as it is, Splectral's own only the routing:
+  "Yes, splectral gets the boot protocol to manage the components. I
+  think this will be a pattern that we will use for other types of
+  application as well. Important, use the same way of working as much
+  as possible to avoid duplication."). So: `base-package-boot` in the
+  Splectral mrepo's list; a component deployed, started, stopped and
+  torn down as any mrepo; what is Splectral's own begins after the
+  deploy. The pattern, an application platform: an mrepo of haiccing's
+  that manages its components, mrepos, with the boot protocol, and adds
+  only what is its own (here the server, the browser routed to its
+  children). A new pattern: its how-to when it is built
+  (`base-docs-hdlc`, "Work"). The rule for what follows here: what
+  haiccing does already is used as it is; something new only where
+  nothing does it.
+- **A pair of linked inbox and outbox with Splectral; only through
+  the Splectral server; watchers at both ends** (the human, 2026-11-18,
+  on our asking whether a component asks its parent for data through
+  its outbox, its request waiting: "I propose that the component keeps
+  a pair of linked Inbox outbox with splectral. So only accessible
+  through the splectral server. And use watchers for notification both
+  ends"). Agreed. Our reading, put back, to confirm:
+  - one pair, the component's own inbox and outbox, linked with
+    Splectral and with nothing else; everything between the two goes
+    over it, both ways: in, a browser's request, a data answer; out, a
+    page, a data request;
+  - nothing else in the install writes its inbox or reads its outbox:
+    a component is reached through Splectral only;
+  - a watcher at each end, nothing looked at on a clock and nothing
+    copied into an inbox of Splectral's: the component's runtime
+    watches its inbox (as every runtime does, `inbox-watcher`), the
+    Splectral server watches the component's outbox (as it watches the
+    boot mrepo's outbox folder today) and answers what it finds there:
+    a page to the browser that waits for it, a data request run and its
+    completed form written into the component's inbox.
+- **The template haiccing's own; the browser app on compatible code**
+  (the human, 2026-11-18, on our asking whether the family's template is
+  haiccing's, with one documentation package of the family's on top:
+  "Yes on template. And the browser app will run compatible code (bare,
+  browser js) with minification etc. To be worked out."). So: no second
+  template: a Splectral package is brought to `base-docs-package` and
+  pinned to it, the generic tests the same; an element set a protocol
+  package, an element an action; a component a component package, its
+  list; one documentation package of the family's for what is its own
+  (an element, a page's action, their how-tos). And, for later, not
+  designed: a dynamic component's code written to run on Bare and in a
+  browser, minified and the like on its way there.
+  **Ours, following from one package, one protocol, said to the human**:
+  a component's own package offers one protocol, named as the component
+  is, its action `page`; the browser's path below the component is the
+  action's URI: `/viewer/hdlc/validation` is `viewer/page hdlc/validation`.
+- **The names, more or less; a Splectral package links no haiccing
+  package, the minimum from the Splectral server; the organisations
+  kept pure** (the human, 2026-11-18, on the names we proposed:
+  `splectral/base-docs-splectral`; `splectral/base-package-ui`, protocol
+  `ui`, its module `pear-full-square/splectral-base-ui`;
+  `splectral/base-package-viewer`, protocol `viewer`, its module
+  `pear-full-square/splectral-base-viewer`; `splectral/base-component-viewer`;
+  the platform staying `haiccing/base-package-splectral`; the `base-view-*`
+  names dropped: "More or less. I would like the splectral packages not
+  to link haiccing packages, but to get the minimum required from
+  spectral server. Probably just a runtime, service. Also we need to
+  deal with the org. But if splectral is pure haiccing and splectral
+  packages or splectral that would make it easy."). Our reading, put
+  back, to confirm:
+  - a component's list names packages of the `splectral` organisation
+    only: its element sets, its own package, itself;
+  - what it needs to run it is given by the platform when it is
+    deployed, not linked by it: the minimum, probably a runtime and the
+    service;
+  - the organisations: `haiccing` the platform, all of it haiccing's;
+    `splectral` what is deployed on it, all of it splectral's; no list
+    names the other's packages, so each organisation is built, released
+    and sourced by itself.
+  Checked: today's tools know one organisation (`tools/release.js`,
+  `package-test.js`, `code-check.js`, `info-extract.js`: the folder
+  `haiccing/`, `sources/haiccing/`, its manifest; `package-bundle.js` has
+  `--org`); and a hook activates its protocols with the protocol
+  protocol (`protocol/activate . info`), so the minimum is likely the
+  runtime, the protocol protocol and the service, and `info` where a
+  component answers about itself.
+- **A dual install, proposed by the human** (2026-11-18, on our asking
+  how the platform gives the minimum (ours: a setting of the platform's
+  package, laid in first by the deploy): "Would it be possible to go a
+  dual install. First haicc, then splectral deploying splectral packages
+  on top?"). Checked, and possible; ours: better than the setting, which
+  is withdrawn for it.
+  - **The first step is there today**: `base-package-service` deployed
+    as a target is "an mrepo with a service and nothing else" (the
+    runtime, `info`, the protocol protocol, the service; its hooks
+    `boot` and `initialise`): `haicc splectral boot/deploy viewer
+    base-package-service`. The boot protocol is not changed, and the
+    minimum is a haiccing package's list, nobody's setting.
+  - **The second step is new**: a list laid on top of an mrepo that is
+    built. `mrepo-base-boot` has the parts (`lay`, a list's `mrepo/`
+    parts into a folder, a later file replacing an earlier one; `place`,
+    the packages hard linked into the mrepo's `packages/` and their
+    list committed), used so far only before an mrepo is built. New:
+    the parts laid into the layers of a built mrepo; its packages list
+    extended; its runtime started again, to load the protocols added.
+  - **To mind**: a hook is one file a transition and a later file
+    replaces an earlier one: the base has `boot` and `initialise`, so a
+    component brings `start` and `stop` and replaces nothing, or hooks
+    of the two steps are joined; it is the second half of a deploy, not
+    an upgrade in place: a teardown takes the whole, a change is both
+    steps again.
+- **An inbox and an outbox for each; the pipelines separate** (the
+  human, 2026-11-18, on the dual install and our asking who performs
+  its second step: "There could be inbox and outbox for each, pipeline
+  separation"). Our reading, put back, to confirm: a component has two
+  pairs of boxes, one for each install, and what comes in by one is
+  never processed by the other:
+  - **haicc's**: the mrepo's own inbox and outbox, as every mrepo has,
+    made by the first step: the commands that manage it (`service/start`,
+    `info/get`, the teardown), come by haicc's hops through the
+    Splectral mrepo, through the request layers, recorded;
+  - **Splectral's**: a second inbox and outbox, made by the second
+    step, linked with the Splectral server and with nothing else: a
+    browser's request and a data answer in, a page and a data request
+    out; a watcher at each end.
+  It settles what we had assumed: "URI hops remain haicc" is the first
+  pair, "only accessible through the splectral server" the second. And
+  it takes three of our doubts with it: an outbox with two meanings (a
+  pair a meaning); a page read committed as a managing command is (each
+  pipeline its own commit times); a page waiting behind the request
+  layers.
+- **Splectral's pipeline: Splectral components only; the communication
+  between the server and a component fixed** (the human, 2026-11-18, on
+  our asking whether Splectral's pair is processed by a light renderer
+  of the Splectral side's own, haiccing's runtime not changed for it:
+  "Yes splectral pipeline is splectral components only and fixed server
+  component communication"). So: the second pair is read and written by
+  the Splectral side alone, the server at one end, the component's
+  renderer at the other; the renderer runs the component's splectral
+  packages and nothing of haiccing's; the mrepo's runtime never reads
+  those boxes. Our reading of "fixed", put back, to confirm: what
+  passes over the pair is the same for every component, a closed set of
+  forms, none of a component's own: a page asked for, a page; data
+  asked for, its answer.
+- **Our opinion asked for** (the human, 2026-11-18, on our last
+  question, put with a recommendation built from what had been said:
+  "Please give your opinion as well, we collaborate"). Ours, given:
+  - **The dual install with two pipelines is the best form so far.**
+    Managing a component as an mrepo, recorded, by the commands known;
+    its pages on a path of Splectral's own. It took our main doubts.
+  - **What the base mrepo is for should be said**: with the pages no
+    longer through it, it is a handle (a position, a registry entry,
+    deploy, teardown, the service) and, the reason that carries its
+    weight, the app's own repository: its data in `main` (what a person
+    saved, a scenario's state), replicated later as any mrepo's.
+    Without that it is two processes a component for little.
+  - **The component should start its own renderer, not the server**
+    (against our own last recommendation, which followed "the server
+    loads the package and starts it"). The server stays the data layer,
+    one concern, no manager of processes; the lifecycle is the mrepo's
+    service with nothing observing it in between: the component's
+    `start` hook starts the renderer, its `stop` hook ends it, and it
+    ends with its runtime: how Splectral's own server is started today.
+    The server following the service instead learns it from completed
+    commands, and misses what ends without one (the MVP's known
+    weakness). The cost: one generic action in haiccing, a program of a
+    placed package started and ended (`runtime/run` refuses `/run`
+    today), of use to every platform; and the second step lays two hook
+    files.
+  - **"No second template" fits more or less**: a Splectral package
+    is run by the renderer, not by an mrepo's runtime, so its elements
+    are called in the renderer's process (our "a request of the
+    component's own" no longer holds), and the generic tests that need
+    an mrepo's side (`mrepo`, the in situ ones) have nothing to run on:
+    the family's documentation package says which apply.
+  - **Enough designed: a proof of concept next.** One static page end
+    to end (the viewer, `info/get`, one element), the two steps, the two
+    pairs; what is still open (the URL's parameters, buttons, the
+    organisation in the tools) answered by building it, the how-tos
+    from it.
+- **The component starts its renderer** (the human, 2026-11-18, on our
+  opinion against our own recommendation and against "the server loads
+  the package and starts it": who starts the renderer, the component by
+  its service's hooks (ours) or the server: "Component"). So: the
+  component's `start` hook starts the renderer, its `stop` hook ends
+  it, and it ends with its runtime; the server starts no process of a
+  component's.
+
+## From the other session (2026-11-18): what the proof of concept meets
+
+The session that built the pair deploy (`pair.md`) and fixed the docs
+review's findings, on the human's word ("put the note in splectral.md"),
+for the colleague building the proof of concept:
+
+- **"Pair" is two things.** `pair.md`'s pair deploy is a node in a
+  container on its own haicc install (`boot/deploy --flags container`,
+  `mrepo-base-boot`'s `internal/pair`, built and in `main`). Here a pair
+  is a component's inbox and outbox. One of the two wants another name
+  before either is documented further; ours: "boxes" for the component's.
+- **The boot protocol changed today**, in `main`: `deploy`, `teardown`
+  and `redeploy` route a child linked `how: container`; `internal/pair`
+  is new; `mrepo-base-request`'s flags know `container`. The dual
+  install's second step touches `mrepo-base-boot` (`lay`, `place`):
+  start from `main` as it is.
+- **A runtime that stops taking its inbox in**, once in nine runs of the
+  haicc command's test (`tasks.md`, the open bug): a component that stops
+  answering may be it. The runtime now writes `runtime-stall.json` beside
+  its `.git` with the step a pass stalls at; its presence, and what it
+  says, is what we need to find the cause.
+- **One build at a time on `sources/`**: a haicc test started while
+  bundles are rebuilt hangs. Pushing is fine: what is pushed to
+  `execute/main` is merged before the next push, as today.
+- **Of use to the proof of concept**: `test/container.sh` and
+  `test/pair.sh` in `base-linux-haicc` show an install made and spoken to
+  through inbox and outbox files alone, with a reply topic in each
+  request's record (a request without one is answered to nobody: the
+  pair's first bug); `haicc <URI> haicc/script` runs lines where the URI
+  points, a renderer's hook lines included.
 
 ## Open, one at a time
 
-1. Whether the commands are those to the letter (`boot/deploy`, the
-   service's), executed in the Splectral mrepo by Splectral's own
-   packages in place of base's: put to the human, ours: yes.
-2. The family's kinds of package, for base: an app and an element set:
-   put, not answered yet.
-3. An app's entry and what it is handed; how its program asks for an
-   element of a linked package; what a request to an app says.
-4. The proposal's open questions: parameters from the URL; writes from
-   the UI; live updates; who may ask.
-5. The names and the repositories, created by the human.
+1. A proof of concept now, and its scope: put to the human.
+2. The second step by name, `splectral/install` (ours, not confirmed).
+3. The organisation in the tools and in this repository: a folder
+   `splectral/` beside `haiccing/`, the tools run an organisation at a
+   time.
+4. Parameters from the URL beyond the path; a static page's writes
+   (buttons).
+5. The repositories' descriptions, for the human to create them.
