@@ -2241,3 +2241,13 @@ package by package and lists here what needs code, built after it.
   printing mode, to design); 9, the `package mrepo` menu listing an entry
   twice (its source not found yet); 5, where the development repository
   is: the packages may not name it (transient), for the human.
+- **Distributed applications on haicc**, a design doc (2026-11-18), from
+  the Splectral proof of concept and the discussion after it: the
+  pattern (a central server, self-contained components that run on their
+  own), communication (single writer, single reader both ways, each
+  pipeline optimised by itself), data and processing (the data
+  repository the only writer, doing the last mile; processing components
+  stateless transformers both ways, recovering from a refused merge),
+  upgrades (active-passive, rollback), from one machine to many (the pair
+  deploy, a Hypercore per direction), open and next:
+  https://claude.ai/artifact/73tvSUZoir4CsYdTCpiVxx
