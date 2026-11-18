@@ -682,6 +682,10 @@ writes or reads either. Ours, said to the human: no locking, no
 conflict, an order kept by its writer; and it is the form a Hypercore
 has (one writer, any reader), so each direction becomes one core when a
 component is on another node, with nothing changed in the pattern.
+  And so (the human): "communication pipelines can be optimised
+  independently": each channel's transport, its commit times, its
+  caching or batching chosen for it alone (a folder, a core, an RPC
+  stream), the forms over it unchanged, nothing else affected.
 
 ## Open, one at a time
 
