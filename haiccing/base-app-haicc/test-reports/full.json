@@ -1,10 +1,10 @@
 {
   "package": "haiccing/base-app-haicc",
-  "content": "1e4c283c9d9e66949dc06e59ebe77b2ba462fb49390c009c7b16db084dbc40cd",
+  "content": "181e9f0315debb2a5007de67a83b4d0adc8c10e2b21698b08c609a44e0bb0dfc",
   "bare": "v1.36.0",
-  "date": "2026-11-18T01:29:47.399Z",
+  "date": "2026-11-18T01:39:14.480Z",
   "set": "full",
-  "ok": false,
+  "ok": true,
   "units": [
     {
       "unit": "/test/command",
@@ -99,18 +99,16 @@
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-execute",
-      "ok": false,
+      "ok": true,
       "tests": {
-        "passed": 9,
+        "passed": 10,
         "total": 10
       },
       "asserts": {
-        "passed": 97,
+        "passed": 98,
         "total": 98
       },
-      "failures": [
-        "the request's log: info unasked (its audit, its metrics), the action's entries under its name, as much as its flag asks"
-      ]
+      "failures": []
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-info",
@@ -140,18 +138,16 @@
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-request",
-      "ok": false,
+      "ok": true,
       "tests": {
-        "passed": 16,
+        "passed": 17,
         "total": 17
       },
       "asserts": {
-        "passed": 186,
+        "passed": 188,
         "total": 188
       },
-      "failures": [
-        "flags: written after a command's URI, that step's; -- says where what follows starts"
-      ]
+      "failures": []
     },
     {
       "unit": "/test/modules/pear-full-square/mrepo-base-runtime",
