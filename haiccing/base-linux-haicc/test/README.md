@@ -70,9 +70,9 @@ folder too; `--keep` leaves both.
 5. **The teardown**: both runtimes stopped, none left in the container;
    the work folder emptied; Bare kept.
 
-## Splectral, as an app platform
+## Splectral
 
-`sh test/splectral.sh` (`--keep` as above) tries Splectral with a
+`sh test/splectral.sh` (`--keep` as above) tries Splectral, an app platform, with a
 component, end to end, in a temporary folder removed after: the docs
 mrepo and Splectral deployed; the info viewer installed in two halves
 (`boot/deploy viewer base-package-service`, then `splectral/install
