@@ -417,18 +417,28 @@ for its lines: the same way of working, nothing new.
     boot mrepo's outbox folder today) and answers what it finds there:
     a page to the browser that waits for it, a data request run and its
     completed form written into the component's inbox.
+- **The template haiccing's own; the browser app on compatible code**
+  (the human, 2026-11-18, on our asking whether the family's template is
+  haiccing's, with one documentation package of the family's on top:
+  "Yes on template. And the browser app will run compatible code (bare,
+  browser js) with minification etc. To be worked out."). So: no second
+  template: a Splectral package is brought to `base-docs-package` and
+  pinned to it, the generic tests the same; an element set a protocol
+  package, an element an action; a component a component package, its
+  list; one documentation package of the family's for what is its own
+  (an element, a page's action, their how-tos). And, for later, not
+  designed: a dynamic component's code written to run on Bare and in a
+  browser, minified and the like on its way there.
+  **Ours, following from one package, one protocol, said to the human**:
+  a component's own package offers one protocol, named as the component
+  is, its action `page`; the browser's path below the component is the
+  action's URI: `/viewer/hdlc/validation` is `viewer/page hdlc/validation`.
 
 ## Open, one at a time
 
-1. The family's template: haiccing's own (`base-docs-package`, a
-   Splectral package brought to it and pinned to it), with a
-   documentation package of the family's for what is its own; an
-   element set a protocol package, an element an action; a component a
-   component package, its list: put to the human, ours: yes, no second
-   template.
+1. The names and the repositories, created by the human: put to the
+   human.
 2. Whether a terminal's command for a component still gets there by
    haicc's hop through the Splectral mrepo: assumed, not confirmed.
-3. What a request to a component says (the page's action, its name,
-   the path its URI); parameters from the URL; a static page's writes
+3. Parameters from the URL beyond the path; a static page's writes
    (buttons).
-4. The names and the repositories, created by the human.
