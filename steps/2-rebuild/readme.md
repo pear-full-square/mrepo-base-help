@@ -4605,4 +4605,14 @@ half 2.3 s, the second 4.0 s, `service/start` 3.5 s; an error page or a
 light, a keyword below followed at a phone's width; no error in the
 page.
 
-**Validated**: below, filled in as it ran.
+**Validated** (the full run): every package's pre-release passing, 23,
+both organisations (the four Splectral packages on haiccing's template,
+its generic tests as they are); `tools/bare tools/release.js --strict`
+exit 0; `tools/bare tools/code-check.js` (25 modules, 24 packages) and
+the READMEs (462): no problems; `tools/bare tools/info-extract.js`: the
+boot mrepo, a host and the docs mrepo, no problem (the docs mrepo
+documents 13 now, the splectral packages among them); the boot's
+`validate` three times; `splectral.sh` 38 of 38 three times (a page
+1.03 to 1.21 s); the `haicc` test, `run.sh`, 303 of 303 twice. Nothing
+left running, no container left. The local agent's next run tests it on
+the human's laptop, test only (`local-note.md`, "The next run").
