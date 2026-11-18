@@ -196,20 +196,37 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   With what was said before: a simple mrepo, light, a renderer to start
   with; "an mrepo with specific language", the language its packages
   offer, those of the splectral family, made in haiccing's ways.
+- **Splectral gets the boot protocol to manage its components; a
+  pattern for other types of application; the same way of working, no
+  duplication** (the human, 2026-11-18, on our asking whether the deploy
+  is `base-package-boot` as it is, Splectral's own only the routing:
+  "Yes, splectral gets the boot protocol to manage the components. I
+  think this will be a pattern that we will use for other types of
+  application as well. Important, use the same way of working as much
+  as possible to avoid duplication."). So: `base-package-boot` in the
+  Splectral mrepo's list; a component deployed, started, stopped and
+  torn down as any mrepo; what is Splectral's own begins after the
+  deploy. The pattern, an application platform: an mrepo of haiccing's
+  that manages its components, mrepos, with the boot protocol, and adds
+  only what is its own (here the server, the browser routed to its
+  children). A new pattern: its how-to when it is built
+  (`base-docs-hdlc`, "Work"). The rule for what follows here: what
+  haiccing does already is used as it is; something new only where
+  nothing does it.
 
 ## Open, one at a time
 
-1. Whether the deploy is base's as it is (`base-package-boot` linked in
-   the Splectral mrepo, a component deployed as the host deploys a
-   node), Splectral's own beginning after it (the server routing the
-   browser to its children): put to the human, ours: yes.
-2. How a component gets its data from the platform (a request of its
-   own to Splectral, its parent; or handed with the browser's request).
-3. The family's packages: an element set a protocol package, an element
+1. How a component gets its data from the platform: put to the human,
+   ours: it asks its parent, a request of its own through its outbox,
+   which Splectral follows (the subscription the outbox's page
+   describes), its page's request waiting meanwhile (`exec.wait`,
+   built); or the data handed down with the browser's request, which
+   needs the platform to read what a component declares.
+2. The family's packages: an element set a protocol package, an element
    an action; the app's own package, answering with pages; the
    component's list. The earlier question, in this light.
-4. What a request a page costs (about 1 s a request through an mrepo's
+3. What a request a page costs (about 1 s a request through an mrepo's
    layers, measured; "a cheaper request pipeline" moved back).
-5. The proposal's open questions: parameters from the URL; writes from
+4. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-6. The names and the repositories, created by the human.
+5. The names and the repositories, created by the human.
