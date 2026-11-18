@@ -42,11 +42,11 @@ test('the machine level, the usage, the sources', (t) => {
 })
 
 test('refused, exit 2: not a command, or its arguments wrong', (t) => {
-  refused(t, ['nosuch'], 2, "no command 'nosuch' (haicc --help)")
+  refused(t, ['nosuch'], 2, "no command 'nosuch' (haicc --help; a URI is followed by its command: haicc nosuch info/get)")
   refused(t, ['-x'], 2, "no command '-x' (haicc --help)")
   refused(t, ['.'], 2, 'haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)')
   refused(t, ['swarms/swarm-1'], 2, 'haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)')
-  refused(t, ['host'], 2, "no command 'host' (haicc --help)")
+  refused(t, ['host'], 2, "no command 'host' (haicc --help; a URI is followed by its command: haicc host info/get)")
   refused(t, ['boot'], 2, 'haicc boot/deploy, haicc boot/teardown')
   refused(t, ['boot/nosuch'], 2, 'no action: boot nosuch (deploy, teardown)')
   refused(t, ['boot/deploy', 'host'], 2, 'haicc boot/deploy (no arguments)')

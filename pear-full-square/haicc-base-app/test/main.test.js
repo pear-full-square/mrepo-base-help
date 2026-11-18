@@ -79,7 +79,7 @@ test('the usage; not a command: exit 2, said on stderr', async (t) => {
     t.is(await s.run(['--help']), 0)
     t.alike(s.out, [USAGE], 'haicc --help: the usage')
     t.is(await s.run(['nosuch']), 2)
-    t.alike([s.out, s.err], [[], ["haicc: no command 'nosuch' (haicc --help)"]], 'haicc: <what>, on stderr; nothing printed')
+    t.alike([s.out, s.err], [[], ["haicc: no command 'nosuch' (haicc --help; a URI is followed by its command: haicc nosuch info/get)"]], 'haicc: <what>, on stderr; nothing printed')
     t.is(await s.run(['boot']), 2)
     t.alike(s.err, ['haicc: haicc boot/deploy, haicc boot/teardown'])
   } finally { s.remove() }

@@ -15,8 +15,9 @@ haicc . boot/deploy splectral base-package-splectral --flags continuation=start
 haicc splectral splectral/status
 # open it in a browser on this machine, then send commands and see each arrive
 haicc . boot/deploy host base-component-haicc --flags continuation=cluster
-# another port, or started again
-haicc splectral splectral/start 4401
+# another port: stopped first (a running server keeps its port)
+haicc splectral splectral/stop .
+haicc splectral splectral/start . 4401
 # ended
 haicc splectral service/stop
 haicc . boot/teardown splectral

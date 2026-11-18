@@ -31,7 +31,7 @@ is for.
 | `protocol.js` | provides protocols: their configs and actions; linked into an mrepo, its protocols are loaded by the runtime; they are offered to the outside once activated |
 | `modules/`, `package.json` | carries its own dependencies |
 | `mrepo/` | comes with an mrepo, by layers |
-| `scripts/` | has scripts: lists of commands to go on with after it is deployed, a file each (`<name>.json`), answered as the deploy's continuation when asked for by name |
+| `scripts/` | has scripts: lists of commands to go on with after it is deployed, a file each (`<name>.haicc`, a simple command a line), answered as the deploy's continuation when asked for by name, sent on by the terminal as `haicc/script` |
 | `howto/` | has how-tos: what can be done with it, a folder each (`<name>/`), its README the how-to: what it does and its steps as typed commands, each with why; a pattern's how-to names it, `Pattern: <name>`; pages of the package, read with `info` |
 | `test/` | has tests and test sets |
 | `test-reports/` | holds the proof that its tests passed: the report of its last pre-release |

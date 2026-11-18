@@ -22,8 +22,10 @@ haicc host haicc swarms/swarm-1/node-1 container/status
 
 ## After
 
-Before the node is torn down its replica is removed: `boot/teardown`
-does not know of containers.
+Before the node is torn down its replica is removed: the host's
+`boot/teardown <position>`, the boot protocol's at an mrepo, does not
+know of a replica's container. The machine's `haicc boot/teardown`
+removes every container of the install with the rest.
 
 ```sh
 haicc host haicc swarms/swarm-1/node-1 container/remove
