@@ -26,6 +26,9 @@
     "pear-full-square/mrepo-base-crud",
     "pear-full-square/mrepo-base-container",
     "pear-full-square/splectral-server",
+    "pear-full-square/splectral-base-renderer",
+    "pear-full-square/splectral-base-ui",
+    "pear-full-square/splectral-base-viewer",
     "pear-full-square/mrepo-base-info"
   ],
   "dependencies": {

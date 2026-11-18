@@ -1,5 +1,5 @@
 // The code rules (pkgm-base-check) on this repository's code: the modules the
-// haiccing packages carry and the packages' own code; and each package
+// packages carry (haiccing's and splectral's) and the packages' own code; and each package
 // against the structure it is to have (its files, its sets, its tests, a
 // test of its own for what it provides); and the implementation
 // validation: every pattern implemented has a how-to; and each module's test
@@ -13,11 +13,13 @@ import { fileURLToPath } from 'bare-url'
 import { checkModule, checkPackage, checkOwn, checkPatterns, checkTestPage } from '../pear-full-square/pkgm-base-check/index.js'
 
 const dev = resolve(dirname(fileURLToPath(import.meta.url)), '..')
-// every package here: a folder of haiccing/ with a package.json
-const packages = readdirSync(join(dev, 'haiccing')).sort().filter(p => existsSync(join(dev, 'haiccing', p, 'package.json')))
+// every package here: a folder of an organisation's (haiccing/,
+// splectral/) with a package.json, as <org>/<package>
+const ORGS = ['haiccing', 'splectral'].filter(o => existsSync(join(dev, o)))
+const packages = ORGS.flatMap(o => readdirSync(join(dev, o)).sort().filter(p => existsSync(join(dev, o, p, 'package.json'))).map(p => `${o}/${p}`))
 const carried = new Set()
 for (const p of packages) {
-  const m = join(dev, 'haiccing', p, 'modules', 'pear-full-square')
+  const m = join(dev, p, 'modules', 'pear-full-square')
   if (existsSync(m)) for (const n of readdirSync(m)) carried.add(n)
 }
 const ours = [...carried].map(n => JSON.parse(readFileSync(join(dev, 'pear-full-square', n, 'package.json'), 'utf8')).name)
@@ -27,13 +29,14 @@ for (const m of [...carried].sort()) for (const p of checkModule(join(dev, 'pear
 // a module's test page: every test by its name, nothing else (every module here)
 const modules = readdirSync(join(dev, 'pear-full-square')).sort().filter(m => existsSync(join(dev, 'pear-full-square', m, 'package.json')))
 for (const m of modules) for (const p of checkTestPage(join(dev, 'pear-full-square', m))) say(`pear-full-square/${m}`, p)
-for (const p of packages) for (const q of checkPackage(join(dev, 'haiccing', p))) say(`haiccing/${p}`, q)
+for (const p of packages) for (const q of checkPackage(join(dev, p))) say(p, q)
 // a package's structure: those that are bundled (they carry the checks)
 for (const p of packages) {
-  if (!existsSync(join(dev, 'haiccing', p, 'main.js'))) continue
-  for (const q of await checkOwn(join(dev, 'haiccing', p))) { n++; console.log(`haiccing/${p}\t${q.check}\t${q.detail}`) }
+  if (!existsSync(join(dev, p, 'main.js'))) continue
+  for (const q of await checkOwn(join(dev, p))) { n++; console.log(`${p}\t${q.check}\t${q.detail}`) }
 }
-// the implementation validation: every pattern implemented has a how-to
-for (const q of checkPatterns(packages.map(p => join(dev, 'haiccing', p)))) { n++; console.log(`haiccing\t${q.check}\t${q.detail}`) }
+// the implementation validation: every pattern implemented has a how-to,
+// over every organisation's packages (the generic how-tos are haiccing's)
+for (const q of checkPatterns(packages.map(p => join(dev, p)))) { n++; console.log(`${ORGS.join('+')}\t${q.check}\t${q.detail}`) }
 console.log(`${carried.size} modules, ${packages.length} packages: ${n} problems`)
 process.exit(n ? 1 : 0)

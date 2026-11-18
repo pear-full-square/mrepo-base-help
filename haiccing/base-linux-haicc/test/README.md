@@ -69,3 +69,17 @@ folder too; `--keep` leaves both.
    reference; `info/get`; the service stopped.
 5. **The teardown**: both runtimes stopped, none left in the container;
    the work folder emptied; Bare kept.
+
+## Splectral, as an app platform
+
+`sh test/splectral.sh` (`--keep` as above) tries Splectral with a
+component, end to end, in a temporary folder removed after: the docs
+mrepo and Splectral deployed; the info viewer installed in two halves
+(`boot/deploy viewer base-package-service`, then `splectral/install
+viewer splectral/base-component-viewer`), its hooks laid by the mrepo
+itself, none of its packages in the mrepo's own; what `install` refuses;
+its pages asked over HTTP before and after its service started (a page
+by its keywords, another mrepo, a keyword not there), its data requests
+in the install's record; stopped, torn down, nothing left running. Each
+step timed, the pages too. It needs the splectral packages' bundles in
+the sources.

@@ -8,7 +8,7 @@
 # The package's own tests, its sets and its READMEs are not touched: its
 # test/README.md links to each test's folder, its README to test-reports/,
 # by hand. Then its pre-release: tools/bare tools/package-test.js.
-#   sh tools/package-template.sh <package>...
+#   sh tools/package-template.sh <package>...   (<org>/<package>; the package alone: haiccing's)
 #   PACKAGES   where the repositories' clones are kept (the folder beside
 #              this repository by default); the template's is cloned when
 #              not there, and brought up to its main
@@ -25,9 +25,10 @@ git -C "$tpl" pull -q --ff-only origin main 2>/dev/null || true
 commit=$(git -C "$tpl" rev-parse HEAD)
 generic="info code mrepo package modules info-in-situ mrepo-in-situ"
 for p in "$@"; do
-  dir=$dev/haiccing/$p
+  # (<org>/<package>, or the package alone: haiccing's)
+  case "$p" in */*) dir=$dev/$p ;; *) dir=$dev/haiccing/$p ;; esac
   [ -f "$dir/package.json" ] || { echo "$p: no package here" >&2; exit 2; }
-  [ "$p" != base-docs-package ] || { echo "$p: the template itself" >&2; exit 2; }
+  [ "${p#haiccing/}" != base-docs-package ] || { echo "$p: the template itself" >&2; exit 2; }
   mkdir -p "$dir/test" "$dir/test-reports"
   for t in $generic; do
     rm -rf "${dir:?}/test/$t"

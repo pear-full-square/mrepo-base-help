@@ -1,11 +1,13 @@
 // The release, built into the local sources (sources/ here, gitignored):
 // everything an install needs, by organisation.
-//   sources/haiccing/<package>.bundle   each package here (a folder of
-//                                       haiccing/ whose package.json names
+//   sources/<org>/<package>.bundle      each package here (a folder of an
+//                                       organisation's, haiccing/ and
+//                                       splectral/, whose package.json names
 //                                       its modules): assembled, then bundled
 //                                       (tools/package-assemble.js,
 //                                       tools/package-bundle.js), in
-//   sources/haiccing/manifest.json      their manifest: these packages only
+//   sources/<org>/manifest.json         their manifest, an organisation's:
+//                                       these packages only
 //   sources/addons/<sha256>             their native addons
 //   sources/holepunchto/<tarball>       Bare's runtime, third party: the
 //                                       tarball this repository's lockfile
@@ -41,23 +43,27 @@ const platform = `${os.platform()}-${os.arch()}`
 const tool = (...a) => { const r = spawnSync(join(dev, 'tools', 'bare'), a, { stdio: 'inherit' }); if (r.status !== 0) throw new Error(`failed: ${a.join(' ')}`) }
 
 // 1. The packages: each assembled (its modules/, node_modules included:
-// gitignored, so not there in a fresh clone), then bundled into the sources.
-const packages = readdirSync(join(dev, 'haiccing')).sort().filter(p => {
-  const f = join(dev, 'haiccing', p, 'package.json')
+// gitignored, so not there in a fresh clone), then bundled into the sources,
+// an organisation at a time: each built, released and sourced by itself.
+export const ORGS = ['haiccing', 'splectral']
+const orgs = ORGS.filter(o => existsSync(join(dev, o)))
+const packages = orgs.flatMap(org => readdirSync(join(dev, org)).sort().filter(p => {
+  const f = join(dev, org, p, 'package.json')
   return existsSync(f) && Array.isArray(JSON.parse(readFileSync(f, 'utf8')).modules)
-})
+}).map(p => `${org}/${p}`))
 for (const p of packages) {
-  tool(join(dev, 'tools', 'package-assemble.js'), join(dev, 'haiccing', p))
-  tool(join(dev, 'tools', 'package-bundle.js'), join(dev, 'haiccing', p), `--out=${out}`)
+  tool(join(dev, 'tools', 'package-assemble.js'), join(dev, p))
+  tool(join(dev, 'tools', 'package-bundle.js'), join(dev, p), `--out=${out}`, `--org=${p.split('/')[0]}`)
 }
-// The manifest names these packages only: one no longer here (removed,
-// renamed) taken out, its bundle too. It is published as it is (an asset
-// of base-linux-haicc's release, what haicc sources download haiccing
+// Each organisation's manifest names its packages only: one no longer here
+// (removed, renamed) taken out, its bundle too. It is published as it is
+// (an asset of base-linux-haicc's release, what haicc sources download
 // reads), so it names the release, nothing else.
-{
-  const mf = join(out, 'haiccing', 'manifest.json')
+for (const org of orgs) {
+  const mf = join(out, org, 'manifest.json')
+  if (!existsSync(mf)) continue
   const m = JSON.parse(readFileSync(mf, 'utf8'))
-  const keep = new Set(packages.map(p => `haiccing/${p}`))
+  const keep = new Set(packages.filter(p => p.startsWith(`${org}/`)))
   const gone = Object.keys(m.packages).filter(k => !keep.has(k))
   for (const k of gone) {
     const f = join(out, m.packages[k].file)
@@ -94,11 +100,11 @@ const built = spawnSync('sh', [join(linux, 'build.sh')], { stdio: ['ignore', 'ig
 if (built.status !== 0) throw new Error('failed: base-linux-haicc/build.sh')
 
 // 4. The test reports: each package's against the bundle just built.
-const manifest = JSON.parse(readFileSync(join(out, 'haiccing', 'manifest.json'), 'utf8')).packages
-const reports = Object.fromEntries(packages.map(p => [`haiccing/${p}`, statusOf(join(dev, 'haiccing', p), manifest[`haiccing/${p}`]?.content)]))
+const manifest = Object.assign({}, ...orgs.map(org => JSON.parse(readFileSync(join(out, org, 'manifest.json'), 'utf8')).packages))
+const reports = Object.fromEntries(packages.map(p => [p, statusOf(join(dev, p), manifest[p]?.content)]))
 
 const commit = spawnSync('git', ['-C', dev, 'rev-parse', 'HEAD'], { stdio: ['ignore', 'pipe', 'ignore'] }).stdout?.toString().trim() || null
-console.log(JSON.stringify({ sources: out, packages: packages.map(p => `haiccing/${p}`), reports, bare: lock.version, commit }))
+console.log(JSON.stringify({ sources: out, packages, reports, bare: lock.version, commit }))
 if (process.argv.includes('--strict') && Object.values(reports).some(r => r !== 'current')) {
   console.error(`not every package's test report is current: ${Object.entries(reports).filter(([, r]) => r !== 'current').map(([p, r]) => `${p} (${r})`).join(', ')}`)
   process.exit(1)

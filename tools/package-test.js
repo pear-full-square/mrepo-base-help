@@ -24,12 +24,14 @@ const folders = args.filter(a => !a.startsWith('--')).map(a => resolve(a))
 if (!folders.length) { console.error('usage: package-test.js <package folder>... [--out=<folder>] [--force]'); process.exit(2) }
 const out = resolve(args.find(a => a.startsWith('--out='))?.slice(6) ?? join(dev, 'sources'))
 const force = args.includes('--force')
-const org = 'haiccing'
 const bare = join(dev, 'tools', 'bare')
 
+// A package's organisation: the folder it is in (haiccing/, splectral/).
+const orgOf = folder => basename(dirname(folder))
 function build (folder) {
+  const org = orgOf(folder)
   for (const t of ['package-assemble.js', 'package-bundle.js']) {
-    const r = spawnSync(bare, [join(dev, 'tools', t), folder, ...(t === 'package-bundle.js' ? [`--out=${out}`] : [])], { stdio: ['ignore', 'ignore', 'inherit'] })
+    const r = spawnSync(bare, [join(dev, 'tools', t), folder, ...(t === 'package-bundle.js' ? [`--out=${out}`, `--org=${org}`] : [])], { stdio: ['ignore', 'ignore', 'inherit'] })
     if (r.status !== 0) throw new Error(`failed: ${t} ${folder}`)
   }
   return JSON.parse(readFileSync(join(out, org, 'manifest.json'), 'utf8')).packages[`${org}/${basename(folder)}`]
@@ -37,7 +39,7 @@ function build (folder) {
 
 let failed = 0
 for (const folder of folders) {
-  const name = `${org}/${basename(folder)}`
+  const name = `${orgOf(folder)}/${basename(folder)}`
   let entry = build(folder)
   let report = 'current'
   if (force || statusOf(folder, entry.content) !== 'current') {

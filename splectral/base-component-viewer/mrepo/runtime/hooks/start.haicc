@@ -1,0 +1,2 @@
+# start: run as the service opens its door: the renderer started beside the mrepo
+runtime/start . splectral/packages/splectral/base-package-renderer

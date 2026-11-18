@@ -1856,6 +1856,11 @@ pages), not for base.
 
 **The design session, started** (2026-11-18): `splectral.md` here: what
 settles in it, in the words used, and what is open.
+**Its proof of concept, built** (2026-11-18, the human: "Go ahead"):
+`readme.md`, part 88: Splectral an app platform, a component in two
+halves (`boot/deploy`, `splectral/install`), the info viewer's pages
+(`/viewer/<keywords>`), the Splectral family in `splectral/`. The info
+viewer (3, 4 below) is its first component.
 
 ## The order after the restructure (the human, 2026-11-17)
 
