@@ -654,6 +654,11 @@ recorded. That keeps "the component starts its renderer": the server
 decides and asks (`service/start`), the component's `start` hook starts
 the renderer. The server manages, the component executes; the server
 still starts no process of a component's.
+  The human, on our asking whether the server controls a component's
+  processes directly: "No, a component once installed runs dividin self
+  contained" (read as "independently, self-contained"). So not directly:
+  installed, a component runs on its own, self-contained; the server
+  installs it and asks for its lifecycle by the commands, nothing more.
 
 ## Open, one at a time
 
