@@ -660,6 +660,17 @@ still starts no process of a component's.
   installed, a component runs on its own, self-contained; the server
   installs it and asks for its lifecycle by the commands, nothing more.
 
+**Single writer, single reader, both ways** (the human, 2026-11-18): "And
+communication is single writer/ single reader both ways." So each
+direction between the server and a component is one channel with one
+writer and one reader: the component's Splectral inbox written by the
+server only and read by the component only; its Splectral outbox
+written by the component only and read by the server only. Nothing else
+writes or reads either. Ours, said to the human: no locking, no
+conflict, an order kept by its writer; and it is the form a Hypercore
+has (one writer, any reader), so each direction becomes one core when a
+component is on another node, with nothing changed in the pattern.
+
 ## Open, one at a time
 
 1. A proof of concept now, and its scope: put to the human.
