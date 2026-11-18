@@ -2,10 +2,7 @@
 
 The development side's tools, by what they are for. Each says in its own header what it does and how it is run.
 
-Kept well structured: they are to become packages themselves, run on the
-haicc platform. One tool one concern; what two tools share is in `lib/`;
-a tool reads and writes files and prints one line of JSON a result, so
-another can use it.
+How they are kept (to become packages): `base-docs-hdlc`, "Tooling".
 
 ## Setting up
 

@@ -120,6 +120,8 @@ with `info/get` by its keywords. Its shape:
    pages: each a choice.
 9. **Every page is reached** by a menu from the top; a link leads to a
    README; a README without a menu is the old form.
+10. **No link to a report file**: what is tested must not depend on a
+    report (a package's content hash leaves its reports out).
 
 The generic `info` test checks them in every package
 (`mrepo-base-info`).

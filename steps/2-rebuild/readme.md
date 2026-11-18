@@ -1342,66 +1342,17 @@ All five packages' `full` sets pass.
 
 ## 30. What haicc is (the human, 2026-11-12; a note, nothing built)
 
-It came back to the human; it replaces part 29's "haicc is not a protocol:
-an access structure, redundant".
-
-- **Its concern: deployment.** Global, across swarms. Also responsible for
-  setting up and managing cross swarm bridges.
-- **Two sides.** On the Linux side of the host, haicc is an app: it
-  manages the downloads of sources and third-party components, and
-  installs from scratch. On the swarm side, it is a specific mrepo.
-- **The haicc mrepo is the only mrepo on a node or host with the boot
-  protocol.**
-- **It only ever connects directly, with local mrepos**: the folder inbox.
-- **A web of haicc mrepos.** The host's instance takes from the terminal,
-  and connects to the swarm nodes' haicc mrepos on the host. Those proxy
-  to the haicc mrepo of the swarm node in its container.
-- **One manager**: there can only be one haicc mrepo actively managing a
-  host or a node.
-- **haicc commands are issued on the host**; internally it is that web.
-- **The boot mrepo is not it**: the boot mrepo deploys the host's haicc
-  mrepo, as the boot on a PC starts the system. What the first-time boot
-  deploys today as `/host` (the runtime package, a placeholder) is where
-  the haicc mrepo goes.
-- **Into a container**: the node's haicc mrepo on the host reaches the one
-  in the container by mapped inbox and outbox folders (folder access), or
-  something equivalent but secure.
+Its settled points moved (2026-11-18) to `base-docs-vision`, "Deployment",
+with what of it is superseded since (the haicc mrepo the only one with the
+boot protocol; the web of haicc mrepos into a container). Its text: this
+file's history.
 
 ## 31. Solutions, components, applications; storage; the haicc component (the human, 2026-11-12; a note, nothing built)
 
 Settled in discussion. Nothing is built from it yet.
 
-**The naming**
-
-- **A package** brings a protocol and its part of the mrepo structure.
-- **A component** (`base-component-<name>`) delivers a service to the
-  solution. The components are the physical view of a solution.
-- **An application** (`base-application-<name>`) delivers user-facing
-  functionality: a logical view within the solution. It consists of an
-  mrepo and sits on one or more components, with one mrepo per component
-  it spans. That mrepo is exclusive (a child mrepo, at
-  `main/<application>/`) or shared (a section of the component's `main`,
-  with its own protocols; not built). The URI is the same either way:
-  XPath decides. With several applications there are relationships
-  between them.
-- **A solution** (`base-solution-<name>`) is a number of applications and
-  components, possibly across swarms.
-- **Why it matters**: haicc can place deployments again, to satisfy the
-  resources needed, without anything changing for the application. With
-  the replication p2p gives, a new install can come in as passive before
-  the switch.
-
-**Storage**
-
-- `main` on the Corestore is the external state; what is on the filesystem
-  is the internal state.
-- The rule: only `main` on the Corestore. On disk, by default, all the
-  remaining layers, unless an exception is raised. The minimum on disk is
-  the inbox and the outbox.
-- Needed, not built: the sync of a folder with the Corestore, both ways.
-- The code does not follow the rule yet: under `p2p` storage it routes
-  `runtime`, `packages`, `help` and `protocols` to the Corestore as well.
-  Not a worry now.
+**The naming** and **Storage** moved (2026-11-18) to `base-docs-vision`,
+"Solutions" and "Storage". Their text: this file's history.
 
 **The haicc component**
 
