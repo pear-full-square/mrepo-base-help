@@ -521,16 +521,48 @@ for its lines: the same way of working, nothing new.
   passes over the pair is the same for every component, a closed set of
   forms, none of a component's own: a page asked for, a page; data
   asked for, its answer.
+- **Our opinion asked for** (the human, 2026-11-18, on our last
+  question, put with a recommendation built from what had been said:
+  "Please give your opinion as well, we collaborate"). Ours, given:
+  - **The dual install with two pipelines is the best form so far.**
+    Managing a component as an mrepo, recorded, by the commands known;
+    its pages on a path of Splectral's own. It took our main doubts.
+  - **What the base mrepo is for should be said**: with the pages no
+    longer through it, it is a handle (a position, a registry entry,
+    deploy, teardown, the service) and, the reason that carries its
+    weight, the app's own repository: its data in `main` (what a person
+    saved, a scenario's state), replicated later as any mrepo's.
+    Without that it is two processes a component for little.
+  - **The component should start its own renderer, not the server**
+    (against our own last recommendation, which followed "the server
+    loads the package and starts it"). The server stays the data layer,
+    one concern, no manager of processes; the lifecycle is the mrepo's
+    service with nothing observing it in between: the component's
+    `start` hook starts the renderer, its `stop` hook ends it, and it
+    ends with its runtime: how Splectral's own server is started today.
+    The server following the service instead learns it from completed
+    commands, and misses what ends without one (the MVP's known
+    weakness). The cost: one generic action in haiccing, a program of a
+    placed package started and ended (`runtime/run` refuses `/run`
+    today), of use to every platform; and the second step lays two hook
+    files.
+  - **"No second template" fits more or less**: a Splectral package
+    is run by the renderer, not by an mrepo's runtime, so its elements
+    are called in the renderer's process (our "a request of the
+    component's own" no longer holds), and the generic tests that need
+    an mrepo's side (`mrepo`, the in situ ones) have nothing to run on:
+    the family's documentation package says which apply.
+  - **Enough designed: a proof of concept next.** One static page end
+    to end (the viewer, `info/get`, one element), the two steps, the two
+    pairs; what is still open (the URL's parameters, buttons, the
+    organisation in the tools) answered by building it, the how-tos
+    from it.
 
 ## Open, one at a time
 
-1. How the Splectral side of a component comes to life: put to the
-   human, ours: `splectral/install <name> <component>`, an action of
-   Splectral's own, lays the component's packages on top and makes the
-   second pair; the Splectral server starts its renderer ("the server
-   loads the package and starts it") and ends it, following the
-   component's service: started with its `service/start`, ended with
-   its `service/stop`, and with its runtime.
+1. Who starts the renderer: the component, by its service's hooks
+   (ours), or the Splectral server, following the component's service:
+   put to the human. With it the second step, `splectral/install`.
 2. The organisation in the tools and in this repository: a folder
    `splectral/` beside `haiccing/`, the tools run an organisation at a
    time.
