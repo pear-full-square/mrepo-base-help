@@ -53,6 +53,7 @@ become HDLC afterwards (haicc (software) development lifecycle)".
 | `mrepo-registry` | the rest, for the next design round | in part |
 | `swarm-cluster` | the nodes finding each other, the `swarm` protocol | the next phase |
 | `splectral` | Splectral beyond the proof of concept | `splectral.md`, "Open" |
+| `dev-env-poc` | a proof-of-concept development environment, from this repository's structure and tools | design discussion first, with the human |
 | `help-mvp` | the flag unit, `help/annotate`, `haici/feedback`, `explore` and `plan` scoped | step 3, not built |
 | `external-request-api` | what the outside may ask | to discuss |
 | `error-on-empty` | a flag: an empty selection fails the request | set aside by the human |
@@ -287,6 +288,18 @@ in git, `42a5a66^`, and in its repositories, `pear-full-square/splectral-*`,
 `splectral/base-view-map`); the structure as it is, asked with `haicc`
 commands, for what ended without a command; the first demo beyond the
 log.
+
+## `dev-env-poc`: a proof-of-concept development environment
+
+**Settled** (the human, 2026-11-18): "POC development environment using
+main structure or similar from this repo and the tools from this repo.
+Needs design discussion first." In the same group as `splectral`, with
+the human next. Not designed, not built.
+
+**Where** (a start, checked again): this repository's structure
+(`haiccing/`, `splectral/`, `pear-full-square/`, `tools/`, `steps/`;
+`CLAUDE.md`, "What is here") and its tools (`tools/`, `base-docs-hdlc`,
+"Tooling"); the priority it may serve, `dev-on-haicc` (P8).
 
 ## `help-mvp`: the flag unit, the help and feedback flags, `haici`
 

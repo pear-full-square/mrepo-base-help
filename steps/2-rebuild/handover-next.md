@@ -57,6 +57,9 @@ What is open, all of it in `tasks.md`:
   package, the repositories the human creates for the new Splectral
   packages and modules (nothing pushed to them yet), today's page as a
   component, info views on every mrepo.
+  Then a proof-of-concept development environment, from this
+  repository's structure (or similar) and its tools: design discussion
+  first (`dev-env-poc`).
 - **To build**: `base-solution-haicc` (host, docs and Splectral as one
   install); `help-mvp`, step 3 (the flag unit, `help/annotate`,
   `haici/feedback`); `install-tests` with `runnable-howtos`, after the
