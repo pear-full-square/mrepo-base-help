@@ -574,3 +574,17 @@ To check, each the human's:
   repository, `splectrum/dev-env-3-mrepo-native`, to be created; whether
   to update the seed to say its storage setting and boxes as layers are
   built here (one commit to `roadmap-1`).
+
+## `docs-review-open`: a question left from the AI agent's docs review
+
+(The rest of the review's open findings: above, with the printing mode.)
+
+- **Where the development repository is**: a package may not name it
+  (`base-docs-package`, "READMEs", 3: transient); the package how-tos say
+  to ask whoever runs the install. For the human: whether packages may
+  name it, or it gets a stable home.
+
+## `housekeeping-branches`
+
+- The branch `execute/solution` (a worktree's, for parallel work in a
+  session) is stale: its work merged; delete it with the human's go.

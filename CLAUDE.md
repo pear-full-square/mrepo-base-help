@@ -14,8 +14,8 @@ only this repository's.
   alone; discuss first, write what has settled.
 - **Worked from the packages:** what settles goes into the packages'
   documentation and is kept there as the implementation goes on
-  (`base-docs-hdlc`, "Documentation"); the records here hold the
-  history.
+  (`base-docs-hdlc`, "Documentation"); `steps/` holds only what is
+  current (open work, designs in discussion); the history is git's.
 
 ## What is here
 

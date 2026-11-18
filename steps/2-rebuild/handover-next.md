@@ -60,3 +60,17 @@ What is open, all of it in `tasks.md`:
   (`swarm-cluster`); then `claude-headless` and `dev-on-haicc`.
 - **The local agent**: its prompt and its last note, `local-note.md`;
   its instructions, `handover-local.md`.
+- **Product repositories**: last pushed 2026-11-17 (the scripts and
+  hooks milestone); everything since is in `main` only, not pushed: the
+  pair deploy, the runtime's stall report, the documentation offloaded
+  into the docs packages, Splectral's proof of concept (its `splectral`
+  packages and modules need repositories the human creates). Pushed when
+  the human asks (`CLAUDE.md`, "Execution").
+- **Designs, for reading and comment**: distributed applications, the doc
+  "Distributed applications on haicc"
+  (https://claude.ai/artifact/73tvSUZoir4CsYdTCpiVxx), its settled points
+  in the vision (`base-docs-vision`, "Distributed applications",
+  "Pipelines"); `distributed-applications.md` here.
+- **Waiting on the human** (in `tasks.md`): the readings of
+  `runnable-howtos` (setting the scene, an intention: a command or
+  inferred); the open questions of `distributed-applications.md`.
