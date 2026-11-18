@@ -488,18 +488,41 @@ for its lines: the same way of working, nothing new.
     of the two steps are joined; it is the second half of a deploy, not
     an upgrade in place: a teardown takes the whole, a change is both
     steps again.
+- **An inbox and an outbox for each; the pipelines separate** (the
+  human, 2026-11-18, on the dual install and our asking who performs
+  its second step: "There could be inbox and outbox for each, pipeline
+  separation"). Our reading, put back, to confirm: a component has two
+  pairs of boxes, one for each install, and what comes in by one is
+  never processed by the other:
+  - **haicc's**: the mrepo's own inbox and outbox, as every mrepo has,
+    made by the first step: the commands that manage it (`service/start`,
+    `info/get`, the teardown), come by haicc's hops through the
+    Splectral mrepo, through the request layers, recorded;
+  - **Splectral's**: a second inbox and outbox, made by the second
+    step, linked with the Splectral server and with nothing else: a
+    browser's request and a data answer in, a page and a data request
+    out; a watcher at each end.
+  It settles what we had assumed: "URI hops remain haicc" is the first
+  pair, "only accessible through the splectral server" the second. And
+  it takes three of our doubts with it: an outbox with two meanings (a
+  pair a meaning); a page read committed as a managing command is (each
+  pipeline its own commit times); a page waiting behind the request
+  layers.
 
 ## Open, one at a time
 
-1. The second step: Splectral's own action, in its protocol, at a
-   child deployed by the first (`splectral/install <name> <component>`,
-   ours), carrying `mrepo-base-boot` for `lay` and `place`: put to the
-   human.
-2. The organisation in the tools and in this repository: a folder
+1. What processes Splectral's pair: put to the human, ours: a process
+   of the Splectral side's own, light, the renderer ("Component starts
+   light, simple renderer"), from the component's splectral packages;
+   the mrepo's runtime never reads those boxes, and haiccing's runtime
+   is not changed for it. The other way: the mrepo's runtime given a
+   second pair and a second pipeline.
+2. Who performs the second step (`splectral/install <name> <component>`,
+   an action of Splectral's own, ours): put, not answered yet; and who
+   starts and stops the renderer.
+3. The organisation in the tools and in this repository: a folder
    `splectral/` beside `haiccing/`, the tools run an organisation at a
    time.
-3. Whether a terminal's command for a component still gets there by
-   haicc's hop through the Splectral mrepo: assumed, not confirmed.
 4. Parameters from the URL beyond the path; a static page's writes
    (buttons).
 5. The repositories' descriptions, for the human to create them.
