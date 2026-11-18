@@ -8,6 +8,23 @@ communication, data and processing, merge failures, upgrades, from one
 machine to many, what is open). This page holds what belongs with the
 code: the proof of concept's review, and what comes of it.
 
+## Settled
+
+- **Three component types** (the human, 2026-11-18, on our answer to
+  "If I have data repo components, data transformation components and UI
+  interaction components: are these three types sufficient to build
+  distributed applications?"): data, transformation, interaction; the
+  interaction type the boundary with anything outside (people through a
+  UI, agents, systems, devices, timers), ours, not contradicted.
+- **Three platforms, haicc on top** (the human: "your fourth would in
+  our case come as 3 platform + haicc on top so that each of the three
+  'pillars' has standard packages in a dedicated organisation"): each
+  pillar a platform of its own, its standard packages in an organisation
+  of its own (interaction: `splectral`; data and transformation: to
+  name); haicc on top, one way of working across the three.
+- **A processing component holds processing state, not data** (the
+  human: "A processing component holds processing state, not no state").
+
 ## The proof of concept reviewed
 
 Reviewed 2026-11-18, at `e34d7d6` (the code that runs: the runtime's new
