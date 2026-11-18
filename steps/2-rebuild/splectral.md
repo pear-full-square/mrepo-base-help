@@ -508,21 +508,32 @@ for its lines: the same way of working, nothing new.
   pair a meaning); a page read committed as a managing command is (each
   pipeline its own commit times); a page waiting behind the request
   layers.
+- **Splectral's pipeline: Splectral components only; the communication
+  between the server and a component fixed** (the human, 2026-11-18, on
+  our asking whether Splectral's pair is processed by a light renderer
+  of the Splectral side's own, haiccing's runtime not changed for it:
+  "Yes splectral pipeline is splectral components only and fixed server
+  component communication"). So: the second pair is read and written by
+  the Splectral side alone, the server at one end, the component's
+  renderer at the other; the renderer runs the component's splectral
+  packages and nothing of haiccing's; the mrepo's runtime never reads
+  those boxes. Our reading of "fixed", put back, to confirm: what
+  passes over the pair is the same for every component, a closed set of
+  forms, none of a component's own: a page asked for, a page; data
+  asked for, its answer.
 
 ## Open, one at a time
 
-1. What processes Splectral's pair: put to the human, ours: a process
-   of the Splectral side's own, light, the renderer ("Component starts
-   light, simple renderer"), from the component's splectral packages;
-   the mrepo's runtime never reads those boxes, and haiccing's runtime
-   is not changed for it. The other way: the mrepo's runtime given a
-   second pair and a second pipeline.
-2. Who performs the second step (`splectral/install <name> <component>`,
-   an action of Splectral's own, ours): put, not answered yet; and who
-   starts and stops the renderer.
-3. The organisation in the tools and in this repository: a folder
+1. How the Splectral side of a component comes to life: put to the
+   human, ours: `splectral/install <name> <component>`, an action of
+   Splectral's own, lays the component's packages on top and makes the
+   second pair; the Splectral server starts its renderer ("the server
+   loads the package and starts it") and ends it, following the
+   component's service: started with its `service/start`, ended with
+   its `service/stop`, and with its runtime.
+2. The organisation in the tools and in this repository: a folder
    `splectral/` beside `haiccing/`, the tools run an organisation at a
    time.
-4. Parameters from the URL beyond the path; a static page's writes
+3. Parameters from the URL beyond the path; a static page's writes
    (buttons).
-5. The repositories' descriptions, for the human to create them.
+4. The repositories' descriptions, for the human to create them.
