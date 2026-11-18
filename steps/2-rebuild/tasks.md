@@ -2243,6 +2243,38 @@ concept's fixes (`distributed-applications.md`, "What comes of it");
 the how-tos written from now on with a script beside them, even before
 the validation runs them.
 
+**Ours, added** (2026-11-18, the session of the pair deploy, on reading
+it): a how-to's steps carry what each answers (`# expect: <fragment>`
+under a line, checked as `run.sh` checks), so a run proves what the page
+says and a reader sees the answer beside the command; the how-tos run
+grouped, an install a package or a pattern, in their order, not an
+install each (a transient install costs about 25 s before its first
+step); a how-to that needs Docker or the network says so and is skipped
+with the reason; the review by an AI agent as the docs' user kept beside
+them (it finds what cannot be found, which a run does not).
+
+**Setting the scene, in the background** (the human, 2026-11-18): "but
+preparing howtos can also be a background task. The deploy could be
+brought upto the point of the first step (if stepped) or runthrough).
+Then expressing intention to do a piece of work can result in a
+background task setting the scene". Our reading, put back, to confirm:
+
+- **A how-to has a scene and its steps.** The scene is what has to be
+  there before the first step (an install booted, a host in service, a
+  swarm); the steps are the work the how-to teaches.
+- **The scene is prepared in the background**, a transient install
+  brought up to the first step, while the person or the agent does
+  something else; the cost of an install is no longer waited for.
+- **Two ways through it**: stepped, a step at a time, each answer seen
+  against what it should be (learning, or doing the work for real); or
+  run through, every step and its check (a demo, the validation).
+- **An intention starts it**: saying what one is about to do (a person
+  to the agent, an agent to itself) starts the preparation of the scene
+  of the how-to that does it; when it is ready, the work begins there.
+- **Scenes compose**: a how-to's scene is often another's end (a host
+  deployed, then a cluster), so preparing one runs the how-tos before
+  it, validated on the way.
+
 ## `review-code`: the code changes the review finds, built after it
 
 The human (2026-11-17): "Do we list these as code modifications, which
