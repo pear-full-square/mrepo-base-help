@@ -2247,7 +2247,9 @@ package by package and lists here what needs code, built after it.
   own), communication (single writer, single reader both ways, each
   pipeline optimised by itself), data and processing (the data
   repository the only writer, doing the last mile; processing components
-  stateless transformers both ways, recovering from a refused merge),
+  transformers both ways holding processing state, not data (the human:
+  "A processing component holds processing state, not no state"),
+  recovering from a refused merge),
   upgrades (active-passive, rollback), from one machine to many (the pair
   deploy, a Hypercore per direction), open and next:
   https://claude.ai/artifact/73tvSUZoir4CsYdTCpiVxx
