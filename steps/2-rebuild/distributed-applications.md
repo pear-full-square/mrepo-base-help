@@ -63,6 +63,34 @@ platforms (`myctral`, `myctrans`, `splectral`), and they deploy the
 components. A direction, not a plan yet: Splectral, its components
 issuing commands through its server, is the first step.
 
+### To explore: a component deployed in two parts
+
+The human (2026-11-18): "I think I will want to explore how to split the
+deployment of a component in two parts: haicc and splectral or myctral.
+haicc creates an mrepo first, hand it over to splectral for component
+deployment. That way we could even have two runtimes." ("yes, record
+it"). The proof of concept has this shape once (`boot/deploy`, then
+`splectral/install`; its renderer a second process); exploring it makes
+it the rule for every platform. haicc owns what every mrepo has
+(creation, the registry entry, the service lifecycle, the management
+commands, the recorded pipeline); the platform owns what is its own
+(Splectral its pages and renderer, `myctral` its validation, merge and
+commit); two runtimes, one concern each. Ours, to settle:
+
+1. One writer per layer: haicc's runtime its management layers, the
+   platform's runtime its own.
+2. The handover: the mrepo's folder, the layers that become the
+   platform's, a record that the mrepo is now that platform's component
+   (a link record, as the pair deploy's).
+3. Lifecycle and order: haicc's service hooks start and stop the
+   platform's runtime; at teardown the platform lets go first, then
+   haicc removes the mrepo.
+4. One install shape for every platform (`splectral/install`,
+   `myctral/install`, `myctrans/install` alike), a pattern with a how-to.
+5. Failure in between: an mrepo created but never taken over, or a
+   handover failing halfway (the proof of concept's finding 4), a
+   defined way back.
+
 ## The proof of concept reviewed
 
 Reviewed 2026-11-18, at `e34d7d6` (the code that runs: the runtime's new
