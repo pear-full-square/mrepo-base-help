@@ -156,15 +156,37 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
     a test of its own, a report; a README a menu, read with `info`; a
     how-to a pattern; the inbox and outbox pattern and its record;
     deploy and teardown, no upgrade in place.
+- **Splectral a haiccing mrepo; its components managed by it, with the
+  same protocols and commands; the hops haicc's** (the human,
+  2026-11-18, on our reading of "separate" and our asking for the
+  family's kinds of package: "But splectral is a haiccing mrepo,
+  splectral components are managed by splectral, not haicc mrepo but
+  could use same protocols and commands. Component deployed by
+  splectral, not haicc, but same command. URI hops remain haicc."). Our
+  reading, put back, to confirm: the platform stays what it is, an mrepo
+  of haiccing's, deployed by the boot mrepo beside the host; a component
+  is no mrepo: it is deployed in Splectral and managed there, by
+  Splectral; the commands for it are the ones for an mrepo (`boot/deploy`,
+  `boot/teardown`, the service's), sent to Splectral, which executes
+  them its own way; a command gets to Splectral by haicc's hops, as to
+  any mrepo, and a component is a position in Splectral's `main`, not a
+  hop:
+
+  ```
+  haicc splectral boot/deploy docs <package>
+  haicc splectral/docs service/start
+  haicc splectral boot/teardown docs
+  ```
 
 ## Open, one at a time
 
-1. The family's kinds of package, for base: an app and an element set:
-   put to the human.
-2. An app's entry and what it is handed; how its program asks for an
+1. Whether the commands are those to the letter (`boot/deploy`, the
+   service's), executed in the Splectral mrepo by Splectral's own
+   packages in place of base's: put to the human, ours: yes.
+2. The family's kinds of package, for base: an app and an element set:
+   put, not answered yet.
+3. An app's entry and what it is handed; how its program asks for an
    element of a linked package; what a request to an app says.
-3. How an app is installed on the platform (deployed and torn down);
-   where the platform's package lives.
 4. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
 5. The names and the repositories, created by the human.
