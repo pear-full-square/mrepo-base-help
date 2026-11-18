@@ -170,23 +170,46 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   `boot/teardown`, the service's), sent to Splectral, which executes
   them its own way; a command gets to Splectral by haicc's hops, as to
   any mrepo, and a component is a position in Splectral's `main`, not a
-  hop:
+  hop (corrected by the next point: a component is an mrepo, a hop
+  to it haicc's):
 
   ```
   haicc splectral boot/deploy docs <package>
   haicc splectral/docs service/start
   haicc splectral boot/teardown docs
   ```
+- **A component is an mrepo, deployed by Splectral** (the human,
+  2026-11-18, on our reading "a component is no mrepo" and our asking
+  whether the commands are the same to the letter: "Component is mrepo
+  deployed by splectral"). Our reading above corrected: "not haicc
+  mrepo" said who manages it, not what it is. So: a component is an
+  mrepo, a child of the Splectral mrepo, deployed by it as the host
+  deploys a node; a hop to it is haicc's, through its shortcut in
+  Splectral's `main`:
+
+  ```
+  haicc splectral boot/deploy viewer <package>
+  haicc splectral/viewer service/start
+  haicc splectral boot/teardown viewer
+  ```
+
+  With what was said before: a simple mrepo, light, a renderer to start
+  with; "an mrepo with specific language", the language its packages
+  offer, those of the splectral family, made in haiccing's ways.
 
 ## Open, one at a time
 
-1. Whether the commands are those to the letter (`boot/deploy`, the
-   service's), executed in the Splectral mrepo by Splectral's own
-   packages in place of base's: put to the human, ours: yes.
-2. The family's kinds of package, for base: an app and an element set:
-   put, not answered yet.
-3. An app's entry and what it is handed; how its program asks for an
-   element of a linked package; what a request to an app says.
-4. The proposal's open questions: parameters from the URL; writes from
+1. Whether the deploy is base's as it is (`base-package-boot` linked in
+   the Splectral mrepo, a component deployed as the host deploys a
+   node), Splectral's own beginning after it (the server routing the
+   browser to its children): put to the human, ours: yes.
+2. How a component gets its data from the platform (a request of its
+   own to Splectral, its parent; or handed with the browser's request).
+3. The family's packages: an element set a protocol package, an element
+   an action; the app's own package, answering with pages; the
+   component's list. The earlier question, in this light.
+4. What a request a page costs (about 1 s a request through an mrepo's
+   layers, measured; "a cheaper request pipeline" moved back).
+5. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-5. The names and the repositories, created by the human.
+6. The names and the repositories, created by the human.
