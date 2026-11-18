@@ -68,7 +68,10 @@ The parts go as typed, unnamed; the mrepo interprets them.
 
 - `0`: done.
 - `1`: the command's own error, from the mrepo, also said on stderr.
-- `2`: not a command, or its arguments wrong.
+- `2`: not a command line `haicc` reads (a word that is none of its
+  own commands, a URI with no command after it), or its arguments
+  wrong. A protocol or an action the mrepo has not is the mrepo's
+  answer, an error: `1`.
 - `3`: something is missing: the boot mrepo, a package, a download.
 - `4`: no response in time.
 - `5`: a response with no completed form.

@@ -373,9 +373,9 @@ export async function execute (ctx, { actions = {} } = {}) {
       },
       // A continuation answered with the output: a script for who asked to
       // go on with (the terminal runs it with sh; an mrepo does not):
-      // continuation(script, at): the script, shell text calling haicc, and
-      // the position in this mrepo it is run for (`.`: this mrepo itself),
-      // its HAICC_AT. One a request.
+      // continuation(script, at): the script, its lines, and the position
+      // in this mrepo they run at (`.`: this mrepo itself), sent on by the
+      // terminal as haicc/script. One a request.
       continuation: (script, at = ROOT) => {
         if (continued) throw new Error('a continuation already')
         continued = continuationOf(script, at)

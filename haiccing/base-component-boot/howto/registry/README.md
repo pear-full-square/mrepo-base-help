@@ -3,8 +3,9 @@
 The install's mrepos listed from the registry, queried, and torn down by a query.
 
 The boot mrepo keeps the mrepo registry in its `main`, at `registry`: a
-node each mrepo it or its children deployed, by unique URI, with where
-it is on this machine, the package it came from and what runs it.
+node each mrepo it deployed itself, by unique URI, with where it is on
+this machine, the package it came from and what runs it. What those
+mrepos deploy in turn (a host's nodes) is in their own links, not here.
 
 ## Steps
 

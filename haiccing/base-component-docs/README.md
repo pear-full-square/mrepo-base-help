@@ -4,8 +4,9 @@ The docs component: the docs mrepo, the platform's documentation, deployed in th
 
 The docs mrepo holds the documentation packages and the `info` protocol,
 and documents every other package the sources offer: the install's
-manual. It is deployed in the boot mrepo, at `docs`, as part of the boot
-install; its runtime extracts its pages as it starts. Every other mrepo
+manual. It is deployed in the boot mrepo, at `docs`, by one command
+(below, "Deploying"): not with the boot; its runtime extracts its pages
+as it starts. Every other mrepo
 answers about itself, what is deployed in it; the whole platform is read
 here.
 
@@ -36,10 +37,36 @@ run), each at its keyword below the top: `haicc docs info/get boot`.
 What is installed is what is documented; later the solution's list
 names them.
 
+## Log
+
+What a request did is in its own record, `log`: its entries, each
+`{ level, event, time, ... }`; `info` unasked (what it changed,
+`request.changed`; its metrics, `request.metrics`), more with `--flags
+log=verbose` or `log=debug`. The requests done are read at the request
+layer:
+
+```
+haicc host crud/read . --flags log=verbose
+haicc host crud/read "done/*" --flags layer=request
+haicc host crud/read "done/*[value/value/protocol='crud']" --flags layer=request
+```
+
+The levels and the entries: `package mrepo request`.
+
+## Howto
+
+The how-tos are each package's, below its keyword: `<keyword> howto`,
+then a how-to's name. `boot howto` (the boot, a deploy, the docs mrepo,
+the registry), `haicc howto` (a hop, a script, a cluster), `splectral
+howto`, and `package howto`: making a package of your own, a how-to a
+pattern (written in the development repository: `package howto
+package`).
+
 ## Deploying
 
-By the boot mrepo, with a command at the root, until the boot install
-does it. No service: its boot hooks activate `info` and extract it.
+By the boot mrepo, with a command at the root: it is not deployed with
+the boot, you deploy it. No service: its boot hooks activate `info` and
+extract it.
 
 ```
 haicc . boot/deploy docs base-component-docs
@@ -47,7 +74,7 @@ haicc docs info/get
 haicc docs info/get hdlc
 ```
 
-## Package
+## Its files
 
 - No protocol and no code of its own: `main.js` is the dispatcher, the
   bundle's main, generated; it offers the tests.

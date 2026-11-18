@@ -25,8 +25,9 @@ export async function deploy (exec, { uri, args = [], flags = {} }, { link: kept
   const { store, sources } = await origin(exec)
   // A continuation asked for (the flag: continuation=<script>): a script
   // of the package deployed, by its name, answered with the deploy for
-  // who asked to go on with, run for the deployed mrepo (HAICC_AT, its
-  // position). One that is not there: refused, before anything is built.
+  // who asked to go on with, run at the deployed mrepo's position (sent
+  // on as haicc/script). One that is not there: refused, before anything
+  // is built.
   const script = typeof flags.continuation === 'string' ? flags.continuation : null
   if (script) fetch({ store, sources, pkg: target })
   const text = script ? scriptOf({ store, pkg: target, name: script }) : null

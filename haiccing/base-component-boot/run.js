@@ -87,7 +87,10 @@ try {
   let list
   try { list = JSON.parse((await openRepo(repo.backend).read('/packages/layer.json')).toString()).packages } finally { await repo.close() }
   const placed = await place({ dir: viewOf(work, NAME), store: storeOf(work), sources, list })
-  log('info', 'packages', placed)
+  // (at info the packages by name, what an agent reads; each with its
+  // hashes and addons at verbose)
+  log('info', 'packages', { packages: Object.keys(placed.packages ?? {}), committed: placed.committed })
+  log('verbose', 'placed', placed)
 } catch (err) {
   // The mrepo there or not: the request printed, the error said.
   console.log(JSON.stringify(done({ ok: false, error: err.message })))
