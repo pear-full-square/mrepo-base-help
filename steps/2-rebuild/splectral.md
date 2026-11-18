@@ -463,17 +463,41 @@ for its lines: the same way of working, nothing new.
   protocol (`protocol/activate . info`), so the minimum is likely the
   runtime, the protocol protocol and the service, and `info` where a
   component answers about itself.
+- **A dual install, proposed by the human** (2026-11-18, on our asking
+  how the platform gives the minimum (ours: a setting of the platform's
+  package, laid in first by the deploy): "Would it be possible to go a
+  dual install. First haicc, then splectral deploying splectral packages
+  on top?"). Checked, and possible; ours: better than the setting, which
+  is withdrawn for it.
+  - **The first step is there today**: `base-package-service` deployed
+    as a target is "an mrepo with a service and nothing else" (the
+    runtime, `info`, the protocol protocol, the service; its hooks
+    `boot` and `initialise`): `haicc splectral boot/deploy viewer
+    base-package-service`. The boot protocol is not changed, and the
+    minimum is a haiccing package's list, nobody's setting.
+  - **The second step is new**: a list laid on top of an mrepo that is
+    built. `mrepo-base-boot` has the parts (`lay`, a list's `mrepo/`
+    parts into a folder, a later file replacing an earlier one; `place`,
+    the packages hard linked into the mrepo's `packages/` and their
+    list committed), used so far only before an mrepo is built. New:
+    the parts laid into the layers of a built mrepo; its packages list
+    extended; its runtime started again, to load the protocols added.
+  - **To mind**: a hook is one file a transition and a later file
+    replaces an earlier one: the base has `boot` and `initialise`, so a
+    component brings `start` and `stop` and replaces nothing, or hooks
+    of the two steps are joined; it is the second half of a deploy, not
+    an upgrade in place: a teardown takes the whole, a change is both
+    steps again.
 
 ## Open, one at a time
 
-1. How the platform gives the minimum: put to the human, ours: a
-   setting of the platform's package says what its components are
-   given; the deploy lays those in first, from the platform's own
-   placed packages, then the component's list; in the boot protocol,
-   for every platform.
+1. The second step: Splectral's own action, in its protocol, at a
+   child deployed by the first (`splectral/install <name> <component>`,
+   ours), carrying `mrepo-base-boot` for `lay` and `place`: put to the
+   human.
 2. The organisation in the tools and in this repository: a folder
    `splectral/` beside `haiccing/`, the tools run an organisation at a
-   time; how `boot/deploy` names a package of another organisation.
+   time.
 3. Whether a terminal's command for a component still gets there by
    haicc's hop through the Splectral mrepo: assumed, not confirmed.
 4. Parameters from the URL beyond the path; a static page's writes
