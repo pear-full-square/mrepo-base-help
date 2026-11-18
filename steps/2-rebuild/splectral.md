@@ -13,8 +13,8 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
 - The server is the data layer: it manages the commands the pages run;
   later caching there. It carries no UI elements of its own.
 - The unit on the Splectral side is self-contained as a haiccing package
-  is: its commands, its UI element set (by copy), its info, its own page
-  or pages.
+  is: its commands, its UI element set (by copy: replaced below, a linked
+  package), its info, its own page or pages.
 - A Splectral family of its own, its packages in the `splectral`
   organisation.
 - One gateway, the inbox: a command from the browser is a `haicc`
@@ -82,17 +82,35 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   not run by themselves: what they offer is instantiated when the top
   package's processing asks for it, as a request instantiates an action
   of a linked package's protocol.
+- **Packages with UI elements only; the details ours** (the human,
+  2026-11-18: "There would be packages just with UI elements, for us to
+  decide the details."). Our question: whether a UI element set is a
+  linked package of the component's list, rather than a module carried
+  by copy. So it is; this replaces "by copy" above. **The details, ours,
+  said to the human**:
+  - one package, one element set, named; an element asked for by name,
+    `<set>/<element>` (`base/tree`), as an action is, `<protocol>/<action>`;
+    never imported by another package;
+  - an element is a function: data in (a command's answer, as the top
+    package hands it), a fragment of a page out, its style with it; it
+    fetches nothing itself: the data is the server's, the processing the
+    top package's;
+  - documented as a protocol's actions are: the set's config in its
+    package, a folder an element in its module, its README with its
+    signature, its arguments, what it returns;
+  - the first set, for base, the proposal's six: page, tree, document,
+    table, log, buttons;
+  - its own test: every element instantiated on a fixture; one not run
+    fails.
 
 ## Open, one at a time
 
-1. What a linked package offers (base: one package, one protocol, its
-   actions), and whether the UI element set is such a package, linked,
-   rather than a module carried by copy: put to the human.
-2. The contract: what a started package is handed (the data: a command
-   run, the records followed) and what it answers a routed request
-   with; its entry file; in the server's process or its own.
-3. Where the server's package lives, and the Splectral mrepo's list.
-4. The proposal's open questions: parameters from the URL; writes from
+1. The contract: what a started top package is handed and what it
+   answers a routed request with: put to the human. Then its entry
+   file; in the server's process or its own.
+2. Where the server's package lives, and the Splectral mrepo's list.
+3. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-5. The names and the repositories (`splectral/base-docs-package`,
-   `base-view-docs`, `base-view-install`), created by the human.
+4. The names and the repositories (`splectral/base-docs-package`,
+   `base-view-docs`, `base-view-install`, an element set's), created by
+   the human.
