@@ -112,8 +112,17 @@ depends on nothing outside itself.
 
 - **`pear-full-square`: the p2p infrastructure.** The p2p series, p2p-git,
   mycelium on the p2p layer, the node and its managers, and the Splectral
-  platform (for seeing and working with running systems, the swarm
-  first).
+  platform's engine (`splectral-server`; the platform itself, made with
+  it, is the haiccing package `base-package-splectral`).
+- **`myctral`: data repositories** (the human, 2026-11-18), the data
+  pillar of a distributed application (below, "Distributed
+  applications"): packages made with mycelium's engines that validate,
+  merge and commit its data structures; the mycelium stack, built on the
+  streaming layer, belongs here.
+- **`myctrans`: data transformation** (the human, 2026-11-18), the
+  transformation pillar: packages that transform, prepare changes and
+  manage the processing. Each of the two builds up the core packages of
+  its area, a natural separation of concerns.
 - **`splectral`: (interaction) components on the Splectral platform**, completely
   agnostic of p2p: they work in the platform's abstract world (hosts,
   nodes, resources by URI, activity), as mycelium works with the p2p
@@ -273,6 +282,50 @@ visible together once all of them are there (or once the one who started
 it records that they are), and a transaction that is not completed is
 simply never shown and can be cleared. It is the pipeline's request
 branch, one commit at the end, across mrepos.
+
+## Distributed applications
+
+Discussed with the human, 2026-11-18, from the Splectral proof of
+concept: the direction distributed applications on p2p take, and how the
+packages for each responsibility are organised. Agreed as direction; the
+practicalities are designed when the work reaches them.
+
+- **Three pillars, haicc on top.** Three component types are enough:
+  data, transformation, interaction. Each pillar is a platform with its
+  standard packages in an organisation of its own: `myctral`, `myctrans`,
+  `splectral`. haicc is one way of working across the three: the same
+  commands and records, install and lifecycle, the registry, routing.
+- **Interaction is the boundary with anything outside**: a person
+  through a UI, an AI agent, another system, a device, a timer.
+  Splectral, the first platform, starts with components that issue
+  commands through its server, the terminal's equivalent.
+- **A central server and self-contained components.** The server
+  installs a component and asks for its lifecycle with the same
+  commands; once installed, a component runs on its own.
+- **Single writer, single reader, both ways.** Each direction between
+  the server and a component is one channel with one writer and one
+  reader; each channel's transport is chosen for it alone (a folder, a
+  Hypercore, an RPC stream), the forms over it unchanged.
+- **Streaming applications.** They work on immutable data change
+  records. The data repository (`myctral`) validates, merges and commits
+  mycelium's data structures, immutable at their base; a commit updates
+  the higher-level components built on them (mutable records and the
+  like). `myctrans` components transform, prepare changes and manage the
+  processing; they hold processing state, not data. A conflict is
+  negotiated between the two: the repository refuses and says why, the
+  component prepares the change again.
+- **Upgrades are active-passive**: a new version deployed beside the
+  old, switched to, rolled back by switching back; deploy and teardown,
+  no upgrade in place.
+- **An application is a haicc repository at the top** that deploys the
+  three platforms; the platforms deploy the components. Realising it
+  takes time.
+- **To explore: a component deployed in two parts**: haicc creates the
+  mrepo and hands it over to the platform, which deploys the component
+  on it; the component can then have two runtimes, one writer per layer.
+- **Proposed, ours, not agreed**: the pipeline engine (above) as
+  `myctrans`'s core, a pipeline the transformation that prepares a
+  change, the data repository's commit its last step.
 
 
 ## Agents
