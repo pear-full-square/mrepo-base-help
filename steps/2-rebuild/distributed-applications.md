@@ -33,11 +33,16 @@ code: the proof of concept's review, and what comes of it.
   components. The mycelium repository will have the full mycelium stack
   built on the streaming layer. Those components are then part of
   myctral. And data commit in a data repo means that the higher level
-  components are accordingly updated (mutable records etc.)" Our reading,
-  to confirm: what a data repository validates and commits is a change
-  record, immutable; the merge into the visible state is `myctrans`
-  components'; a conflict between two changes is resolved where they are
-  merged, not refused at the commit.
+  components are accordingly updated (mutable records etc.)" Our reading
+  (that `myctrans` merges) corrected by the human: "data repo validates
+  and commit the immutable based data structures (of mycelium); the
+  merge is myctral, in the data repository, myctrans transforms,
+  prepares and manages; Conflict is resolved in negotiation between the
+  data repo and the data processor." So: the data repository validates,
+  merges and commits mycelium's data structures, immutable at their
+  base; `myctrans` components transform, prepare the changes and manage
+  the processing; a conflict is negotiated between the two (the
+  repository refuses and says why, the component prepares again).
 - **Splectral starts with the terminal equivalent** (the human): "we
   start on spectral with component that issue commands through the
   server. However, They could also link in data into their mrepo (more
