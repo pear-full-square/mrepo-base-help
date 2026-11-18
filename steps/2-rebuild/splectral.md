@@ -593,6 +593,96 @@ for its lines: the same way of working, nothing new.
   in the runtime protocol (`start`, `stop`, `lay`); the boxes queues;
   no documentation package of the family yet.
 
+## From the other session (2026-11-18): what the proof of concept meets
+
+The session that built the pair deploy (`pair.md`) and fixed the docs
+review's findings, on the human's word ("put the note in splectral.md"),
+for the colleague building the proof of concept:
+
+- **"Pair" is two things.** `pair.md`'s pair deploy is a node in a
+  container on its own haicc install (`boot/deploy --flags container`,
+  `mrepo-base-boot`'s `internal/pair`, built and in `main`). Here a pair
+  is a component's inbox and outbox. One of the two wants another name
+  before either is documented further; ours: "boxes" for the component's.
+- **The boot protocol changed today**, in `main`: `deploy`, `teardown`
+  and `redeploy` route a child linked `how: container`; `internal/pair`
+  is new; `mrepo-base-request`'s flags know `container`. The dual
+  install's second step touches `mrepo-base-boot` (`lay`, `place`):
+  start from `main` as it is.
+- **A runtime that stops taking its inbox in**, once in nine runs of the
+  haicc command's test (`tasks.md`, the open bug): a component that stops
+  answering may be it. The runtime now writes `runtime-stall.json` beside
+  its `.git` with the step a pass stalls at; its presence, and what it
+  says, is what we need to find the cause.
+- **One build at a time on `sources/`**: a haicc test started while
+  bundles are rebuilt hangs. Pushing is fine: what is pushed to
+  `execute/main` is merged before the next push, as today.
+- **Of use to the proof of concept**: `test/container.sh` and
+  `test/pair.sh` in `base-linux-haicc` show an install made and spoken to
+  through inbox and outbox files alone, with a reply topic in each
+  request's record (a request without one is answered to nobody: the
+  pair's first bug); `haicc <URI> haicc/script` runs lines where the URI
+  points, a renderer's hook lines included.
+
+**The human's answer** (2026-11-18) to the other session's view (its
+doubts: speed, what the base mrepo is for): "The splectral component
+mrepo will be for its own state and caching. Speed doesn't concern me
+because of the additional patterns that can be applied to speed it up.
+Data can even be linked into the repo, there are loads of options. The
+design explores two patterns: an application processing context and an
+equivalent UI interaction to the terminal command line." So: the base
+mrepo is the component's own state and its cache; speed is not a
+concern of the design (patterns for it later: caching in the mrepo,
+data linked into the repository, the RPC server); and what the design
+is for is two patterns: **an application processing context** (a
+component: its mrepo, its renderer, its pipelines) and **a UI
+interaction equivalent to the terminal's command line** (a browser's
+request a `haicc` command, its answer a page). The proof of concept
+proves the two patterns, not the speed.
+
+**The component server pattern, a distributed application** (the human,
+2026-11-18): "I think I will use the component server pattern as a
+traditional distributed application with central server and services in
+distributed components, again with a self contained approach." So the
+pattern is a distributed application's: a central server (the platform,
+routing and providing data) and services in components, each
+self-contained, that need not run where the server does. Ours, said to
+the human: the inbox and outbox are already where a component is, not
+how it is reached, so a component in a container (the pair deploy) or
+on another node takes the same forms; what a distributed form adds,
+each later: where a component runs (the registry), one that does not
+answer (the server says so, a time limit), the forms between server and
+component versioned, and a transport beyond a shared folder (the
+replication over a stream, `tasks.md`).
+
+**The server manages install and lifecycle** (the human, 2026-11-18):
+"Once deployed the server manages install and lifecycle." Our reading,
+put back, to confirm: once the platform is deployed, its server is who
+installs a component (both steps of the dual install) and drives its
+lifecycle (initialise, start, stop, teardown), as a distributed
+application's central server manages its services; it does so by the
+same commands, sent into the component's own inbox, haicc's pipeline,
+recorded. That keeps "the component starts its renderer": the server
+decides and asks (`service/start`), the component's `start` hook starts
+the renderer. The server manages, the component executes; the server
+still starts no process of a component's.
+  The human, on our asking whether the server controls a component's
+  processes directly: "No, a component once installed runs dividin self
+  contained" (read as "independently, self-contained"). So not directly:
+  installed, a component runs on its own, self-contained; the server
+  installs it and asks for its lifecycle by the commands, nothing more.
+
+**Single writer, single reader, both ways** (the human, 2026-11-18): "And
+communication is single writer/ single reader both ways." So each
+direction between the server and a component is one channel with one
+writer and one reader: the component's Splectral inbox written by the
+server only and read by the component only; its Splectral outbox
+written by the component only and read by the server only. Nothing else
+writes or reads either. Ours, said to the human: no locking, no
+conflict, an order kept by its writer; and it is the form a Hypercore
+has (one writer, any reader), so each direction becomes one core when a
+component is on another node, with nothing changed in the pattern.
+
 ## Open, one at a time
 
 1. What the proof of concept showed, with the human: the page, the
