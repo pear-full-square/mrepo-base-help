@@ -102,6 +102,24 @@ write. The node on the host, the bridgehead, links it at the position
 `container` and reaches it through its inbox and outbox folders, as any
 linked mrepo.
 
+A node can instead run in a container on its own haicc install, a pair
+(`boot/deploy <position> <package> --flags container`, `mrepo-base-boot`).
+The container's haicc home is a folder of the host's,
+`<work>/containers/<swarm>/<name>/`, mounted into it, the host's sources
+read only at their own paths; it boots itself, and its own boot mrepo
+deploys the node at the same position, by the same unique URI. The host
+keeps a link (`how: container`) to the node's folder inside it and no
+runtime of its own for it:
+
+- **Commands for the node** go as to any linked mrepo: a file in its
+  inbox folder, the answer from its outbox folder.
+- **Platform commands on it** (its deploy, teardown, redeploy) go to the
+  container's boot mrepo, through its inbox, and are executed there.
+- **The host never starts, stops or signals** its runtime, nor uses an
+  absolute path read from its data; the container is the host's, through
+  Docker (`--init`, as the host's user), found by the folder it is
+  labelled with.
+
 ```
 <dir>/
   .git/          its layers

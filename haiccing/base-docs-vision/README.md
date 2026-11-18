@@ -89,6 +89,59 @@ Bundles are the transport between repositories outside replication:
 self-contained, immutable, verifiable, shared by hash. Loose objects stay
 the working store; deltas are an optimisation for later.
 
+Where an mrepo's layers are kept (the human, 2026-11-12; settled, not
+built):
+
+- `main` on the Corestore is the external state; what is on the
+  filesystem is the internal state.
+- **Only `main` on the Corestore.** On disk, by default, every other
+  layer, unless an exception is raised; at least the inbox and the
+  outbox.
+- Needed: a folder synced with the Corestore, both ways.
+- The code does not follow the rule yet: under `p2p` storage it routes
+  `runtime`, `packages` and `protocols` to the Corestore as well.
+
+## Solutions
+
+The naming (the human, 2026-11-12; settled, not built):
+
+- **A package** brings a protocol and its part of the mrepo structure.
+- **A component** (`base-component-<name>`) delivers a service to the
+  solution; the components are its physical view.
+- **An application** (`base-application-<name>`) delivers user-facing
+  functionality, a logical view within the solution: an mrepo on one or
+  more components, one mrepo per component it spans, exclusive (a child
+  mrepo, at `main/<application>/`) or shared (a section of the
+  component's `main`, with its own protocols). The URI is the same
+  either way. With several applications there are relationships between
+  them.
+- **A solution** (`base-solution-<name>`) is a number of applications and
+  components, possibly across swarms.
+- **Why it matters**: haicc can place deployments again, to satisfy the
+  resources needed, with nothing changing for the application; with the
+  replication p2p gives, a new install can come in as passive before the
+  switch.
+
+Open: how this application relates to the distributed application of
+2026-11-18 (a haicc repository at the top deploying the three platforms,
+"Distributed applications"), to be reconciled.
+
+## Deployment
+
+What haicc is for (the human, 2026-11-12):
+
+- **Its concern is deployment**, global, across swarms; also setting up
+  and managing the bridges between swarms.
+- **Two sides**: on the machine, an app that manages the downloads of
+  the sources and installs from scratch; on the swarm's side, an mrepo.
+- **Its commands are issued on the host**; what they reach beyond it is
+  haicc's own concern.
+
+Superseded since: that the haicc mrepo is the only one with the boot
+protocol (the boot mrepo, the host and Splectral all deploy), and the web
+of haicc mrepos proxying into a node's container (a node in a container
+is a pair, on its own install: `base-docs-haicc`, "pair").
+
 ## Organisations
 
 Agreed 2026-11-02. The layers: the p2p and language substrate, mycelium
@@ -404,6 +457,63 @@ phase; scheduled, it leaves the vision):
 6. **Distribution**: components as pairs in containers, then one
    Hypercore per channel direction for a component on another node.
 
+
+## Help and haici
+
+The human, 2026-11-13 to 2026-11-15. What was built of it: the static
+side as the `info` protocol (a package's pages read by keywords), the
+how-tos as pages in the packages, read with `info`; their direction,
+runnable how-tos, is `base-docs-hdlc`'s ("Working demos"). The rest is
+direction.
+
+- **Three kinds of help** (settled): static help, about the packages'
+  composition, design and decisions, complete; dynamic help, a full
+  command described in context; and the how-tos, "very important": "the
+  entry point to scope an activity on the platform", "what do you want to
+  do plus how-to options".
+- **Dynamic help** (ours, proposed): a full command with `--help`
+  answered with its action's documentation and the check where it stands
+  (active here, its arguments right), nothing executed; the how-tos that
+  use it.
+- **`haici`, human AI continuous improvement** (settled): it starts from
+  the request log, "the one place that has all the information", parsed
+  into its sections (metrics, warnings and errors, audit, the use of the
+  protocols, what was asked of help and not found); learning simply
+  first, sophistication built up. Its findings are rooted in the package
+  they belong to, not where they were seen, and reach the packages that
+  use it. Ours, proposed: `haici` proposes, a change goes through the
+  development process, it never edits a package.
+- **Headless Claude** (settled): a user, a generator ("not only user"),
+  and the filler of what is not built yet; "generating dynamic howto
+  feedback"; "our setup is recursive and fractal". Ours, proposed: a
+  generated how-to counts once a second headless Claude, given only the
+  install and the activity, finds it and does it; an action documented
+  and not coded run by headless Claude with its README as its contract,
+  until code replaces it.
+- **Feedback on a command** (settled, with "a proper flag handling
+  unit"): a flag that rewrites a command into `haici`'s feedback command,
+  run where the command would have run, the command itself not run.
+
+## Queries across links
+
+XPath across linked mrepos (the human, 2026-11-14 and 2026-11-15;
+settled, not built; the first phase, inside one mrepo, is
+`base-docs-xpath`):
+
+- **Two scenarios**: juxtaposed, the local structure and a linked mrepo
+  side by side, each its own stretch of the URI (`crud/read
+  host/swarms/*`); stacked, several layers at one position, one on top
+  of another (the overlays, "Pipelines").
+- **The segmentation is haicc's**: a query that comes in is rewritten
+  into a pipeline of `haicc` segments and node set merges ("pure haicc as
+  selecting commands and node set merging"); the rewrite made in each
+  mrepo as the query arrives there, its shortcuts its own.
+- **No cascading**: a linked mrepo answers with node sets already merged
+  as far as its own links go; a caller merges one level only.
+- **Single or multiple requests**: a query's plan run in one request or
+  a step a request, depending on how long processing takes; the mode a
+  configuration option, the first implementation measured to find where
+  one becomes the other.
 
 ## Agents
 

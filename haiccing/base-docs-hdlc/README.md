@@ -73,6 +73,10 @@ wrong, it is raised.
   failure stops the work and says why.
 - **Knowledge stays with its concern**: a part knows only what its
   concern needs.
+- **What is there is used as it is**: something new is made only where
+  nothing does it already; a new platform or application takes the
+  platform's protocols and commands as they are and adds only what is
+  its own.
 
 ## Documentation
 
@@ -84,6 +88,13 @@ wrong, it is raised.
   its own. A decision and its reason: the record of the work.
 - **The rules are checked**, not remembered: the README rules, the code
   rules and a package's structure run as tests.
+- **Worked from the packages** (the human, 2026-11-18): the
+  documentation lives in the packages and is kept there as the
+  implementation goes on, a design still changing included; the
+  direction of what is not built is the vision's
+  (`base-docs-vision`). The development repository's records hold the
+  history: what was said, decided, found, scheduled; what settles moves
+  into the packages and leaves the records.
 
 ## Working demos
 
@@ -153,6 +164,14 @@ Before every commit:
 - **The implementation validation**: every pattern a package implements
   (its kind, a layer, hooks, a service, a continuation script) has a
   how-to naming it; one without fails the code check.
+- **A report certifies the content it was run on**: after a commit of
+  generated files (the modules' copies, a dispatcher), the changed
+  packages' pre-releases again before the work is final; the strict
+  release check says every report current.
+- **A test waits for a process to end** (`kill -0`), not only for it to
+  stop answering; nothing left running after a run.
+- **A test run's last lines are read**: an apostrophe in a test's title
+  or message breaks its file, and a filter on the output hides that.
 
 ## Branches
 
@@ -193,11 +212,23 @@ Before every commit:
   built.
 - **Each part of the work is recorded**: what was built, what was
   decided while building and why, what was found, how it was validated.
+- **How a task reads**: **settled**, what a person said or confirmed,
+  built as written; **left to us**, handed over, ours to decide and
+  change while building, said what was done; **proposed**, ours, put to
+  a person and not yet answered, confirmed before it is built unless
+  the task says it is ours; **where**, the code found when the task was
+  discussed, a start, checked again.
+- **From vision to work**: a direction agreed with a person, and the
+  order of its steps, are the vision's until they are scheduled; a step
+  designed and requested as a phase becomes scheduled work, taken up as
+  requests and reported back, and leaves the vision.
 
 ## Tooling
 
 Today's tooling, in the development repository's `tools/`, until the
-HDLC is a protocol of its own:
+HDLC is a protocol of its own. Kept to become packages: one tool, one
+concern; what two tools share in `lib/`; a tool reads and writes files and
+prints one line of JSON a result, so another can use it.
 
 - `install.sh`: the dependencies, replayed from the lockfile.
 - `release.js`: every package assembled and bundled into the sources,

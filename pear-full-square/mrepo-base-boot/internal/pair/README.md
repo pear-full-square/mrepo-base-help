@@ -27,3 +27,15 @@ mounted into it: this host uses only the inboxes and outboxes in it.
 `PAIRS` (`containers`, under the work folder), `IMAGE`
 (`debian:bookworm-slim`), `HOME` (`/haicc`, the container's haicc home
 inside it).
+
+## Not yet
+
+- **The node brought back on a restart**: started again, the container
+  boots its install again; whether its boot starts the node's runtime
+  again is to be checked.
+- **The shared folder narrowed**: today the container's whole haicc home
+  is shared (a prototype's simplest); settled for later, only the
+  container's boot mrepo and the node shared, every mrepo the node
+  deploys in the container only.
+- **Replication** of a node's commits, for a node on another machine, where
+  no folder is shared: one Hypercore per direction.

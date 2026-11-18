@@ -12,6 +12,10 @@ only this repository's.
 - **The aim:** full AI autonomy, from a need to running software that
   satisfies it. Structure and design are decided with the human, not
   alone; discuss first, write what has settled.
+- **Worked from the packages:** what settles goes into the packages'
+  documentation and is kept there as the implementation goes on
+  (`base-docs-hdlc`, "Documentation"); the records here hold the
+  history.
 
 ## What is here
 
@@ -44,10 +48,11 @@ history, and each package and module has its own repository).
   and, after a context reset, `steps/2-rebuild/handover-next.md`: how the
   human works with us, what is done, what is open. Scheduled work:
   `steps/2-rebuild/tasks.md`. Designs in discussion:
-  `steps/2-rebuild/xpath.md`, `steps/2-rebuild/help.md`, the pair deploy
-  `steps/2-rebuild/pair.md`, Splectral's server and package template
+  `steps/2-rebuild/xpath.md`, Splectral's server and package template
   `steps/2-rebuild/splectral.md`, distributed applications
-  `steps/2-rebuild/distributed-applications.md`. The package
+  `steps/2-rebuild/distributed-applications.md`. Offloaded into the
+  packages, a page pointing there: the pair deploy (`pair.md`), help
+  and haici (`help.md`). The package
   review: `steps/2-rebuild/review.md`.
 
 ## Validation, the commands
@@ -56,10 +61,8 @@ The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
 
 - A package's pre-release: `tools/bare tools/package-test.js <org>/<package>` (`haiccing/`, `splectral/`).
 - Everything: `tools/bare tools/release.js --strict`: every report
-  `current`. After a commit of generated files (the modules' copies,
-  `main.js`), the changed packages' pre-releases again before the work
-  is final: a report certifies the content it was run on (the local
-  agent's finding, 2026-11-18).
+  `current` (a report certifies the content it was run on:
+  `base-docs-hdlc`, "Validation").
 - The checks: `tools/bare tools/info-extract.js` (and `--files`),
   `tools/bare tools/code-check.js`.
 - The boot's test, several times:
@@ -94,8 +97,6 @@ repository's and its tools'.
   rebuilt hangs.
 - **Before a long run**: `tools/bare tools/release.js`, then each changed
   package's own test from its folder: a slip is found in seconds.
-- **A test waits for a runtime's process to end** (`kill -0`), not only
-  for it to stop answering.
 - **A removal by a variable is refused** by a safety check: write it as
   `"${VAR:?}"`, or make a fresh folder with `mktemp -d`.
 - **What it all looks like**: `tools/bare tools/info-view.js` deploys the

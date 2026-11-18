@@ -121,16 +121,7 @@ waits for the go), `request-layer-access` (task 9), `xpath-phase-2`
 | | `runnable-howtos` | working demos as documentation: every how-to a script the validation runs, an AI its primary user | feedback on the documentation, proposed (2026-11-18), with `install-tests` |
 | P2 to P8 | above | the other priorities | not discussed yet |
 
-How to read a task:
-
-- **Settled** is what the human said or confirmed. Build it as written.
-- **Left to us** is what the human handed over: ours to decide and to
-  change while building. Say what was done.
-- **Proposed** is ours, put to the human and not yet answered. Confirm it
-  with the human before building ("go"), unless the task says it is ours
-  to keep or change.
-- **Where** names the code found when the task was discussed, to start
-  from; check it again, the code may have moved.
+How to read a task: `base-docs-hdlc`, "Work" (moved 2026-11-18).
 
 Validation, the commit, the merge and the product repositories: as
 `CLAUDE.md` and `handover-next.md` say, for every task.
@@ -427,9 +418,8 @@ The human, 2026-11-14. Part of the standard: it is in the template.
   template's own report, `full.json`, with `full.md`, the same to read (a
   sentence, an overview table, a table of the units; the human's wish),
   written from it by the pre-release.
-- A rule found on the way: what is tested must not depend on a report
-  (the content hash leaves the reports out): no link from a README to a
-  report file.
+- A rule found on the way, now `base-docs-package`, "READMEs", 10: no
+  link from a README to a report file.
 - `tools/package-test.js <package folder>...`: a package's pre-release.
   `tools/package-bundle.js` gives every bundle its `content` (a hash of
   everything in it but its test reports), in the manifest;

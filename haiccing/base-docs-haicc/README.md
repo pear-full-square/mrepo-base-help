@@ -30,9 +30,15 @@ docs mrepo: `haicc docs info/get <keywords>`.
   it. `haicc host <protocol>/<action>`.
 - **A swarm and its nodes**: a node is an mrepo at
   `swarms/<swarm>/<name>` in the host, `<swarm>/<name>`; it can have a
-  replica in a container, linked as `container`.
-- **Splectral**: an mrepo beside the host, showing an install in a
-  browser.
+  replica in a container, linked as `container`; or it runs in a
+  container on its own haicc install, a pair (`boot/deploy ...
+  --flags container`).
+- **Splectral**, `local/splectral`: an app platform beside the host. It
+  deploys its components with the boot protocol, installs their
+  Splectral side (`splectral/install`) and serves their pages in a
+  browser; its server is the data layer, running the commands a
+  component asks for as a terminal does. Its components are packages of
+  the `splectral` organisation; the first is the info viewer.
 
 ## Terms
 
@@ -69,5 +75,14 @@ docs mrepo: `haicc docs info/get <keywords>`.
 - **docs mrepo**: the install's documentation, every package's pages,
   read with `info/get`; any other mrepo answers about itself.
 - **HDLC**: the haicc delivery lifecycle, how work is done.
+- **pair**: a node run in a Docker container on its own haicc install.
+  The host links it (`how: container`) and forwards every command for it
+  to it; a platform command acting on it (the boot protocol's) goes to
+  the container's platform, which executes it; the container's
+  lifecycle is the host's, through Docker.
+- **app platform**: an mrepo that deploys its components with the boot
+  protocol and adds only what is its own; a component deployed in two
+  parts, a plain mrepo first, the platform's side laid on it after.
+  Splectral is one.
 - **haici**: human ai continuous improvement, findings from the request
   log, fed back to the HDLC.

@@ -16,23 +16,8 @@ illustration only: none of it is decided.
 
 ## The picture
 
-**Settled** (the human)
 
-- "Our current model in main is a local data structure that may have
-  remote repositories linked in various places." Where a shortcut to
-  remote mrepos exists there are several layers, which XPath has to
-  process, and whose results have to be merged.
-- "We now have the haicc command that makes these uri segment hops up to
-  the shortcuts clear", and then the parallel XPath result sets that
-  need merging.
-- **Two scenarios**, not one (the human's correction of our first
-  example):
-  - **juxtaposed**: the local structure and a linked mrepo side by side,
-    each its own stretch of the URI. `crud/read host/swarms/*`: local up
-    to `host`, the linked mrepo's data after it;
-  - **stacked**: several layers at one position, one placed on top of
-    another (several sources at a node, local data beside them: the
-    overlays of `vision.md`).
+Moved (2026-11-18) to `base-docs-vision`, "Queries across links": the settled picture, its two scenarios.
 
 ## The segmentation is haicc's
 
@@ -40,14 +25,8 @@ The human's question: use `haicc` for the segmentation, or build a
 parallel segmentation in the XPath library? Our answer: `haicc`. The
 human built on it, below.
 
-**Settled** (the human)
 
-- **A query that comes in is rewritten** into a pipeline of `haicc`
-  segments and merge operations. "Since the end result of xpath is a
-  node set it is pure haicc as selecting commands and node set merging."
-- **No cascading**: "the linked mrepo returns nodesets that are already
-  merged as far as other linked mrepos is concerned within its data." A
-  caller merges one level only: what it fanned out itself.
+Moved (2026-11-18) to `base-docs-vision`, "Queries across links": the settled rewrite into `haicc` segments and merges, no cascading.
 
 **Ours** (said in the discussion, not objected to)
 
@@ -154,30 +133,8 @@ document.
 
 ## The steps
 
-**Settled** (the human, after the measurements of the commits)
 
-- "I think we should do a good first implementation and measure its
-  performance to see if we should go single or multiple requests
-  (processing duration vs request and commit overhead)."
-- **Both modes** (the human, 2026-11-15, on our reading that the figures
-  would decide for one of the two): "Xpath Pipeline should allow multi
-  and single request mode depending on how long processing takes." Our
-  reading, to confirm: a query's plan is one thing (its steps: select,
-  filter, merge) and can be run two ways inside an mrepo: in one
-  request, the steps calls inside it; or as several requests, a step
-  each, on the query's request branch one after another. Short
-  processing: one request, nothing paid for a request and its commits a
-  step (here about 44 ms a request's cycle, 7 to 9 ms a commit); long
-  processing: several. The first implementation is measured to find
-  where the one becomes the other. Across a link a hop is a request in
-  both modes.
-
-- **The mode is a config option** (the human, asked who chooses: the
-  one who asks, or the pipeline from an estimate): "That is a config
-  option." So neither an option on the query nor an estimate: it is set
-  in the config, a local matter, as the flag `error-on-empty` is
-  (`tasks.md`, "Future additions": how a package is made, what type of
-  mrepo it is for; the configs well documented).
+Moved (2026-11-18) to `base-docs-vision`, "Queries across links": the settled single or multiple request modes, a configuration option.
 
 - **The initial implementation: parse, process and continue** (the
   human's proposal, 2026-11-15): "Parse sufficiently of the command to

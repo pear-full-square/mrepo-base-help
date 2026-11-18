@@ -265,9 +265,8 @@ among them: `pear-full-square/mrepo-base-container`,
   built (part 75 was built on one that was not, and had to be
   corrected: part 76); what is left to us is ours to decide and say.
   What is settled is recorded in the words used.
-- **What cost time, to mind**: an apostrophe in a test's title or
-  message breaks the file, and a filter on the output hides it: read a
-  test run's last lines. One run at a time on `sources/`: a `haicc`
+- **What cost time, to mind**: a test run's last lines read
+  (`base-docs-hdlc`, "Validation"). One run at a time on `sources/`: a `haicc`
   test started while bundles are rebuilt hangs. A full validation is
   about 30 minutes: every package's pre-release
   (`tools/bare tools/package-test.js haiccing/<package>`, in a loop),

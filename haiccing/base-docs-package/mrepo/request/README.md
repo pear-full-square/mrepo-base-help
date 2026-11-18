@@ -34,7 +34,10 @@ haicc host crud/read swarms --flags log=verbose
   goes with each command sent on from there; one written after the last
   command's URI is that command's.
 - **A flag that is none**, or a value its flag does not take: ignored,
-  with a warning in the request's log.
+  with a warning in the request's log. The rule (the human): "wrong flag
+  or issues with underlying functionality don't throw errors but
+  warnings": a flag whose target is not there is a warning too, nothing
+  thrown.
 - The flags there are: `log`, below, `layer`, `continuation` ("A
   continuation", further down), and `container`, a routing directive:
   `boot/deploy`'s child deployed into a container, on the container's
