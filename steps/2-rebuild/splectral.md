@@ -39,9 +39,22 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
   a test of its own, a report), documents itself (its README a menu,
   read with `info`), and has a how-to for every pattern it implements.
 
+- **The server loads and runs, it does not interpret** (the human,
+  2026-11-18: "The server loads and runs, does not interpret. The server
+  is the data layer, the component does everything on top."). Our
+  question: whether the server reads a package's view files, as the
+  proposal had it, or knows no views. So: no view is read by the server;
+  what a view is, how a command is bound to a UI element, what a page
+  looks like, all of it is on top, the packages'. Our reading of "loads
+  and runs", put back, to confirm: it loads the packages of its list
+  (their files served as they are) and runs the commands their pages
+  send (into the boot mrepo's inbox, the completed form back, the
+  records streamed).
+
 ## Open, one at a time
 
-1. What the server knows of a package: its views, or only its files.
+1. Whether "runs" is also a package's own code on the server's side, or
+   only the commands: put to the human.
 2. What entity a Splectral package creates (base: one package, one
    protocol).
 3. Where the server's package lives, and the Splectral mrepo's list.
