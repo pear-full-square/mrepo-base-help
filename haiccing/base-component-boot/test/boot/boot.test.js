@@ -66,7 +66,7 @@ test('the boot: put in place, its runtime started, nothing deployed; the host de
     const repo = openRepo(p2pgitBackend(gitdirOf(work, 'boot'), { fs }))
     const listed = JSON.parse((await repo.read('/packages/manifest.json')).toString()).packages
     t.alike(Object.keys(listed), ['haiccing/base-package-runtime', 'haiccing/base-package-info', 'haiccing/base-package-protocol', 'haiccing/base-package-boot', 'haiccing/base-package-haicc', 'haiccing/base-package-crud', 'haiccing/base-component-boot'], 'the packages layer: the component\'s list (the runtime, the info protocol, the protocol protocol, the boot protocol, the haicc protocol, the crud protocol, the component itself last)')
-    t.is(listed['haiccing/base-package-runtime'].sha256, logged[1].packages['haiccing/base-package-runtime'].sha256, 'and the hashes')
+    t.alike(logged[1].packages, Object.keys(listed), 'logged at info by name (the hashes at verbose)')
     t.absent((await repo.select('/packages/haiccing')).length, 'not the bytes')
     // the runtime: from the boot mrepo's own packages, on the Bare that ran the boot
     t.is(out.runtime, `${os.execPath()} ${mine} ${viewOf(work, 'boot')}`, 'its command recorded')
