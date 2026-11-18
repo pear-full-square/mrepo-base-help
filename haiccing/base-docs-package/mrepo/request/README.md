@@ -35,8 +35,10 @@ haicc host crud/read swarms --flags log=verbose
   command's URI is that command's.
 - **A flag that is none**, or a value its flag does not take: ignored,
   with a warning in the request's log.
-- The flags there are: `log`, below, `layer`, and `continuation`
-  ("A continuation", further down).
+- The flags there are: `log`, below, `layer`, `continuation` ("A
+  continuation", further down), and `container`, a routing directive:
+  `boot/deploy`'s child deployed into a container, on the container's
+  own haicc install (`mrepo-base-boot`'s `deploy`).
 
 ### The layer
 

@@ -26,9 +26,24 @@ in, in that order, and the child is built at `<parent>/main/<name>/`.
 
 Asked for a script of the package (the request's flag,
 `continuation=<script>`), it answers with it as its continuation: the
-script, shell text, read from the package's bundle (`scripts/<script>.sh`),
-run for the deployed mrepo's position (`HAICC_AT`). A script the package has
-not is refused before anything is built, with those it has.
+script's lines, read from the package's bundle (`scripts/<script>.haicc`),
+for the deployed mrepo's position: the terminal sends them on as
+`haicc/script <position>`. A script the package has not is refused before
+anything is built, with those it has.
+
+**Into a container** (the request's flag `container`, a routing
+directive): the child is deployed on another haicc install, the
+container's, and run there (`internal/pair`). The container is made from
+a plain image (`debian:bookworm-slim`); its haicc home is a folder of
+this host's, `<work>/containers/<swarm>/<name>/`, mounted into it: this
+host's install copied in, its sources mounted read only at their own
+paths. It boots itself; the child is then deployed by the container's
+platform, its boot mrepo, at the same position and by the same unique
+URI. Here only its link: its node, its shortcut and its record, `how:
+container`, its `folder` the child's in the container's home: commands
+for it are forwarded as to any linked mrepo, through its inbox and
+outbox folders. Answers `{ deployed, mrepo, package, container: { name,
+image } }`.
 
 What it writes in the parent:
 
@@ -66,6 +81,9 @@ nothing of it inside this mrepo's folder.
   cannot target it.
 - The parent's packages manifest names no store.
 - The target lists no packages; its runtime does not start.
+- Into a container: no haicc install beside the work folder; the
+  container not made, or not booted in time; the container's platform
+  refusing the deploy (`in the container: ...`). Nothing of it is left.
 
 ## Design
 

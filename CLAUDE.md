@@ -48,7 +48,11 @@ history, and each package and module has its own repository).
 The rules are `base-docs-hdlc`'s "Validation"; here, how each is run.
 
 - A package's pre-release: `tools/bare tools/package-test.js haiccing/<package>`.
-- Everything: `tools/bare tools/release.js --strict`.
+- Everything: `tools/bare tools/release.js --strict`: every report
+  `current`. After a commit of generated files (the modules' copies,
+  `main.js`), the changed packages' pre-releases again before the work
+  is final: a report certifies the content it was run on (the local
+  agent's finding, 2026-11-18).
 - The checks: `tools/bare tools/info-extract.js` (and `--files`),
   `tools/bare tools/code-check.js`.
 - The boot's test, several times:

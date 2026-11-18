@@ -33,6 +33,11 @@ deployed or torn down.
 | `teardown` | the same; a query into the registry, `registry/<swarm>/*` | none |
 | `redeploy` | as `deploy` | the package, optional: the one it was deployed from |
 
+`--flags container` on a deploy, a routing directive: the child deployed
+into a Docker container, on the container's own haicc install, which runs
+it; this mrepo links it and forwards to it. Its teardown and redeploy go
+to the container's platform by its link's record.
+
 What a position means its documents say, not this config: the nearest
 node above it whose document is `{"kind":"swarm"}` makes the child that
 swarm's node (`<swarm>/<name>`); none, it is in its parent's swarm
