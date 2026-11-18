@@ -40,7 +40,8 @@ history, and each package and module has its own repository).
   human works with us, what is done, what is open. Scheduled work:
   `steps/2-rebuild/tasks.md`. Designs in discussion:
   `steps/2-rebuild/xpath.md`, `steps/2-rebuild/help.md`, the pair deploy
-  `steps/2-rebuild/pair.md`. The package
+  `steps/2-rebuild/pair.md`, Splectral's server and package template
+  `steps/2-rebuild/splectral.md`. The package
   review: `steps/2-rebuild/review.md`.
 
 ## Validation, the commands
