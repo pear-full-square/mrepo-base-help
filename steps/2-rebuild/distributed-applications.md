@@ -20,8 +20,28 @@ code: the proof of concept's review, and what comes of it.
   our case come as 3 platform + haicc on top so that each of the three
   'pillars' has standard packages in a dedicated organisation"): each
   pillar a platform of its own, its standard packages in an organisation
-  of its own (interaction: `splectral`; data and transformation: to
-  name); haicc on top, one way of working across the three.
+  of its own; haicc on top, one way of working across the three.
+- **The organisations** (the human, 2026-11-18): "myctrans, myctral are
+  the organisations for data transformation and data repositories. That
+  will allow us to build up packages with core functionality for each
+  area and a natural separation of concerns." So: `myctral` the data
+  repositories, `myctrans` the data transformation, `splectral` the
+  interaction.
+- **Streaming applications** (the human): "The data applications that we
+  build that way are streaming applications that work on immutable data
+  change records which are merged in to the visible state by myctrans
+  components. The mycelium repository will have the full mycelium stack
+  built on the streaming layer. Those components are then part of
+  myctral. And data commit in a data repo means that the higher level
+  components are accordingly updated (mutable records etc.)" Our reading,
+  to confirm: what a data repository validates and commits is a change
+  record, immutable; the merge into the visible state is `myctrans`
+  components'; a conflict between two changes is resolved where they are
+  merged, not refused at the commit.
+- **Splectral starts with the terminal equivalent** (the human): "we
+  start on spectral with component that issue commands through the
+  server. However, They could also link in data into their mrepo (more
+  direct). But we want to start with a terminal equivalent."
 - **A processing component holds processing state, not data** (the
   human: "A processing component holds processing state, not no state").
 
