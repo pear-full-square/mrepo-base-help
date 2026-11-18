@@ -3,8 +3,7 @@
 A design settled in discussion (2026-11-18), the design session asked
 for on 2026-11-17 ("for splectral we need to do a design session for the
 server 'proper' and the components"). Its proof of concept is built
-(`readme.md`, part 88; the human: "Go ahead"); before it, the MVP (parts
-80 and 81). First the design as it stands,
+(the human: "Go ahead"; `base-docs-haicc`, "Levels"); before it, the MVP. First the design as it stands,
 written up and kept current; then our critical view of an earlier form of it, asked for by the human ("Once
 this is written up, give me your critical view on the design"); then the
 session itself, each point in the words used. The earlier proposal (the
@@ -585,7 +584,7 @@ for its lines: the same way of working, nothing new.
   component's.
 
 - **The proof of concept, built** (the human, 2026-11-18, on our scope:
-  "Go ahead"): `readme.md`, part 88. The second step is
+  "Go ahead"): `base-docs-haicc`, "Levels". The second step is
   `splectral/install`, as we named it. What we decided while building is
   there, each with its reason; the main ones: the component lays its
   hooks itself (`runtime/lay`, one writer); its packages on Splectral's
@@ -595,11 +594,11 @@ for its lines: the same way of working, nothing new.
 
 ## From the other session (2026-11-18): what the proof of concept meets
 
-The session that built the pair deploy (`pair.md`) and fixed the docs
+The session that built the pair deploy (`base-docs-haicc`, "pair") and fixed the docs
 review's findings, on the human's word ("put the note in splectral.md"),
 for the colleague building the proof of concept:
 
-- **"Pair" is two things.** `pair.md`'s pair deploy is a node in a
+- **"Pair" is two things.** the pair deploy (`base-docs-haicc`, "pair") is a node in a
   container on its own haicc install (`boot/deploy --flags container`,
   `mrepo-base-boot`'s `internal/pair`, built and in `main`). Here a pair
   is a component's inbox and outbox. One of the two wants another name
