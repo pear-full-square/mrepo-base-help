@@ -643,6 +643,18 @@ answer (the server says so, a time limit), the forms between server and
 component versioned, and a transport beyond a shared folder (the
 replication over a stream, `tasks.md`).
 
+**The server manages install and lifecycle** (the human, 2026-11-18):
+"Once deployed the server manages install and lifecycle." Our reading,
+put back, to confirm: once the platform is deployed, its server is who
+installs a component (both steps of the dual install) and drives its
+lifecycle (initialise, start, stop, teardown), as a distributed
+application's central server manages its services; it does so by the
+same commands, sent into the component's own inbox, haicc's pipeline,
+recorded. That keeps "the component starts its renderer": the server
+decides and asks (`service/start`), the component's `start` hook starts
+the renderer. The server manages, the component executes; the server
+still starts no process of a component's.
+
 ## Open, one at a time
 
 1. A proof of concept now, and its scope: put to the human.
