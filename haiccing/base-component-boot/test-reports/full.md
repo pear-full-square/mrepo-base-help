@@ -1,6 +1,6 @@
 # Test report: haiccing/base-component-boot
 
-The package passed its `full` set: all 23 units, 322 of 322 tests and 2232 of 2232 asserts.
+The package passed its `full` set: all 23 units, 325 of 325 tests and 2255 of 2255 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 23 units, 322 of 322 tests and 2232 of 22
 | Set | `full` |
 | Result | passed |
 | Units | 23 of 23 passed |
-| Tests | 322 of 322 passed |
-| Asserts | 2232 of 2232 passed |
-| Run | 2026-11-18 03:18 UTC |
+| Tests | 325 of 325 passed |
+| Asserts | 2255 of 2255 passed |
+| Run | 2026-11-18 07:22 UTC |
 | Bare | v1.36.0 |
-| Content | `9873a11364d123c485c8b3e57b1560c8c0e72ec3dc8782ab57eccbdb374efe86` |
+| Content | `3e5c3698c79d575c36afecd9e31d652268a2e7c60ee7f4fed7e7ba6865c94cdc` |
 
 ## Units
 
@@ -29,7 +29,7 @@ The package passed its `full` set: all 23 units, 322 of 322 tests and 2232 of 22
 | `/test/modules/pear-full-square/mrepo-base-info` | passed | 8 of 8 | 57 of 57 |
 | `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 10 of 10 |
 | `/test/modules/pear-full-square/mrepo-base-request` | passed | 17 of 17 | 188 of 188 |
-| `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 6 of 6 | 124 of 124 |
+| `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 9 of 9 | 146 of 146 |
 | `/test/modules/pear-full-square/mrepo-base-service` | passed | 2 of 2 | 13 of 13 |
 | `/test/modules/pear-full-square/mrepo-base-xpath` | passed | 5 of 5 | 52 of 52 |
 | `/test/modules/pear-full-square/mycelium-container-document` | passed | 1 of 1 | 8 of 8 |
@@ -40,6 +40,6 @@ The package passed its `full` set: all 23 units, 322 of 322 tests and 2232 of 22
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 62 of 62 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 63 of 63 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

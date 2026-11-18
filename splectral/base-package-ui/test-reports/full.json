@@ -1,0 +1,127 @@
+{
+  "package": "splectral/base-package-ui",
+  "content": "fd680419c98a1d4316c05953c1f3da4dd1d6fcc15b35f76138e4f289f0593ddd",
+  "bare": "v1.36.0",
+  "date": "2026-11-18T07:36:29.523Z",
+  "set": "full",
+  "ok": true,
+  "units": [
+    {
+      "unit": "/test/mounted",
+      "ok": true,
+      "tests": {
+        "passed": 4,
+        "total": 4
+      },
+      "asserts": {
+        "passed": 11,
+        "total": 11
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/info",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 2,
+        "total": 2
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/code",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 2,
+        "total": 2
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/mrepo",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 1,
+        "total": 1
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/package",
+      "ok": true,
+      "tests": {
+        "passed": 1,
+        "total": 1
+      },
+      "asserts": {
+        "passed": 1,
+        "total": 1
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/mrepo-base-info",
+      "ok": true,
+      "tests": {
+        "passed": 8,
+        "total": 8
+      },
+      "asserts": {
+        "passed": 57,
+        "total": 57
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/mycelium-uri",
+      "ok": true,
+      "tests": {
+        "passed": 21,
+        "total": 21
+      },
+      "asserts": {
+        "passed": 195,
+        "total": 195
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/pkgm-base-check",
+      "ok": true,
+      "tests": {
+        "passed": 23,
+        "total": 23
+      },
+      "asserts": {
+        "passed": 63,
+        "total": 63
+      },
+      "failures": []
+    },
+    {
+      "unit": "/test/modules/pear-full-square/splectral-base-ui",
+      "ok": true,
+      "tests": {
+        "passed": 2,
+        "total": 2
+      },
+      "asserts": {
+        "passed": 19,
+        "total": 19
+      },
+      "failures": []
+    }
+  ]
+}
