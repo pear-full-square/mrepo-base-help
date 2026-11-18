@@ -44,16 +44,15 @@ history, and each package and module has its own repository).
 - `tools/`: today's HDLC tooling (`base-docs-hdlc`, "Tooling"). `sources/`
   and `node_modules/` are ignored by git: a fresh clone needs
   `sh tools/install.sh`, then `tools/bare tools/release.js`.
-- `steps/`: the records. Where work stands: `steps/2-rebuild/readme.md`
-  and, after a context reset, `steps/2-rebuild/handover-next.md`: how the
-  human works with us, what is done, what is open. Scheduled work:
-  `steps/2-rebuild/tasks.md`. Designs in discussion:
-  `steps/2-rebuild/xpath.md`, Splectral's server and package template
-  `steps/2-rebuild/splectral.md`, distributed applications
-  `steps/2-rebuild/distributed-applications.md`. Offloaded into the
-  packages, a page pointing there: the pair deploy (`pair.md`), help
-  and haici (`help.md`). The package
-  review: `steps/2-rebuild/review.md`.
+- `steps/`: what is current, nothing else (the history is git's: the
+  human, 2026-11-18, "we don't want history lying around, that is what
+  git is for"). After a context reset: `steps/2-rebuild/handover-next.md`.
+  The open scheduled work: `steps/2-rebuild/tasks.md`. Designs in
+  discussion: `steps/2-rebuild/xpath.md`, Splectral's server and package
+  template `steps/2-rebuild/splectral.md`, distributed applications
+  `steps/2-rebuild/distributed-applications.md`. The local runs: the
+  prompt and the last note, `steps/2-rebuild/local-note.md`; the local
+  agent's instructions, `steps/2-rebuild/handover-local.md`.
 
 ## Validation, the commands
 

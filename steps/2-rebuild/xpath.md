@@ -2,7 +2,8 @@
 
 In discussion with the human, started 2026-11-14. A design: nothing of
 it is built. It grows as the discussion goes; what is built leaves this
-file and becomes a part in `readme.md`.
+file for the packages' documentation (`base-docs-xpath`), its history in
+git.
 
 What is built and settled is offloaded (part 86) into the base
 family's XPath documentation, `haiccing/base-docs-xpath`: the query of
@@ -143,8 +144,8 @@ Moved (2026-11-18) to `base-docs-vision`, "Queries across links": the settled si
   and continue".
 - **Its measurements go into the request's record** (the human,
   2026-11-15, asked whether timings should be written there at debug
-  level: "Logging was decided to go to the request info": `readme.md`,
-  part 12, "a request is its own record"). So: `exec.log` entries at
+  level: "Logging was decided to go to the request info": a request is
+  its own record, `base-docs-package`, `mrepo/request/`, "The log"). So: `exec.log` entries at
   `debug`, with what each step took, in the request's `log`. What is
   there for it: the four levels, the mrepo's threshold in
   `/runtime/log.json` (`info` without it). What is not: no code logs at
@@ -152,8 +153,8 @@ Moved (2026-11-18) to `base-docs-vision`, "Queries across links": the settled si
   duration, and nothing writes `/runtime/log.json`: the level cannot be
   set from the command line. **A task of its own since** (the human:
   the levels implemented, what goes at which level decided, "logging
-  level is request flag"): `tasks.md`, task 5, **built** (`readme.md`,
-  part 66): `--flags log=verbose` gives each step with what it took and
+  level is request flag"): `tasks.md`, task 5, **built** (`base-docs-package`,
+  `mrepo/request/`, "The log"): `--flags log=verbose` gives each step with what it took and
   what it read and wrote, `exec.step` measures it for the action, and a
   request's metrics are in every record. The XPath measurements read
   those.
@@ -589,7 +590,7 @@ task 6); 2 the step after (the union, with the fan-out over shortcuts);
 | value | an attribute by `@` | `[@name='sam']` | 1, the same as `[name='sam']`: a leaf is the document's key and its value |
 | | what is XML's alone: namespaces, comments, processing instructions, `id()`, `lang()`, `text()` | | not |
 
-- **Built** (parts 67 and 68 of `readme.md`): phase 1, as `query` in
+- **Built** (`base-docs-xpath`): phase 1, as `query` in
   `mycelium-xpath`; what is of a later phase is refused, said as such.
   On it: the mrepo's query (`mrepo-base-xpath`), `crud`, and `haicc`'s
   `goto`, which executes a command at each position a URI selects and
@@ -774,8 +775,8 @@ this."
 - **The same measured on the human's laptop** (twelve cores), by the
   local agent: in `prompt-local.md`.
 
-**Against what is built** (found, 2026-11-14; both repaired since:
-`readme.md`, part 65, and "After the repairs" below)
+**Against what is built** (found, 2026-11-14; both repaired since,
+"After the repairs" below)
 
 - **The merge into `main` is a plain merge today**, not a squash
   (`mrepo-base-execute`: `w.merge(...)`; `mycelium-git`'s `merge` makes

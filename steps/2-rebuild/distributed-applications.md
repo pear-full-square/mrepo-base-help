@@ -134,7 +134,7 @@ being the colleague's who built it:
    (`mrepo-base-runtime/internal/program/index.js`, `stateOf` line 29,
    `end` line 57). A renderer that died, its pid reused (likeliest after
    a reboot: the state file outlives it), and `stop` ends an unrelated
-   process. The same kind as the pair deploy's first danger (`pair.md`).
+   process. The same kind as the pair deploy's first danger (`base-docs-package`, `mrepo/`, "The mrepo's folder").
    **Fix**: record the process's start time (`/proc/<pid>/stat`, field
    22) or check its command line holds the bundle's path, before a
    signal.
