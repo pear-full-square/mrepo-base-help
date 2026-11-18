@@ -2297,6 +2297,27 @@ confirm:
   page does); a scene thrown away and prepared again after it is worked
   in.
 
+**A run's report, stored with the how-to** (the human, 2026-11-18, on
+our view that a static run report is worth keeping when it is pinned to
+what it ran on: "we can request the test phase to store the static logs
+report with the item's documentation. So a prerelease full test run
+creates fresh reports, and they are easily accessible (and readable)."):
+a package's pre-release (`full`) runs its how-tos and stores each run's
+report beside the how-to's page, as the test reports are stored today:
+every step's command and answer, what each changed (`request.changed`),
+its metrics, the checks; fresh at every pre-release, read with `info`
+like the page. A report producer reads the run's records and writes it
+in its shapes (ours: JSON for agents and comparisons, Markdown for
+people); ours: a first case of a `myctrans` pipeline.
+
+**A demo with no steps, a direct run** (the human: "is a static report
+enough?"). Ours, said to the human: mostly, for what it is for (what the
+demo does, and that it works on this release), when the report also
+holds the scene before and the state after, not only the answers; not
+for exploring the end state or trying a variation, which needs it live:
+its scene and its end prepared again on demand, in the background, as a
+stepped how-to's are.
+
 ## `review-code`: the code changes the review finds, built after it
 
 The human (2026-11-17): "Do we list these as code modifications, which
