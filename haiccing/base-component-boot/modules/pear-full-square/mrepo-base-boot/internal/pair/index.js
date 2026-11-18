@@ -19,6 +19,8 @@ export const HOME = '/haicc'
 // The container's boot mrepo, its folder in its work folder, its address.
 const BOOT = join('work', 'mrepos', 'boot')
 const BOOT_URI = 'local/boot'
+// Where the container's platform answers to: the pair's outside.
+const REPLY = '/haicc/pair'
 // How long the container is given to install and boot, and a platform
 // command to be answered (s).
 const WAIT = 180
@@ -51,7 +53,9 @@ export function pairOf (exec, c) {
 // log: none (the caller's step says what was sent and what came back)
 async function platform (p, parts, { timeout = WAIT } = {}) {
   const key = guid()
-  inboxOf(p.boot).write(key, wrap(`/${BOOT_URI}/inbox`, { ...record(null, parts, key), headers: { trigger: 'external' } }))
+  // (a reply topic: a request without one is answered to nobody, its
+  // completed form not written to the outbox)
+  inboxOf(p.boot).write(key, wrap(`/${BOOT_URI}/inbox`, { ...record(REPLY, parts, key), headers: { trigger: 'external' } }))
   const back = join(p.boot, 'outbox', `${key}.json`)
   // time: the wait for another install's answer, bounded
   for (const end = Date.now() + timeout * 1000; !existsSync(back);) {
