@@ -8,6 +8,60 @@ kept in a local source, `~/haicc-mirror/` since 2026-11-13 (before:
 them, git URLs to local mirrors), so `tools/install.sh` and
 `tools/release.js` run with no network.
 
+## 2026-11-18: the next run, `e61e222`, released as `r-6b4d346`
+
+"The next run" (below), step by step.
+
+1. **The clone:** `main` at `e61e222`.
+2. **The dependencies:** `tools/install.sh` exit 0 (207 kept, nothing
+   fetched); `node_modules/bare-runtime-linux-x64/bin/bare` there.
+3. **The sources:** `release.js` exit 0, nineteen bundles, `git status`
+   no change.
+4. **The haicc test:** 303/303 three times (354, 337, 337 s), nothing
+   left after each. The install in a container (added to this step
+   while the run went, `1133b32`): 18/18 three times (38, 32, 35 s), on
+   `6b4d346`.
+5. **The packages' tests:** every bundle's `/test/full` exit 0,
+   `"ok":true`. **`release.js --strict`: every report stale**, all
+   nineteen: the reports (9097b11, 87e7608) certify the content before
+   `6b424fc` ("Generated files after the merge": the modules' READMEs,
+   `main.js`'s test lists, `pkgm-base-check`'s new test), whose
+   pre-releases were not run again. Stopped before the release and asked;
+   the human: "you can run package-test yourself in this case". Every
+   package's `tools/package-test.js`: each full set passed, the reports
+   written (`cd2e516`, merged `6b4d346` with the cloud session's
+   `1133b32`); `--strict` every report current. **Proposal:** after a
+   commit of generated files, the pre-releases again before the commit
+   is final (`release.js --strict` in the cloud session's validation
+   would have caught it).
+6. **The docs view:** `info-view.js` exit 0: 19 packages, 9 documented,
+   1,215 keywords, 425 pages, `"problems":0`; nothing left.
+   `sources/info-view.html` (854 KB) kept for the human.
+7. **The release `r-6b4d346`** (`local-run.md`): twenty repositories,
+   59 assets, digests checked. The commit is `6b4d346`, not `e61e222`:
+   the reports, and `1133b32` (the installer's `--bin` check) merged
+   in; the haicc test run again once on it, 303/303. Left without a
+   current release: `base-package-help`, `base-package-howto`,
+   `package-docs-mrepo`; also `base-package-haici` (no package here) and
+   the earlier platform's six. For the human.
+8. **Installed from GitHub**, a clean temporary folder, the how-to's
+   steps: every command exit 0 (the download 351 s, 19 fetched, no
+   retry; the cluster 94 s, two containers); nothing left, the folder
+   removed.
+9. **Installed for the human:** `haicc` at `/usr/local/bin/haicc`, its
+   folder `~/.haicc`; the installer run over yesterday's install
+   (nothing running, the work folder empty); the development
+   repository's `sources/` unlinked so the install is the release's;
+   `haicc sources download bare haiccing`, `haicc prereq` every line ok.
+   No `boot/deploy`.
+10. **The docs review:** `docs-review-local.md`. All eleven tasks
+    reached; twelve findings, the first: Splectral's start as written
+    fails (`splectral/start 4401`: the port taken for the URI); a
+    continuation script said three ways (sh, `.json`, `.haicc`); the
+    docs mrepo advertised in `--help` but not deployed; the request log
+    not found by keyword; the package how-tos needing the development
+    repository, unnamed.
+
 ## The next run (2026-11-17, from the cloud session): read this first
 
 The prompt for this run, here so it is read with the notes (it was

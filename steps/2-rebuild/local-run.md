@@ -1,5 +1,99 @@
 # The local runs: the releases
 
+## 2026-11-18: the release `r-6b4d346`
+
+On "The next run" of `local-note.md` (2026-11-17), step 7, after its
+steps 4 and 5 passed. Unsigned; Bare not published.
+
+- **Commit built:** `6b4d346` (`main`): `e61e222`, the one the prompt
+  named, with the nineteen test reports run again here (`cd2e516`; on
+  `e61e222` every report was stale, the human: "you can run package-test
+  yourself in this case") and the cloud session's `1133b32` merged in
+  (the installer refuses a `--bin` that is its own `bin/`; the container
+  test). Clean, `release.js --strict` every report current; nineteen
+  packages in the manifest, every entry's commit `6b4d346`.
+- **Tested:** the haicc test 303/303 three times on `e61e222` (the same
+  bundles' content) and once on `6b4d346`; the install in a container
+  (`container.sh`) 18/18 three times on `6b4d346`; every package's
+  `/test/full` from its bundle ok.
+- **The repositories first:** `tools/packages.sh` for all twenty (every
+  package's reports changed). Tag targets, each repository's `main`:
+  `base-app-haicc` e23f11d, `base-component-boot` 8f35fb9, `base-component-docs` a4f8a01, `base-component-haicc` 30f5b87, `base-docs-haicc` df0e745, `base-docs-hdlc` 8079d06, `base-docs-package` 6b86de5, `base-docs-uri` 95042ee, `base-docs-vision` 2151e4c, `base-docs-xpath` c88a1a8, `base-linux-haicc` 859aa09, `base-package-boot` 68f6740, `base-package-container` 3091a7a, `base-package-crud` fefcd4e, `base-package-haicc` d8e8405, `base-package-info` 1b1abef, `base-package-protocol` 049c1dc, `base-package-runtime` 0096bfc, `base-package-service` 2ecb5b4, `base-package-splectral` 0ab9619.
+- **Assets:** as for `r-46a3b3f`: per package its bundle, its manifest
+  entry, its addons; `base-linux-haicc` the installer and the sources'
+  `haiccing/manifest.json`. 59 assets, 196,210,747 bytes; sizes and digests
+  on GitHub checked, no mismatch. `base-linux-haicc`'s latest:
+  `r-6b4d346`.
+- **New packages, first released:** `base-component-docs`,
+  `base-docs-haicc`, `-hdlc`, `-package`, `-uri`, `-vision`, `-xpath`.
+  **Left without a current release** (their latest `r-46a3b3f`, the
+  packages gone): `base-package-help`, `base-package-howto`,
+  `package-docs-mrepo`. `package-docs-package` is `base-docs-package`
+  (renamed). Also in the organisation, no release and no package here:
+  `base-package-haici`, and the earlier platform's six. For the human.
+
+| repository | file | bytes | sha256 |
+|---|---|---|---|
+| `base-app-haicc` | `base-app-haicc.bundle` | 4,362,711 | `1e90718382f4754f7dbbc26a4a9bb7bccf8214daf20b648df25a111fbf7bcc61` |
+| `base-app-haicc` | `base-app-haicc.manifest.json` | 2,681 | `4b2f80427256b4c44299b574d679c86895a402e3e65b5e03dccb88be7bf1b4fe` |
+| `base-app-haicc` | `base-app-haicc-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-component-boot` | `base-component-boot.bundle` | 4,385,515 | `e77bbc0b557eebea1401337fddf01fee9150ce926c1e1403d6f0e50ac92dd422` |
+| `base-component-boot` | `base-component-boot.manifest.json` | 2,691 | `2cde6a8a4ca50faa9cc77ceb473a052b5921c27ddca9d7ef7ee0e37939448800` |
+| `base-component-boot` | `base-component-boot-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-component-docs` | `base-component-docs.bundle` | 1,085,440 | `cabe10d954cb9246f4bb878f52c22d871df82a1f23706747bea857161394597f` |
+| `base-component-docs` | `base-component-docs.manifest.json` | 2,156 | `6e94390c7ce25de466cf059a13254d71c434cdd80a038a077b09e8f01023a63a` |
+| `base-component-docs` | `base-component-docs-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-component-haicc` | `base-component-haicc.bundle` | 1,095,653 | `1d3ed9975634d08418d6f20da4692aee3dc279aab3e44b14de14051061860316` |
+| `base-component-haicc` | `base-component-haicc.manifest.json` | 2,158 | `227fe23a4328f1e96dfe5f6530e9931c2705acdbf952e13fb5cc685723620c53` |
+| `base-component-haicc` | `base-component-haicc-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-docs-haicc` | `base-docs-haicc.bundle` | 1,076,642 | `e68d9259b6f2f01c9ef29523f55208bd9e9cde7b1cf3a17118049edc4b3d9c31` |
+| `base-docs-haicc` | `base-docs-haicc.manifest.json` | 2,147 | `28e7ab51a21c4f6040317d5b53354acc9dc252cd792c9463d877d914fcf67dee` |
+| `base-docs-haicc` | `base-docs-haicc-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-docs-hdlc` | `base-docs-hdlc.bundle` | 1,081,386 | `6509be5a3e6e465a858f786ddf51a3053f1b9203639cbc474dc74dc3dba95405` |
+| `base-docs-hdlc` | `base-docs-hdlc.manifest.json` | 2,145 | `7c31276bd30593acdc1b832a9a3c6537b4dedfe1f8a874836cce3a7b9275beb3` |
+| `base-docs-hdlc` | `base-docs-hdlc-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-docs-package` | `base-docs-package.bundle` | 1,144,128 | `a39dd0b8fbcd6d900c4fbff4c78690e5fe17d96f9fc88b3c4fa0910aecf5eb99` |
+| `base-docs-package` | `base-docs-package.manifest.json` | 2,151 | `7d523aa1ff1d8fbda0098e1e002d8325e62add9cd148d159c6ad37c3acedf8b1` |
+| `base-docs-package` | `base-docs-package-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-docs-uri` | `base-docs-uri.bundle` | 1,076,286 | `22488cc8175a9e04921da8a3173cb9f798a5eaa2161e447e2b77e9f1a3d320de` |
+| `base-docs-uri` | `base-docs-uri.manifest.json` | 2,143 | `becb7740012e0f3758aa9df0aaf1f10333222541783d99280e5a349bd30dbb76` |
+| `base-docs-uri` | `base-docs-uri-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-docs-vision` | `base-docs-vision.bundle` | 1,092,091 | `2d582e37c6670bc234c8cb788445095417d284083cca94afd6f8783e7697e01c` |
+| `base-docs-vision` | `base-docs-vision.manifest.json` | 2,149 | `61a1594dacbe1c54deb995a57e7f23e84d81c9d194682f36abb69b0518d79c51` |
+| `base-docs-vision` | `base-docs-vision-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-docs-xpath` | `base-docs-xpath.bundle` | 1,077,215 | `73d56d4ae269b43fbee1fad481ea547ad01b2409b7f24d0b64abbd41c00a1043` |
+| `base-docs-xpath` | `base-docs-xpath.manifest.json` | 2,147 | `eed8aab7b339b056f12abda64d6ee7aacab527866df80b9b645363ffa7a2de3e` |
+| `base-docs-xpath` | `base-docs-xpath-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-package-boot` | `base-package-boot.bundle` | 4,351,586 | `9e7715afd56ba22430e0bf5be557d211cafd9cb7f329ff824881e68d5911594e` |
+| `base-package-boot` | `base-package-boot.manifest.json` | 2,692 | `d768c9afc0d52cdfa43c03e8be5d848645f99069adf4e208271022d492b007b0` |
+| `base-package-boot` | `base-package-boot-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-package-container` | `base-package-container.bundle` | 4,390,738 | `7ec4e0ea1a616f62cfb9d9a1921e253b1973570be9134b1fa2bdedbce60eb1be` |
+| `base-package-container` | `base-package-container.manifest.json` | 2,702 | `9ab827c0fc9265b1d09e1703d16f62d1e66794193c4cf83de3e64dcc4ad42fe6` |
+| `base-package-container` | `base-package-container-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-package-crud` | `base-package-crud.bundle` | 1,204,235 | `6ec73620e3754c0aff3dbe04ace79e70f2ba2ed15ebb12b82e0cffa1a977d939` |
+| `base-package-crud` | `base-package-crud.manifest.json` | 2,174 | `438c6a8a0c85459dae2e80a42b9c48230264e211feed7500ce322c5518fcadee` |
+| `base-package-crud` | `base-package-crud-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-package-haicc` | `base-package-haicc.bundle` | 4,040,030 | `cadb3d0f41288a74489dafaef850a6dab1bc8fc6fde52630e37fa346480665cc` |
+| `base-package-haicc` | `base-package-haicc.manifest.json` | 2,694 | `5cf0a99e674f79e5845a123d1d78f0dd2c1fdec485febfe449837a287a8830f4` |
+| `base-package-haicc` | `base-package-haicc-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-package-info` | `base-package-info.bundle` | 1,086,502 | `284fb1c5ec443f4482d793b1125632920e1ff6dca52acd0114a869e696d767c9` |
+| `base-package-info` | `base-package-info.manifest.json` | 2,174 | `f60bb4977b6182f4c983387b4e725fca30e335f199601ec829d541ee5cc5e231` |
+| `base-package-info` | `base-package-info-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-package-protocol` | `base-package-protocol.bundle` | 1,093,335 | `d484f8f47eb6386cbe4b27625c5250d0dab97efe6fe3fe78b8d05d0a821ce904` |
+| `base-package-protocol` | `base-package-protocol.manifest.json` | 2,182 | `c4b9305edfc11da46eeb840c929ac8e63e3aae18476253e03df6d93cadd2dec9` |
+| `base-package-protocol` | `base-package-protocol-addons.tar` | 983,040 | `0c996768f6e3a445a91e39a46ce8e8a94f9468f5c419500a3c40bc43b7851f70` |
+| `base-package-runtime` | `base-package-runtime.bundle` | 4,262,114 | `3a6b18cb52449a3ec937fcba958567c048d670ce37d58b29f1c2db0fe5f5f2c3` |
+| `base-package-runtime` | `base-package-runtime.manifest.json` | 2,711 | `e527da6cc5b4eefe7c8bad8fb8b3af3cf50671d44928028d82995d618a95de9e` |
+| `base-package-runtime` | `base-package-runtime-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-package-service` | `base-package-service.bundle` | 4,001,057 | `ace800c875950172b1a373b990f4b3932e952a93272275be18685af8afa6691a` |
+| `base-package-service` | `base-package-service.manifest.json` | 2,698 | `910ed665f3d5e8676ba5ca464de7e5814ea1490d85ddf411b95fe562f30937de` |
+| `base-package-service` | `base-package-service-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-package-splectral` | `base-package-splectral.bundle` | 4,200,899 | `81a40f9201602e172c27ab845a0690018747086311ada555b150eab5d5494aa1` |
+| `base-package-splectral` | `base-package-splectral.manifest.json` | 2,715 | `99584b93086cebcf69d58ddb682288b43de548b0e38a3b6be4d54f2f5785961b` |
+| `base-package-splectral` | `base-package-splectral-addons.tar` | 17,397,760 | `b533304ce62ee6b4d09595822d7dbd0c703046697ce18fa54ecaac338668fa68` |
+| `base-linux-haicc` | `haicc-install.sh` | 17,070 | `a72b51702cb0c5f011bcc18dce500d8ddab76c00e1410f186bfcea1ab51ab888` |
+| `base-linux-haicc` | `manifest.json` | 45,284 | `17138e1d34498ec539742ee1cb3be556ece40cea297ef145fd5cafac3bc70389` |
+
 ## 2026-11-17: the release `r-61314e0` of `base-linux-haicc`: the installer fixed
 
 Found installing `r-46a3b3f` from GitHub (below): a connection reset in
