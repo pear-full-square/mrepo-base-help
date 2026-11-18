@@ -85,6 +85,45 @@ wrong, it is raised.
 - **The rules are checked**, not remembered: the README rules, the code
   rules and a package's structure run as tests.
 
+## Working demos
+
+Feedback on the documentation, settled with the human (2026-11-18), to
+shape the way we work; not yet built (scheduled work). An AI is the
+documentation's primary user, and for it working demos are the most
+important part of the documentation, when they run in the validation: a
+demo nothing runs is prose with code in it, and goes stale as prose does.
+
+- **Every how-to runnable**: a how-to has its page and a script beside
+  it, its steps (`.haicc` lines, `sh` where the machine level is
+  needed), each with what it answers (`# expect: <fragment>` under its
+  line, checked). A run proves what the page says; a reader sees the
+  answer beside the command.
+- **A scene and its steps**: the scene is what has to be there before the
+  first step (an install booted, a host in service, a swarm); a how-to's
+  scene is often another's end, so preparing it runs the how-tos before
+  it. Two ways through: stepped, a step at a time, each answer seen;
+  or run through, every step and its check (a demo, the validation).
+- **Scenes prepared in the background**: an install brought up to the
+  first step while other work goes on, started by an intention to do a
+  piece of work. A how-to has a unique key (`<org>/<package>/<name>`),
+  its scene placed by it: a development install preinstalls the scenes,
+  ready to start, and they can be explored as part of the documentation.
+- **Run in the validation**: a package's pre-release (`full`) runs its
+  how-tos, grouped in one install a package or a pattern, in their order;
+  one that needs Docker or the network says so and is skipped with the
+  reason; a how-to that fails fails the pre-release.
+- **A run's report, stored with the how-to**: each run's report beside
+  the how-to's page, fresh at every pre-release, read with `info` like the
+  page: every step's command and answer, what each changed, its metrics,
+  the checks, the state before and after. A report producer writes it
+  from the run's records, in its shapes (JSON for agents and comparisons,
+  Markdown for people).
+- **A direct run**, a demo with no steps: its report is enough to say
+  what it does and that it works on this release; exploring its end, or
+  trying a variation, needs it live, prepared again on demand.
+- **The review by an AI agent as the documentation's user** stays beside
+  them: a run proves the commands, the review finds what cannot be found.
+
 ## Validation
 
 Before every commit:
