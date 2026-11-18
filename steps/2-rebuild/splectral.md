@@ -102,26 +102,35 @@ built: what is built is the MVP (`readme.md`, parts 80 and 81).
     table, log, buttons;
   - its own test: every element instantiated on a fixture; one not run
     fails.
+- **The inbox and outbox pattern between the server and a component**
+  (the human, 2026-11-18, on our asking whether RPC waits for AVRO and
+  the contract is two data messages meanwhile, `run` and `records`:
+  "You can use the inbox outbox pattern for server component
+  communication"). So no AVRO RPC now: what we have. Our reading, put
+  back, to confirm: what passes between the server and a component is a
+  record, the request record as it is documented (`base-docs-package`,
+  `mrepo/`, "A request": a form in an envelope, its key, the topic its
+  completed form goes back to), written whole into an inbox folder, the
+  completed form back in an outbox folder, matched by its key. Both
+  ways: the server writes a browser's request into the component's
+  inbox, the page comes back in the component's outbox; the component
+  writes a data request (`run`) into the server's inbox, the completed
+  form comes back in the server's outbox; `records` is the component
+  following the server's outbox. So a started component is a process of
+  its own, sharing nothing in memory with the server; when the RPC
+  server comes, the same forms travel as its messages.
 
 ## Open, one at a time
 
-1. The contract: what a started top package is handed and what it
-   answers a routed request with: put to the human (ours: a handle with
-   three things, a command run, the records followed, an element
-   instantiated; a page back). The human, on it (2026-11-18): "When we
-   have AVRO we will use the rpc server for the communication, or should
-   we do that now already?" Checked: AVRO is not built (no module, no
-   schemas; "JSON first. AVRO later"; out of this phase's scope in
-   `steps/plan.md`); agreed earlier: "The barified RPC server is the
-   real-time data communication tool [...] Splectral's server gets it
-   with the move to AVRO" (the seed's `docs/design/values.md`). Ours,
-   put to the human: not now; the data side of the contract written as
-   named messages now (data in, data out, JSON, nothing shared), so the
-   RPC server replaces how they travel, not what they are. Then its
-   entry file; in the server's process or its own.
-2. Where the server's package lives, and the Splectral mrepo's list.
-3. The proposal's open questions: parameters from the URL; writes from
+1. Whether a component is a light process with an inbox and an outbox
+   folder (the pattern, not the pipeline: nothing committed a page), or
+   an mrepo, its requests through the request layers (about 1 s a
+   request, measured): put to the human, ours: the light process.
+2. The component's entry file; how the top package asks for an element
+   of a linked package.
+3. Where the server's package lives, and the Splectral mrepo's list.
+4. The proposal's open questions: parameters from the URL; writes from
    the UI; live updates; who may ask.
-4. The names and the repositories (`splectral/base-docs-package`,
+5. The names and the repositories (`splectral/base-docs-package`,
    `base-view-docs`, `base-view-install`, an element set's), created by
    the human.
