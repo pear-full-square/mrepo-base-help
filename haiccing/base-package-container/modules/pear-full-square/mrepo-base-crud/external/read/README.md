@@ -2,8 +2,8 @@
 
 Reads the nodes a URI selects: each with its document and the names of its children.
 
-A URI names one node, or selects: it is a query (`mycelium-xpath` says
-what of XPath is built). A `*` selects every child; a filter keeps the
+A URI names one node, or selects: it is a query (`xpath`, the docs mrepo's
+keyword, says what of XPath is built). A `*` selects every child; a filter keeps the
 nodes whose document it holds for: `swarms/*[state='started']`,
 `swarms/*[size>2 and owner/name='ann']/nodes/*`. A leaf in a filter is a
 key of the node's document, in its URI form: `publicKey` is written

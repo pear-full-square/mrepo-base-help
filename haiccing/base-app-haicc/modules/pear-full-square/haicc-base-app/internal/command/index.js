@@ -5,7 +5,8 @@ import { MACHINE } from '../boot/index.js'
 // The commands that are neither for the mrepos nor the machine level.
 const OWN = ['sources', 'output', 'scripts']
 const USAGE = ['help', '--help', '-h']
-const none = name => new Failure(`no command '${name}' (haicc --help)`, 2)
+// (a word that could be a position: the command a URI wants said too)
+const none = name => new Failure(/^[a-z][a-z0-9-]*$/.test(name) ? `no command '${name}' (haicc --help; a URI is followed by its command: haicc ${name} info/get)` : `no command '${name}' (haicc --help)`, 2)
 // A position written as the root: `.`, or `./` and nothing after.
 export const isRoot = uri => uri.replace(/^(\.\/)+/, '') === '.' || uri.replace(/^(\.\/)+/, '') === ''
 

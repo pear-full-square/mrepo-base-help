@@ -89,7 +89,7 @@ try {
   const placed = await place({ dir: viewOf(work, NAME), store: storeOf(work), sources, list })
   // (at info the packages by name, what an agent reads; each with its
   // hashes and addons at verbose)
-  log('info', 'packages', { packages: Object.keys(placed), placed: Object.keys(placed).length })
+  log('info', 'packages', { packages: Object.keys(placed.packages ?? {}), committed: placed.committed })
   log('verbose', 'placed', placed)
 } catch (err) {
   // The mrepo there or not: the request printed, the error said.

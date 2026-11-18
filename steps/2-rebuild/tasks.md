@@ -2219,3 +2219,17 @@ package by package and lists here what needs code, built after it.
   --flags container`; `pair.md`, "Built, the prototype". The runtime says a
   pass that stalls (`runtime-stall.json`), for the open bug above: no
   stall in the runs since (one hang in nine).
+- **The docs review's findings** (`docs-review-local.md`, `r-6b4d346`),
+  **done** (2026-11-18): 1 (Splectral's start, `. <port>`, an action's
+  target first in `--help`), 2 (the continuation `.haicc` everywhere), 3
+  (the docs mrepo deployed by a command, said in `--help` and its pages),
+  4 (the docs mrepo's `Log` section, `--help`), 5 (the package how-tos:
+  "Written where"), 6 (the script how-to: the folder the user's), 7 (the
+  replica how-to's teardowns), 8 (the registry's scope), 9 (the colliding
+  section renamed), 11 (the exit codes' table; `haicc <word>`'s hint),
+  12 (the examples, `xpath`, the docs mrepo's `Howto`); 10 in part:
+  `boot/deploy` logs its packages by name at info. **Open**: 10, a
+  continuation's `--output` two documents and a page printed as JSON (a
+  printing mode, to design); 9, the `package mrepo` menu listing an entry
+  twice (its source not found yet); 5, where the development repository
+  is: the packages may not name it (transient), for the human.

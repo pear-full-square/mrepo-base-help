@@ -23,8 +23,14 @@ haicc <URI> --flags <flag>... -- <command>      flags after a URI: that
                                                 continuation=<script>, a
                                                 script to go on with, where
                                                 a command has some (a deploy:
-                                                its package's): run here with
-                                                sh, HAICC_AT its position
+                                                its package's scripts/
+                                                <script>.haicc): its lines
+                                                sent on by haicc as
+                                                haicc/script at the position;
+                                                container, on a boot/deploy:
+                                                the child deployed into a
+                                                Docker container, run there
+                                                by its own haicc install
 haicc <URI> <command> <URI> --flags <flag>...   after the last command's URI:
                                                 that command's, closed by the
                                                 end of the line
@@ -37,6 +43,11 @@ haicc boot/deploy                               the machine level: the boot
                                                 root, its runtime started
 haicc boot/teardown                             every runtime stopped, what
                                                 boot/deploy put in place removed
+haicc scripts                                   the install's scripts by
+                                                name: <home>/scripts/
+                                                <name>.haicc, a folder you
+                                                make (haicc <URI> haicc/file
+                                                <URI> <name> runs one)
 haicc sources                                   the sources registered
 haicc sources unlink <folder>
 haicc sources download [<what>...]              fetched over https: <org>,
@@ -47,7 +58,7 @@ haicc sources https | no-https                  https as the backup, or not
   haicc . boot/deploy host base-component-haicc
   haicc host service/initialise
   haicc host service/start
-  haicc host boot/deploy node-1 base-package-runtime
+  haicc host boot/deploy node-1 base-component-haicc
   haicc host haicc node-1 info/get
   haicc host crud/read . --flags log=verbose
   haicc host --flags log=debug -- haicc node-1 crud/read .
@@ -59,7 +70,14 @@ haicc sources https | no-https                  https as the backup, or not
 
 A URI is relative, without a leading slash: . is the local root, host the
 position host in it. A position named like a command of haicc itself is
-written with ./ in front: ./sources, ./boot, ./output.
+written with ./ in front: ./sources, ./boot, ./output. An action's first
+argument is its own target URI, . the position itself, then what it
+takes: haicc splectral splectral/start . 4401.
+
+A request's log is in its record: info unasked, more with --flags
+log=verbose; the requests done, at the request layer:
+haicc host crud/read "done/*" --flags layer=request.
 
 An mrepo answers about itself: haicc host info/get, haicc host info/get boot;
-the platform's documentation: haicc docs info/get, haicc docs info/get hdlc`
+the platform's documentation, once its mrepo is deployed (haicc . boot/deploy
+docs base-component-docs): haicc docs info/get, haicc docs info/get hdlc`

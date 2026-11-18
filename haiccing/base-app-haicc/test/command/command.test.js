@@ -58,10 +58,10 @@ test('the usage: every form of the command line, printed; exit 0', async (t) => 
 
 test('not a command: exit 2, said on stderr, nothing printed', async (t) => {
   for (const [a, said] of [
-    [['nosuch'], "haicc: no command 'nosuch' (haicc --help)"],
+    [['nosuch'], "haicc: no command 'nosuch' (haicc --help; a URI is followed by its command: haicc nosuch info/get)"],
     [['.'], 'haicc: haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)'],
     [['swarms/swarm-1'], 'haicc: haicc <URI> <protocol>/<action> <argument>... (a command follows the URI)'],
-    [['host'], "haicc: no command 'host' (haicc --help)"],
+    [['host'], "haicc: no command 'host' (haicc --help; a URI is followed by its command: haicc host info/get)"],
     [['boot'], 'haicc: haicc boot/deploy, haicc boot/teardown'],
     [['boot/nosuch'], 'haicc: no action: boot nosuch (deploy, teardown)'],
     [['boot/deploy', 'host'], 'haicc: haicc boot/deploy (no arguments)'],
