@@ -2090,6 +2090,13 @@ registry, we can create info views on all mrepos."
    sources and node mrepo is shared, all mrepo downstream from the node
    mrepo live in the container only". What follows, proposed, in
    `pair.md`.
+   **Revised** (the human, 2026-11-18): the container's boot mrepo shared
+   too, the host dropping the platform commands into its inbox; no
+   reading of the container's mrepos from their folders; "a clean
+   separation of install on host and container with shared container
+   boot and node manager looks a good pattern to start with and we
+   should test it against having everything on host". Agreed; in
+   `pair.md`.
    **Settled** (the human, 2026-11-17), `haicc/file` and the scripts
    folder: "I propose we have a fixed folder within the haicc install for
    script files, called scripts, next to work"; "if we do a script

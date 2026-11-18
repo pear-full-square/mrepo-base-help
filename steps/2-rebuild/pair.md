@@ -50,30 +50,42 @@ haicc platform."
    stay in the container; the host's folder for the pair is the node's
    mrepo folder alone.
 
-### What follows, to settle before building
+### Revised (the human, 2026-11-18)
 
-- **The platform commands' route.** The container's boot mrepo is not
-  shared, so the host cannot drop a platform command into its inbox.
-  Proposed: the host's platform runs the container's `haicc` command in
-  it (`docker exec <container> haicc <the command>`), the container's
-  platform's own terminal; its answer the host's action's answer. The
-  same for the first deploy of the node and for its teardown. A routing
-  through Docker, used only for the platform commands; everything else
-  through the node's shared folder.
-- **The first request.** With nothing of the container's home shared,
-  `start.sh` is not a file of the host's: the container's command line
-  itself (`sh -c '<install if not there; boot>'`, the installer copied
-  in or mounted read only beside the sources); the node then deployed by
-  a platform command (`docker exec`, above). Started again, the command
-  line boots again; whether the boot starts the node's runtime again,
-  to check.
-- **A shared folder at the node's place.** The node's folder is mounted
-  where the container's install places it
-  (`/haicc/work/mrepos/<swarm>/<name>`), so the mount point is there
-  before the deploy. Today `boot/deploy` refuses a folder that is there
-  ("in the way") and `boot/teardown` removes the folder, which a mount
-  point cannot be. Proposed: deploy takes an empty folder that is there;
+"The host needs access to the inbox of the container boot mrepo. If the
+host reads the container mrepo 'locally' then it should have access to
+all container mrepos 'locally' for it to make sense - maybe drop that
+bit? A clean separation of install on host and container with shared
+container boot and node manager looks a good pattern to start with and
+we should test it against having everything on host." Agreed:
+
+- **Shared**: the sources (read only, at their paths), the container's
+  boot mrepo's folder and the node's (the node manager): each mounted
+  where the container's install places it. Everything else of the
+  container's install, and every mrepo the node deploys, in the
+  container only.
+- **The platform commands' route**: a file dropped into the container's
+  boot mrepo's inbox, its answer from its outbox, as through any
+  shortcut: no `docker exec`. The first deploy of the node, its teardown
+  and redeploy all go this way.
+- **No local reading**: the host reads nothing of the container's
+  mrepos from their folders; what it wants to know it asks, the node or
+  the container's platform, as for any linked mrepo. The folders are
+  shared for their inboxes and outboxes.
+- **The first request**: the container's command line installs (the
+  installer mounted read only beside the sources) and boots; the boot
+  mrepo's runtime then takes the host's requests from its inbox. Started
+  again, it boots again; whether the boot starts the node's runtime
+  again, to check.
+- **A mount point at an mrepo's place** (both shared folders): today
+  `boot/deploy` refuses a folder that is there ("in the way"), the boot
+  component too maybe, and a teardown removes the folder, which a mount
+  point cannot be. Proposed: an empty folder that is there taken; a
   teardown empties it and removes it when it can.
+- **Tested against everything on the host**: the same scenario, a host
+  with a swarm of nodes, the same commands and checks, run twice: the
+  nodes deployed on the host, as today, and the nodes as pairs. What
+  differs is the pair's: its checks, and its timing beside the other.
 
 ## What it is
 
