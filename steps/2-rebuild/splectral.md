@@ -690,6 +690,14 @@ component is on another node, with nothing changed in the pattern.
 
 1. What the proof of concept showed, with the human: the page, the
    timings (a page about 1.1 s), the decisions made while building.
+   Shown 2026-11-19: 38 of 38 checks, a page 1.2-1.35 s. The human,
+   on our raising that every page view is recorded as a command (the
+   log's size): "This is a poc of the principle: a viewer based on
+   command used for help info. It has the core design that is being
+   evaluated, not the finished product." So the proof of concept is
+   judged on its core design only; what a finished product needs
+   (speed, the log's size: `logging`) is not part of it. Ours, agreed:
+   the core design holds, both patterns shown.
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).
