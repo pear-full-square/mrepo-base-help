@@ -254,8 +254,8 @@ test('deploy from a target package\'s list, placed by its unique URI, its link r
   }
 })
 
-// The runtime's bundle as the development repository's sources hold it
-// (tools/package-bundle.js); the test skipped without.
+// The runtime's bundle as a sources folder holds it (the packages'
+// build); the test skipped without.
 // (SOURCES: a sources folder given, as a package's tests pass theirs)
 const SOURCES = process.env.SOURCES || join(import.meta.dirname ?? new URL('.', import.meta.url).pathname, '..', '..', '..', 'sources')
 const haveRuntime = existsSync(join(SOURCES, 'haiccing', 'base-package-runtime.bundle'))

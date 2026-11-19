@@ -98,10 +98,11 @@ with `info/get` by its keywords. Its shape:
 2. **Summary**: everything up to the first `##` heading, at most 100
    words: what it does and how it is used. Everything else goes into
    sections.
-3. **Self-contained**: no reference to a development repository, a
-   transient one: neither its notes (`docs/`, `steps/`) nor a link to it
-   (`dev-env-<n>`). A README stands on its own or links within its
-   package.
+3. **Self-contained**: nothing of where it was made, a place of the
+   moment: neither its notes (`docs/`, `steps/`), nor a link to it
+   (`dev-env-<n>`), nor a mention of it (the team, 2026-11-19; the code
+   check finds the words). A README stands on its own or links within
+   its package.
 4. **Every README has a one-liner**, lists of tests included.
 5. **Section titles are short, stable nouns** ("Usage", "API", "Tests",
    "Design"), at most three words, or a file's name, so a section can be

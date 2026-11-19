@@ -6,8 +6,8 @@
 #     --keep    the temporary folder and its runtimes left as they are, to
 #               inspect (its path printed)
 #   SOURCES     the sources folder it links: the packages' bundles (the
-#               app's among them) and Bare's tarball (the development repository's sources/, built
-#               by tools/release.js); else ../../../sources from here;
+#               app's among them) and Bare's tarball (a sources folder, as
+#               the packages' build writes it); else ../../../sources from here;
 #               without one: skipped
 #   Docker      its daemon answering: the cluster's nodes get their
 #               containers (section 12); without it those checks fail

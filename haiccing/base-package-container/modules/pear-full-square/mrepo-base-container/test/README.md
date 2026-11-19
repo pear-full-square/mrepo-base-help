@@ -3,8 +3,8 @@
 The tests of mrepo-base-container, a section per file, each test by its name.
 
 They need Docker: a daemon that answers. Where none does, they fail and
-say so. The packages are read from the development repository's
-`sources/` (or `SOURCES`).
+say so. The packages are read from a sources folder (`SOURCES`, else
+`sources/` beside the packages).
 
 ## `container.test.js`
 

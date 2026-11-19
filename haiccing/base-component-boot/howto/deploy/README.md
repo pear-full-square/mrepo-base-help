@@ -17,4 +17,6 @@ haicc host crud/read .
 
 ## Then
 
-What can be done in the host is its own to say: `haicc host info/get`.
+Once the host is deployed (the steps above), what can be done in it is
+its own to say: `haicc host info/get`. Before that, `host` is no node
+there.

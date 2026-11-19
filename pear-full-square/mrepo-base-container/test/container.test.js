@@ -1,5 +1,5 @@
 // The container actions, with Docker: a bridgehead built here (a swarm's
-// node, its packages the development repository's sources), an execution
+// node, its packages a sources folder's), an execution
 // written for the actions (reads from its repository, writes collected,
 // then committed), and a real container made, started, reached, stopped
 // and removed. No Docker daemon answering: the test fails, saying so.
@@ -17,8 +17,7 @@ import { create, start, stop, remove, status, replica, docker, available, imageO
 const json = b => JSON.parse(b.toString())
 const lj = (dir, mode) => { mkdirSync(dir, { recursive: true }); writeFileSync(join(dir, 'layer.json'), JSON.stringify({ mode, description: 'test' })) }
 
-// The packages as the development repository's sources hold them
-// (tools/release.js). (SOURCES: a sources folder given, as a package's
+// The packages as a sources folder holds them (the packages' build). (SOURCES: a sources folder given, as a package's
 // tests pass theirs)
 const SOURCES = process.env.SOURCES || join(import.meta.dirname ?? new URL('.', import.meta.url).pathname, '..', '..', '..', 'sources')
 // The package the bridgehead is made of here: the runtime's own, the

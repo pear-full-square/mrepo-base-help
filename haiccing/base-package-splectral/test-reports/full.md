@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-splectral
 
-The package passed its `full` set: all 24 units, 336 of 336 tests and 2291 of 2291 asserts.
+The package passed its `full` set: all 24 units, 337 of 337 tests and 2295 of 2295 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 24 units, 336 of 336 tests and 2291 of 22
 | Set | `full` |
 | Result | passed |
 | Units | 24 of 24 passed |
-| Tests | 336 of 336 passed |
-| Asserts | 2291 of 2291 passed |
-| Run | 2026-11-19 09:49 UTC |
+| Tests | 337 of 337 passed |
+| Asserts | 2295 of 2295 passed |
+| Run | 2026-11-19 12:49 UTC |
 | Bare | v1.36.0 |
-| Content | `56183fb712b2f6a3c56409f29205b684fcf57e61ef018ae315d69ea6ab83ef77` |
+| Content | `5ec2202bde4b570f66fcd4b510c375c277abd003b448a79155c3c96abd10c613` |
 
 ## Units
 
@@ -26,7 +26,7 @@ The package passed its `full` set: all 24 units, 336 of 336 tests and 2291 of 22
 | `/test/modules/pear-full-square/mrepo-base-boot` | passed | 6 of 6 | 101 of 101 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 98 of 98 |
-| `/test/modules/pear-full-square/mrepo-base-info` | passed | 8 of 8 | 57 of 57 |
+| `/test/modules/pear-full-square/mrepo-base-info` | passed | 9 of 9 | 60 of 60 |
 | `/test/modules/pear-full-square/mrepo-base-protocol` | passed | 3 of 3 | 10 of 10 |
 | `/test/modules/pear-full-square/mrepo-base-request` | passed | 17 of 17 | 188 of 188 |
 | `/test/modules/pear-full-square/mrepo-base-runtime` | passed | 9 of 9 | 146 of 146 |
@@ -40,7 +40,7 @@ The package passed its `full` set: all 24 units, 336 of 336 tests and 2291 of 22
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 68 of 68 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 69 of 69 |
 | `/test/modules/pear-full-square/splectral-server` | passed | 8 of 8 | 108 of 108 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

@@ -24,5 +24,5 @@ The boot component's tests: one of its own, `boot`, and the generic ones, a fold
 ## Sources
 
 `SOURCES`: the sources folder `boot/` needs (the packages' bundles, this
-component's among them); else the development repository's `sources/`;
+component's among them); else `../../sources`, beside the packages;
 without it, skipped.

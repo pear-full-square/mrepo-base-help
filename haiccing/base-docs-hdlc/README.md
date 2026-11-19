@@ -94,7 +94,7 @@ wrong, it is raised.
   documentation lives in the packages and is kept there as the
   implementation goes on, a design still changing included; the
   direction of what is not built is the vision's
-  (`base-docs-vision`). The development repository's records hold the
+  (`base-docs-vision`). The records where the work is done hold the
   history: what was said, decided, found, scheduled; what settles moves
   into the packages and leaves the records.
 
@@ -228,7 +228,7 @@ Before every commit:
 
 ## Tooling
 
-Today's tooling, in the development repository's `tools/`, until the
+Today's tooling, beside the packages (`tools/`), not in them, until the
 HDLC is a protocol of its own. Kept to become packages: one tool, one
 concern; what two tools share in `lib/`; a tool reads and writes files and
 prints one line of JSON a result, so another can use it.

@@ -539,9 +539,9 @@ them.
 - **From the docs review by an AI agent** (2026-11-18; the review in
   git, `steps/2-rebuild/docs-review-local.md`): 10, a continuation's
   `--output` printing two documents and a page as JSON (a printing mode,
-  to design); 9, the `package mrepo` menu listing an entry twice (its
-  source not found yet); 5, where the development repository is: the
-  packages may not name it, for the human.
+  to design). Done since: 9, the `package mrepo` entry twice (gone with
+  the documentation's offload); 5, settled (the human, 2026-11-19:
+  "Packages are self contained, and certainly not mention dev repo").
 
 ## `composite-actions`: an action resuming after a child request
 
@@ -609,15 +609,6 @@ To check, each the human's:
   repository, `splectrum/dev-env-3-mrepo-native`, to be created; whether
   to update the seed to say its storage setting and boxes as layers are
   built here (one commit to `roadmap-1`).
-
-## `docs-review-open`: a question left from the AI agent's docs review
-
-(The rest of the review's open findings: above, with the printing mode.)
-
-- **Where the development repository is**: a package may not name it
-  (`base-docs-package`, "READMEs", 3: transient); the package how-tos say
-  to ask whoever runs the install. For the human: whether packages may
-  name it, or it gets a stable home.
 
 ## `housekeeping-branches`
 

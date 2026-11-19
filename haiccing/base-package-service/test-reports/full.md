@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-service
 
-The package passed its `full` set: all 14 units, 251 of 251 tests and 1500 of 1500 asserts.
+The package passed its `full` set: all 14 units, 252 of 252 tests and 1504 of 1504 asserts.
 
 | | |
 |---|---|
@@ -8,11 +8,11 @@ The package passed its `full` set: all 14 units, 251 of 251 tests and 1500 of 15
 | Set | `full` |
 | Result | passed |
 | Units | 14 of 14 passed |
-| Tests | 251 of 251 passed |
-| Asserts | 1500 of 1500 passed |
-| Run | 2026-11-19 05:08 UTC |
+| Tests | 252 of 252 passed |
+| Asserts | 1504 of 1504 passed |
+| Run | 2026-11-19 12:46 UTC |
 | Bare | v1.36.0 |
-| Content | `04c82cd04ac0dd5c5c81d9deb1081c70876f3164a318713284f971f6a62902ed` |
+| Content | `d1ac274f8057ae855e5f09677bbbc5b3bcac9729b2043bd6c349f604fa5eca92` |
 
 ## Units
 
@@ -23,7 +23,7 @@ The package passed its `full` set: all 14 units, 251 of 251 tests and 1500 of 15
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-info` | passed | 8 of 8 | 57 of 57 |
+| `/test/modules/pear-full-square/mrepo-base-info` | passed | 9 of 9 | 60 of 60 |
 | `/test/modules/pear-full-square/mrepo-base-request` | passed | 17 of 17 | 188 of 188 |
 | `/test/modules/pear-full-square/mrepo-base-service` | passed | 2 of 2 | 13 of 13 |
 | `/test/modules/pear-full-square/mycelium-container-document` | passed | 1 of 1 | 8 of 8 |
@@ -31,6 +31,6 @@ The package passed its `full` set: all 14 units, 251 of 251 tests and 1500 of 15
 | `/test/modules/pear-full-square/mycelium-uri` | passed | 21 of 21 | 195 of 195 |
 | `/test/modules/pear-full-square/mycelium-value-json` | passed | 1 of 1 | 3 of 3 |
 | `/test/modules/pear-full-square/mycelium-xpath` | passed | 21 of 21 | 141 of 141 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 68 of 68 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 69 of 69 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

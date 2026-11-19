@@ -3,8 +3,8 @@
 // handed over, its runtime started (from its own packages/). Nothing is
 // deployed by it: the host is deployed by a command, and from there on
 // everything is a command sent to the boot mrepo's inbox.
-// The sources: SOURCES, else the development repository's sources/ (the
-// packages' bundles written there); what needs them skipped without.
+// The sources: SOURCES, else ../../sources beside the packages (their
+// bundles in it); what needs them skipped without.
 // Everything from the package's own modules/.
 import test from '../../modules/node_modules/brittle/index.js'
 import process from '../../modules/node_modules/bare-process/index.js'
