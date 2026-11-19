@@ -698,6 +698,18 @@ component is on another node, with nothing changed in the pattern.
    judged on its core design only; what a finished product needs
    (speed, the log's size: `logging`) is not part of it. Ours, agreed:
    the core design holds, both patterns shown.
+   **Settled** (2026-11-19): the human asked "is this poc fit for purpose
+   to use as a pattern to design the proper viewer app? That design will
+   include command specific data schemas"; ours: yes, the setup carries
+   over as it is (the dual install, the two pipelines, the renderer
+   started by the component's hooks, the server the data layer, a page
+   a `haicc` command), and only the viewer's page action is replaced: it
+   has `info/get`'s answer shape written into it, where the
+   command-specific data schemas go. The human: "Agreed". The structure
+   of the data is not the viewer's concern: it is the data side's, to be
+   added to and optimised (the human). The proper viewer app is designed
+   after other reviews the human has in mind ("We will do some other
+   review before we start on it").
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).
