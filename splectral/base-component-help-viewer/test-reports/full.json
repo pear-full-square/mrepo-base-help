@@ -1,8 +1,8 @@
 {
   "package": "splectral/base-component-help-viewer",
-  "content": "cce2e12183d0f84a2d56ab510b61e7b25325b809e45e28bd4909925bfd00eb09",
+  "content": "5a0198c906ceda7b30df6d55e6eb12f539247207b7132ddb4a4f1f0e318b8bab",
   "bare": "v1.36.0",
-  "date": "2026-11-19T08:25:02.050Z",
+  "date": "2026-11-19T09:52:51.323Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -335,12 +335,12 @@
       "unit": "/test/modules/pear-full-square/splectral-server",
       "ok": true,
       "tests": {
-        "passed": 7,
-        "total": 7
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 96,
-        "total": 96
+        "passed": 108,
+        "total": 108
       },
       "failures": []
     }

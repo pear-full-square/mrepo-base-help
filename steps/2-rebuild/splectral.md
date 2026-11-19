@@ -728,6 +728,27 @@ component is on another node, with nothing changed in the pattern.
    help alone (its layout, the keywords below to move through, the
    command it shows); the generic viewer is designed from it, not held
    back by it.
+   **Settled** (2026-11-19), the site: the human, "The viewer must be a
+   tab within a splectral site setup. It could be a drop-down if to
+   many viewers"; "The component owns a section, can be more than one
+   page. Probably the server should create the site, and viewers
+   install within. It could be a site viewer, a component on its own";
+   "Single step on URI, and the site viewer could have pages of its
+   own"; "The site owns the tab, the viewer opens the 'real estate'
+   within"; "You can start with a fully static page for now at the
+   server embedded in the site frame. Start simple." And: "URI is
+   /help, site serves / and viewer help By chopping up the Uri this way
+   nesting can be easily achieved." Built: the server's site, static,
+   its tabs Splectral's own page (`/`, `/install`) then each component,
+   past five a drop-down; the URI chopped, `/help/hdlc/validation` the
+   site with the help viewer's page `hdlc/validation` embedded in its
+   content area, its links opening at the top (the address bar the
+   page's own URI). And: "Yes, with relative URLs always correct,
+   irrespective of parent": the site gives an embedded page its base,
+   its section's own address; a component's links relative to its
+   section, the `base` the server passed it dropped. Later, from it: the
+   site a component of its own (a site viewer, pages of its own);
+   sections nested.
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).

@@ -35,8 +35,8 @@ docs mrepo: `haicc docs info/get <keywords>`.
   --flags container`).
 - **Splectral**, `local/splectral`: an app platform beside the host. It
   deploys its components with the boot protocol, installs their
-  Splectral side (`splectral/install`) and serves their pages in a
-  browser; its server is the data layer, running the commands a
+  Splectral side (`splectral/install`) and serves them in a browser as
+  a site, a tab each, a component's section in its content area; its server is the data layer, running the commands a
   component asks for as a terminal does. Its components are packages of
   the `splectral` organisation; the first is the help viewer.
 

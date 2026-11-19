@@ -31,7 +31,7 @@ test('the program: its page made over its Splectral boxes; its state; ended with
     t.ok(await until(() => existsSync(state)), 'its state written once it follows its inbox')
     t.is(JSON.parse(readFileSync(state, 'utf8')).component, 'splectral/base-component-help-viewer', 'the component it runs for')
     const key = '11111111-1111-4111-8111-111111111111'
-    put(join(side, 'inbox'), key, envelope(key, { request: 'page', path: 'hdlc', query: {}, base: '/help' }))
+    put(join(side, 'inbox'), key, envelope(key, { request: 'page', path: 'hdlc', query: {} }))
     t.ok(await until(() => readdirSync(join(side, 'outbox')).length === 1), 'a data request in its outbox')
     const name = readdirSync(join(side, 'outbox'))[0]
     const asked = JSON.parse(readFileSync(join(side, 'outbox', name), 'utf8'))
