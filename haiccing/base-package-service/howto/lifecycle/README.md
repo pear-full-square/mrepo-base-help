@@ -13,7 +13,7 @@ haicc host service/initialise
 # its door opened: its start hooks activate what is behind it (boot)
 haicc host service/start
 # what is behind the door now allowed
-haicc host boot/deploy node-1 base-package-runtime
+haicc host boot/deploy node-1 haiccing/base-package-runtime
 haicc host boot/teardown node-1
 # its door closed again: boot refused until the next start
 haicc host service/stop

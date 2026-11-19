@@ -59,10 +59,10 @@ scenario () {
   echo "# $mode"
   haicc sources link "$SOURCES" >/dev/null; haicc prereq >/dev/null
   label=boot; step boot/deploy; is $? 0 "$mode: haicc boot/deploy"
-  label=host; step --output . boot/deploy host base-component-haicc --flags continuation=start; is $? 0 "$mode: the host deployed and started"
+  label=host; step --output . boot/deploy host haiccing/base-component-haicc --flags continuation=start; is $? 0 "$mode: the host deployed and started"
   label=swarm; step --output host crud/create swarms/swarm-1 '{"kind":"swarm"}'; is $? 0 "$mode: a swarm at the host"
   # shellcheck disable=SC2086
-  label=deploy; step --output host boot/deploy swarms/swarm-1/node-1 base-component-haicc $flag; is $? 0 "$mode: the node deployed${flag:+ ($flag)}"
+  label=deploy; step --output host boot/deploy swarms/swarm-1/node-1 haiccing/base-component-haicc $flag; is $? 0 "$mode: the node deployed${flag:+ ($flag)}"
   has "$out" '"mrepo":"swarm-1/node-1"' "$mode: by its unique URI"
   if [ "$mode" = pair ]; then
     has "$out" '"container":{"name":"haicc-pair-swarm-1-node-1-' "pair: in its container"
@@ -75,7 +75,7 @@ scenario () {
   label=read; step --output $N crud/read notes/a; has "$out" '"value":{"x":1}' "$mode: read back"
   label=script; step --output $N haicc/script . 'crud/create notes/b
 crud/read notes/b'; has "$out" '"line":"crud/read notes/b"' "$mode: a script's lines at the node"
-  label=sub; step --output $N boot/deploy sub base-component-haicc; has "$out" '"deployed":"sub"' "$mode: the node deploys an mrepo of its own"
+  label=sub; step --output $N boot/deploy sub haiccing/base-component-haicc; has "$out" '"deployed":"sub"' "$mode: the node deploys an mrepo of its own"
   label=sub-init; step --output $N/sub service/initialise; out2=$out
   label=sub-start; step --output $N/sub service/start; has "$out2$out" '"state":"started"' "$mode: its service started, through the node"
   label=sub-read; step --output $N/sub crud/read .; has "$out" '"uri":["main","."]' "$mode: reached through the node"
@@ -87,7 +87,7 @@ crud/read notes/b'; has "$out" '"line":"crud/read notes/b"' "$mode: a script's l
     is "$(docker ps -aq --filter "label=haicc.folder=$H/work/containers/swarm-1/node-1" | wc -l | tr -d ' ')" 0 "pair: its container removed"
     [ -e "$H/work/containers/swarm-1/node-1" ] && no "pair: its folder removed" || ok "pair: its folder removed"
     # again, then the machine's teardown with the pair there
-    label=deploy-again; step --output host boot/deploy swarms/swarm-1/node-1 base-component-haicc $flag; is $? 0 "pair: deployed again"
+    label=deploy-again; step --output host boot/deploy swarms/swarm-1/node-1 haiccing/base-component-haicc $flag; is $? 0 "pair: deployed again"
   fi
   label=machine; step boot/teardown; is $? 0 "$mode: haicc boot/teardown"
   is "$(docker ps -aq --filter label=haicc.folder | while read -r id; do docker inspect --format '{{index .Config.Labels "haicc.folder"}}' "$id"; done | grep -c "^$T/")" 0 "$mode: no container of the install left"

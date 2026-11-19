@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-vision",
-  "content": "2917fa4bbe51c4fcb8c7bf7b1eeeee4a23ae8770e2b5597cd7ba9a896bfc5f2f",
+  "content": "39630550b29c91d3a0092afd74989774eb26c21c9aeb9d5d15648f102f82584b",
   "bare": "v1.36.0",
-  "date": "2026-11-18T11:34:50.883Z",
+  "date": "2026-11-19T02:55:58.968Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -105,8 +105,8 @@
         "total": 23
       },
       "asserts": {
-        "passed": 63,
-        "total": 63
+        "passed": 68,
+        "total": 68
       },
       "failures": []
     }

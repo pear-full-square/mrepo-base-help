@@ -20,7 +20,7 @@ How they are kept (to become packages): `base-docs-hdlc`, "Tooling".
 | `package-assemble.js` | a package's `modules/` written: our modules copied, the third-party code they use |
 | `package-bundle.js` | a package written as a bundle into the sources, its entry in the manifest |
 | `package-test.js` | a package's pre-release: built, its `full` set run unless its report is current, the report written and bundled |
-| `package-template.sh` | a package brought to the package template: the generic tests' folders, `test-reports/`, the pin |
+| `package-template.sh` | a package (`<org>/<package>`) brought to its organisation's package template: the generic tests' folders, `test-reports/`, the pin |
 
 ## All packages
 
@@ -42,7 +42,7 @@ How they are kept (to become packages): `base-docs-hdlc`, "Tooling".
 | tool | does |
 |---|---|
 | `products.sh` | a module's own repository updated from here |
-| `packages.sh` | a package's own repository updated from here |
+| `packages.sh` | a package's own repository (`<org>/<package>`) updated from here |
 
 ## lib/
 
@@ -50,4 +50,5 @@ How they are kept (to become packages): `base-docs-hdlc`, "Tooling".
 |---|---|
 | `lib/dispatcher.js` | a package's dispatcher and test runner, written into the package |
 | `lib/report.js` | a package's test report: its status against a bundle, the report to read |
+| `lib/orgs.js` | the organisations: one list every tool reads, each its template and the organisations its packages may depend on; a list checked against its organisation |
 | `lib/commit-bench-worker.js` | a writer of `commit-bench.js`, run as a thread or as a process |

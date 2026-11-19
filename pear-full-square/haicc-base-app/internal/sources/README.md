@@ -30,16 +30,17 @@ list is the file `sources.list` in haicc's own folder, a line a source:
 |---|---|
 | `haicc sources` | the sources registered |
 | `haicc sources unlink <folder>` | a folder taken off the list |
-| `haicc sources https`, `no-https` | https as the backup for what the folders lack, or not |
-| `haicc sources download [<what>...]` | `<org>`, `<org>/<package>`; nothing named: the organisation |
+| `haicc sources https [<org>...]`, `no-https [<org>...]` | https as the backup for what the folders lack, or not: each organisation named (`github:<org>`); none named, haicc's own for `https`, every one for `no-https` |
+| `haicc sources download <org>...` | what the first step does not take: a package alone (`<org>/<package>`) is never downloaded, its organisation is |
 
 ## Errors
 
 - An action that is not there, or its arguments wrong: a `Failure`, exit
   code 2.
-- A download that could not be made: each said, then a `Failure` with
-  exit code 3. Our packages are not published anywhere yet, so every
-  download ends so.
+- A download that comes to the app: each said, then a `Failure` with
+  exit code 3. Bare and the organisations are downloaded by the
+  platform's first step, before Bare (`base-linux-haicc`); a package is
+  downloaded with its organisation, not alone.
 
 ## Design
 

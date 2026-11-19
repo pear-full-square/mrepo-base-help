@@ -213,6 +213,11 @@ line or right above it: `// log: ...`, `// catch: ...`, `// console: ...`,
 `modules`: our modules the unit starts from; what they use is worked out
 from them ("Modules", above).
 
+`platform`: a platform's package only, the organisation of its
+components (`"platform": "splectral"`; `base-docs-haicc`, "Platforms").
+A list of that organisation is the platform's component, the pattern
+`<org>-component`.
+
 `template`: the commit of this template the package was brought to ("From
 the template", below).
 

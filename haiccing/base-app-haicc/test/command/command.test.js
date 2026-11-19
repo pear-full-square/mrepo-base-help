@@ -53,7 +53,7 @@ test('the usage: every form of the command line, printed; exit 0', async (t) => 
     const r = asked('usage', await haicc(a))
     t.alike([r.code, r.out, r.err], [0, USAGE + '\n', ''], `haicc ${a.join(' ')}`)
   }
-  for (const form of ['haicc <URI> <protocol>/<action> <argument>...', 'haicc --raw <URI>', 'haicc --output <URI>', 'haicc boot/deploy', 'haicc boot/teardown', 'haicc sources', 'haicc sources unlink <folder>', 'haicc sources download [<what>...]', 'haicc sources https | no-https']) t.ok(USAGE.includes(form), `in it: ${form}`)
+  for (const form of ['haicc <URI> <protocol>/<action> <argument>...', 'haicc --raw <URI>', 'haicc --output <URI>', 'haicc boot/deploy', 'haicc boot/teardown', 'haicc sources', 'haicc sources unlink <folder>', 'haicc sources download <org>...', 'haicc sources https | no-https [<org>...]']) t.ok(USAGE.includes(form), `in it: ${form}`)
 })
 
 test('not a command: exit 2, said on stderr, nothing printed', async (t) => {
@@ -67,7 +67,7 @@ test('not a command: exit 2, said on stderr, nothing printed', async (t) => {
     [['boot/deploy', 'host'], 'haicc: haicc boot/deploy (no arguments)'],
     [['--output'], 'haicc: --output goes before a URI'],
     [['--raw'], 'haicc: --raw goes before a URI'],
-    [['sources', 'link', '/x'], 'haicc: haicc sources [unlink <folder> | download [<what>...] | https | no-https]']
+    [['sources', 'link', '/x'], 'haicc: haicc sources [unlink <folder> | download <org>... | https [<org>...] | no-https [<org>...]]']
   ]) {
     const r = await haicc(a)
     t.alike([r.code, r.out, r.err], [2, '', said + '\n'], `haicc ${a.join(' ')}`)
@@ -96,7 +96,7 @@ test('haicc sources: the list in its own folder, read and changed', async (t) =>
   r = await haicc(['sources', 'https'])
   t.alike([r.code, r.out], [0, `folder:${join(home, 'src')}\ngithub:${CONFIG.org}\n`], 'https: back on')
   r = await haicc(['sources', 'download', CONFIG.org])
-  t.alike([r.code, r.out, r.err], [3, '', `haicc: ${CONFIG.org}: not published yet; link a sources folder (haicc sources link <folder>)\n`], 'download: our packages are not published yet, exit 3')
+  t.alike([r.code, r.out, r.err], [3, '', `haicc: ${CONFIG.org}: fetched before the app (haicc sources download ${CONFIG.org})\n`], 'download: an organisation, the first step\'s, not the app\'s: exit 3')
   r = await haicc(['sources', 'unlink', join(home, 'src')])
   t.alike([r.code, r.out], [0, `github:${CONFIG.org}\n`], 'unlink')
   t.is(readFileSync(join(home, 'sources.list'), 'utf8'), `github:${CONFIG.org}\n`, 'the list written')
@@ -105,7 +105,7 @@ test('haicc sources: the list in its own folder, read and changed', async (t) =>
 test('a command for the mrepos: its record in the root\'s inbox, value by value', async (t) => {
   mkdirSync(join(root, 'inbox'), { recursive: true }); mkdirSync(join(root, 'outbox'))
   let a = answer({ output: { deployed: 'host' } })
-  let r = asked('request', await haicc(['--output', '.', 'boot/deploy', 'host', 'base-component-haicc']))
+  let r = asked('request', await haicc(['--output', '.', 'boot/deploy', 'host', 'haiccing/base-component-haicc']))
   let { file, envelope } = await a
   t.is(r.code, 0, r.err)
   t.is(envelope.topic, `/${CONFIG.root.uri}/inbox`, 'an envelope addressed to the root mrepo\'s inbox: /local/boot/inbox')
@@ -115,7 +115,7 @@ test('a command for the mrepos: its record in the root\'s inbox, value by value'
   t.is(envelope.value.topic, '/haicc/terminal', 'its core addressed back to the terminal')
   t.is(envelope.value.key, envelope.key, 'the same key')
   t.alike(envelope.value.headers, { trigger: 'external' }, 'the core\'s headers: triggered from outside, a terminal')
-  t.alike(envelope.value.value, ['boot/deploy', 'host', 'base-component-haicc'], 'at the root the command plain, its parts as typed, unnamed')
+  t.alike(envelope.value.value, ['boot/deploy', 'host', 'haiccing/base-component-haicc'], 'at the root the command plain, its parts as typed, unnamed')
   t.alike(readdirSync(join(root, 'inbox')), [file], 'nothing half written left beside it')
 
   a = answer({ output: 1 })
@@ -138,11 +138,11 @@ test('its response: the record unpacked, as stored, or the output alone; the exi
   // (packed again: what the unpacking added taken off; the exact check, strings minded, is the module's)
   const packed = s => JSON.stringify(JSON.parse(s))
   let a = answer({ output })
-  let r = await haicc(['.', 'boot/deploy', 'host', 'base-component-haicc'])
+  let r = await haicc(['.', 'boot/deploy', 'host', 'haiccing/base-component-haicc'])
   let { text } = await a
   t.alike([r.code, r.err], [0, ''], 'an output: exit 0')
   t.ok(r.out.includes('\n    "topic": "/haicc/terminal", "key": "'), 'by default the record unpacked across lines: the core two deep, its entries packed on a line')
-  t.ok(r.out.includes('\n      "command": ["boot/deploy","host","base-component-haicc"],'), 'the form three deep; what fits on a line left as stored, an entry never split')
+  t.ok(r.out.includes('\n      "command": ["boot/deploy","host","haiccing/base-component-haicc"],'), 'the form three deep; what fits on a line left as stored, an entry never split')
   t.ok(r.out.trimEnd().split('\n').every(l => l.length <= 80), 'to 80 columns: the output is no terminal, no width set')
   t.is(packed(r.out), text.trim(), 'packed again: the record as stored, nothing of it changed')
 

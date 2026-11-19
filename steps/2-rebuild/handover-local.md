@@ -22,7 +22,7 @@ sh haiccing/base-linux-haicc/haicc-install.sh
 haicc sources link <clone>/sources
 haicc prereq
 haicc boot/deploy
-haicc . boot/deploy host base-component-haicc
+haicc . boot/deploy host haiccing/base-component-haicc
 haicc host service/initialise
 haicc host service/start
 haicc . crud/create swarms/swarm-1
@@ -61,7 +61,12 @@ Decided by the human (2026-11-13). The cloud session cannot create a
 GitHub release; it can only push commits. So:
 
 - **Where**: a release on each package's own repository
-  (`github.com/haiccing/<package>`), not in a repository of sources.
+  (`github.com/<org>/<package>`), not in a repository of sources.
+- **An organisation's manifest** (`sources/<org>/manifest.json`): an
+  asset of its documentation package's release, `<org>/base-docs-<platform>`;
+  haiccing's on `haiccing/base-docs-haicc` (2026-11-19: no longer on
+  `base-linux-haicc`; the installer released before it still reads it
+  there, so the first release after it carries it on both).
 - **What**: what `tools/bare tools/release.js` built for that package,
   from the commit you tested: its bundle and what belongs with it, as
   `sources/` holds it (the manifest entry, its native addons). For
@@ -77,5 +82,5 @@ GitHub release; it can only push commits. So:
   commit, each repository, its tag, its assets with their sizes and
   hashes, the URL each is downloaded from. `haicc sources download`
   fetches what you publish (`base-linux-haicc`'s README, "haicc sources
-  download haiccing"), so say exactly what you published and how you
+  download <org>"), so say exactly what you published and how you
   named it.

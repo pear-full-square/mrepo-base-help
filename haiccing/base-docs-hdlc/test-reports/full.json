@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-hdlc",
-  "content": "de1b4f682d1a1c49cf7e7636725cc887664ca7fd942fd2f0912bc62c0b477815",
+  "content": "1f5f3fe9ff7507ec22b0af599e9fb2ccc6cc4561cee1ef7eec0913218ed82859",
   "bare": "v1.36.0",
-  "date": "2026-11-19T01:59:13.917Z",
+  "date": "2026-11-19T02:55:41.637Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -105,8 +105,8 @@
         "total": 23
       },
       "asserts": {
-        "passed": 63,
-        "total": 63
+        "passed": 68,
+        "total": 68
       },
       "failures": []
     }

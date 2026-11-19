@@ -55,8 +55,8 @@ test('a continuation: the response says what to go on with, a script: sent on as
     mkdirSync(join(s.root, 'inbox'), { recursive: true }); mkdirSync(join(s.root, 'outbox'), { recursive: true })
     const script = 'service/initialise\nservice/start\n'
     let a = answerAll(s.root, [{ output: { deployed: 'host' }, continuation: { at: 'host', script } }, { output: [{ line: 'service/initialise' }, { line: 'service/start' }] }])
-    t.is(await s.run(['--output', '.', 'boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start']), 0, 'exit 0: the script done')
-    t.alike(await a.all, [['boot/deploy', 'host', 'base-component-haicc', '--flags', 'continuation=start'], ['haicc/script', 'host', script]], 'the command, then its script, one command to the root: haicc/script, its URI the position it was answered for')
+    t.is(await s.run(['--output', '.', 'boot/deploy', 'host', 'haiccing/base-component-haicc', '--flags', 'continuation=start']), 0, 'exit 0: the script done')
+    t.alike(await a.all, [['boot/deploy', 'host', 'haiccing/base-component-haicc', '--flags', 'continuation=start'], ['haicc/script', 'host', script]], 'the command, then its script, one command to the root: haicc/script, its URI the position it was answered for')
     t.alike(s.out, ['{"deployed":"host"}', '[{"line":"service/initialise"},{"line":"service/start"}]'], '--output: each one\'s output')
 
     a = answerAll(s.root, [{ output: 1, continuation: { at: '.', script: 'x/y\n' } }, { error: 'line 1: x/y: no protocol' }])
@@ -108,8 +108,8 @@ test('haicc sources: printed a line a source', async (t) => {
     writeFileSync(join(s.home, LIST), 'folder:/a\ngithub:haiccing\n')
     t.is(await s.run(['sources']), 0)
     t.alike(s.out, ['folder:/a', 'github:haiccing'])
-    t.is(await s.run(['sources', 'download', 'haiccing']), 3)
-    t.alike(s.err, ['haicc: haiccing: not published yet; link a sources folder (haicc sources link <folder>)'], 'said once, exit 3')
+    t.is(await s.run(['sources', 'download', 'haiccing/base-package-runtime']), 3)
+    t.alike(s.err, ['haicc: haiccing/base-package-runtime: a package is not downloaded alone; its organisation is (haicc sources download haiccing)'], 'said once, exit 3')
   } finally { s.remove() }
 })
 
@@ -119,11 +119,11 @@ test('a command for the mrepos: its response printed unpacked, as stored, or its
     mkdirSync(join(s.root, 'inbox'), { recursive: true }); mkdirSync(join(s.root, 'outbox'))
     const long = { deployed: 'host', mrepo: 'local/host', package: 'haiccing/base-component-haicc', runtime: { pid: 4242 } }
     let a = answer(s.root, { output: long })
-    t.is(await s.run(['.', 'boot/deploy', 'host', 'base-component-haicc']), 0, 'an output: exit 0')
+    t.is(await s.run(['.', 'boot/deploy', 'host', 'haiccing/base-component-haicc']), 0, 'an output: exit 0')
     let { envelope, text } = await a
     t.is(envelope.topic, `/${CONFIG.root.uri}/inbox`, 'sent to the root mrepo\'s inbox')
     t.is(envelope.value.topic, CONFIG.reply, 'its core addressed back to the terminal')
-    t.alike(envelope.value.value, ['boot/deploy', 'host', 'base-component-haicc'], 'at the root: the command plain')
+    t.alike(envelope.value.value, ['boot/deploy', 'host', 'haiccing/base-component-haicc'], 'at the root: the command plain')
     t.is(s.out.length, 1)
     t.ok(s.out[0].includes('\n    "topic": "/haicc/terminal", "key": "'), 'by default the record unpacked: the core two deep, its entries packed on lines')
     t.ok(s.out[0].split('\n').length > 3 && s.out[0].split('\n').every(l => l.length <= 80), 'to 80 columns: the output is no terminal, no width set')

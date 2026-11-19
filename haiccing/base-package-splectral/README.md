@@ -52,7 +52,7 @@ own.
 A component is an app: an mrepo Splectral deploys, in two halves.
 
 ```
-haicc splectral boot/deploy viewer base-package-service
+haicc splectral boot/deploy viewer haiccing/base-package-service
 haicc splectral splectral/install viewer splectral/base-component-viewer
 haicc splectral/viewer service/initialise
 haicc splectral/viewer service/start

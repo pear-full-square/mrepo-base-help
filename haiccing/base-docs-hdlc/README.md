@@ -237,11 +237,13 @@ prints one line of JSON a result, so another can use it.
 - `release.js`: every package assembled and bundled into the sources,
   Bare's tarball, the `haicc` installer; `--strict` refuses a stale
   report.
-- `package-test.js <package>`: a package's pre-release.
-- `package-template.sh <package>`: a package brought to the template,
-  its generic tests copied, its pin recorded.
-- `products.sh <module>`, `packages.sh -m <what> <package>`: the
+- `package-test.js <org>/<package>`: a package's pre-release.
+- `package-template.sh <org>/<package>`: a package brought to its
+  organisation's template, its generic tests copied, its pin recorded.
+- `products.sh <module>`, `packages.sh -m <what> <org>/<package>`: the
   product repositories updated.
+- `lib/orgs.js`: the organisations, one list every tool reads: each its
+  template and the organisations its packages may depend on.
 - `info-extract.js`, `code-check.js`: the checks; `info-view.js`: the docs
   view, the docs mrepo of a transient install (every package the sources
   offer) in one page, browsed by keywords.

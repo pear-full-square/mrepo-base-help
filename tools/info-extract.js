@@ -8,8 +8,8 @@
 // base-component-haicc, base-component-docs), its list from its
 // mrepo/packages/layer.json, its bundles from sources/ here. The out folder
 // (default sources/info/<component>/): the pages, index.json and
-// problems.json. --files: the rules on this repository's own READMEs (the
-// haiccing packages, the modules they carry), by file. Exit 1 when there
+// problems.json. --files: the rules on this repository's own READMEs (every
+// organisation's packages, the modules they carry), by file. Exit 1 when there
 // is a problem.
 import process from 'bare-process'
 import { readFileSync, writeFileSync, mkdirSync, rmSync, existsSync, readdirSync, statSync } from 'bare-fs'
@@ -17,6 +17,7 @@ import { join, resolve, dirname } from 'bare-path'
 import { fileURLToPath } from 'bare-url'
 import Bundle from 'bare-bundle'
 import { check, extract } from '../pear-full-square/mrepo-base-info/index.js'
+import { packagesHere } from './lib/orgs.js'
 
 const dev = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const args = process.argv.slice(2)
@@ -25,7 +26,7 @@ const WANTED = k => k.endsWith('/README.md') || k === '/package.json' || k === '
 
 if (args.includes('--files')) {
   // every package here, and every module a package carries
-  const packages = ['haiccing', 'splectral'].filter(o => existsSync(join(dev, o))).flatMap(o => readdirSync(join(dev, o)).sort().filter(n => statSync(join(dev, o, n)).isDirectory()).map(n => `${o}/${n}`))
+  const packages = packagesHere(dev)
   const carried = new Set(packages.flatMap(p => { const m = join(dev, p, 'modules', 'pear-full-square'); return existsSync(m) ? readdirSync(m) : [] }))
   const roots = [...packages, ...[...carried].sort().map(m => `pear-full-square/${m}`)]
   const found = []

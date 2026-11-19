@@ -120,7 +120,7 @@ test('the actions: nothing running; what start refuses; its server started from 
     await t.exception(act('install', reads, { uri: ['main'], args: ['splectral/x'] }), /missing argument: target/)
     await t.exception(act('install', reads, { uri: ['main', 'stream'], args: ['splectral/x'] }), /not a position for a component: stream/, 'the server\'s own paths')
     await t.exception(act('install', reads, { uri: ['main', 'a/b'], args: ['splectral/x'] }), /not a position for a component: a\/b/, 'one name, at the top')
-    await t.exception(act('install', reads, { uri: ['main', 'viewer'], args: ['splectral/x'] }), /not deployed: viewer \(boot\/deploy viewer base-package-service first\)/, 'nothing deployed there')
+    await t.exception(act('install', reads, { uri: ['main', 'viewer'], args: ['splectral/x'] }), /not deployed: viewer \(boot\/deploy viewer haiccing\/base-package-service first\)/, 'nothing deployed there')
     await t.exception(act('start', exec, { args: ['web'] }), /not a port: web/)
     await t.exception(act('start', execution({ dir, work: null })), /no work folder in the context/)
     writeFileSync(join(work, 'mrepo.json'), JSON.stringify({ storage: 'filesystem', name: 'boot' }))

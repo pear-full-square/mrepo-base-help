@@ -54,6 +54,21 @@ organisation of its own, beside haicc's own, `haiccing`.
   packages in the sources under `<org>/`, its manifest
   `<org>/manifest.json`. An install sources `haiccing` and the
   organisation of each platform it deploys.
+- **A package is named fully qualified**, `<org>/<package>`, always:
+  in a command, a list, a manifest. No organisation is assumed, so
+  packages of other organisations, a user's later, are named the same
+  way.
+- **References**: a list (a top-level inclusion) names its own
+  organisation's packages only; a package may depend on the
+  organisations its own declares (haiccing's for the three platforms),
+  written in the organisation's manifest (`depends`).
+- **A platform declares its organisation**: its package's
+  `package.json`, `"platform": "<org>"`; a list of that organisation is
+  its component.
+- **Sourcing, an organisation at a time**: `haicc sources download
+  <org>`, its manifest an asset of the latest release of its
+  documentation package (`<org>/base-docs-<platform>`, haiccing's
+  `base-docs-haicc`).
 - **One package template, an input source each**: a platform's packages
   are brought to a template very similar to haiccing's
   (`base-docs-package`); what differs is the input source, the

@@ -26,7 +26,9 @@ export function sources (home) {
   return self
 }
 
-const USAGE = 'haicc sources [unlink <folder> | download [<what>...] | https | no-https]'
+const USAGE = 'haicc sources [unlink <folder> | download <org>... | https [<org>...] | no-https [<org>...]]'
+// An organisation's name: <org>
+const ORG = /^[a-z][a-z0-9-]*$/
 
 // haicc sources <action> <argument>...: what it prints, a line each.
 export function sourcesCommand (home, args, { org, err = () => {} }) {
@@ -40,24 +42,30 @@ export function sourcesCommand (home, args, { org, err = () => {} }) {
       if (rest.length !== 1) throw new Failure('haicc sources unlink <folder>', 2)
       s.unregister(`folder:${isFolder(rest[0]) ? resolve(rest[0]) : rest[0]}`)
       return s.list()
-    case 'https':
-      s.register(`github:${org}`)
+    case 'https': {
+      // each organisation named, haicc's own when none is
+      const orgs = rest.length ? rest : [org]
+      for (const o of orgs) if (!ORG.test(o)) throw new Failure(`haicc sources https [<org>...] (not an organisation: ${o})`, 2)
+      for (const o of orgs) s.register(`github:${o}`)
       return s.list()
-    case 'no-https':
-      s.unregister(`github:${org}`)
+    }
+    case 'no-https': {
+      // each organisation named, every one when none is
+      for (const o of rest) if (!ORG.test(o)) throw new Failure(`haicc sources no-https [<org>...] (not an organisation: ${o})`, 2)
+      for (const l of s.list().filter(l => l.startsWith('github:') && (!rest.length || rest.includes(l.slice('github:'.length))))) s.unregister(l)
       return s.list()
+    }
     case 'download': {
-      let missed = false
-      for (const what of rest.length ? rest : [org]) {
-        missed = true
-        // our packages are not published anywhere yet (release and sourcing:
-        // signed bundles and their manifest, to come)
-        if (what === org || what.startsWith(`${org}/`)) err(`haicc: ${what}: not published yet; link a sources folder (haicc sources link <folder>)`)
-        else if (what === 'bare' || what === 'third-party') err(`haicc: ${what}: fetched on its own, before the app (haicc sources download bare)`)
-        else err(`haicc: nothing to download for '${what}' (bare, ${org}, ${org}/<package>)`)
+      // what the first step (sh, before Bare) fetches never comes here:
+      // bare, third-party and the organisations; a package alone is never
+      // downloaded
+      if (!rest.length) throw new Failure('haicc sources download bare|<org>...', 2)
+      for (const what of rest) {
+        if (what.includes('/')) err(`haicc: ${what}: a package is not downloaded alone; its organisation is (haicc sources download ${what.split('/')[0]})`)
+        else if (what === 'bare' || what === 'third-party' || ORG.test(what)) err(`haicc: ${what}: fetched before the app (haicc sources download ${what})`)
+        else err(`haicc: nothing to download for '${what}' (bare, <org>)`)
       }
-      if (missed) throw new Failure('', 3)
-      return []
+      throw new Failure('', 3)
     }
     default:
       throw new Failure(USAGE, 2)
