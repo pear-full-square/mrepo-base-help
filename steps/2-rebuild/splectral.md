@@ -39,17 +39,18 @@ mrepo's request layers.
   request layers, recorded; Splectral's, linked with the Splectral
   server and nothing else, for pages and data, a watcher at each end,
   what passes over it fixed, the same for every component.
-- **The renderer**: a light process of the Splectral side's own, from
-  the component's packages; it reads Splectral's inbox, calls the
-  elements in its own process, writes Splectral's outbox. Started by
-  the component's `start` hook, ended by its `stop` hook and with its
+- **The component's program**: a light process of the Splectral side's
+  own (the help viewer's in its one package; a renderer every component
+  shares, later, from what it teaches); it reads Splectral's inbox,
+  makes the page in its own process, writes Splectral's outbox. Started
+  by the component's `start` hook, ended by its `stop` hook and with its
   runtime: the lifecycle is the mrepo's service.
 - **The packages**: of the `splectral` organisation only, linking no
   haiccing package; brought to haiccing's template
   (`base-docs-package`), one documentation package of the family's on
-  top; an element set a protocol package, an element an action; a
-  component a component package, its list; its own package one
-  protocol, named as it is, its action `page`.
+  top. Today one: the help viewer, a standalone first implementation
+  (2026-11-19, below): its program and its page in it, no protocol, no
+  element set, no renderer apart.
 - **The pattern, an application platform**: an mrepo that manages its
   components with the boot protocol and adds only what is its own; to
   be used for other types of application.
@@ -57,28 +58,26 @@ mrepo's request layers.
 **The commands**
 
 ```
-haicc splectral boot/deploy viewer haiccing/base-package-service
-haicc splectral splectral/install viewer splectral/base-component-viewer
-haicc splectral/viewer service/initialise
-haicc splectral/viewer service/start     # the renderer started: pages answer
-haicc splectral/viewer service/stop      # the renderer ended
-haicc splectral boot/teardown viewer
+haicc splectral boot/deploy help haiccing/base-package-service
+haicc splectral splectral/install help splectral/base-component-help-viewer
+haicc splectral/help service/initialise
+haicc splectral/help service/start     # its program started: pages answer
+haicc splectral/help service/stop      # its program ended
+haicc splectral boot/teardown help
 ```
 
-**How a page is made** (the browser asks `/viewer/hdlc/validation`)
+**How a page is made** (the browser asks `/help/hdlc/validation`)
 
-1. The server routes by the first segment to the component `viewer` and
-   writes a page request into its Splectral inbox (`viewer/page
-   hdlc/validation`).
-2. The renderer, watching it, runs the action of the component's own
-   package.
-3. The action needs data: the renderer writes a data request into the
+1. The server routes by the first segment to the component `help` and
+   writes a page request into its Splectral inbox (`hdlc/validation`).
+2. The component's program, watching it, makes the page.
+3. The page needs data: the program writes a data request into the
    Splectral outbox (`info/get hdlc/validation` at `docs`).
 4. The server, watching that outbox, runs the command as the data layer
    (into the boot mrepo's inbox, as a terminal does) and writes its
    completed form into the Splectral inbox.
-5. The action goes on: it calls the elements it draws with (`ui/page`),
-   builds the page and answers; the page is in the Splectral outbox.
+5. The program goes on: it draws the page and answers; the page is in
+   the Splectral outbox.
 6. The server's watcher hands it to the browser that waits.
 
 **Later, not designed**: speed, with the RPC server and AVRO; commit
@@ -95,11 +94,13 @@ browser.
   its list; `splectral/install`; the server routing the browser to its
   components, running their data requests; a component not running said
   at once.
-- The splectral family: the renderer; the first element set, `ui`; the
-  first component, the info viewer, the docs mrepo its default.
+- The splectral family: the help viewer, one package
+  (`splectral/base-component-help-viewer`, its module
+  `splectral-base-help-viewer`), the docs mrepo its default; first built
+  as four packages (a renderer, an element set `ui`, the viewer's
+  protocol, the component), made one on 2026-11-19.
 - The tools: a second organisation.
-- The how-tos: `program`, `platform`, `element-set`,
-  `splectral-component`.
+- The how-tos: `program`, `platform`, `splectral-component`.
 
 Not yet: the family's documentation package; today's page as a
 component; parameters beyond `?at`, buttons, live updates.
@@ -391,8 +392,8 @@ for its lines: the same way of working, nothing new.
 
   ```
   haicc splectral boot/deploy viewer <package>
-  haicc splectral/viewer service/start
-  haicc splectral boot/teardown viewer
+  haicc splectral/help service/start
+  haicc splectral boot/teardown help
   ```
 
   With what was said before: a simple mrepo, light, a renderer to start
@@ -710,14 +711,24 @@ component is on another node, with nothing changed in the pattern.
    added to and optimised (the human). The proper viewer app is designed
    after other reviews the human has in mind ("We will do some other
    review before we start on it").
+   **Settled** (2026-11-19), the review of the packages: the human, "This
+   is help specific, but has a generic name"; "I don't think these
+   packages are creating protocols. It is a single page that shows the
+   info of a specific or default help info request. I propose a minimum
+   amount of packages as a standalone initial implementation." Ours: one
+   package, its renderer split out when a second component needs one.
+   The human: "Yes, one package, go ahead. From this we will learn in
+   order to do the more generic approach." Built: the four packages and
+   three modules made one, `splectral/base-component-help-viewer` and
+   `splectral-base-help-viewer`; its position in the examples `help`;
+   the `element-set` pattern gone.
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).
 3. The repositories, created by the human, then pushed:
-   `splectral/base-package-renderer`, `base-package-ui`,
-   `base-package-viewer`, `base-component-viewer`;
-   `pear-full-square/splectral-base-renderer`, `splectral-base-ui`,
-   `splectral-base-viewer`.
+   `splectral/base-component-help-viewer`,
+   `pear-full-square/splectral-base-help-viewer`; and
+   `splectral/base-docs-splectral` with step 2.
 4. Today's page (the install, its commands) as a component; then info
    views on every mrepo from the registry.
 5. Parameters from the URL beyond the path and `?at`; a static page's

@@ -72,9 +72,8 @@ What is open, all of it in `tasks.md`:
 - **Product repositories**: last pushed 2026-11-19 (the three
   platforms' organisations, packages fully qualified): every haiccing
   package and every module that changed. The Splectral family's
-  repositories (`splectral/base-package-renderer`, `base-package-ui`,
-  `base-package-viewer`, `base-component-viewer`, `base-docs-splectral`;
-  `pear-full-square/splectral-base-renderer`, `-ui`, `-viewer`) are not
+  repositories (`splectral/base-component-help-viewer`,
+  `base-docs-splectral`; `pear-full-square/splectral-base-help-viewer`) are not
   created yet: the human creates them. Pushed when the human asks
   (`CLAUDE.md`, "Execution").
 - **Designs, for reading and comment**: distributed applications, the doc

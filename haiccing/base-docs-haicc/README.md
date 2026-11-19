@@ -38,7 +38,7 @@ docs mrepo: `haicc docs info/get <keywords>`.
   Splectral side (`splectral/install`) and serves their pages in a
   browser; its server is the data layer, running the commands a
   component asks for as a terminal does. Its components are packages of
-  the `splectral` organisation; the first is the info viewer.
+  the `splectral` organisation; the first is the help viewer.
 
 ## Platforms
 

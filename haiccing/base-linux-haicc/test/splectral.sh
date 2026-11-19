@@ -1,6 +1,6 @@
 #!/bin/sh
 # Splectral as an app platform, end to end: an install with the docs
-# mrepo and Splectral; a component, the info viewer, installed in two
+# mrepo and Splectral; a component, the help viewer, installed in two
 # halves (boot/deploy, then splectral/install), its service started, its
 # pages asked over HTTP as a browser asks them; what it refuses; stopped,
 # torn down; nothing left. Each step timed, the pages too.
@@ -15,7 +15,7 @@ keep=no
 [ "${1:-}" = --keep ] && keep=yes
 . "$pkg/pins"
 SOURCES=${SOURCES:-$pkg/../../sources}
-for f in "$HAICC_ORG/$APP_PACKAGE.bundle" "$HAICC_ORG/base-package-splectral.bundle" splectral/base-component-viewer.bundle "$BARE_FILE"; do
+for f in "$HAICC_ORG/$APP_PACKAGE.bundle" "$HAICC_ORG/base-package-splectral.bundle" splectral/base-component-help-viewer.bundle "$BARE_FILE"; do
   [ -f "$SOURCES/$f" ] || { echo "skipped: no $f in $SOURCES (SOURCES: a sources folder)"; exit 0; }
 done
 SOURCES=$(cd "$SOURCES" && pwd)
@@ -49,53 +49,53 @@ URL=$(printf '%s' "$out" | sed -n 's/.*"url":"\([^"]*\)".*/\1/p')
 has "$URL" "http://127.0.0.1:" "its server: $URL"
 
 # the component, the first half: haicc's, a plain service-managed mrepo deployed by Splectral
-label=base; step --output splectral boot/deploy viewer haiccing/base-package-service; has "$out" '"mrepo":"local/viewer"' "the first half: a plain mrepo deployed by Splectral, local/viewer"
+label=base; step --output splectral boot/deploy help haiccing/base-package-service; has "$out" '"mrepo":"local/help"' "the first half: a plain mrepo deployed by Splectral, local/help"
 # the second half: Splectral's, the component's packages laid on top
-label=install; step --output splectral splectral/install viewer splectral/base-component-viewer; has "$out" '"installed":"viewer"' "the second half: the component installed"
+label=install; step --output splectral splectral/install help splectral/base-component-help-viewer; has "$out" '"installed":"help"' "the second half: the component installed"
 has "$out" '"laid":["runtime/hooks/start.haicc","runtime/hooks/stop.haicc"]' "its start and stop hooks laid by the mrepo itself"
-has "$out" '"packages":["splectral/base-package-renderer","splectral/base-package-ui","splectral/base-package-viewer","splectral/base-component-viewer"]' "its packages, all splectral's"
-F=$H/work/mrepos/local/viewer
+has "$out" '"packages":["splectral/base-component-help-viewer"]' "its package, splectral's: itself only"
+F=$H/work/mrepos/local/help
 [ -f "$F/splectral/component.json" ] && [ -d "$F/splectral/inbox" ] && [ -d "$F/splectral/outbox" ] && ok "Splectral's side of its folder: its record, its inbox and outbox" || no "Splectral's side of its folder"
 is "$(ls "$F/packages/splectral" 2>/dev/null)" "" "none of its packages in the mrepo's own packages: no haiccing runtime loads them"
-out=$(haicc --output splectral/viewer runtime/run . packages/splectral/base-package-renderer 2>&1)
-has "$out" "not a package of this mrepo: splectral/base-package-renderer" "the runtime knows none of them"
+out=$(haicc --output splectral/help runtime/run . packages/splectral/base-component-help-viewer 2>&1)
+has "$out" "not a package of this mrepo: splectral/base-component-help-viewer" "the runtime knows none of them"
 
 # what it refuses
-out=$(haicc --output splectral splectral/install viewer splectral/base-component-viewer); has "$out" "a component there already: viewer" "installed again: refused (deploy and teardown)"
-out=$(haicc --output splectral splectral/install other splectral/base-component-viewer); has "$out" "not deployed: other" "nothing deployed there: refused"
+out=$(haicc --output splectral splectral/install help splectral/base-component-help-viewer); has "$out" "a component there already: help" "installed again: refused (deploy and teardown)"
+out=$(haicc --output splectral splectral/install other splectral/base-component-help-viewer); has "$out" "not deployed: other" "nothing deployed there: refused"
 haicc --output splectral boot/deploy other haiccing/base-package-service >/dev/null
 out=$(haicc --output splectral splectral/install other haiccing/base-component-docs); has "$out" "not a Splectral component: haiccing/base-component-docs" "a haiccing package: not a Splectral component"
 haicc --output splectral boot/teardown other >/dev/null
-out=$(haicc --output splectral splectral/install stream splectral/base-component-viewer); has "$out" "not a position for a component: stream" "a position that is the server's own path: refused"
+out=$(haicc --output splectral splectral/install stream splectral/base-component-help-viewer); has "$out" "not a position for a component: stream" "a position that is the server's own path: refused"
 
 # not started: said at once
-get /viewer/; is "$code" 503 "its pages before its service started: not running, said at once"
-# its service, through haicc's hops: its renderer started by its start hook
-label=initialise; step --output splectral/viewer service/initialise; has "$out" '"state":"initialised"' "its service initialised, through Splectral"
-label=start; step --output splectral/viewer service/start; has "$out" '"state":"started"' "started: its renderer started by its hook"
-[ -f "$F/splectral/packages/splectral/base-package-renderer.state.json" ] && ok "the renderer's state, beside its bundle" || no "the renderer's state"
+get /help/; is "$code" 503 "its pages before its service started: not running, said at once"
+# its service, through haicc's hops: its program started by its start hook
+label=initialise; step --output splectral/help service/initialise; has "$out" '"state":"initialised"' "its service initialised, through Splectral"
+label=start; step --output splectral/help service/start; has "$out" '"state":"started"' "started: its program started by its hook"
+[ -f "$F/splectral/packages/splectral/base-component-help-viewer.state.json" ] && ok "its program's state, beside its bundle" || no "its program's state"
 
 # its pages, as a browser asks them
-get /viewer/; is "$code" 200 "its top page"
+get /help/; is "$code" 200 "its top page"
 has "$PAGE" "<title>docs</title>" "the docs mrepo's top"
-has "$PAGE" '<a href="/viewer/hdlc">hdlc</a>' "the keywords below, links to the same view"
-get /viewer/hdlc/validation; is "$code" 200 "a page by its keywords"
+has "$PAGE" '<a href="/help/hdlc">hdlc</a>' "the keywords below, links to the same view"
+get /help/hdlc/validation; is "$code" 200 "a page by its keywords"
 has "$PAGE" "Before every commit" "as haicc docs info/get hdlc/validation answers it, drawn"
 has "$PAGE" '<code>haicc docs info/get hdlc/validation</code>' "the command it shows"
-get "/viewer/?at=splectral"; has "$PAGE" "<title>splectral</title>" "another mrepo, by its position: Splectral answering about itself"
-get /viewer/no/such/thing; is "$code" 200 "a keyword that is not there: a page all the same"
+get "/help/?at=splectral"; has "$PAGE" "<title>splectral</title>" "another mrepo, by its position: Splectral answering about itself"
+get /help/no/such/thing; is "$code" 200 "a keyword that is not there: a page all the same"
 has "$PAGE" 'class="error"' "its error said on it"
-for i in 1 2 3; do get /viewer/hdlc/validation; done
+for i in 1 2 3; do get /help/hdlc/validation; done
 get /records; has "$PAGE" '"command":"haicc docs info/get hdlc/validation"' "its data requests: commands in the install's record, as a terminal's"
 is "$(ls "$F/splectral/inbox" "$F/splectral/outbox" | grep -c json)" 0 "its boxes empty: each record taken removed"
 
 # stopped, torn down
-label=stop; step --output splectral/viewer service/stop; has "$out" '"service":"stopped"' "its service stopped"
-[ -f "$F/splectral/packages/splectral/base-package-renderer.state.json" ] && no "its renderer ended" || ok "its renderer ended by its stop hook"
-get /viewer/; is "$code" 503 "its pages: not running"
-label=teardown; step --output splectral boot/teardown viewer; has "$out" '"tornDown":"viewer"' "the component torn down, as any mrepo"
+label=stop; step --output splectral/help service/stop; has "$out" '"service":"stopped"' "its service stopped"
+[ -f "$F/splectral/packages/splectral/base-component-help-viewer.state.json" ] && no "its program ended" || ok "its program ended by its stop hook"
+get /help/; is "$code" 503 "its pages: not running"
+label=teardown; step --output splectral boot/teardown help; has "$out" '"tornDown":"help"' "the component torn down, as any mrepo"
 [ -e "$F" ] && no "its folder removed" || ok "its folder removed"
-get /viewer/; is "$code" 404 "its pages: not deployed"
+get /help/; is "$code" 404 "its pages: not deployed"
 label=machine; step boot/teardown; is $? 0 "haicc boot/teardown"
 is "$(pgrep -f -- "[/]bin/bare $T/" | wc -l | tr -d ' ')" 0 "nothing of the install left running"
 
