@@ -291,10 +291,10 @@ log.
 
 ## `dev-env-poc`: a proof-of-concept development environment
 
-**Settled** (the human, 2026-11-18): "POC development environment using
+**Asked** (the human, 2026-11-18): "POC development environment using
 main structure or similar from this repo and the tools from this repo.
-Needs design discussion first." In the same group as `splectral`, with
-the human next. Not designed, not built.
+Needs design discussion first." In the same group as `splectral`, next
+for the team to discuss. Not designed, not built.
 
 **Where** (a start, checked again): this repository's structure
 (`haiccing/`, `splectral/`, `pear-full-square/`, `tools/`, `steps/`;
