@@ -722,6 +722,12 @@ component is on another node, with nothing changed in the pattern.
    three modules made one, `splectral/base-component-help-viewer` and
    `splectral-base-help-viewer`; its position in the examples `help`;
    the `element-set` pattern gone.
+   **Settled** (2026-11-19): the human, "So the implementation can be
+   very help specific, in terms of the page layout and such"; ours,
+   agreed: as a standalone first implementation its page is shaped for
+   help alone (its layout, the keywords below to move through, the
+   command it shows); the generic viewer is designed from it, not held
+   back by it.
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).
