@@ -69,11 +69,12 @@ What is open, all of it in `tasks.md`:
   (`swarm-cluster`); then `claude-headless` and `dev-on-haicc`.
 - **The local agent**: its prompt and its last note, `local-note.md`;
   its instructions, `handover-local.md`.
-- **Product repositories**: last pushed 2026-11-19, the help viewer
-  made one package: every package and module that changed, the help
-  viewer's two included. Not created yet: `splectral/base-docs-splectral`
-  (`splectral.md`, step 2). Pushed when the human asks (`CLAUDE.md`,
-  "Execution").
+- **Product repositories**: not in use yet, our private use only (the
+  human, 2026-11-19); everything builds and runs from this repository
+  (`tools/release.js`, `haicc sources link`). Pushed only when the human
+  asks; one behind is no fault. Last pushed 2026-11-19, before the
+  Splectral site. Not created yet: `splectral/base-docs-splectral`
+  (`splectral.md`, step 2).
 - **Designs, for reading and comment**: distributed applications, the doc
   "Distributed applications on haicc"
   (https://claude.ai/artifact/73tvSUZoir4CsYdTCpiVxx), its settled points
