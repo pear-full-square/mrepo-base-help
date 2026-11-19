@@ -725,10 +725,9 @@ component is on another node, with nothing changed in the pattern.
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).
-3. The repositories, created by the human, then pushed:
-   `splectral/base-component-help-viewer`,
-   `pear-full-square/splectral-base-help-viewer`; and
-   `splectral/base-docs-splectral` with step 2.
+3. The repositories: `splectral/base-component-help-viewer` and
+   `pear-full-square/splectral-base-help-viewer` created by the human
+   and pushed (2026-11-19); `splectral/base-docs-splectral` with step 2.
 4. Today's page (the install, its commands) as a component; then info
    views on every mrepo from the registry.
 5. Parameters from the URL beyond the path and `?at`; a static page's
