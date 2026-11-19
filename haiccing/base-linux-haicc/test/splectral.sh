@@ -78,13 +78,19 @@ label=start; step --output splectral/help service/start; has "$out" '"state":"st
 # its pages, as a browser asks them
 get /help/; is "$code" 200 "its top page"
 has "$PAGE" "<title>docs</title>" "the docs mrepo's top"
-has "$PAGE" '<a href="/help/hdlc">hdlc</a>' "the keywords below, links to the same view"
+has "$PAGE" '<a href="/help/" class="on" aria-current="page">help</a>' "in the site: its tab, shown"
+has "$PAGE" '<a href=&quot;hdlc&quot;>hdlc</a>' "the keywords below, links to the same view, relative to its section"
+has "$PAGE" '<base href=&quot;/help/&quot; target=&quot;_top&quot;>' "its page embedded in the site, its base its section's own address"
 get /help/hdlc/validation; is "$code" 200 "a page by its keywords"
 has "$PAGE" "Before every commit" "as haicc docs info/get hdlc/validation answers it, drawn"
 has "$PAGE" '<code>haicc docs info/get hdlc/validation</code>' "the command it shows"
 get "/help/?at=splectral"; has "$PAGE" "<title>splectral</title>" "another mrepo, by its position: Splectral answering about itself"
+# the site: the URI chopped, the site serving /, Splectral's own page its first tab
+get /; has "$PAGE" '<a href="/install" class="on" aria-current="page">install</a><a href="/help/">help</a>' "the site: its own page shown, the component a tab"
+has "$PAGE" "srcdoc=" "its own page embedded in the content area"
+get /install; has "$PAGE" '<a href="/install" class="on"' "its own page at its own URI"
 get /help/no/such/thing; is "$code" 200 "a keyword that is not there: a page all the same"
-has "$PAGE" 'class="error"' "its error said on it"
+has "$PAGE" 'class=&quot;error&quot;' "its error said on it"
 for i in 1 2 3; do get /help/hdlc/validation; done
 get /records; has "$PAGE" '"command":"haicc docs info/get hdlc/validation"' "its data requests: commands in the install's record, as a terminal's"
 is "$(ls "$F/splectral/inbox" "$F/splectral/outbox" | grep -c json)" 0 "its boxes empty: each record taken removed"

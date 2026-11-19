@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-package-splectral",
-  "content": "1fba858d5677681491e6cfc3df84bff264c49b54edb8d6eaad549a3bbd2083ab",
+  "content": "56183fb712b2f6a3c56409f29205b684fcf57e61ef018ae315d69ea6ab83ef77",
   "bare": "v1.36.0",
-  "date": "2026-11-19T05:11:24.593Z",
+  "date": "2026-11-19T09:49:40.276Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -309,12 +309,12 @@
       "unit": "/test/modules/pear-full-square/splectral-server",
       "ok": true,
       "tests": {
-        "passed": 7,
-        "total": 7
+        "passed": 8,
+        "total": 8
       },
       "asserts": {
-        "passed": 96,
-        "total": 96
+        "passed": 108,
+        "total": 108
       },
       "failures": []
     }
