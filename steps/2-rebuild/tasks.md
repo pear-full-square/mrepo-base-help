@@ -54,6 +54,7 @@ become HDLC afterwards (haicc (software) development lifecycle)".
 | `swarm-cluster` | the nodes finding each other, the `swarm` protocol | the next phase |
 | `splectral` | Splectral beyond the proof of concept | `splectral.md`, "Open" |
 | `dev-env-poc` | a proof-of-concept development environment, from this repository's structure and tools | design discussion first, with the human |
+| `platform-orgs` | three platforms on haicc, each its own packages organisation: the code and the sourcing | asked, in discussion |
 | `help-mvp` | the flag unit, `help/annotate`, `haici/feedback`, `explore` and `plan` scoped | step 3, not built |
 | `external-request-api` | what the outside may ask | to discuss |
 | `error-on-empty` | a flag: an empty selection fails the request | set aside by the human |
@@ -300,6 +301,27 @@ for the team to discuss. Not designed, not built.
 (`haiccing/`, `splectral/`, `pear-full-square/`, `tools/`, `steps/`;
 `CLAUDE.md`, "What is here") and its tools (`tools/`, `base-docs-hdlc`,
 "Tooling"); the priority it may serve, `dev-on-haicc` (P8).
+
+## `platform-orgs`: three platforms, each its own organisation
+
+**Asked** (the human, 2026-11-19): "We now have 3 platforms on top of
+haicc, each with their packages organisation. The code needs amending to
+deal with this, including sourcing." The three: `myctral` (data),
+`myctrans` (transformation), `splectral` (interaction)
+(`base-docs-vision`, "Distributed applications"); their GitHub
+organisations exist.
+
+**Where** (2026-11-19, a start, checked again): the organisations named
+in code, `haiccing` and `splectral` only: `tools/release.js` (`ORGS`),
+`tools/code-check.js`, `tools/info-extract.js`; `tools/packages.sh`
+(haiccing's only); `pkgm-base-check`'s patterns (`splectral-component`
+by the organisation's name). The sourcing over https one organisation:
+`base-linux-haicc` (`HAICC_ORG` in the pins, `sources download
+bare|haiccing`, the manifest from `base-linux-haicc`'s latest release,
+`sources.list` `github:haiccing`). Organisation-agnostic already: a
+folder source (`mrepo-base-boot`'s `fetch`, `<org>/manifest.json`),
+`tools/package-test.js` (the folder's organisation). A platform's own
+organisation in its server, by design (`splectral-server`, `ORG`).
 
 ## `help-mvp`: the flag unit, the help and feedback flags, `haici`
 
