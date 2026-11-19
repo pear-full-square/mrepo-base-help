@@ -31,3 +31,6 @@ platform () {
   case "$_m" in x86_64|amd64) _m=x64 ;; aarch64|arm64) _m=arm64 ;; esac
   printf '%s-%s\n' "$_s" "$_m"
 }
+# What haicc sources download takes: bare, third-party, an organisation
+# (a name, <org>; a package is never downloaded alone).
+is_download () { case "$1" in bare|third-party) return 0 ;; ''|*[!a-z0-9-]*|-*) return 1 ;; [a-z]*) return 0 ;; *) return 1 ;; esac; }

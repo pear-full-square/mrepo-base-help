@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-xpath",
-  "content": "3feb35459d3f05a91086f70ca2225541520c7ab201d409e889a2936f3dc86439",
+  "content": "7327a03fb2b6e2b8b2b141350c874eef2b7031d70e3027182710b81d14d6ae4b",
   "bare": "v1.36.0",
-  "date": "2026-11-18T07:22:52.339Z",
+  "date": "2026-11-19T02:56:04.866Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -105,8 +105,8 @@
         "total": 23
       },
       "asserts": {
-        "passed": 63,
-        "total": 63
+        "passed": 68,
+        "total": 68
       },
       "failures": []
     }

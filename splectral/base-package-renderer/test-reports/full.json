@@ -1,8 +1,8 @@
 {
   "package": "splectral/base-package-renderer",
-  "content": "56eeae8e58b31736a13b2f40afd9b4e94f49c3d9daf7d7bc69bff1250069a1f2",
+  "content": "8a08b94f69b63035c27e91a063ed03555400de1a3ab4e50f5bfe592f41c3c75c",
   "bare": "v1.36.0",
-  "date": "2026-11-18T11:52:28.973Z",
+  "date": "2026-11-19T03:11:00.331Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -79,8 +79,8 @@
         "total": 6
       },
       "asserts": {
-        "passed": 100,
-        "total": 100
+        "passed": 101,
+        "total": 101
       },
       "failures": []
     },
@@ -300,8 +300,8 @@
         "total": 23
       },
       "asserts": {
-        "passed": 63,
-        "total": 63
+        "passed": 68,
+        "total": 68
       },
       "failures": []
     },

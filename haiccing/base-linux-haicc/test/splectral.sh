@@ -42,14 +42,14 @@ get () { s=$(ms); code=$(curl -s -o "$T/page" -w '%{http_code}' --max-time 60 "$
 sh "$pkg/haicc-install.sh" --home="$H" --bin="$T/bin" >/dev/null
 haicc sources link "$SOURCES" >/dev/null; haicc prereq >/dev/null
 label=boot; step boot/deploy; is $? 0 "haicc boot/deploy"
-label=docs; step --output . boot/deploy docs base-component-docs; has "$out" '"deployed":"docs"' "the docs mrepo deployed"
-label=splectral; step --output . boot/deploy splectral base-package-splectral --flags continuation=start; has "$out" '"state":"started"' "Splectral deployed and in service"
+label=docs; step --output . boot/deploy docs haiccing/base-component-docs; has "$out" '"deployed":"docs"' "the docs mrepo deployed"
+label=splectral; step --output . boot/deploy splectral haiccing/base-package-splectral --flags continuation=start; has "$out" '"state":"started"' "Splectral deployed and in service"
 out=$(haicc --output splectral splectral/status)
 URL=$(printf '%s' "$out" | sed -n 's/.*"url":"\([^"]*\)".*/\1/p')
 has "$URL" "http://127.0.0.1:" "its server: $URL"
 
 # the component, the first half: haicc's, a plain service-managed mrepo deployed by Splectral
-label=base; step --output splectral boot/deploy viewer base-package-service; has "$out" '"mrepo":"local/viewer"' "the first half: a plain mrepo deployed by Splectral, local/viewer"
+label=base; step --output splectral boot/deploy viewer haiccing/base-package-service; has "$out" '"mrepo":"local/viewer"' "the first half: a plain mrepo deployed by Splectral, local/viewer"
 # the second half: Splectral's, the component's packages laid on top
 label=install; step --output splectral splectral/install viewer splectral/base-component-viewer; has "$out" '"installed":"viewer"' "the second half: the component installed"
 has "$out" '"laid":["runtime/hooks/start.haicc","runtime/hooks/stop.haicc"]' "its start and stop hooks laid by the mrepo itself"
@@ -63,7 +63,7 @@ has "$out" "not a package of this mrepo: splectral/base-package-renderer" "the r
 # what it refuses
 out=$(haicc --output splectral splectral/install viewer splectral/base-component-viewer); has "$out" "a component there already: viewer" "installed again: refused (deploy and teardown)"
 out=$(haicc --output splectral splectral/install other splectral/base-component-viewer); has "$out" "not deployed: other" "nothing deployed there: refused"
-haicc --output splectral boot/deploy other base-package-service >/dev/null
+haicc --output splectral boot/deploy other haiccing/base-package-service >/dev/null
 out=$(haicc --output splectral splectral/install other haiccing/base-component-docs); has "$out" "not a Splectral component: haiccing/base-component-docs" "a haiccing package: not a Splectral component"
 haicc --output splectral boot/teardown other >/dev/null
 out=$(haicc --output splectral splectral/install stream splectral/base-component-viewer); has "$out" "not a position for a component: stream" "a position that is the server's own path: refused"

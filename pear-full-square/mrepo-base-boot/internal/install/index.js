@@ -8,10 +8,13 @@ import { parseSource } from '../fetch/index.js'
 import { lay } from '../lay/index.js'
 import { place } from '../place/index.js'
 
-// The organisation of a package named without one.
-const ORG = 'haiccing'
-// <org>/<package>; the package alone: ours
-export const targetOf = name => (name.includes('/') ? name : `${ORG}/${name}`)
+// A package is named fully qualified, <org>/<package>, always: no
+// organisation is assumed (base-docs-haicc, "Platforms").
+const QUALIFIED = /^[a-z][a-z0-9-]*\/[a-z0-9][a-z0-9.-]*$/
+export const targetOf = name => {
+  if (!QUALIFIED.test(String(name))) throw new Error(`not fully qualified: ${name} (<org>/<package>)`)
+  return name
+}
 
 // Where this mrepo's packages come from: the store and the sources its
 // packages manifest records.

@@ -28,7 +28,7 @@ downloaded over https, or a sources folder linked. The how-to `install`.
 |---|---|
 | `haicc sources link <folder>` | a local folder linked as a source, not copied: Bare's runtime and the packages come from it |
 | `haicc sources download bare` | Bare's runtime fetched over https into haicc's own sources folder, checked against its pin |
-| `haicc sources download haiccing` | the packages fetched over https into the same folder: the manifest from `base-linux-haicc`'s latest release, then each package's bundle and addons from its own release (`r-<commit>`), each checked against the manifest (sha256); the manifest written last. `HAICC_RELEASES` names another base than `https://github.com/haiccing` |
+| `haicc sources download <org>...` | an organisation's packages fetched over https into the same folder, haiccing's and each platform's (`base-docs-haicc`, "Platforms"): the manifest from the latest release of its documentation package (`<org>/base-docs-<platform>`, haiccing's `base-docs-haicc`), then each package's bundle and addons from its own release (`r-<commit>`), each checked against the manifest (sha256); the manifest written last, `github:<org>` registered. A package alone is not downloaded. `HAICC_RELEASES` names another base than `https://github.com` |
 | `haicc prereq [--check]` | what the command needs to start, checked: the platform, the tools, a source holding the app, Bare; Bare unpacked from the sources |
 | `haicc --help` | these, then the app's when it can be started |
 

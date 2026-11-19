@@ -11,9 +11,9 @@ through its parent by its shortcut.
 
 ```sh
 # the host, from the boot mrepo: built from the haicc component, its runtime started
-haicc . boot/deploy host base-component-haicc
-# a node, from the host: the package alone means haiccing/<package>
-haicc host boot/deploy node-1 base-package-runtime
+haicc . boot/deploy host haiccing/base-component-haicc
+# a node, from the host: its package fully qualified, <org>/<package>
+haicc host boot/deploy node-1 haiccing/base-package-runtime
 # read through the host: the request hops at its shortcut
 haicc host/node-1 crud/read .
 # redeployed from the package it came from (or another, named)

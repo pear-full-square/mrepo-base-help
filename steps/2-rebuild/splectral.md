@@ -57,7 +57,7 @@ mrepo's request layers.
 **The commands**
 
 ```
-haicc splectral boot/deploy viewer base-package-service
+haicc splectral boot/deploy viewer haiccing/base-package-service
 haicc splectral splectral/install viewer splectral/base-component-viewer
 haicc splectral/viewer service/initialise
 haicc splectral/viewer service/start     # the renderer started: pages answer
@@ -491,7 +491,7 @@ for its lines: the same way of working, nothing new.
     as a target is "an mrepo with a service and nothing else" (the
     runtime, `info`, the protocol protocol, the service; its hooks
     `boot` and `initialise`): `haicc splectral boot/deploy viewer
-    base-package-service`. The boot protocol is not changed, and the
+    haiccing/base-package-service`. The boot protocol is not changed, and the
     minimum is a haiccing package's list, nobody's setting.
   - **The second step is new**: a list laid on top of an mrepo that is
     built. `mrepo-base-boot` has the parts (`lay`, a list's `mrepo/`

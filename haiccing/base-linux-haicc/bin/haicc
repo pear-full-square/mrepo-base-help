@@ -5,8 +5,8 @@
 # app's start.
 #   haicc sources link <folder>     its own: a folder linked as a source
 #   haicc sources download bare     its own: Bare fetched over https
-#   haicc sources download <org>    its own: our packages fetched over
-#                                   https, from their releases
+#   haicc sources download <org>... its own: an organisation's packages
+#                                   fetched over https, from their releases
 #   haicc prereq [--check]          its own: what the app needs to start,
 #                                   checked; Bare put in place
 #   haicc --help                    its own commands said, then the app's
@@ -27,9 +27,11 @@ haicc sources link <folder>                     a local folder linked as a
                                                 the packages come from it
 haicc sources download bare                     Bare's runtime fetched over
                                                 https, checked against its pin
-haicc sources download $HAICC_ORG                 the packages fetched over https
-                                                from their releases, checked
-                                                against their manifest
+haicc sources download <org>...                 an organisation's packages
+                                                fetched over https from their
+                                                releases, checked against its
+                                                manifest ($HAICC_ORG, and each
+                                                platform's)
 haicc prereq [--check]                          what the command needs to
                                                 start, checked; Bare put in
                                                 place from the sources
@@ -42,11 +44,11 @@ app () {
   [ -x "$HAICC_BARE" ] || return 0
   in_sources "$HAICC_ORG/$APP_PACKAGE.bundle"
 }
-# Is every part after the first one of bare, third-party, our organisation
+# Is every part after the first one of bare, third-party, an organisation
 # (and one there)? Those are fetched before the app can start.
 only_own () {
   [ $# -gt 0 ] || return 1
-  for _w in "$@"; do case "$_w" in bare|third-party|"$HAICC_ORG") ;; *) return 1 ;; esac; done
+  for _w in "$@"; do is_download "$_w" || return 1; done
 }
 
 case "${1:-}" in

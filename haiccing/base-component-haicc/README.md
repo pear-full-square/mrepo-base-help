@@ -37,7 +37,7 @@ behind the service's door, activated by hooks on `start`. Its info is extracted 
 command answers what was done and the state now.
 
 ```
-haicc . boot/deploy host base-component-haicc
+haicc . boot/deploy host haiccing/base-component-haicc
 haicc host service/initialise
 haicc host service/start
 ```

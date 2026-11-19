@@ -10,7 +10,7 @@ deploys it at `docs`, beside the host.
 
 ```sh
 # the docs mrepo, from the docs component
-haicc . boot/deploy docs base-component-docs
+haicc . boot/deploy docs haiccing/base-component-docs
 # its front page, and a page by its keywords
 haicc docs info/get
 haicc docs info/get boot/deploy

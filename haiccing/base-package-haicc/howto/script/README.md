@@ -20,13 +20,13 @@ crud/read .
 # at a position inside it: the lines run from swarms/swarm-1
 haicc host haicc/script swarms/swarm-1 '
 crud/read .
-boot/deploy node-1 base-component-haicc
+boot/deploy node-1 haiccing/base-component-haicc
 '
 # a heredoc: a line that holds JSON keeps its quotes
 haicc host haicc/script . <<'END'
 # the swarm's node, then a node in it
 crud/create swarms/swarm-2 '{"kind":"swarm"}'
-boot/deploy swarms/swarm-2/node-1 base-component-haicc
+boot/deploy swarms/swarm-2/node-1 haiccing/base-component-haicc
 END
 # a script kept in the install, by its name: <home>/scripts/check.haicc
 # (the folder is yours to make: mkdir -p ~/.haicc/scripts)

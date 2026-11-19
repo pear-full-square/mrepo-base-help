@@ -11,7 +11,7 @@ read. Docker is needed; the containers are left running.
 
 ```sh
 # the host and its cluster: every command of the script done in turn
-haicc . boot/deploy host base-component-haicc --flags continuation=cluster
+haicc . boot/deploy host haiccing/base-component-haicc --flags continuation=cluster
 # the swarm's nodes, and one node's container
 haicc host crud/read "swarms/swarm-1/*"
 haicc host haicc swarms/swarm-1/node-1 container/status

@@ -50,20 +50,21 @@ haicc scripts                                   the install's scripts by
                                                 <URI> <name> runs one)
 haicc sources                                   the sources registered
 haicc sources unlink <folder>
-haicc sources download [<what>...]              fetched over https: <org>,
-                                                <org>/<package>
-haicc sources https | no-https                  https as the backup, or not
+haicc sources download <org>...                 an organisation's packages
+                                                fetched over https (the first
+                                                step's, before the app)
+haicc sources https | no-https [<org>...]       https as the backup, or not
 
   haicc boot/deploy
-  haicc . boot/deploy host base-component-haicc
+  haicc . boot/deploy host haiccing/base-component-haicc
   haicc host service/initialise
   haicc host service/start
-  haicc host boot/deploy node-1 base-component-haicc
+  haicc host boot/deploy node-1 haiccing/base-component-haicc
   haicc host haicc node-1 info/get
   haicc host crud/read . --flags log=verbose
   haicc host --flags log=debug -- haicc node-1 crud/read .
   haicc . crud/read "done/*[value/value/protocol='boot']" --flags layer=request
-  haicc . boot/deploy host base-component-haicc --flags continuation=start
+  haicc . boot/deploy host haiccing/base-component-haicc --flags continuation=start
   haicc host boot/teardown node-1
   haicc . boot/teardown host
   haicc boot/teardown
@@ -80,4 +81,4 @@ haicc host crud/read "done/*" --flags layer=request.
 
 An mrepo answers about itself: haicc host info/get, haicc host info/get boot;
 the platform's documentation, once its mrepo is deployed (haicc . boot/deploy
-docs base-component-docs): haicc docs info/get, haicc docs info/get hdlc`
+docs haiccing/base-component-docs): haicc docs info/get, haicc docs info/get hdlc`

@@ -16,7 +16,7 @@ haicc host --flags log=debug -- haicc node-1 crud/read .
 # another layer read: the requests done
 haicc . crud/read "done/*[value/value/protocol='boot']" --flags layer=request
 # a script to go on with, after the deploy
-haicc . boot/deploy host base-component-haicc --flags continuation=start
+haicc . boot/deploy host haiccing/base-component-haicc --flags continuation=start
 ```
 
 ## Notes

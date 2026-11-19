@@ -1,6 +1,6 @@
 # Test report: haiccing/base-app-haicc
 
-The package passed its `full` set: all 23 units, 343 of 343 tests and 2287 of 2287 asserts.
+The package passed its `full` set: all 23 units, 343 of 343 tests and 2295 of 2295 asserts.
 
 | | |
 |---|---|
@@ -9,10 +9,10 @@ The package passed its `full` set: all 23 units, 343 of 343 tests and 2287 of 22
 | Result | passed |
 | Units | 23 of 23 passed |
 | Tests | 343 of 343 passed |
-| Asserts | 2287 of 2287 passed |
-| Run | 2026-11-18 07:18 UTC |
+| Asserts | 2295 of 2295 passed |
+| Run | 2026-11-19 03:15 UTC |
 | Bare | v1.36.0 |
-| Content | `d07d554750d5960057f991e0edd1911f4f46960bad2d4d85014f5becc68ab7fd` |
+| Content | `1bfe9309691d4115f7db61349ced9adff0269a8819625d116aa7a7d856f88461` |
 
 ## Units
 
@@ -23,7 +23,7 @@ The package passed its `full` set: all 23 units, 343 of 343 tests and 2287 of 22
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/haicc-base-app` | passed | 18 of 18 | 182 of 182 |
+| `/test/modules/pear-full-square/haicc-base-app` | passed | 18 of 18 | 185 of 185 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 98 of 98 |
 | `/test/modules/pear-full-square/mrepo-base-info` | passed | 8 of 8 | 57 of 57 |
@@ -40,6 +40,6 @@ The package passed its `full` set: all 23 units, 343 of 343 tests and 2287 of 22
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 63 of 63 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 68 of 68 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

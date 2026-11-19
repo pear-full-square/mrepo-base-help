@@ -6,7 +6,7 @@ Deploys the host, the mrepo a machine is managed with, and brings it into servic
 
 ```sh
 # the host: an mrepo of its own, built from the haicc component and linked here at host
-haicc . boot/deploy host base-component-haicc
+haicc . boot/deploy host haiccing/base-component-haicc
 # made ready: its info extracted
 haicc host service/initialise
 # its door opened: it can deploy mrepos and hold structure in its main

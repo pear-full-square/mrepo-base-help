@@ -75,7 +75,7 @@ folder too; `--keep` leaves both.
 `sh test/splectral.sh` (`--keep` as above) tries Splectral, an app platform, with a
 component, end to end, in a temporary folder removed after: the docs
 mrepo and Splectral deployed; the info viewer installed in two halves
-(`boot/deploy viewer base-package-service`, then `splectral/install
+(`boot/deploy viewer haiccing/base-package-service`, then `splectral/install
 viewer splectral/base-component-viewer`), its hooks laid by the mrepo
 itself, none of its packages in the mrepo's own; what `install` refuses;
 its pages asked over HTTP before and after its service started (a page

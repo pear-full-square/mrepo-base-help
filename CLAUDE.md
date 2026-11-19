@@ -49,7 +49,10 @@ history, and each package and module has its own repository).
   info viewer, the first component). Brought to haiccing's template.
 - `pear-full-square/`: the modules those packages carry, and
   `pkgm-base-manager`, which the tools use.
-- `tools/`: today's HDLC tooling (`base-docs-hdlc`, "Tooling"). `sources/`
+- `tools/`: today's HDLC tooling (`base-docs-hdlc`, "Tooling"); the
+  organisations, one list every tool reads, `tools/lib/orgs.js`
+  (`haiccing`, `splectral`, `myctral`, `myctrans`: `base-docs-haicc`,
+  "Platforms"); a package named `<org>/<package>` always. `sources/`
   and `node_modules/` are ignored by git: a fresh clone needs
   `sh tools/install.sh`, then `tools/bare tools/release.js`.
 - `steps/`: what is current, nothing else (the history is git's: the
@@ -115,7 +118,7 @@ repository's and its tools'.
 
 - **Product repositories:** a session attaches them and pushes: each
   module's (`sh tools/products.sh <module>...`, from `main`) and each
-  package's (`sh tools/packages.sh -m "<what changed>" <package>...`).
+  package's (`sh tools/packages.sh -m "<what changed>" <org>/<package>...`).
   Pushed when the human asks, or at a milestone agreed with them; not
   after every change. New repositories are created by the human.
 - **Planning:** the phase's request comes from `splectrum/roadmap-1`; the

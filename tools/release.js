@@ -1,13 +1,15 @@
 // The release, built into the local sources (sources/ here, gitignored):
 // everything an install needs, by organisation.
 //   sources/<org>/<package>.bundle      each package here (a folder of an
-//                                       organisation's, haiccing/ and
-//                                       splectral/, whose package.json names
+//                                       organisation's (tools/lib/orgs.js),
+//                                       whose package.json names
 //                                       its modules): assembled, then bundled
 //                                       (tools/package-assemble.js,
 //                                       tools/package-bundle.js), in
 //   sources/<org>/manifest.json         their manifest, an organisation's:
-//                                       these packages only
+//                                       these packages only, and the
+//                                       organisations they may depend on
+//                                       (tools/lib/orgs.js)
 //   sources/addons/<sha256>             their native addons
 //   sources/holepunchto/<tarball>       Bare's runtime, third party: the
 //                                       tarball this repository's lockfile
@@ -30,11 +32,12 @@
 import process from 'bare-process'
 import os from 'bare-os'
 import crypto from 'bare-crypto'
-import { readFileSync, writeFileSync, mkdirSync, existsSync, readdirSync, unlinkSync } from 'bare-fs'
+import { readFileSync, writeFileSync, mkdirSync, existsSync, unlinkSync } from 'bare-fs'
 import { join, resolve, dirname } from 'bare-path'
 import { fileURLToPath } from 'bare-url'
 import { spawnSync } from 'bare-subprocess'
 import { statusOf } from './lib/report.js'
+import { orgOf, orgsHere, packagesHere } from './lib/orgs.js'
 
 const dev = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const flag = (n, d) => process.argv.slice(2).find(a => a.startsWith(`--${n}=`))?.slice(n.length + 3) ?? d
@@ -45,32 +48,30 @@ const tool = (...a) => { const r = spawnSync(join(dev, 'tools', 'bare'), a, { st
 // 1. The packages: each assembled (its modules/, node_modules included:
 // gitignored, so not there in a fresh clone), then bundled into the sources,
 // an organisation at a time: each built, released and sourced by itself.
-export const ORGS = ['haiccing', 'splectral']
-const orgs = ORGS.filter(o => existsSync(join(dev, o)))
-const packages = orgs.flatMap(org => readdirSync(join(dev, org)).sort().filter(p => {
-  const f = join(dev, org, p, 'package.json')
-  return existsSync(f) && Array.isArray(JSON.parse(readFileSync(f, 'utf8')).modules)
-}).map(p => `${org}/${p}`))
+const orgs = orgsHere(dev)
+const packages = packagesHere(dev, (org, p, pj) => Array.isArray(pj.modules))
 for (const p of packages) {
   tool(join(dev, 'tools', 'package-assemble.js'), join(dev, p))
   tool(join(dev, 'tools', 'package-bundle.js'), join(dev, p), `--out=${out}`, `--org=${p.split('/')[0]}`)
 }
 // Each organisation's manifest names its packages only: one no longer here
-// (removed, renamed) taken out, its bundle too. It is published as it is
-// (an asset of base-linux-haicc's release, what haicc sources download
-// reads), so it names the release, nothing else.
+// (removed, renamed) taken out, its bundle too; and the organisations its
+// packages may depend on. It is published as it is (an asset of the
+// release of the organisation's documentation package, what haicc sources
+// download reads), so it names the release, nothing else.
 for (const org of orgs) {
   const mf = join(out, org, 'manifest.json')
   if (!existsSync(mf)) continue
   const m = JSON.parse(readFileSync(mf, 'utf8'))
+  const was = JSON.stringify(m)
   const keep = new Set(packages.filter(p => p.startsWith(`${org}/`)))
-  const gone = Object.keys(m.packages).filter(k => !keep.has(k))
-  for (const k of gone) {
+  for (const k of Object.keys(m.packages).filter(k => !keep.has(k))) {
     const f = join(out, m.packages[k].file)
     if (existsSync(f)) unlinkSync(f)
     delete m.packages[k]
   }
-  if (gone.length) writeFileSync(mf, JSON.stringify(m, null, 2) + '\n')
+  m.depends = orgOf(org).depends
+  if (JSON.stringify(m) !== was) writeFileSync(mf, JSON.stringify(m, null, 2) + '\n')
 }
 
 // 2. Bare's runtime, as the lockfile pins it: its tarball, by its

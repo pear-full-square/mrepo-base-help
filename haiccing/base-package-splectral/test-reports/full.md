@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-splectral
 
-The package passed its `full` set: all 24 units, 335 of 335 tests and 2273 of 2273 asserts.
+The package passed its `full` set: all 24 units, 335 of 335 tests and 2279 of 2279 asserts.
 
 | | |
 |---|---|
@@ -9,10 +9,10 @@ The package passed its `full` set: all 24 units, 335 of 335 tests and 2273 of 22
 | Result | passed |
 | Units | 24 of 24 passed |
 | Tests | 335 of 335 passed |
-| Asserts | 2273 of 2273 passed |
-| Run | 2026-11-18 11:42 UTC |
+| Asserts | 2279 of 2279 passed |
+| Run | 2026-11-19 03:07 UTC |
 | Bare | v1.36.0 |
-| Content | `fe9ae56bc76c1bfebc8b63770fea76c8260020c0119a25d1ce15016e35ee159b` |
+| Content | `bb4af974b51b7554fe1752b6df167ef6c8fc98dc67b6dcbd7a6656c2dd3f9165` |
 
 ## Units
 
@@ -23,7 +23,7 @@ The package passed its `full` set: all 24 units, 335 of 335 tests and 2273 of 22
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 6 of 6 | 100 of 100 |
+| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 6 of 6 | 101 of 101 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 98 of 98 |
 | `/test/modules/pear-full-square/mrepo-base-info` | passed | 8 of 8 | 57 of 57 |
@@ -40,7 +40,7 @@ The package passed its `full` set: all 24 units, 335 of 335 tests and 2273 of 22
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 63 of 63 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 68 of 68 |
 | `/test/modules/pear-full-square/splectral-server` | passed | 7 of 7 | 96 of 96 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

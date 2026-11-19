@@ -25,7 +25,7 @@ human sees what the AI reads on the command line.
 ## Installing
 
 ```sh
-haicc splectral boot/deploy viewer base-package-service
+haicc splectral boot/deploy viewer haiccing/base-package-service
 haicc splectral splectral/install viewer splectral/base-component-viewer
 haicc splectral/viewer service/initialise
 haicc splectral/viewer service/start

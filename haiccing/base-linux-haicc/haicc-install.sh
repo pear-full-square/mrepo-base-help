@@ -37,8 +37,8 @@ cat > "$home/bin/haicc" <<'HAICC_INSTALL_FILE_END'
 # app's start.
 #   haicc sources link <folder>     its own: a folder linked as a source
 #   haicc sources download bare     its own: Bare fetched over https
-#   haicc sources download <org>    its own: our packages fetched over
-#                                   https, from their releases
+#   haicc sources download <org>... its own: an organisation's packages
+#                                   fetched over https, from their releases
 #   haicc prereq [--check]          its own: what the app needs to start,
 #                                   checked; Bare put in place
 #   haicc --help                    its own commands said, then the app's
@@ -59,9 +59,11 @@ haicc sources link <folder>                     a local folder linked as a
                                                 the packages come from it
 haicc sources download bare                     Bare's runtime fetched over
                                                 https, checked against its pin
-haicc sources download $HAICC_ORG                 the packages fetched over https
-                                                from their releases, checked
-                                                against their manifest
+haicc sources download <org>...                 an organisation's packages
+                                                fetched over https from their
+                                                releases, checked against its
+                                                manifest ($HAICC_ORG, and each
+                                                platform's)
 haicc prereq [--check]                          what the command needs to
                                                 start, checked; Bare put in
                                                 place from the sources
@@ -74,11 +76,11 @@ app () {
   [ -x "$HAICC_BARE" ] || return 0
   in_sources "$HAICC_ORG/$APP_PACKAGE.bundle"
 }
-# Is every part after the first one of bare, third-party, our organisation
+# Is every part after the first one of bare, third-party, an organisation
 # (and one there)? Those are fetched before the app can start.
 only_own () {
   [ $# -gt 0 ] || return 1
-  for _w in "$@"; do case "$_w" in bare|third-party|"$HAICC_ORG") ;; *) return 1 ;; esac; done
+  for _w in "$@"; do is_download "$_w" || return 1; done
 }
 
 case "${1:-}" in
@@ -137,6 +139,9 @@ platform () {
   case "$_m" in x86_64|amd64) _m=x64 ;; aarch64|arm64) _m=arm64 ;; esac
   printf '%s-%s\n' "$_s" "$_m"
 }
+# What haicc sources download takes: bare, third-party, an organisation
+# (a name, <org>; a package is never downloaded alone).
+is_download () { case "$1" in bare|third-party) return 0 ;; ''|*[!a-z0-9-]*|-*) return 1 ;; [a-z]*) return 0 ;; *) return 1 ;; esac; }
 HAICC_INSTALL_FILE_END
 cat > "$home/bin/haicc-prereq" <<'HAICC_INSTALL_FILE_END'
 #!/bin/sh
@@ -213,14 +218,17 @@ cat > "$home/bin/haicc-sources" <<'HAICC_INSTALL_FILE_END'
 #                                     haicc's own sources folder, checked
 #                                     against its pin; that folder linked
 #                                     (third-party: the same)
-#   haicc sources download <org>      our packages fetched over https from
-#                                     their releases into the same folder:
-#                                     the organisation's manifest (an asset
-#                                     of base-linux-haicc's latest release),
+#   haicc sources download <org>...   an organisation's packages fetched
+#                                     over https from their releases into
+#                                     the same folder: its manifest (an
+#                                     asset of the latest release of its
+#                                     documentation package, base-docs-
+#                                     <platform>: haiccing's base-docs-haicc),
 #                                     then each package's bundle and addons
 #                                     from its own release (r-<commit>),
 #                                     each checked against the manifest
-#                                     (sha256); the manifest written last
+#                                     (sha256); the manifest written last;
+#                                     github:<org> registered
 # The list is the app's too: $HAICC_HOME/sources.list, a line a source,
 # folder:<path> or github:<org>. This is the only script that reaches the
 # network.
@@ -259,9 +267,13 @@ download_bare () {
   echo "bare: downloaded, as pinned ($BARE_VERSION)"
 }
 
-# Where our releases are: $HAICC_RELEASES/<package>/releases/download/<tag>/
-# <file>, as on GitHub (another base, a file:// one, for a test).
-releases=${HAICC_RELEASES:-https://github.com/$HAICC_ORG}
+# Where the releases are: $HAICC_RELEASES/<org>/<package>/releases/
+# download/<tag>/<file>, as on GitHub (another base, a file:// one, for a
+# test).
+releases=${HAICC_RELEASES:-https://github.com}
+# The repository whose latest release carries an organisation's manifest:
+# its documentation package, base-docs-<platform>; haicc's own, base-docs-haicc.
+manifest_repo () { case "$1" in "$HAICC_ORG") echo base-docs-haicc ;; *) echo "base-docs-$1" ;; esac; }
 sha256_of () { sha256sum "$1" | cut -d' ' -f1; }
 
 # The manifest, as tools/release.js writes it (two spaces a level): a line
@@ -281,19 +293,20 @@ entries () {
 }
 
 download_org () {
+  org=$1
   command -v curl >/dev/null 2>&1 || fail "curl is needed to download" 3
   command -v sha256sum >/dev/null 2>&1 || fail "sha256sum is needed to download" 3
-  tmp=$own/$HAICC_ORG.part
-  rm -rf "$tmp"; mkdir -p "$tmp" "$own/$HAICC_ORG" "$own/addons"
-  url=$releases/base-linux-haicc/releases/latest/download/manifest.json
-  echo "$HAICC_ORG: fetching its manifest, $url"
+  tmp=$own/$org.part
+  rm -rf "$tmp"; mkdir -p "$tmp" "$own/$org" "$own/addons"
+  url=$releases/$org/$(manifest_repo "$org")/releases/latest/download/manifest.json
+  echo "$org: fetching its manifest, $url"
   fetch "$url" "$tmp/manifest.json" || { rm -rf "$tmp"; fail "could not fetch the manifest: $url" 3; }
   entries "$tmp/manifest.json" > "$tmp/entries"
   grep -q '^P ' "$tmp/entries" || { rm -rf "$tmp"; fail "the manifest names no package: $url" 3; }
   name=; tar_=
   while read -r kind a b c d; do
     if [ "$kind" = P ]; then
-      name=$a; pkg=${a#*/}; to=$own/$b; tag=r-$(printf '%.7s' "$d"); base=$releases/$pkg/releases/download/$tag
+      name=$a; pkg=${a#*/}; to=$own/$b; tag=r-$(printf '%.7s' "$d"); base=$releases/$org/$pkg/releases/download/$tag
       if [ -f "$to" ] && [ "$(sha256_of "$to")" = "$c" ]; then echo "$name: there"
       else
         fetch "$base/$pkg.bundle" "$to.part" || { rm -rf "$tmp" "$to.part"; fail "could not fetch $name: $base/$pkg.bundle" 3; }
@@ -313,9 +326,9 @@ download_org () {
     fi
     [ "$kind" = P ] && rm -rf "$tmp/x"
   done < "$tmp/entries"
-  mv "$tmp/manifest.json" "$own/$HAICC_ORG/manifest.json"
+  mv "$tmp/manifest.json" "$own/$org/manifest.json"
   rm -rf "$tmp"
-  echo "$HAICC_ORG: downloaded, as its manifest says"
+  echo "$org: downloaded, as its manifest says"
 }
 
 cmd=${1:-}
@@ -327,24 +340,19 @@ case "$cmd" in
     register "folder:$(cd "$1" && pwd)"
     sources ;;
   download)
-    [ $# -gt 0 ] || fail "haicc sources download bare|$HAICC_ORG" 2
-    for what in "$@"; do
-      case "$what" in
-        bare|third-party|"$HAICC_ORG") ;;
-        *) fail "haicc sources download bare|$HAICC_ORG" 2 ;;
-      esac
-    done
+    [ $# -gt 0 ] || fail "haicc sources download bare|<org>..." 2
+    for what in "$@"; do is_download "$what" || fail "haicc sources download bare|<org>... (not one: $what)" 2; done
     # the folder registered after each download, so what one fetched is
-    # there even when the next fails
+    # there even when the next fails; an organisation's https too
     for what in "$@"; do
       case "$what" in
         bare|third-party) download_bare ;;
-        "$HAICC_ORG") download_org ;;
+        *) download_org "$what"; register "github:$what" ;;
       esac
       register "folder:$own"
     done ;;
   *)
-    fail "haicc sources link <folder>, haicc sources download bare|$HAICC_ORG" 2 ;;
+    fail "haicc sources link <folder>, haicc sources download bare|<org>..." 2 ;;
 esac
 HAICC_INSTALL_FILE_END
 cat > "$home/pins" <<'HAICC_INSTALL_FILE_END'

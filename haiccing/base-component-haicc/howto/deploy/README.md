@@ -13,7 +13,7 @@ swarm node's name: `swarm-1/node-1`.
 # the swarm: a node in the host's main, its document saying it is one
 haicc host crud/create swarms/swarm-1 '{"kind":"swarm"}'
 # the node: an mrepo of its own, built from the haicc component
-haicc host boot/deploy swarms/swarm-1/node-1 base-component-haicc
+haicc host boot/deploy swarms/swarm-1/node-1 haiccing/base-component-haicc
 # made ready, its info extracted; its door opened (at the host's position, then on at the node's shortcut)
 haicc host haicc swarms/swarm-1/node-1 service/initialise
 haicc host haicc swarms/swarm-1/node-1 service/start

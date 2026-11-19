@@ -157,7 +157,8 @@ test('deploy from a target package\'s list, placed by its unique URI, its link r
     t.alike(json(await child.read('/runtime/mrepo.json')), { uri: 'local/host' }, 'its identity, in its own runtime layer')
     await t.exception(deploy(exec, { uri: ['main', 'host'], args: ['haiccing/target'] }), /deployed already/)
 
-    await t.exception(deploy(exec, { uri: ['main', 'y'], args: ['none'] }), /haiccing\/none.*not in the store nor the sources|not in the store nor the sources.*haiccing\/none/, 'a package named without its organisation: haiccing')
+    await t.exception(deploy(exec, { uri: ['main', 'y'], args: ['none'] }), /not fully qualified: none \(<org>\/<package>\)/, 'a package named without its organisation: refused, none assumed')
+    await t.exception(deploy(exec, { uri: ['main', 'y'], args: ['haiccing/none'] }), /not in the store nor the sources/, 'fully qualified, not there: said')
     const r = await redeploy(exec, { uri: ['main', 'host'] })
     await commit()
     t.is(r.tornDown, 'host')

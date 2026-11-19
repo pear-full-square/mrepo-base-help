@@ -23,8 +23,8 @@ The runtime is not started here: that is the caller's.
 packages manifest: `{ store, sources, packages }`, `packages` the names
 of its own, in order, the last the package that defines it.
 
-`targetOf(name)` gives a package its organisation: `<org>/<package>` as
-it is, the package alone `haiccing/<package>`.
+`targetOf(name)`: a package named fully qualified, `<org>/<package>`, as
+it is; a package without its organisation is refused, none is assumed.
 
 ## Returns
 

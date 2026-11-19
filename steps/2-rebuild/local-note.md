@@ -126,10 +126,10 @@ organisation, `splectral/`, its packages built beside haiccing's.
 >    human, its URL in your note):
 >    ```sh
 >    haicc boot/deploy
->    haicc . boot/deploy docs base-component-docs
->    haicc . boot/deploy splectral base-package-splectral --flags continuation=start
+>    haicc . boot/deploy docs haiccing/base-component-docs
+>    haicc . boot/deploy splectral haiccing/base-package-splectral --flags continuation=start
 >    haicc splectral splectral/status          # the server's URL
->    haicc splectral boot/deploy viewer base-package-service
+>    haicc splectral boot/deploy viewer haiccing/base-package-service
 >    haicc splectral splectral/install viewer splectral/base-component-viewer
 >    haicc splectral/viewer service/initialise
 >    haicc splectral/viewer service/start

@@ -116,7 +116,7 @@ A command may answer, beside its output, with a script to go on with:
   behind the one the command was sent on at.
 - **Who answers with one**: an action, when it has something to go on
   with. `boot/deploy` does when asked, by a flag, for a script of the
-  package it deploys: `haicc . boot/deploy host base-component-haicc
+  package it deploys: `haicc . boot/deploy host haiccing/base-component-haicc
   --flags continuation=start`.
 
 ## Commands sent on

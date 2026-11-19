@@ -8,7 +8,7 @@ the deployed mrepo: its lines, each a simple command, executed there,
 the first that fails ending it.
 
 ```
-haicc . boot/deploy host base-component-haicc --flags continuation=start
+haicc . boot/deploy host haiccing/base-component-haicc --flags continuation=start
 ```
 
 | script | |

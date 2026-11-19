@@ -54,7 +54,7 @@ become HDLC afterwards (haicc (software) development lifecycle)".
 | `swarm-cluster` | the nodes finding each other, the `swarm` protocol | the next phase |
 | `splectral` | Splectral beyond the proof of concept | `splectral.md`, "Open" |
 | `dev-env-poc` | a proof-of-concept development environment, from this repository's structure and tools | design discussion first, with the human |
-| `platform-orgs` | three platforms on haicc, each its own packages organisation: the code and the sourcing | the top-level docs written; the code changes to build |
+| `platform-orgs` | three platforms on haicc, each its own packages organisation: the code and the sourcing | built; the manifests' releases, each platform's template, dependencies checked |
 | `help-mvp` | the flag unit, `help/annotate`, `haici/feedback`, `explore` and `plan` scoped | step 3, not built |
 | `external-request-api` | what the outside may ask | to discuss |
 | `error-on-empty` | a flag: an empty selection fails the request | set aside by the human |
@@ -304,49 +304,24 @@ for the team to discuss. Not designed, not built.
 
 ## `platform-orgs`: three platforms, each its own organisation
 
-**Asked** (the human, 2026-11-19): "We now have 3 platforms on top of
-haicc, each with their packages organisation. The code needs amending to
-deal with this, including sourcing." The three: `myctral` (data),
-`myctrans` (transformation), `splectral` (interaction)
-(`base-docs-vision`, "Distributed applications"); their GitHub
-organisations exist.
+Built 2026-11-19 (the human: "Yes, go ahead with the five changes. We
+need fully qualified packages, that does user packages later"; on our
+reading of references: "Yes, just itself for top level inclusions wider
+for dependencies"). What it is: `base-docs-haicc`, "Platforms";
+`tools/lib/orgs.js`. Open, the remainder:
 
-**Where** (2026-11-19, a start, checked again): the organisations named
-in code, `haiccing` and `splectral` only: `tools/release.js` (`ORGS`),
-`tools/code-check.js`, `tools/info-extract.js`; `tools/packages.sh`
-(haiccing's only); `pkgm-base-check`'s patterns (`splectral-component`
-by the organisation's name). The sourcing over https one organisation:
-`base-linux-haicc` (`HAICC_ORG` in the pins, `sources download
-bare|haiccing`, the manifest from `base-linux-haicc`'s latest release,
-`sources.list` `github:haiccing`). Organisation-agnostic already: a
-folder source (`mrepo-base-boot`'s `fetch`, `<org>/manifest.json`),
-`tools/package-test.js` (the folder's organisation). A platform's own
-organisation in its server, by design (`splectral-server`, `ORG`).
-
-**Settled** (2026-11-19): the human, on our survey: "Add to top level
-docs first, the package template will be very similar but the input
-source different. Also the required code changes." Written:
-`base-docs-haicc`, "Platforms" and the term organisation;
-`base-docs-package`, every organisation's packages following it, a
-platform's template very similar, its input source the platform's own
-organisation.
-
-**The code changes** (ours, from the survey; to confirm before built)
-
-1. **One list of organisations**, in `tools/lib/`, read by
-   `release.js`, `code-check.js` and `info-extract.js`.
-2. **`tools/packages.sh`** takes `<org>/<package>`, pushes to that
-   organisation's repository (as `package-template.sh` takes it).
-3. **`tools/package-template.sh`**: the template's repository by the
-   package's organisation (the input source), not `haiccing/base-docs-package`
-   always.
-4. **`pkgm-base-check`**: a platform's component pattern from what the
-   platform declares, not from the organisation's name `splectral`.
-5. **`base-linux-haicc`**: `haicc sources download <org>` for any
-   organisation; `sources.list` several `github:<org>` lines; each
-   organisation's manifest from a release of its own. Open: which
-   repository's release carries it (ours: the platform's documentation
-   package, `base-docs-<platform>`; haiccing's `base-docs-haicc`).
+- **The manifests' releases**: haiccing's on `haiccing/base-docs-haicc`
+  from the next release (and on `base-linux-haicc` too, for the
+  installer released before it); splectral's on
+  `splectral/base-docs-splectral`, a repository the human creates
+  (`splectral.md`, step 2). The local agent's (`handover-local.md`).
+- **Each platform's own template**: `tools/lib/orgs.js` names
+  `haiccing/base-docs-package` for all three until a platform's
+  documentation package holds a template of its own.
+- **Dependencies checked**: a package's dependencies on another
+  organisation are written in the manifest (`depends`), not yet checked
+  where a package is deployed (the dual install's first half is
+  haiccing's by its command).
 
 ## `help-mvp`: the flag unit, the help and feedback flags, `haici`
 

@@ -1,6 +1,6 @@
 # Test report: haiccing/base-package-container
 
-The package passed its `full` set: all 24 units, 332 of 332 tests and 2222 of 2222 asserts.
+The package passed its `full` set: all 24 units, 332 of 332 tests and 2228 of 2228 asserts.
 
 | | |
 |---|---|
@@ -9,10 +9,10 @@ The package passed its `full` set: all 24 units, 332 of 332 tests and 2222 of 22
 | Result | passed |
 | Units | 24 of 24 passed |
 | Tests | 332 of 332 passed |
-| Asserts | 2222 of 2222 passed |
-| Run | 2026-11-18 11:49 UTC |
+| Asserts | 2228 of 2228 passed |
+| Run | 2026-11-19 03:21 UTC |
 | Bare | v1.36.0 |
-| Content | `0675d6fc7027cb38e7147c8a865751e8c550828374ba2498b111e0fe3987bef6` |
+| Content | `a49c9811c57440cbf4c9b5e7be04e1afc8417655cb9ee4fcfd351ab34b8fc10b` |
 
 ## Units
 
@@ -23,7 +23,7 @@ The package passed its `full` set: all 24 units, 332 of 332 tests and 2222 of 22
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
-| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 6 of 6 | 100 of 100 |
+| `/test/modules/pear-full-square/mrepo-base-boot` | passed | 6 of 6 | 101 of 101 |
 | `/test/modules/pear-full-square/mrepo-base-container` | passed | 4 of 4 | 53 of 53 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 98 of 98 |
@@ -41,6 +41,6 @@ The package passed its `full` set: all 24 units, 332 of 332 tests and 2222 of 22
 | `/test/modules/pear-full-square/p2p-mrepo` | passed | 34 of 34 | 171 of 171 |
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
-| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 63 of 63 |
+| `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 68 of 68 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

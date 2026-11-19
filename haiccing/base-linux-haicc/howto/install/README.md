@@ -18,7 +18,7 @@ haicc sources download bare haiccing
 haicc prereq
 # the boot mrepo, then a host in service
 haicc boot/deploy
-haicc . boot/deploy host base-component-haicc
+haicc . boot/deploy host haiccing/base-component-haicc
 haicc host service/initialise
 haicc host service/start
 ```

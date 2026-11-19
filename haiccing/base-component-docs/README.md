@@ -69,7 +69,7 @@ the boot, you deploy it. No service: its boot hooks activate `info` and
 extract it.
 
 ```
-haicc . boot/deploy docs base-component-docs
+haicc . boot/deploy docs haiccing/base-component-docs
 haicc docs info/get
 haicc docs info/get hdlc
 ```

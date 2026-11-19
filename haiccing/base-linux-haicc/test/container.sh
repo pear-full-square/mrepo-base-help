@@ -63,7 +63,7 @@ is "$(echo "$out" | grep -vc '^ok')" 0 "every line of it ok"
 
 # 3. The boot and a host in service
 out=$(haicc boot/deploy); is $? 0 "haicc boot/deploy: the boot mrepo, its runtime running in the container"
-out=$(haicc --output . boot/deploy host base-component-haicc --flags continuation=start); is $? 0 "haicc . boot/deploy host base-component-haicc --flags continuation=start"
+out=$(haicc --output . boot/deploy host haiccing/base-component-haicc --flags continuation=start); is $? 0 "haicc . boot/deploy host haiccing/base-component-haicc --flags continuation=start"
 has "$out" '"state":"started"' "the host in service: its continuation run"
 
 # 4. Commands
