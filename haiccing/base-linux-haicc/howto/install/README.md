@@ -26,6 +26,6 @@ haicc host service/start
 ## Notes
 
 - **Offline, from a sources folder**: `haicc sources link <folder>` in
-  place of the download (the development repository's `sources/`, built
-  by its `tools/release.js`).
+  place of the download (a sources folder, as the packages' build writes
+  it).
 - **Elsewhere**: `sh haicc-install.sh --home=<folder> --bin=<folder>`.

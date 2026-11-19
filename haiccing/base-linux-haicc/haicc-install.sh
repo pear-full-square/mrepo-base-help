@@ -357,8 +357,8 @@ esac
 HAICC_INSTALL_FILE_END
 cat > "$home/pins" <<'HAICC_INSTALL_FILE_END'
 # pins: what the haicc scripts are pinned to; sourced by them.
-# Bare's runtime, third party: written by the development repository's
-# tools/release.js from its lockfile, the Bare the packages are built with.
+# Bare's runtime, third party: the Bare the packages are built with,
+# written by their build from its lockfile.
 BARE_VERSION=1.36.0
 BARE_PLATFORM=linux-x64
 BARE_FILE=holepunchto/bare-runtime-linux-x64-1.36.0.tgz

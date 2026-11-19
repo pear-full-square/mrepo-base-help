@@ -1,8 +1,8 @@
 {
   "package": "haiccing/base-docs-hdlc",
-  "content": "426d9122a5038f7de054a67d53ac607f666caab46b8d401c359a25c8411a079d",
+  "content": "6f9d2ad8f9f89ca37be41e16d33682ab641fdd96c73ae1198a861c217987b5a3",
   "bare": "v1.36.0",
-  "date": "2026-11-19T04:59:29.361Z",
+  "date": "2026-11-19T12:36:04.050Z",
   "set": "full",
   "ok": true,
   "units": [
@@ -75,12 +75,12 @@
       "unit": "/test/modules/pear-full-square/mrepo-base-info",
       "ok": true,
       "tests": {
-        "passed": 8,
-        "total": 8
+        "passed": 9,
+        "total": 9
       },
       "asserts": {
-        "passed": 57,
-        "total": 57
+        "passed": 60,
+        "total": 60
       },
       "failures": []
     },
@@ -105,8 +105,8 @@
         "total": 23
       },
       "asserts": {
-        "passed": 68,
-        "total": 68
+        "passed": 69,
+        "total": 69
       },
       "failures": []
     }

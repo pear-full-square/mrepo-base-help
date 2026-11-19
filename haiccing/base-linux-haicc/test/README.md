@@ -4,7 +4,7 @@ The haicc command tested end to end as it is installed, from the installer to a 
 
 `sh test/run.sh` works in a temporary folder, removed after, and leaves
 nothing running. It needs a sources folder with the packages' bundles and
-Bare's tarball: `SOURCES`, else the development repository's `sources/`;
+Bare's tarball: `SOURCES`, else `../../sources`, beside the packages;
 without one it is skipped. `--keep` leaves the folder and its runtimes to
 inspect. One line a check, the count last; exit 0 passed, 1 failed.
 
