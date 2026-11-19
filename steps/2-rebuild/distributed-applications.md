@@ -142,8 +142,8 @@ being the colleague's who built it:
    reads from a component's outbox (`splectral-server/internal/components/index.js`
    lines 34, 39) and, on a time limit, its own request from the
    component's inbox (line 82); the renderer removes what it reads from
-   its inbox (`splectral-base-renderer/internal/render/index.js` line
-   39). Right for folders, against the rule settled since ("single
+   its inbox (then `splectral-base-renderer`'s render, now
+   `splectral-base-help-viewer/internal/render/index.js`). Right for folders, against the rule settled since ("single
    writer, single reader both ways"), and it does not carry to a
    Hypercore, where a reader cannot remove. **Fix**: a reader keeps its
    own position; what was read retired by its writer, or by commit times

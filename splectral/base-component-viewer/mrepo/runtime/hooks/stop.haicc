@@ -1,2 +1,0 @@
-# stop: run as the service closes its door: the renderer ended
-runtime/stop . splectral/packages/splectral/base-package-renderer

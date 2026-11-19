@@ -87,7 +87,7 @@ product repository written; only the notes are committed.
 
 What is new: Splectral's proof of concept (`base-docs-haicc`, "Levels";
 `splectral.md`, the design): Splectral an app platform, a component an
-mrepo it deploys in two halves, the info viewer's pages in a browser as
+mrepo it deploys in two halves, the help viewer's pages in a browser as
 `haicc docs info/get` answers on the command line; a second
 organisation, `splectral/`, its packages built beside haiccing's.
 
@@ -96,13 +96,12 @@ organisation, `splectral/`, its packages built beside haiccing's.
 >
 > 1. **Update the clone.** Check out `main` and pull. Write down the
 >    commit (`<commit>` below).
-> 2. **Install the dependencies.** `sh tools/install.sh`; three modules
->    are new (`splectral-base-renderer`, `splectral-base-ui`,
->    `splectral-base-viewer`: links in `node_modules/`, nothing to fetch).
+> 2. **Install the dependencies.** `sh tools/install.sh`; one module
+>    is new (`splectral-base-help-viewer`: a link in `node_modules/`,
+>    nothing to fetch).
 > 3. **Build the sources.** `tools/bare tools/release.js`: now two
 >    organisations, `sources/haiccing/` (nineteen bundles) and
->    `sources/splectral/` (four: `base-package-renderer`,
->    `base-package-ui`, `base-package-viewer`, `base-component-viewer`),
+>    `sources/splectral/` (one: `base-component-help-viewer`),
 >    each with its manifest. `git status` must show no change after it;
 >    if it does, say so and stop.
 > 4. **Splectral's test, three times**:
@@ -129,22 +128,22 @@ organisation, `splectral/`, its packages built beside haiccing's.
 >    haicc . boot/deploy docs haiccing/base-component-docs
 >    haicc . boot/deploy splectral haiccing/base-package-splectral --flags continuation=start
 >    haicc splectral splectral/status          # the server's URL
->    haicc splectral boot/deploy viewer haiccing/base-package-service
->    haicc splectral splectral/install viewer splectral/base-component-viewer
->    haicc splectral/viewer service/initialise
->    haicc splectral/viewer service/start
+>    haicc splectral boot/deploy help haiccing/base-package-service
+>    haicc splectral splectral/install help splectral/base-component-help-viewer
+>    haicc splectral/help service/initialise
+>    haicc splectral/help service/start
 >    ```
->    Then in a browser: `<URL>/viewer/`, `<URL>/viewer/hdlc/validation`,
->    `<URL>/viewer/?at=splectral`; the keywords below a page followed;
+>    Then in a browser: `<URL>/help/`, `<URL>/help/hdlc/validation`,
+>    `<URL>/help/?at=splectral`; the keywords below a page followed;
 >    light and dark; a narrow window. And Splectral's own page, `<URL>/`:
 >    the viewer's data requests are among its commands. Stop and start
->    the viewer's service (`haicc splectral/viewer service/stop`): its
+>    the viewer's service (`haicc splectral/help service/stop`): its
 >    pages say it does not run, then answer again.
 > 7. **An AI agent as the viewer's user** (Claude Code headless, as for
 >    the docs review): give it the running install and ask it to answer
 >    three questions of its own choosing about the platform twice, once
 >    with `haicc docs info/get <keywords>` only, once through the viewer
->    only (`curl <URL>/viewer/<keywords>`, or a browser): is what a person
+>    only (`curl <URL>/help/<keywords>`, or a browser): is what a person
 >    sees the same as what the command line answers, page for page; what
 >    is missing or harder in the browser; what is broken. Its findings,
 >    in its words, into your note.

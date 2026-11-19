@@ -43,10 +43,11 @@ history, and each package and module has its own repository).
   `test/` the generic tests), `base-docs-hdlc`, `base-docs-haicc`,
   `base-docs-uri`, `base-docs-xpath`, `base-docs-vision`.
 - `splectral/`: the Splectral family's packages, apps on Splectral (a
-  second organisation, built and released by itself): `base-package-renderer`
-  (a component's renderer, its program), `base-package-ui` (the first
-  element set), `base-package-viewer` and `base-component-viewer` (the
-  info viewer, the first component). Brought to haiccing's template.
+  second organisation, built and released by itself):
+  `base-component-help-viewer`, the help viewer, the first component, a
+  standalone first implementation (one package: its program and its
+  page in it, its module `splectral-base-help-viewer`). Brought to
+  haiccing's template.
 - `pear-full-square/`: the modules those packages carry, and
   `pkgm-base-manager`, which the tools use.
 - `tools/`: today's HDLC tooling (`base-docs-hdlc`, "Tooling"); the
