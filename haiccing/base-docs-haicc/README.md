@@ -40,6 +40,27 @@ docs mrepo: `haicc docs info/get <keywords>`.
   component asks for as a terminal does. Its components are packages of
   the `splectral` organisation; the first is the info viewer.
 
+## Platforms
+
+haicc is the base; on it, three platforms, one for each type of
+component: `myctral` (data), `myctrans` (transformation) and `splectral`
+(interaction). Each is an app platform with its packages in an
+organisation of its own, beside haicc's own, `haiccing`.
+
+- **The platform itself is haiccing's**: the mrepo that deploys its
+  components and its server (`base-package-splectral`); its components'
+  packages are its organisation's, and name no other organisation's.
+- **An organisation is built, released and sourced by itself**: its
+  packages in the sources under `<org>/`, its manifest
+  `<org>/manifest.json`. An install sources `haiccing` and the
+  organisation of each platform it deploys.
+- **One package template, an input source each**: a platform's packages
+  are brought to a template very similar to haiccing's
+  (`base-docs-package`); what differs is the input source, the
+  platform's own organisation.
+- **Built so far**: `splectral`, its proof of concept; `myctral` and
+  `myctrans` have their organisations, no packages yet.
+
 ## Terms
 
 - **mrepo**: a repository that runs; its data in layers, git branches;
@@ -57,6 +78,9 @@ docs mrepo: `haicc docs info/get <keywords>`.
 - **module**: code, carried by packages; a documented method is a
   folder, `external/` for a protocol's actions, `internal/` for code.
 - **family**: packages that follow one package specification: `base`.
+- **organisation**: the packages of one platform, or haicc's own
+  (`haiccing`), built, released and sourced together: a GitHub
+  organisation, a folder in the sources, a manifest.
 - **position**: where a command stands; a URI names it.
 - **kind**: what a node's document says it is, the type of its data
   structure: `{"kind":"swarm"}`. What a position means, its documents

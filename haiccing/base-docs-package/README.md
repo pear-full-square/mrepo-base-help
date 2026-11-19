@@ -7,6 +7,11 @@ goes there. `mrepo/` is the run time: the mrepo, each layer a page. Every
 package of the base family follows it; the template a base package is
 brought to.
 
+Every organisation's packages follow it: haiccing's, and each
+platform's (`myctral`, `myctrans`, `splectral`; `base-docs-haicc`,
+"Platforms"). A platform's package template is very similar to this
+one; what differs is the input source, the platform's own organisation.
+
 ## Links
 
 - [mrepo](mrepo/)
