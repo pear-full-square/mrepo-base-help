@@ -11,6 +11,7 @@ modules for linux-x64, each with its version, licence and source in
 
 ## Links
 
+- [haicc-base-app](pear-full-square/haicc-base-app/)
 - [mrepo-base-boot](pear-full-square/mrepo-base-boot/)
 - [mrepo-base-crud](pear-full-square/mrepo-base-crud/)
 - [mrepo-base-execute](pear-full-square/mrepo-base-execute/)

@@ -399,8 +399,11 @@ done): the flag unit, `help/annotate` and `haici/feedback`, with
 
 **Open**
 
-- Where `help/annotate`, `howto/explore` and `howto/plan` live, now that
-  the `help` and `howto` packages are gone.
+- Where `howto/explore` and `howto/plan` live, now that the `howto`
+  package is gone. `help/annotate`: in `haiccing/base-package-help`, a
+  package of its own (ours; the human, 2026-11-20: "Please go ahead with
+  your proposed order"), its repository the human's to create; linked
+  wherever `info` is.
 - For `explore` and `plan`: the call to headless Claude built now, or
   scoped only (ours: scoped only; the call, the runtime starting `claude
   -p` with `haicc` its only tool, a piece of its own).
