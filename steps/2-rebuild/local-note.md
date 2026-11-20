@@ -75,6 +75,69 @@ offline: every download kept in a local source (`~/haicc-mirror/`), so
    started), the help viewer's requests among the commands, an error's
    message in red.
 
+### The human's manual test: the help viewer like for like with the command line
+
+The human, after trying the site (2026-11-20): "really slick", then
+three points: the `mrepo` box takes an mrepo only, not keywords (and
+nothing lists the mrepos); there is no navigation, "one has to guess";
+and "to have equivalence with command line I should be able to enter
+what info/get requests and see the same result. Important is to have a
+100% like for like with command line." Discussed with the local agent;
+the proposal below is what we came to, for the team (the cloud session)
+to design. Nothing changed in the code.
+
+1. **The address is the command** (the human: "The same command = the
+   same page"). The command's words, in order, are the path below the
+   component: `haicc docs info/get hdlc/validation` is
+   `/help/docs/info/get/hdlc/validation`; `haicc splectral/help
+   info/get` is `/help/splectral/help/info/get`. Every page then
+   bookmarkable, shareable, Back works, and following links is
+   navigating.
+   - **Where the URI ends**: a URI has slashes (`splectral/help`), so do
+     keywords. The server knows the install's tree (the `install` tab
+     draws it) and what each mrepo offers: the longest run of known
+     mrepos is the URI, the next two segments the protocol and action,
+     the rest the arguments. Ambiguous only if an mrepo is named like a
+     protocol: the proposal, `boot/deploy` refuses such a name, rather
+     than a separator in every address.
+   - **The root `.`** needs a form in a path (`/help/./info/get`, or a
+     name); **flags** in the query (`?flags=log=verbose`), last as on
+     the command line.
+2. **Navigation, cascading dropdowns** (the human's proposal): a
+   dropdown for the mrepo; for the chosen mrepo, a dropdown of its first
+   level's keywords; as one drills down, the next level's.
+   `[docs ▾] › [hdlc ▾] › [validation ▾]`: the row is the breadcrumb
+   and the menu at once; choosing opens that address; changing a level
+   drops those after it; a page with nothing below has no further
+   dropdown.
+   - **Each level's options are the parent's own `info/get` answer**,
+     its below: level one is `haicc docs info/get`'s below, level two
+     under `hdlc` is `haicc docs info/get hdlc`'s. No index of its own
+     that can drift: the navigation is like for like too.
+   - **The mrepos from the install's tree**, indented as the `install`
+     tab draws them.
+   - **A keyword opening several pages** says so (`package (3)`): the
+     below entries' `choices` count, today not shown in the browser.
+   - **Not every page at once**: the docs mrepo has about 1,200
+     keywords and 425 pages, too many for a list; a filter over the
+     keywords later if wanted.
+   - Plain `<select>`: keyboard and phone with no extra code.
+   - Later, other read-only actions: a dropdown between the mrepo and
+     the keywords for what the mrepo offers (`docs ▾ › info/get ▾ ›
+     hdlc ▾`), the same pattern.
+3. **The command line's own output, `?raw`**: on any address, exactly
+   what that command prints in a terminal (the record, its log, its
+   metrics). The drawn page stays the default, a view of that answer.
+   **A test**: for a set of commands, `?raw` byte for byte the command
+   line's output; the AI agent's comparison of 2026-11-18 then a check
+   run every time.
+4. **Read-only actions only** in addresses: following a link never
+   deploys, starts or stops anything. `info/get` first; `crud/read`,
+   `splectral/status` and the like when wanted.
+
+Also from the agent's comparison (2026-11-18), still open: keywords
+named in a page's text (`boot howto`, `xpath`) as links.
+
 ### The release record, `r-62af3e4`
 
 Each asset is downloaded from
@@ -127,74 +190,6 @@ for the installer released before).
 | `base-package-service` | `base-package-service.bundle` | 4,010,164 | `086ece8aac293d2f84b31db281286066ef5deaa28a603368b51f96249475fcd4` |
 | `base-package-splectral` | `base-package-splectral-addons.tar` | 17,397,760 | `b12456a5bf93a4776212cc1dd8ff58a63322d9fdbf9ecb176aa05876fe8dcea3` |
 | `base-package-splectral` | `base-package-splectral.bundle` | 4,653,373 | `3a6e5e8cc86233e8a1db5186ea6f8ec177433d6f7b5428bf911d0681049704b4` |
-
-## 2026-11-18: Splectral's proof of concept, `e78c495`, tested
-
-"The next run" (below), test only: no release, no product repository.
-
-1. **The clone:** `main` at `e78c495`.
-2. **The dependencies:** `tools/install.sh` exit 0 ("0 fetched, 207
-   kept, 3 linked"): the three splectral modules linked.
-3. **The sources:** `release.js` exit 0, `sources/haiccing/` nineteen
-   bundles, `sources/splectral/` four and its manifest; `git status` no
-   change.
-4. **Splectral's test, three times:** 38/38 `# ok` each (65, 71, 72 s);
-   nothing left (no `bin/bare`, no `/tmp/haicc-splectral.*`); no hang.
-   Timings (ms), runs 1/2/3: boot 1395/1969/1818, docs 6387/8583/8508,
-   splectral 11930/14488/13372, base 2200/2599/2550, install
-   3684/4237/4674, initialise 3896/4697/3746, start 3923/3965/3783, stop
-   3605/3753/3765, teardown 2766/1900/1978, machine 878/983/1192. Pages:
-   a viewer page 1.2–1.5 s each (1191–1478 ms), the not-running and
-   not-deployed answers 8–13 ms.
-5. **The other tests:** `run.sh` 303/303 three times (371, 366, 366 s),
-   nothing left; `container.sh` 18/18 (40 s), no container left; every
-   bundle's `/test/full`, both organisations (23), exit 0, `"ok":true`;
-   `release.js --strict` exit 0, every report `current` (23).
-6. **By hand**, in the human's install (`~/.haicc`; its sources now this
-   clone's `sources/`, the release's `~/.haicc/sources` unlinked, kept):
-   the eight commands every one exit 0 (docs 7.7 s, Splectral 15.9 s,
-   the rest 1.6–5.4 s). **Left running: `http://127.0.0.1:4400`**, the
-   viewer at `/viewer/`. In a browser (Playwright's headless Chromium):
-   `/viewer/`, `/viewer/hdlc/validation`, `/viewer/?at=splectral` drawn,
-   light and dark, a 390 px window wrapping cleanly; every keyword link
-   below `/viewer/` (28), `?at=splectral` (22, `?at` kept) and
-   `/viewer/hdlc` (13) answers 200 with no error. Splectral's page `/`:
-   the tree (boot, docs, splectral, viewer started) and the viewer's
-   data requests among its commands (`haicc docs info/get
-   hdlc/validation`, through `local/docs`). `service/stop`: `/viewer/`
-   503, "not running: viewer (its service not started? haicc
-   splectral/viewer service/start)"; `service/start`: 200 again (0.9 s).
-   Small: the not-running page has no dark style.
-7. **An AI agent as the viewer's user** (Claude Code headless, an empty
-   folder, only `haicc … info/get` and `curl` to the viewer allowed; 157
-   s). Its findings, in its words, shortened:
-   - "Same text on every page compared": ten keyword sets (root, haicc,
-     boot, boot howto, boot howto deploy, hdlc, hdlc validation, hdlc
-     branches, its-files, crud) and `splectral info/get` against
-     `?at=splectral`: body, order of the choices, below and oneliners
-     the same; links to the matching keyword path.
-   - Differences: the viewer adds an `<h1>` from the title where a page
-     has none ("Validation"); the below entries' `choices` count missing
-     in the viewer ("no hint a click opens 3–4 stacked pages"); the
-     request record (log, metrics, `remote`) not shown; the footer's
-     command slash-joined (`hdlc/validation`), which works.
-   - Harder in the browser: "no route from Splectral into the viewer":
-     `/` has no link to `/viewer/`, the viewer none back, another
-     position only by typing `?at=`; keywords in the text (`xpath`,
-     `package howto package`) not links; an error page's nearby keywords
-     not links. Harder on the command line: about 30 lines of JSON
-     around each answer, the page one string with `\n`, tables raw.
-   - Unclear both ways: `haicc/package` three sections all "Package";
-     `haicc/test-reports` the same generic text four times.
-   - **Broken:** bold that begins with a code span not rendered, the
-     `**` shown: `/viewer/haicc` (base-app-haicc, Commands: "**A
-     `<protocol>/<action>` without a URI**", "**`haicc scripts`**", …),
-     `/viewer/hdlc` and `/viewer/hdlc/branches` ("**`main` holds
-     settled state**"). The deploy how-to ends on `haicc host info/get`,
-     no host in this install ("no node there"). No dead link found.
-   Checked by me: the `**` as reported (`/viewer/hdlc/branches`: `<li>**<code>main</code>
-   holds settled state**`); `/` has no link to `/viewer`; an unknown
-   keyword's page answers 200 (as the test expects).
 
 ## The next run (2026-11-19, from the cloud session): read this first
 
