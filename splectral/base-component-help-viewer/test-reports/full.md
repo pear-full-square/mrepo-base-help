@@ -1,29 +1,30 @@
 # Test report: splectral/base-component-help-viewer
 
-The package passed its `full` set: all 26 units, 342 of 342 tests and 2323 of 2323 asserts.
+The package passed its `full` set: all 27 units, 362 of 362 tests and 2535 of 2535 asserts.
 
 | | |
 |---|---|
 | Package | `splectral/base-component-help-viewer` |
 | Set | `full` |
 | Result | passed |
-| Units | 26 of 26 passed |
-| Tests | 342 of 342 passed |
-| Asserts | 2323 of 2323 passed |
-| Run | 2026-11-19 12:52 UTC |
+| Units | 27 of 27 passed |
+| Tests | 362 of 362 passed |
+| Asserts | 2535 of 2535 passed |
+| Run | 2026-11-20 10:51 UTC |
 | Bare | v1.36.0 |
-| Content | `366bfc144a7b0bb7084c4f9dc4b3eece8d596c65d7271e5564081952448cfa15` |
+| Content | `1311642a191a77bcb69de15a914e13cbff7a3293ccea3992ef6efc43471e1306` |
 
 ## Units
 
 | Unit | Result | Tests | Asserts |
 |---|---|---|---|
 | `/test/configured` | passed | 3 of 3 | 9 of 9 |
-| `/test/program` | passed | 1 of 1 | 9 of 9 |
+| `/test/program` | passed | 1 of 1 | 10 of 10 |
 | `/test/info` | passed | 1 of 1 | 2 of 2 |
 | `/test/code` | passed | 1 of 1 | 2 of 2 |
 | `/test/mrepo` | passed | 1 of 1 | 1 of 1 |
 | `/test/package` | passed | 1 of 1 | 1 of 1 |
+| `/test/modules/pear-full-square/haicc-base-app` | passed | 18 of 18 | 185 of 185 |
 | `/test/modules/pear-full-square/mrepo-base-boot` | passed | 6 of 6 | 101 of 101 |
 | `/test/modules/pear-full-square/mrepo-base-crud` | passed | 8 of 8 | 76 of 76 |
 | `/test/modules/pear-full-square/mrepo-base-execute` | passed | 10 of 10 | 98 of 98 |
@@ -42,7 +43,7 @@ The package passed its `full` set: all 26 units, 342 of 342 tests and 2323 of 23
 | `/test/modules/pear-full-square/p2p-replicate` | passed | 1 of 1 | 10 of 10 |
 | `/test/modules/pear-full-square/p2p-store` | passed | 5 of 5 | 20 of 20 |
 | `/test/modules/pear-full-square/pkgm-base-check` | passed | 23 of 23 | 69 of 69 |
-| `/test/modules/pear-full-square/splectral-base-help-viewer` | passed | 6 of 6 | 53 of 53 |
-| `/test/modules/pear-full-square/splectral-server` | passed | 8 of 8 | 108 of 108 |
+| `/test/modules/pear-full-square/splectral-base-help-viewer` | passed | 8 of 8 | 74 of 74 |
+| `/test/modules/pear-full-square/splectral-server` | passed | 8 of 8 | 113 of 113 |
 
 Written by the package's pre-release from `full.json`, beside it. The content is the hash of the bundle that was tested, its test reports left out.

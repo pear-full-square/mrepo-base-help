@@ -22,6 +22,7 @@ const UNITS = {
   "/test/mrepo-in-situ": () => Promise.all([import("./test/mrepo-in-situ/run.js")]),
   "/test/package": () => Promise.all([import("./test/package/run.js")]),
   "/test/program": () => Promise.all([import("./test/program/run.js")]),
+  "/test/modules/pear-full-square/haicc-base-app": () => Promise.all([import("./modules/pear-full-square/haicc-base-app/test/command.test.js"), import("./modules/pear-full-square/haicc-base-app/test/main.test.js"), import("./modules/pear-full-square/haicc-base-app/test/print.test.js"), import("./modules/pear-full-square/haicc-base-app/test/request.test.js"), import("./modules/pear-full-square/haicc-base-app/test/sources.test.js")]),
   "/test/modules/pear-full-square/mrepo-base-boot": () => Promise.all([import("./modules/pear-full-square/mrepo-base-boot/test/build.test.js"), import("./modules/pear-full-square/mrepo-base-boot/test/deploy.test.js")]),
   "/test/modules/pear-full-square/mrepo-base-crud": () => Promise.all([import("./modules/pear-full-square/mrepo-base-crud/test/crud.test.js")]),
   "/test/modules/pear-full-square/mrepo-base-execute": () => Promise.all([import("./modules/pear-full-square/mrepo-base-execute/test/execute.test.js")]),

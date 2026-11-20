@@ -85,6 +85,20 @@ get /help/hdlc/validation; is "$code" 200 "a page by its keywords"
 has "$PAGE" "Before every commit" "as haicc docs info/get hdlc/validation answers it, drawn"
 has "$PAGE" '<code>haicc docs info/get hdlc/validation</code>' "the command it shows"
 get "/help/?at=splectral"; has "$PAGE" "<title>splectral</title>" "another mrepo, by its position: Splectral answering about itself"
+get "/help/?at=."; has "$PAGE" '<code>haicc . info/get</code>' "the root, as the command line names it"
+# the navigation: a drop-down the mrepo, the install's as the server knows them; one a level, its choices its parent's answer
+get /help/hdlc/validation
+has "$PAGE" '<option value=&quot;./?at=splectral%2Fhelp&quot;>' "the mrepo's drop-down: the install's mrepos, the component's own among them"
+has "$PAGE" '<option value=&quot;hdlc/validation&quot; selected>validation</option>' "a level a keyword: validation chosen, among hdlc's below"
+# raw, like for like: the response as the terminal prints it (no terminal: to 80), the same output
+cli=$(haicc docs info/get hdlc/validation)
+get "/help/hdlc/validation?raw"; is "$code" 200 "raw: the command's response whole"
+# (the page's text: in the site's srcdoc, escaped twice, the site's then the page's)
+raw=$(awk '{ a = a $0 "\n" } END { o = "<pre class=&quot;raw&quot;><code>"; s = index(a, o); e = index(a, "</code></pre>"); if (s && e) printf "%s", substr(a, s + length(o), e - s - length(o)) }' "$T/page" \
+  | sed -e 's/&quot;/"/g' -e 's/&amp;/\&/g' -e 's/&lt;/</g' -e 's/&gt;/>/g' -e 's/&quot;/"/g' -e "s/&#39;/'/g" -e 's/&amp;/\&/g')
+tail_of () { printf '%s\n' "$1" | sed -n '/^      "output": /,$p'; }
+[ -n "$(tail_of "$cli")" ] && [ "$(tail_of "$cli")" = "$(tail_of "$raw")" ] && ok "raw: its output printed line for line as the command line prints it" || no "raw: like for like" "$(printf '%s' "$raw" | head -c 300)"
+has "$raw" '"command": ["haicc","docs","info/get","hdlc/validation"]' "raw: the command as a terminal sends it"
 # the site: the URI chopped, the site serving /, Splectral's own page its first tab
 get /; has "$PAGE" '<a href="/install" class="on" aria-current="page">install</a><a href="/help/">help</a>' "the site: its own page shown, the component a tab"
 has "$PAGE" "srcdoc=" "its own page embedded in the content area"

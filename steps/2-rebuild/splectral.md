@@ -749,6 +749,38 @@ component is on another node, with nothing changed in the pattern.
    section, the `base` the server passed it dropped. Later, from it: the
    site a component of its own (a site viewer, pages of its own);
    sections nested.
+   **Settled** (2026-11-20), the human's manual test of the help viewer
+   (the local note of 2026-11-19, in git): "really slick"; no
+   navigation, "one has to guess"; "Important is to have a 100% like
+   for like with command line." The local agent's proposal, the address
+   the command (`/help/docs/info/get/...`), discussed: ours, `info/get`
+   kept out of the address, the viewer only ever asks it. The human:
+   "For this case: mrepo plus the pages within as navigation to
+   explore." "do we do an mrepo dropdown and repo help URL? That is
+   already half of the annotate (the mrepo part and the protocol
+   action) so a very good start. Please go ahead with your proposed
+   order." The order, ours, agreed:
+   1. The server's test that failed one run in a few (the local run's
+      note): built. The cause was the test's, not a margin: its fake
+      component named its data request by the page's key with the
+      first digit made `d`, the same name when the key began with `d`
+      (one in 16); a name seen in a folder is not taken again.
+   2. The navigation: built (`splectral-base-help-viewer`, `page`). The
+      address is the mrepo (`?at=`, `.` the root) and the keywords; a
+      drop-down the mrepo, the install's as Splectral's server knows
+      them (`{ request: "mrepos" }`, from its structure); one a level of
+      keywords, each level's choices its parent's own `info/get`
+      answer's below; `?raw` the response as the terminal prints it, by
+      the `haicc` command's own `unpack`, checked line for line against
+      the command line in `splectral.sh`; answers kept in the program
+      until the install changes (the structure's `version`).
+   3. The flag unit with `help/annotate` (`help-mvp`, step 3): next.
+      `help/annotate` in a package of its own, `haiccing/base-package-help`
+      (ours, the human: "go ahead"), its repository the human's.
+   4. A command box in the viewer on `--flags help`: the command typed
+      sent with the help flag, its annotation drawn. After 3.
+   Not taken up: the address as the command; `boot/deploy` refusing an
+   mrepo named like a protocol (not needed with `?at=`).
 2. The family's documentation package, `splectral/base-docs-splectral`:
    what is the family's own (an element, a page's action, which generic
    tests apply).
