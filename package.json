@@ -1,11 +1,14 @@
 {
   "name": "mrepo-base-help",
   "version": "0.1.0",
-  "description": "Module: mrepo help, the READMEs of an mrepo's packages extracted, checked against the rules and retrieved by URI.",
+  "description": "Module: the mrepo help protocol, a command explained where it would run, not executed.",
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "bare ../../node_modules/brittle/cmd.js test/*.test.js"
+    "test": "brittle-bare test/*.test.js"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "brittle": "4.5.0"
+  }
 }

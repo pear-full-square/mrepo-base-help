@@ -1,73 +1,55 @@
-// The help layer: READMEs parsed into their levels, extracted from bundles'
-// files at the URIs they document, with their index; retrieved by help get.
 import test from 'brittle'
-import { parse, extract, check } from '../internal/extract/index.js'
-import { get as help } from '../external/get/index.js'
+import { annotate } from '../index.js'
 
-const B = s => Buffer.from(s)
-const README = '# thing\n\nA thing, with `package.json` inside. More here.\n\n| | |\n|---|---|\n| [sub/](sub/) | below |\n\n## Usage\n\nUse it.\n\n## Notes\n\nNone.\n'
+// An mrepo as an execution reads it: its files by path; its runtime's
+// view: the protocols loaded, read access.
+function execution ({ protocols, active = Object.keys(protocols), service = { state: 'started' }, info = true }) {
+  const files = new Map()
+  for (const p of active) files.set(`/protocols/${p}.json`, '{}')
+  if (service) files.set('/runtime/service.json', JSON.stringify(service))
+  if (info) {
+    files.set('/info/index.json', JSON.stringify({ 'crud/read': [{ page: 'packages/haiccing/base-package-crud/read/README.md', oneliner: 'Reads the nodes at a URI.', below: [] }] }))
+    files.set('/info/packages/haiccing/base-package-crud/read/README.md', '# read\n\nReads the nodes at a URI.\n')
+  }
+  const find = async p => (files.has(p) ? Buffer.from(files.get(p)) : null)
+  const read = async p => { if (!files.has(p)) throw new Error(`not found: ${p}`); return Buffer.from(files.get(p)) }
+  const select = async pattern => [...files.keys()].filter(p => p.startsWith(pattern.replace(/\*$/, ''))).map(p => [p])
+  const logged = []
+  return { logged, runtime: { protocols, find, read, select }, find, read, select, log: (level, event, data) => logged.push([level, event, data]) }
+}
+const PROTOCOLS = {
+  crud: { default: 'read', actions: { read: { uris: ['**'], description: 'The nodes at a URI, read.' }, create: { uris: ['**'], args: ['value', 'kind?'], description: 'A node made.' } } },
+  service: { actions: { start: { uris: ['.'], states: ['initialised'], description: 'The service started.' } } },
+  help: { default: 'annotate', actions: { annotate: { uris: ['**'], args: ['command', 'arguments?'] } } }
+}
 
-test('parse: the title, the one-liner, the summary, the sections, the links', (t) => {
-  const r = parse(README)
-  t.is(r.title, 'thing')
-  t.is(r.oneliner, 'A thing, with `package.json` inside.', 'the first sentence, a full stop in code ignored')
-  t.ok(r.summary.startsWith('A thing') && r.summary.includes('[sub/](sub/)') && !r.summary.includes('Usage'), 'up to the first ## heading')
-  t.alike(r.sections.map(s => s.title), ['Usage', 'Notes'])
-  t.is(r.sections[0].text, 'Use it.')
-  t.alike(r.links, ['sub/'])
+test('annotate: a command explained on an execution written for it: what it does, the door here and now, its arguments, the commands to run it and read more', async (t) => {
+  const exec = execution({ protocols: PROTOCOLS })
+  const a = await annotate(exec, { uri: ['main', 'swarms'], args: ['crud/read'] })
+  t.alike(a, { help: 'crud/read swarms', does: 'The nodes at a URI, read.', door: 'taken here, now', arguments: 'none', run: 'crud/read swarms', more: 'info/get crud/read' }, 'each a short line in a fixed place: the command, what it does, the door, its arguments, to run it, to read more')
+  t.is((await annotate(exec, { uri: ['main', 'swarms'], args: ['crud'] })).help, 'crud/read swarms', 'the protocol alone: its default action')
+  t.is((await annotate(exec, { uri: ['main', 'x'], args: ['crud/create', '{}'] })).arguments, 'value [kind]', 'the arguments its action names, an optional one in brackets')
+  t.is((await annotate(exec, { uri: ['main', 'x'], args: ['crud/read'], flags: { log: 'debug' } })).run, 'crud/read x --flags log=debug', 'its other flags kept in the command to run it')
+  t.is((await annotate(exec, { uri: ['main', 'x'], args: ['crud/create', 'a b'] })).run, 'crud/create x "a b"', 'an argument with a space quoted, as typed')
+  t.ok(exec.logged.some(([level, event]) => level === 'verbose' && event === 'annotated'), 'what it did, logged')
 })
 
-const packages = [
-  { pkg: 'haiccing/docs', help: 'mrepo', files: { '/README.md': B('# docs\n\nThe docs package.\n\n[mrepo/](mrepo/)\n'), '/mrepo/README.md': B('# mrepo/\n\nThe mrepo.\n\n[packages/](packages/)\n'), '/mrepo/packages/README.md': B('# /packages\n\nThe packages layer.\n') } },
-  { pkg: 'haiccing/app', help: null, files: { '/README.md': B('# app\n\nAn app.\n\n[test/](test/) [gone/](gone/)\n'), '/test/README.md': B('# test/\n\nIts tests.\n'), '/modules/node_modules/x/README.md': B('# x\n\nThird party.\n') } }
-]
-
-test('extract: each README at the URI it documents; the index; the packages linked from the layer\'s help', (t) => {
-  const files = extract(packages)
-  t.alike(Object.keys(files).sort(), ['/README.md', '/index.json', '/packages/README.md', '/packages/haiccing/app/README.md', '/packages/haiccing/app/test/README.md', '/packages/haiccing/docs/README.md', '/problems.json'], 'the mrepo folder of the docs package at the root; the others under /packages; no third-party')
-  const index = JSON.parse(files['/index.json'].toString())
-  t.alike(index['/'], { title: 'mrepo/', oneliner: 'The mrepo.', links: ['/packages'] })
-  t.alike(index['/packages'].links, ['/packages/haiccing/docs', '/packages/haiccing/app'], 'each linked package')
-  t.alike(index['/packages/haiccing/app'].links, ['/packages/haiccing/app/test'], 'a link to nothing dropped')
-  t.alike(index['/packages/haiccing/docs'].links, ['/'], 'its link to its mrepo/: the help root, where that folder went')
-})
-
-test('help get: the levels, a section, the nearest when nothing is there', async (t) => {
-  const files = extract(packages)
-  // (the rest of an execution context standing in: a file that may not be there, the log, a step)
-  const rest = { find: async function (p) { try { return await this.read(p) } catch { return null } }, log () {}, step: async (event, data, fn) => fn() }
-  const exec = { read: async uri => { const f = files[uri.slice('/help'.length)]; if (!f) throw new Error('none'); return f }, ...rest }
-  const s = await help(exec, { uri: ['main', '.'], args: ['packages/haiccing/app'] })
-  t.alike([s.uri, s.oneliner, s.links], ['packages/haiccing/app', 'An app.', [{ uri: 'packages/haiccing/app/test', oneliner: 'Its tests.' }]], 'the subject its first argument, from the mrepo\'s root; the summary level: the one-liner, the links with theirs')
-  t.ok(typeof s.summary === 'string')
-  t.alike(Object.keys(await help(exec, { uri: ['main', '.'], args: ['help', 'oneliner'] })), ['uri', 'title', 'oneliner', 'links'], 'the root, by help too; one-liners only')
-  const root = await help(exec, { uri: ['main', '.'], args: ['oneliner'] })
-  t.alike([root.uri, root.links], ['.', [{ uri: 'packages', oneliner: root.links[0].oneliner }]], 'a level first: no subject, the mrepo itself; its URI .')
-  t.is((await help(exec, { uri: ['main', '.'] })).uri, '.', 'no argument at all: the mrepo itself, the summary')
-  t.is((await help(exec, { uri: ['main', '.'], args: ['.', 'detail'] })).uri, '.', '. written out')
-  t.is((await help(exec, { uri: ['main', '.'], args: ['./packages'] })).uri, 'packages', './ in front')
-  await t.exception(help(exec, { uri: ['main', '.'], args: ['/packages'] }), /not a relative URI: \/packages/)
-  await t.exception(help(exec, { uri: ['main', '.'], args: ['packages/haiccing/app/test/nothing'] }), /no help at packages\/haiccing\/app\/test\/nothing: nearest packages\/haiccing\/app\/test/)
-  await t.exception(help(exec, { uri: ['main', '.'], args: ['packages/haiccing/app', 'no', 'such', 'section'] }), /no section "no such section" at packages\/haiccing\/app/)
-  await t.exception(help({ read: async () => { throw new Error('none') }, ...rest }, { uri: ['main', '.'] }), /no help extracted in this mrepo yet \(help\/extract\)/)
-})
-
-test('the rules: a README against them, and a tree with a broken link, an unlinked folder, an unreached README', (t) => {
-  const bad = '# bad\n\nA one-liner far too long (with parentheses), going on and on and on and on and on and on and on and on and on, see ' + 'docs' + '/design/x.md\n\n## A title much too long here\n'
-  t.alike(check(bad).map(([c]) => c).sort(), ['oneliner', 'oneliner', 'oneliner', 'sections', 'transient'].sort(), 'its length, its parentheses, not one sentence; a long section title; a reference to the development repository')
-  t.alike(check(README), [], 'a good one: none')
-  const out = extract([{ pkg: 'o/p', help: null, paths: ['/README.md', '/a/README.md', '/b/README.md', '/c/x/README.md'], files: {
-    '/README.md': B('# p\n\nThe package.\n\n[a/](a/) [nowhere/](nowhere/)\n'),
-    '/a/README.md': B('# a\n\nThe a part.\n'),
-    '/b/README.md': B('# b\n\nThe b part.\n'),
-    '/c/x/README.md': B('# x\n\nThe x part.\n')
-  } }])
-  const problems = JSON.parse(out['/problems.json'].toString()).map(p => `${p.uri} ${p.check}`).sort()
-  t.alike(problems, ['/packages/o/p cascade', '/packages/o/p cascade', '/packages/o/p links', '/packages/o/p/b reached', '/packages/o/p/c/x reached'].sort(), 'the link to nothing; b and c/x not linked, not reached')
-})
-
-test('parse: a heading inside a code block is not a section', (t) => {
-  const r = parse('# x\n\nThe x.\n\n```markdown\n## not one\n```\n\n## One\n\nText.\n')
-  t.alike(r.sections.map(s => s.title), ['One'])
-  t.ok(r.summary.includes('## not one'), 'it stays in the summary')
+test('annotate: refused at the door, each reason; no page here; no command given', async (t) => {
+  const exec = execution({ protocols: PROTOCOLS, active: ['crud', 'help'] })
+  const nope = await annotate(exec, { uri: ['main', 'x'], args: ['nope/read'] })
+  t.alike([nope.door, nope.more], ['refused here: no protocol: nope (crud, help)', 'info/get'], 'a protocol not loaded here; to read more, the top')
+  const update = await annotate(exec, { uri: ['main', 'x'], args: ['crud/update'] })
+  t.alike([update.door, update.does, update.more], ['refused here: no action: crud update (create, read)', null, 'info/get crud'], 'an action it does not offer: nothing it does; to read more, its protocol\'s page')
+  t.is((await annotate(exec, { uri: ['main', 'x'], args: ['service/start'] })).door, 'refused here: not offered: service start at x', 'not offered at that URI')
+  t.is((await annotate(exec, { uri: ['main', '.'], args: ['service/start'] })).door, 'refused here: not now: service start (service is not active; the service is started)', 'not active here')
+  const later = execution({ protocols: PROTOCOLS })
+  t.is((await annotate(later, { uri: ['main', '.'], args: ['service/start'] })).door, 'refused here: not now: service start (the service is started)', 'not in this state')
+  const lacking = await annotate(later, { uri: ['main', 'x'], args: ['crud/create'] })
+  t.alike([lacking.door, lacking.arguments], ['refused here: missing argument: value', 'value [kind]; missing: value'], 'an argument missing: refused, and said with its arguments')
+  const bare = execution({ protocols: PROTOCOLS, info: false })
+  const none = await annotate(bare, { uri: ['main', 'x'], args: ['service/start'] })
+  t.is(none.does, 'The service started.', 'no info here: its description still')
+  t.ok(bare.logged.some(([level, event, d]) => event === 'no page' && /no info extracted/.test(d.why)), 'no page: said in its log, not thrown')
+  await t.exception(annotate(later, { uri: ['main', 'x'], args: [] }), /missing argument: command/)
+  await t.exception(annotate(later, { uri: ['main', 'x'], args: ['--flags'] }), /missing argument: command/, 'no command, a word that is none')
 })

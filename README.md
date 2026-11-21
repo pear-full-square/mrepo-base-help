@@ -1,30 +1,38 @@
 # mrepo-base-help
 
-Mrepo help: the READMEs of an mrepo's packages extracted, checked against the rules and retrieved by URI.
+The mrepo help protocol: a command explained where it would run, not executed.
 
-The `help` protocol's `extract` writes it: every README of the mrepo's
-linked packages, at the URI it documents, with a generated index and the
-problems found; an internal request the runtime places as the mrepo
-starts. `get` reads it. Every package
-carrying the module validates its own help with the tests in `validate/`.
+`--flags help` on a command makes it `help/annotate` at the same URI
+(`mrepo-base-request`, the flag `help`): answered by the mrepo the
+command would have run in, here and now, nothing of it executed. Offered
+by `haiccing/base-package-help`.
 
-| | |
-|---|---|
-| [external/](external/) | the help protocol's actions |
-| [internal/](internal/) | the extraction and the rules |
-| [validate/](validate/) | the tests every package carrying it runs on itself |
-| [test/](test/) | its own tests |
+## Links
+
+- [external](external/)
+- [test](test/)
+
+## Commands
+
+```
+haicc host crud/read swarms --flags help
+haicc host help/annotate swarms crud/read
+haicc docs info/get hdlc --flags help
+```
 
 ## Design
 
-- **The README rules** are mechanical: the one-liner, the summary's
-  length, self-containment, section titles; on the whole tree, links,
-  cascade, reach. No AI needed.
-- **Mounted by `base-package-help`**, whose `protocol.js` offers `help`.
-- **Next, on the roadmap**: the external API structured, protocols and
-  actions; URI dismantling; the help flag, a command rewritten as a help
-  command with the original request as its input.
+- **Help is a rewrite** (the team, 2026-11-15): the command a help flag
+  is on is not executed; it becomes `help/annotate` before the door,
+  which checks that one; the command's own check is what `annotate`
+  answers, as the door would say it as the command executes.
+- **What it reads is what is there**: the protocols the runtime loaded,
+  the active ones and the service's state; the action's page from the
+  mrepo's own info (`mrepo-base-info`'s `get`, at `<protocol>/<action>`).
+- **Short, natural language, a fixed place each**: what it does, the
+  door's answer, the arguments, the command to run it, where to read
+  more; the record as it is with `haicc --raw`.
 
 ## Tests
 
-- `npm test`: parsing, extraction, retrieval, the rules.
+- `brittle-bare test/*.test.js` (Bare installed): a command annotated on an execution written for it: taken, refused (not loaded, not offered there, not active, not now, missing an argument), its page or none; each test by its name in [test/](test/).
